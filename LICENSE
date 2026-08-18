@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Santiago Tobon
+Copyright (c) 2026 Fabian Santiago Tobón Valero y Daniel Alejandro León Ladino
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+NOTA SOBRE EL ALCANCE DE ESTA LICENCIA
+
+Esta licencia cubre el CÓDIGO FUENTE de la plataforma. No cubre:
+
+1. Los documentos del Centro Nacional de Memoria Histórica (CNMH) que se
+   importen a la plataforma. Esos materiales conservan la licencia con la que
+   el CNMH los publicó y deben citarse según sus propias condiciones.
+
+2. Los testimonios, relatos y contenidos que la comunidad de El Salado u otras
+   comunidades aporten a través de la plataforma.
+
+3. La cartografía servida por OpenStreetMap, cuyos datos se publican bajo la
+   Open Database License (ODbL) y requieren la atribución "© colaboradores de
+   OpenStreetMap", que la aplicación muestra en cada mapa.
