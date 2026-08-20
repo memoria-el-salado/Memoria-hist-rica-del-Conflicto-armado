@@ -1,0 +1,380 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Rol {
+  ESTUDIANTE
+  DOCENTE
+  ADMIN
+}
+
+enum TipoRecurso {
+  VIDEO
+  AUDIO
+  DOCUMENTO
+  SIMULADOR
+}
+
+enum EstadoCaso {
+  ACTIVO
+  EN_CURADURIA
+  BORRADOR
+}
+
+enum Epoca {
+  ANTES_1997
+  ENTRE_1997_2000
+  RETORNO
+}
+
+enum PiezaJardin {
+  FLOR
+  HOJA
+  SEMILLA
+  MANO
+}
+
+enum Prioridad {
+  ALTA
+  MEDIA
+  BAJA
+}
+
+enum Subsidio {
+  NINGUNO
+  RIEGO
+  AGRICULTURA
+}
+
+model User {
+  id           String   @id @default(cuid())
+  usuario      String   @unique
+  email        String   @unique
+  passwordHash String
+  nombre       String
+  iniciales    String
+  rol          Rol
+  subpoblacion String?
+  creadoEn     DateTime @default(now())
+
+  /// Las cuentas nacen con una contraseña provisional que entrega quien las
+  /// crea. Mientras la marca siga activa, la plataforma solo deja pasar a la
+  /// pantalla de cambio de contraseña.
+  debeCambiarContrasena Boolean   @default(true)
+  contrasenaCambiadaEn  DateTime?
+
+  /// Quién dio de alta a este usuario: el administrador crea docentes y el
+  /// docente crea a sus estudiantes.
+  creadoPorId String?
+  creadoPor   User?   @relation("UsuariosCreados", fields: [creadoPorId], references: [id], onDelete: SetNull)
+  creados     User[]  @relation("UsuariosCreados")
+
+  anotaciones     Anotacion[]
+  marcas          MarcaCartografia[]
+  simulaciones    Simulacion[]
+  floresJardin    FlorJardin[]
+  entradasDiario  EntradaDiario[]
+  progresos       ProgresoEje[]
+  respuestas      RespuestaActividad[]
+  recursosSubidos Recurso[]
+  forosCreados    Foro[]
+}
+
+model Caso {
+  id       String     @id @default(cuid())
+  nombre   String     @unique
+  depto    String @db.Text
+  estado   EstadoCaso @default(EN_CURADURIA)
+  version  String     @default("0.1.0")
+  activo   Boolean    @default(false)
+  /// Ubicación del caso de estudio en el mapa de Colombia.
+  lat      Float?
+  lon      Float?
+  creadoEn DateTime   @default(now())
+
+  ejes       Eje[]
+  documentos DocumentoFuente[]
+}
+
+model Eje {
+  id              String  @id @default(cuid())
+  numero          Int
+  nombre          String
+  descripcion     String @db.Text
+  objetivoGeneral String? @db.Text
+  tono            String
+  orden           Int
+  // El Preámbulo "Me cuido y nos cuidamos" antecede a los ejes numerados.
+  esPreambulo     Boolean @default(false)
+
+  casoId String
+  caso   Caso   @relation(fields: [casoId], references: [id], onDelete: Cascade)
+
+  sesiones  Sesion[]
+  recursos  Recurso[]
+  progresos ProgresoEje[]
+
+  @@unique([casoId, numero])
+}
+
+model Sesion {
+  id            String  @id @default(cuid())
+  codigo        String
+  titulo        String @db.Text
+  objetivo      String? @db.Text
+  tipo          String
+  pantalla      String
+  publicada     Boolean @default(false)
+  alertaCuidado Boolean @default(false)
+  orden         Int
+
+  /// Texto de la sesión tal como venía en el documento importado. Es lo que
+  /// lee el estudiante al abrir la actividad: sin esto la pantalla no tendría
+  /// nada propio que mostrar.
+  contenido           String? @db.Text
+  /// Pregunta que encabeza la actividad. Se toma del documento cuando aparece.
+  preguntaOrientadora String? @db.Text
+
+  ejeId String
+  eje   Eje    @relation(fields: [ejeId], references: [id], onDelete: Cascade)
+
+  subsecciones Subseccion[]
+
+  /// Trabajo que los estudiantes producen dentro de esta sesión.
+  anotaciones     Anotacion[]
+  marcas          MarcaCartografia[]
+  flores          FlorJardin[]
+  entradasDiario  EntradaDiario[]
+  respuestas      RespuestaActividad[]
+  simulaciones    Simulacion[]
+
+  @@unique([ejeId, codigo])
+}
+
+/// Tercer nivel de la guía del CNMH: 1.2 → 1.2.1, 1.2.2 …
+model Subseccion {
+  id     String @id @default(cuid())
+  codigo String
+  titulo String @db.Text
+  orden  Int
+
+  /// Texto de la subsección en el documento de origen.
+  contenido String? @db.Text
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@unique([sesionId, codigo])
+}
+
+/// Documento del que se derivó un módulo (guía o informe del CNMH).
+model DocumentoFuente {
+  id             String   @id @default(cuid())
+  titulo         String @db.Text
+  nombreArchivo  String @db.Text
+  rutaArchivo    String @db.Text
+  paginas        Int
+  subidoEn       DateTime @default(now())
+
+  casoId String?
+  caso   Caso?   @relation(fields: [casoId], references: [id], onDelete: SetNull)
+}
+
+model ProgresoEje {
+  id         String @id @default(cuid())
+  porcentaje Int    @default(0)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ejeId  String
+  eje    Eje    @relation(fields: [ejeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ejeId])
+}
+
+model Recurso {
+  id       String      @id @default(cuid())
+  titulo   String @db.Text
+  contexto String @db.Text
+  tipo     TipoRecurso
+  alerta   Boolean     @default(false)
+  creadoEn DateTime    @default(now())
+
+  ejeId String
+  eje   Eje    @relation(fields: [ejeId], references: [id], onDelete: Cascade)
+
+  autorId String?
+  autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
+
+  auditoria AuditoriaAccesibilidad?
+}
+
+model AuditoriaAccesibilidad {
+  id            String   @id @default(cuid())
+  descripcion   String @db.Text
+  transcripcion Boolean  @default(false)
+  contraste     Boolean  @default(false)
+  responsivo    Boolean  @default(false)
+  revisadaEn    DateTime @default(now())
+
+  recursoId String  @unique
+  recurso   Recurso @relation(fields: [recursoId], references: [id], onDelete: Cascade)
+}
+
+model Anotacion {
+  id       String   @id @default(cuid())
+  texto    String @db.Text
+  cita     String? @db.Text
+  creadoEn DateTime @default(now())
+
+  autorId String
+  autor   User   @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@index([sesionId])
+}
+
+model MarcaCartografia {
+  id       String   @id @default(cuid())
+  lugar    String @db.Text
+  relato   String @db.Text
+  audio    String   @default("Sin audio")
+  /// Sensaciones asociadas al lugar. Se guarda como JSON para que el modelo
+  /// funcione igual en PostgreSQL y en MySQL, que no admite listas de texto.
+  tags     Json
+  /// Coordenadas geográficas reales del punto marcado en el mapa.
+  lat      Float
+  lon      Float
+  creadoEn DateTime @default(now())
+
+  autorId String
+  autor   User   @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@index([sesionId])
+}
+
+model Simulacion {
+  id             String   @id @default(cuid())
+  indiceEquidad  Int      @default(0)
+  validadaEn     DateTime?
+  actualizadoEn  DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  asignaciones Asignacion[]
+
+  /// Cada estudiante tiene una simulación por sesión, no una sola en total.
+  @@unique([userId, sesionId])
+}
+
+model Familia {
+  id           String    @id @default(cuid())
+  nombre       String @db.Text
+  personas     Int
+  menores      Int
+  cabezaMujer  Boolean
+  etnica       Boolean
+  retornada    Boolean
+  prioridad    Prioridad
+  orden        Int       @unique
+
+  asignaciones Asignacion[]
+}
+
+model Asignacion {
+  id       String   @id @default(cuid())
+  hectareas Int     @default(0)
+  subsidio Subsidio @default(NINGUNO)
+
+  simulacionId String
+  simulacion   Simulacion @relation(fields: [simulacionId], references: [id], onDelete: Cascade)
+  familiaId    String
+  familia      Familia    @relation(fields: [familiaId], references: [id], onDelete: Cascade)
+
+  @@unique([simulacionId, familiaId])
+}
+
+model FlorJardin {
+  id       String      @id @default(cuid())
+  nombre   String @db.Text
+  legado   String @db.Text
+  epoca    Epoca
+  pieza    PiezaJardin
+  tono     String
+  altura   Int
+  creadoEn DateTime    @default(now())
+
+  autorId String?
+  autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@index([sesionId])
+}
+
+model EntradaDiario {
+  id       String   @id @default(cuid())
+  emocion  String
+  texto    String @db.Text
+  privada  Boolean  @default(true)
+  creadoEn DateTime @default(now())
+
+  autorId String
+  autor   User   @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  /// El diario también se puede escribir fuera de una sesión concreta, desde
+  /// el espacio personal del estudiante.
+  sesionId String?
+  sesion   Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  @@index([sesionId])
+}
+
+model Foro {
+  id       String   @id @default(cuid())
+  pregunta String @db.Text
+  rolA     String @db.Text
+  rolB     String @db.Text
+  fuentes  String   @default("Por asignar")
+  abierto  Boolean  @default(true)
+  creadoEn DateTime @default(now())
+
+  autorId String?
+  autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
+}
+
+/// Respuesta escrita del estudiante a una sesión. Sustituye a la antigua
+/// RespuestaCopla, que solo servía para un ejercicio concreto del prototipo.
+model RespuestaActividad {
+  id           String   @id @default(cuid())
+  texto        String   @db.Text
+  actualizadoEn DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sesionId])
+}
+
+model ReporteDiferenciado {
+  id       String   @id @default(cuid())
+  resumen  String @db.Text
+  creadoEn DateTime @default(now())
+}

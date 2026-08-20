@@ -1,0 +1,78 @@
+MIT License
+
+Copyright (c) 2026 Fabian Santiago Tobón Valero y Daniel Alejandro León Ladino
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+ALCANCE DE ESTA LICENCIA
+================================================================================
+
+La licencia MIT anterior cubre el CÓDIGO FUENTE escrito por los autores. NO
+cubre el contenido que la plataforma procesa ni el software de terceros que
+utiliza.
+
+1. CONTENIDO PEDAGÓGICO
+   Los documentos del Centro Nacional de Memoria Histórica (CNMH) que se
+   importen conservan la licencia con la que el CNMH los publicó y deben
+   citarse según sus propias condiciones. La plataforma los almacena y los
+   muestra; no reclama ningún derecho sobre ellos.
+
+2. TESTIMONIOS Y APORTES DE LA COMUNIDAD
+   Los relatos, marcas cartográficas, memorias y anotaciones que aporten las
+   comunidades o los estudiantes pertenecen a quienes los escriben. La
+   plataforma es el medio, no la titular.
+
+3. CARTOGRAFÍA
+   Los mapas provienen de OpenStreetMap, cuyos datos se publican bajo la Open
+   Database License (ODbL). Exige la atribución "© colaboradores de
+   OpenStreetMap", que la aplicación muestra en cada mapa.
+
+================================================================================
+SOFTWARE DE TERCEROS
+================================================================================
+
+Dependencias directas, todas con licencias permisivas compatibles con MIT:
+
+    Next.js, React, React DOM, Tailwind CSS, unpdf, Zod, pg   MIT
+    Prisma y sus adaptadores, TypeScript                      Apache-2.0
+    NextAuth (Auth.js)                                        ISC
+    Leaflet, dotenv                                           BSD-2-Clause
+    bcryptjs                                                  BSD-3-Clause
+
+Entre las dependencias transitivas (551 paquetes analizados) hay ocho con
+licencias de copyleft DÉBIL. Ninguna obliga a liberar este proyecto bajo su
+misma licencia, porque se usan sin modificar y como módulos independientes,
+pero se declaran por transparencia:
+
+    mariadb 3.4.5                    LGPL-2.1-or-later
+      Controlador de MySQL que usa el adaptador de Prisma. Es la única de
+      ejecución; el resto intervienen solo al compilar o al probar.
+
+    @img/sharp-win32-x64             Apache-2.0 AND LGPL-3.0-or-later
+    lightningcss (y su binario)      MPL-2.0
+    axe-core                         MPL-2.0
+    elkjs                            EPL-2.0
+
+MPL-2.0 y EPL-2.0 son copyleft por archivo: solo obligan a mantener la licencia
+sobre los archivos originales si se modifican, cosa que este proyecto no hace.
+LGPL permite el uso desde software con otra licencia mientras la biblioteca se
+enlace de forma dinámica, que es como Node.js carga sus módulos.
+
+No hay ninguna dependencia GPL, AGPL, SSPL ni con cláusulas de uso restringido.

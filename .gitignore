@@ -1,0 +1,26 @@
+# Copia portátil de Node.js: es una distribución binaria, no código del proyecto.
+/node-portable/
+
+# Dependencias y compilados
+node_modules/
+.next/
+out/
+build/
+
+# Variables de entorno: contienen credenciales de la base de datos.
+.env
+.env.*
+!.env.example
+
+# Documentos que sube el administrador desde la aplicación
+app/almacen/
+
+# Instrucciones para asistentes de IA, no forman parte de la aplicación
+AGENTS.md
+CLAUDE.md
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+next-env.d.ts

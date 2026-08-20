@@ -1,0 +1,10 @@
+# Los archivos por lotes de Windows necesitan finales de línea CRLF: CMD no
+# resuelve etiquetas en un .bat guardado al estilo Unix y aborta sin avisar.
+*.bat text eol=crlf
+
+# Los guiones de shell son al revés: CRLF los rompe con "bad interpreter".
+*.sh       text eol=lf
+*.command  text eol=lf
+
+# El manual se entrega en Word; que Git no intente tratarlo como texto.
+*.docx binary

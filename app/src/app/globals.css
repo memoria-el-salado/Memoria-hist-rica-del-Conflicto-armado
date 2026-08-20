@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primario: #d95d39;
+  --color-primario-fuerte: #b8482a;
+  --color-primario-hover: #9e3c22;
+  --color-primario-tinte: #fdf4f0;
+  --color-primario-borde: #f2d9cf;
+
+  --color-secundario: #1b8a8a;
+  --color-secundario-fuerte: #177575;
+  --color-secundario-tinte: #f1f7f6;
+  --color-secundario-borde: #cfe6e4;
+
+  --color-terciario: #ebb035;
+  --color-terciario-fuerte: #a8791c;
+  --color-terciario-tinte: #fdf8ef;
+  --color-terciario-borde: #e7dcc6;
+
+  --color-fondo: #f9f8f6;
+  --color-superficie: #ffffff;
+  --color-superficie-suave: #fcfbfa;
+  --color-tinta: #33302c;
+  --color-tinta-media: #4a423c;
+  --color-apagado: #6e655e;
+  --color-tenue: #8c8279;
+  --color-suave: #a79e96;
+  --color-borde: #ede7e1;
+  --color-borde-campo: #e4ddd6;
+  --color-peligro: #c0392b;
+
+  --font-sans: var(--fuente-public-sans), system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    background: var(--color-fondo);
+    color: var(--color-tinta);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--color-primario);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-primario-fuerte);
+    text-decoration: underline;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primario);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #f6d9ce;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ded7d0;
+    border-radius: 9px;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mecer {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.animar-aparecer {
+  animation: aparecer 0.3s ease both;
+}
+
+.animar-mecer {
+  animation: mecer 6s ease-in-out infinite;
+}
+
+/* Escala de texto accesible (A / A+ / A++) aplicada al contenido principal. */
+[data-escala="1"] {
+  font-size: 100%;
+}
+[data-escala="1.12"] {
+  font-size: 112%;
+}
+[data-escala="1.25"] {
+  font-size: 125%;
+}
