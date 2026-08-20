@@ -15,8 +15,12 @@
     "postinstall": "prisma generate",
     "db:motor": "node scripts/motor-bd.mjs",
     "db:sincronizar": "prisma db push",
+    "estado": "tsx scripts/estado.ts",
     "modulos:limpiar": "tsx scripts/limpiar-modulos.ts",
-    "pdf:revisar": "tsx scripts/ver-pdf.ts"
+    "pdf:revisar": "tsx scripts/ver-pdf.ts",
+    "pdf:clasificar": "tsx scripts/comparar-pdf.ts",
+    "humo:sesiones": "node scripts/comprobar-sesion.mjs",
+    "humo:documentos": "node scripts/comprobar-acceso-pdf.mjs"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

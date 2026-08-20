@@ -199,6 +199,14 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run db:migrate` | Aplica las migraciones versionadas (solo PostgreSQL) |
 | `npm run db:seed` | Recarga los datos iniciales |
 | `npm run db:studio` | Explorador visual de la base de datos |
+| `npm run estado` | Resume los módulos y documentos cargados |
+| `npm run modulos:limpiar` | Borra módulos y documentos para repetir una importación |
+| `npm run pdf:revisar <pdf>` | Muestra la estructura y el texto que el importador ve en un PDF |
+| `npm run pdf:clasificar <pdf...>` | Distingue una guía del estudiante de una guía para maestros |
+| `npm run humo:sesiones` | Comprueba que las actividades muestran el contenido importado |
+| `npm run humo:documentos` | Comprueba que el estudiante no abre el material reservado al docente |
+
+Los dos últimos necesitan la aplicación en marcha (`npm run dev`).
 
 ---
 
@@ -266,6 +274,12 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |
 | CU09 | Creación de módulos desde documentos PDF | `/admin/importar` |
 | CU10 | Validación de accesibilidad universal | `/admin/accesibilidad` |
+
+**Las dos guías del CNMH.** Cada caso se publica en dos documentos: la guía del estudiante, que es
+la que se importa para construir el módulo, y la guía para maestros, que trae las orientaciones y lo
+que se espera que los estudiantes descubran. La segunda se marca como **solo docentes** desde
+`/admin/importar`: la restricción se aplica en `/api/documentos/[id]`, de modo que un estudiante que
+escriba la dirección recibe un 403, y las pantallas de actividad solo enlazan documentos abiertos.
 
 **Las actividades del estudiante no son rutas fijas.** Todas viven en `/estudiante/sesion/{id}`: la
 pantalla que se muestra la decide la actividad que el administrador asignó a esa sesión al importar

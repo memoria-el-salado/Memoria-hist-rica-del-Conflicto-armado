@@ -3,10 +3,12 @@
 import { useActionState, useState, useTransition } from "react";
 import { ACTIVIDADES, type EjeArmado } from "@/lib/importador-pdf";
 import {
+  alternarVisibilidadDocumento,
   analizarDocumento,
   analizarDocumentoExistente,
   crearModuloDesdeDocumento,
   eliminarDocumento,
+  vincularDocumento,
   type ResultadoAnalisis,
 } from "./actions";
 
@@ -15,11 +17,20 @@ type Documento = {
   titulo: string;
   nombreArchivo: string;
   paginas: number;
+  casoId: string | null;
   caso: string | null;
+  /** Reservado al docente: las guías para maestros traen las respuestas. */
+  soloDocentes: boolean;
   subidoEn: string;
 };
 
-export function ImportadorDocumento({ documentos }: { documentos: Documento[] }) {
+export function ImportadorDocumento({
+  documentos,
+  casos,
+}: {
+  documentos: Documento[];
+  casos: { id: string; nombre: string }[];
+}) {
   const [arbol, setArbol] = useState<EjeArmado[] | null>(null);
   const [nombre, setNombre] = useState("");
   const [depto, setDepto] = useState("");
@@ -33,6 +44,16 @@ export function ImportadorDocumento({ documentos }: { documentos: Documento[] })
   const [borrando, iniciarBorrado] = useTransition();
   /** Sesión cuyo texto está desplegado para revisar; solo una a la vez. */
   const [textoAbierto, setTextoAbierto] = useState<string | null>(null);
+
+  /** Reserva un documento al docente o lo vuelve a abrir a los estudiantes. */
+  function alternarVisibilidad(id: string) {
+    iniciarBorrado(async () => setMensaje(await alternarVisibilidadDocumento(id)));
+  }
+
+  /** Asocia el documento a un módulo ya creado, sin reimportar su estructura. */
+  function vincular(id: string, casoId: string) {
+    iniciarBorrado(async () => setMensaje(await vincularDocumento(id, casoId)));
+  }
 
   /** Quita un PDF del repositorio para poder volver a subir una versión nueva. */
   function borrar(id: string, titulo: string) {
@@ -506,20 +527,50 @@ export function ImportadorDocumento({ documentos }: { documentos: Documento[] })
               className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-4 py-3 last:border-b-0"
             >
               <div className="min-w-0 flex-1">
-                <div className="text-[13px] font-bold">{d.titulo}</div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[13px] font-bold">{d.titulo}</span>
+                  {d.soloDocentes && (
+                    <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[10px] font-bold text-[#5B4B8A]">
+                      Solo docentes
+                    </span>
+                  )}
+                </div>
                 <div className="text-[11px] text-suave">
                   {d.nombreArchivo} · {d.paginas} páginas · {d.subidoEn}
                 </div>
               </div>
-              {d.caso ? (
-                <span className="rounded-full bg-secundario-tinte px-2.5 py-1 text-[10.5px] font-bold text-secundario-fuerte">
-                  {d.caso}
-                </span>
-              ) : (
-                <span className="rounded-full bg-[#F3F0EC] px-2.5 py-1 text-[10.5px] font-bold text-suave">
-                  Sin módulo
-                </span>
-              )}
+
+              <label className="sr-only" htmlFor={`caso-${d.id}`}>
+                Módulo al que pertenece {d.titulo}
+              </label>
+              <select
+                id={`caso-${d.id}`}
+                value={d.casoId ?? ""}
+                onChange={(e) => vincular(d.id, e.target.value)}
+                disabled={borrando}
+                className="max-w-[180px] rounded-md border border-borde-campo bg-superficie px-2 py-1.5 text-[11.5px]"
+              >
+                <option value="">Sin módulo</option>
+                {casos.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nombre}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                onClick={() => alternarVisibilidad(d.id)}
+                disabled={borrando}
+                title={
+                  d.soloDocentes
+                    ? "Ahora solo lo abren los docentes. Púlsalo para abrirlo también a los estudiantes."
+                    : "Los estudiantes pueden abrirlo. Púlsalo para reservarlo al docente."
+                }
+                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario disabled:opacity-60"
+              >
+                {d.soloDocentes ? "Abrir a estudiantes" : "Reservar al docente"}
+              </button>
+
               <button
                 onClick={() => analizarCargado(d.id)}
                 disabled={analizandoPrevio}

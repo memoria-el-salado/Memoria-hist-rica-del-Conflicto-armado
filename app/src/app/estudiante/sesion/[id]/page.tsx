@@ -27,7 +27,17 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
   const sesion = await prisma.sesion.findUnique({
     where: { id },
     include: {
-      eje: { include: { caso: { include: { documentos: { take: 1 } } } } },
+      eje: {
+        include: {
+          caso: {
+            include: {
+              // El estudiante solo ve las guías pensadas para él; las de
+              // maestros traen las respuestas y quedan fuera de su alcance.
+              documentos: { where: { soloDocentes: false }, take: 1 },
+            },
+          },
+        },
+      },
       subsecciones: { orderBy: { orden: "asc" } },
     },
   });

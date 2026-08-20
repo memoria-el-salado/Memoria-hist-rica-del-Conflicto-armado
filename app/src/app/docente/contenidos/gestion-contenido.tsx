@@ -26,12 +26,21 @@ type Recurso = {
   alerta: boolean;
 };
 
+type Documento = {
+  id: string;
+  titulo: string;
+  paginas: number;
+  /** El estudiante no puede abrirlo: es material de preparación del docente. */
+  soloDocentes: boolean;
+};
+
 type Props = {
   recursos: Recurso[];
   ejes: { id: string; label: string }[];
+  documentos: Documento[];
 };
 
-export function GestionContenido({ recursos, ejes }: Props) {
+export function GestionContenido({ recursos, ejes, documentos }: Props) {
   const [alerta, setAlerta] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [, iniciarTransicion] = useTransition();
@@ -57,6 +66,50 @@ export function GestionContenido({ recursos, ejes }: Props) {
         Carga y organiza recursos en los módulos temáticos. Todo recurso exige contexto histórico, y puedes
         activar una Alerta de Cuidado antes de contenidos emocionalmente retadores.
       </p>
+
+      {documentos.length > 0 && (
+        <div className="mb-5 rounded-xl border border-borde bg-superficie p-[18px]">
+          <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
+            GUÍAS DEL MÓDULO ACTIVO
+          </div>
+          <p className="mt-1.5 text-[12px] leading-[1.6] text-suave">
+            Los documentos de los que salió la ruta pedagógica. Los marcados como material del
+            docente no aparecen en la pantalla del estudiante.
+          </p>
+          <div className="mt-3 grid gap-2">
+            {documentos.map((d) => (
+              <div
+                key={d.id}
+                className="flex flex-wrap items-center gap-3 rounded-[10px] border border-borde bg-superficie-suave px-3.5 py-2.5"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[13px] font-bold">{d.titulo}</span>
+                    {d.soloDocentes ? (
+                      <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[10px] font-bold text-[#5B4B8A]">
+                        Solo docentes
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[10px] font-bold text-secundario-fuerte">
+                        Visible para estudiantes
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-suave">{d.paginas} páginas</div>
+                </div>
+                <a
+                  href={`/api/documentos/${d.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario hover:no-underline"
+                >
+                  Abrir PDF
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid items-start gap-[18px] xl:grid-cols-[1.6fr_1fr]">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">

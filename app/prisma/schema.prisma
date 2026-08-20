@@ -180,6 +180,11 @@ model DocumentoFuente {
   paginas        Int
   subidoEn       DateTime @default(now())
 
+  /// Las guías para maestros traen las respuestas esperadas y las
+  /// orientaciones para conducir la sesión. Ponerlas al alcance del estudiante
+  /// arruinaría la actividad, así que se pueden reservar al docente.
+  soloDocentes Boolean @default(false)
+
   casoId String?
   caso   Caso?   @relation(fields: [casoId], references: [id], onDelete: SetNull)
 }

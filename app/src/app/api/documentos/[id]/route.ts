@@ -21,6 +21,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: "Documento no encontrado." }, { status: 404 });
   }
 
+  // Las guías para maestros contienen las respuestas y las orientaciones de la
+  // sesión: el estudiante no debe poder abrirlas ni escribiendo la dirección.
+  if (documento.soloDocentes && sesion.user.rol === "ESTUDIANTE") {
+    return NextResponse.json(
+      { error: "Este documento es material del docente." },
+      { status: 403 }
+    );
+  }
+
   // La ruta se reconstruye desde el identificador, nunca desde la entrada del usuario.
   const ruta = path.join(process.cwd(), "almacen", "documentos", `${documento.id}.pdf`);
 

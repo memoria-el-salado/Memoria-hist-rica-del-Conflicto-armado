@@ -147,6 +147,61 @@ export async function eliminarDocumento(documentoId: string) {
   return { ok: `"${documento.titulo}" se eliminó del repositorio.` };
 }
 
+/**
+ * Reserva un documento al docente, o lo vuelve a abrir a todos.
+ *
+ * Las guías para maestros del CNMH traen las respuestas esperadas y las
+ * orientaciones para conducir la sesión; si el estudiante puede abrirlas, la
+ * actividad pierde sentido.
+ */
+export async function alternarVisibilidadDocumento(documentoId: string) {
+  if (!(await exigirAdmin())) return { error: "No autorizado." };
+
+  const documento = await prisma.documentoFuente.findUnique({ where: { id: documentoId } });
+  if (!documento) return { error: "El documento ya no existe." };
+
+  const actualizado = await prisma.documentoFuente.update({
+    where: { id: documentoId },
+    data: { soloDocentes: !documento.soloDocentes },
+  });
+
+  revalidatePath("/admin/importar");
+  revalidatePath("/docente/contenidos");
+
+  return {
+    ok: actualizado.soloDocentes
+      ? `"${actualizado.titulo}" queda reservado a los docentes.`
+      : `"${actualizado.titulo}" vuelve a estar disponible para los estudiantes.`,
+  };
+}
+
+/**
+ * Asocia un documento ya cargado a un módulo existente, sin volver a importar
+ * su estructura. Es la vía para adjuntar la guía del docente al mismo caso que
+ * se creó desde la guía del estudiante.
+ */
+export async function vincularDocumento(documentoId: string, casoId: string) {
+  if (!(await exigirAdmin())) return { error: "No autorizado." };
+
+  const documento = await prisma.documentoFuente.findUnique({ where: { id: documentoId } });
+  if (!documento) return { error: "El documento ya no existe." };
+
+  if (!casoId) {
+    await prisma.documentoFuente.update({ where: { id: documentoId }, data: { casoId: null } });
+    revalidatePath("/admin/importar");
+    return { ok: `"${documento.titulo}" ya no está asociado a ningún módulo.` };
+  }
+
+  const caso = await prisma.caso.findUnique({ where: { id: casoId } });
+  if (!caso) return { error: "El módulo no existe." };
+
+  await prisma.documentoFuente.update({ where: { id: documentoId }, data: { casoId } });
+
+  revalidatePath("/admin/importar");
+  revalidatePath("/docente/contenidos");
+  return { ok: `"${documento.titulo}" quedó asociado al módulo "${caso.nombre}".` };
+}
+
 /** Paso 1b · Analiza un documento que ya está cargado en el sistema. */
 export async function analizarDocumentoExistente(documentoId: string): Promise<ResultadoAnalisis> {
   if (!(await exigirAdmin())) return { error: "No autorizado." };
