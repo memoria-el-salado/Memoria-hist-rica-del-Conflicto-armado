@@ -76,18 +76,23 @@ async function main() {
   const sinRuta = htmlMapa.includes("todavía no está disponible");
   console.log(`Mapa del viaje: ${mapa.status} · ruta pedagógica ${sinRuta ? "VACÍA" : "cargada"}`);
 
-  // Se revisan sesiones de distintas actividades.
+  // Solo tiene sentido revisar las sesiones que el docente ya publicó: las
+  // demás muestran el aviso de que todavía no están disponibles.
   const sesiones = await prisma.sesion.findMany({
-    where: { eje: { caso: { activo: true } }, codigo: { in: ["1.1", "1.2", "1.3", "1.4", "6.4"] } },
+    where: { eje: { caso: { activo: true } }, publicada: true },
     orderBy: { codigo: "asc" },
+    include: { subsecciones: { orderBy: { orden: "asc" } } },
   });
 
   for (const s of sesiones) {
     const res = await pedir(`/estudiante/sesion/${s.id}`);
     const html = await res.text();
 
-    // Se busca un fragmento largo del contenido guardado dentro de la página.
-    const limpio = (s.contenido ?? "").replace(/\s+/g, " ").trim();
+    // La pantalla compone la lectura con el texto de la sesión y el de sus
+    // subsecciones, así que se busca un fragmento de cualquiera de los dos.
+    const fuente =
+      (s.contenido ?? "") || s.subsecciones.map((x) => x.contenido ?? "").find((t) => t.length > 200) || "";
+    const limpio = fuente.replace(/\s+/g, " ").trim();
     const muestra = limpio.slice(20, 90);
     const traeContenido = muestra.length > 40 && html.replace(/\s+/g, " ").includes(muestra);
     const traeTitulo = html.includes(s.titulo.slice(0, 30));

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { componerLectura, subseccionesSinTexto } from "@/lib/lectura-sesion";
 
 /**
  * Encabezado común a todas las actividades.
@@ -80,7 +81,10 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
  * hueco con un texto inventado.
  */
 export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
-  const parrafos = (sesion.contenido ?? "").split(/\n{2,}/).filter((p) => p.trim());
+  // El documento reparte el contenido entre la sesión y sus subsecciones; la
+  // lectura se compone de ambas para no dar por vacío lo que sí está escrito.
+  const bloques = componerLectura(sesion.contenido, sesion.subsecciones);
+  const sinTexto = subseccionesSinTexto(sesion.subsecciones);
 
   return (
     <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
@@ -100,40 +104,42 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
         </div>
       )}
 
-      {parrafos.length > 0 ? (
-        parrafos.map((parrafo, i) => (
-          <p
-            key={i}
-            className="mb-3.5 text-justify text-[13.5px] leading-[1.85] text-tinta-media last:mb-0"
-          >
-            {parrafo}
-          </p>
-        ))
+      {bloques.length > 0 ? (
+        bloques.map((bloque) =>
+          bloque.tipo === "subtitulo" ? (
+            <h3
+              key={bloque.id}
+              className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
+            >
+              <span className="text-primario">{bloque.codigo}</span>
+              <span>{bloque.texto}</span>
+            </h3>
+          ) : (
+            <p
+              key={bloque.id}
+              className="mb-3.5 text-justify text-[13.5px] leading-[1.85] text-tinta-media last:mb-0"
+            >
+              {bloque.texto}
+            </p>
+          )
+        )
       ) : (
         <p className="text-[13px] leading-[1.7] text-tenue">
-          El documento importado no traía texto para esta sesión: su desarrollo está en las
-          subsecciones y en el trabajo de clase. Puedes abrir el PDF original desde el enlace de
-          arriba.
+          El documento importado no traía texto para esta sesión: su desarrollo está en el trabajo
+          de clase. Puedes abrir el PDF original desde el enlace de arriba.
         </p>
       )}
 
-      {sesion.subsecciones.length > 0 && (
+      {sinTexto.length > 0 && (
         <div className="mt-5 border-t border-[#F1EBE5] pt-4">
           <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
-            CONTENIDO DE LA SESIÓN
+            TAMBIÉN EN ESTA SESIÓN
           </div>
-          <ol className="mt-2.5 grid gap-2.5">
-            {sesion.subsecciones.map((sub) => (
-              <li key={sub.id}>
-                <div className="flex gap-2 text-[13px] font-semibold text-tinta-media">
-                  <span className="text-primario">{sub.codigo}</span>
-                  <span>{sub.titulo}</span>
-                </div>
-                {sub.contenido && (
-                  <p className="mt-1 text-justify text-[12.5px] leading-[1.75] text-apagado">
-                    {sub.contenido.split(/\n{2,}/)[0]}
-                  </p>
-                )}
+          <ol className="mt-2.5 grid gap-1.5">
+            {sinTexto.map((sub) => (
+              <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
+                <span className="font-bold text-primario">{sub.codigo}</span>
+                <span>{sub.titulo}</span>
               </li>
             ))}
           </ol>

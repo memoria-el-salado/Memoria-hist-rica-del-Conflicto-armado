@@ -20,7 +20,10 @@
     "pdf:revisar": "tsx scripts/ver-pdf.ts",
     "pdf:clasificar": "tsx scripts/comparar-pdf.ts",
     "humo:sesiones": "node scripts/comprobar-sesion.mjs",
-    "humo:documentos": "node scripts/comprobar-acceso-pdf.mjs"
+    "humo:documentos": "node scripts/comprobar-acceso-pdf.mjs",
+    "demo:cargar": "tsx scripts/datos-demostracion.ts",
+    "manual:capturar": "node scripts/capturar-manual.mjs",
+    "manual:generar": "python scripts/generar-manual.py"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",
@@ -46,6 +49,7 @@
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.1",
+    "puppeteer-core": "^25.8.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.12",
     "typescript": "^5",

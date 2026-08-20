@@ -418,6 +418,19 @@ software con otra licencia cuando el enlace es dinámico, que es como Node.js ca
 
 ## 15. Manual de Usuario
 
-`MANUAL-DE-USUARIO.docx` documenta, para los tres perfiles, cómo operar cada pantalla, los mensajes
-que devuelve el sistema y cómo resolverlos. Es el documento dirigido a quien **usa** la plataforma;
-este README está dirigido a quien la **instala y mantiene**.
+`MANUAL-DE-USUARIO.docx` es una **guía visual**: una pantalla por página, con la captura grande y
+unos pocos pasos numerados debajo. Va dirigido a quien **usa** la plataforma sin conocerla; este
+README está dirigido a quien la **instala y mantiene**.
+
+Se regenera desde la aplicación en marcha, para que nunca muestre pantallas que ya no existen:
+
+```bash
+npm run dev                                          # en otra terminal
+npm run demo:cargar <guia.pdf> <guia-maestros.pdf>   # datos con los que se ve algo real
+npm run manual:capturar                              # 20 capturas en manual/capturas
+npm run manual:generar                               # arma el .docx
+```
+
+`demo:cargar` **borra los módulos y las cuentas de docentes y estudiantes**, y deja el administrador
+con la misma contraseña que el resto. Es para preparar una demostración o el manual, no para una
+instalación en uso. La generación del documento necesita Python con `python-docx`.

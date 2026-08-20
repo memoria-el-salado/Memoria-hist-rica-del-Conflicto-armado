@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { publicarAnotacion } from "@/app/estudiante/sesion/[id]/actions";
+import { componerLectura, subseccionesSinTexto } from "@/lib/lectura-sesion";
 import { CabeceraSesion, type DatosSesion } from "./cabecera-sesion";
 
 /**
@@ -49,7 +50,10 @@ export function LecturaAnotada({
     null as { ok?: string; error?: string } | null
   );
 
-  const parrafos = (sesion.contenido ?? "").split(/\n{2,}/).filter((p) => p.trim().length > 60);
+  // El texto de la sesión se compone del suyo propio y del de sus subsecciones,
+  // porque el documento reparte el contenido entre ambos niveles.
+  const bloques = componerLectura(sesion.contenido, sesion.subsecciones);
+  const sinTexto = subseccionesSinTexto(sesion.subsecciones);
 
   return (
     <div className="animar-aparecer">
@@ -73,26 +77,33 @@ export function LecturaAnotada({
             )}
           </div>
 
-          {parrafos.length > 0 ? (
+          {bloques.length > 0 ? (
             <>
-              {parrafos.map((parrafo, i) => {
-                const elegido = cita === parrafo;
-                return (
+              {bloques.map((bloque) =>
+                bloque.tipo === "subtitulo" ? (
+                  <h3
+                    key={bloque.id}
+                    className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
+                  >
+                    <span className="text-primario">{bloque.codigo}</span>
+                    <span>{bloque.texto}</span>
+                  </h3>
+                ) : (
                   <button
-                    key={i}
-                    onClick={() => setCita(elegido ? "" : parrafo)}
-                    aria-pressed={elegido}
+                    key={bloque.id}
+                    onClick={() => setCita(cita === bloque.texto ? "" : bloque.texto)}
+                    aria-pressed={cita === bloque.texto}
                     className="mb-2 block w-full cursor-pointer rounded-r-lg border-l-[3px] px-[15px] py-2.5 text-justify text-[13.5px] leading-[1.85] transition-colors"
                     style={{
-                      borderLeftColor: elegido ? "#EBB035" : "transparent",
-                      background: elegido ? "#FBEFD8" : "transparent",
+                      borderLeftColor: cita === bloque.texto ? "#EBB035" : "transparent",
+                      background: cita === bloque.texto ? "#FBEFD8" : "transparent",
                       color: "#5B524B",
                     }}
                   >
-                    {parrafo}
+                    {bloque.texto}
                   </button>
-                );
-              })}
+                )
+              )}
               <p className="mt-3 text-[11.5px] text-tenue">
                 Haz clic en un párrafo para citarlo en tu anotación.
               </p>
@@ -104,13 +115,13 @@ export function LecturaAnotada({
             </p>
           )}
 
-          {sesion.subsecciones.length > 0 && (
+          {sinTexto.length > 0 && (
             <div className="mt-5 border-t border-[#F1EBE5] pt-4">
               <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
-                CONTENIDO DE LA SESIÓN
+                TAMBIÉN EN ESTA SESIÓN
               </div>
               <ol className="mt-2.5 grid gap-1.5">
-                {sesion.subsecciones.map((sub) => (
+                {sinTexto.map((sub) => (
                   <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
                     <span className="font-bold text-primario">{sub.codigo}</span>
                     <span>{sub.titulo}</span>
