@@ -8,7 +8,7 @@
  *   npx tsx scripts/datos-demostracion.ts <guia-estudiante.pdf> [guia-maestros.pdf]
  */
 import { randomUUID } from "crypto";
-import { copyFile, mkdir, readFile } from "fs/promises";
+import { copyFile, mkdir, readFile, unlink } from "fs/promises";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
@@ -66,8 +66,20 @@ async function main() {
   }
 
   console.log("Limpiando módulos y cuentas de demostración...");
+
+  // Los PDF se borran junto con su ficha: si no, el almacén va acumulando
+  // archivos que ya no pertenecen a ningún documento.
+  const previos = await prisma.documentoFuente.findMany();
   await prisma.caso.deleteMany();
   await prisma.documentoFuente.deleteMany();
+  for (const d of previos) {
+    try {
+      await unlink(path.join(CARPETA, `${d.id}.pdf`));
+    } catch {
+      /* el archivo ya no estaba */
+    }
+  }
+
   await prisma.user.deleteMany({ where: { rol: { in: ["DOCENTE", "ESTUDIANTE"] } } });
 
   // --- Módulo a partir de la guía del estudiante -------------------------

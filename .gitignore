@@ -6,6 +6,8 @@ node_modules/
 .next/
 out/
 build/
+*.tsbuildinfo
+next-env.d.ts
 
 # Variables de entorno: contienen credenciales de la base de datos.
 .env
@@ -18,9 +20,9 @@ app/almacen/
 # Instrucciones para asistentes de IA, no forman parte de la aplicación
 AGENTS.md
 CLAUDE.md
+.claude/
 
 # Sistema y editores
 .DS_Store
 Thumbs.db
-*.tsbuildinfo
-next-env.d.ts
+~$*

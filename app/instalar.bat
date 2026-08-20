@@ -277,14 +277,11 @@ REM ---------------------------------------- 6. Migraciones y datos
 echo.
 echo [6/6] Creando las tablas y cargando los datos...
 
-if "%MOTOR%"=="postgresql" (
-  call npm exec --yes prisma migrate deploy
-) else (
-  call npm exec --yes prisma db push
-)
+REM El esquema se aplica igual con los dos motores, desde schema.prisma.
+call npm exec --yes prisma db push
 if errorlevel 1 (
   echo.
-  echo   ERROR: fallaron las migraciones. Revisa la cadena DATABASE_URL del archivo .env
+  echo   ERROR: no se pudieron crear las tablas. Revisa la cadena DATABASE_URL del archivo .env
   echo.
   pause
   exit /b 1
