@@ -1,0 +1,12 @@
+# Identidades de los autores.
+#
+# El trabajo se hizo desde varias cuentas: la de Git en cada equipo y la de
+# GitHub al subir archivos desde la web. Este archivo las agrupa para que el
+# historial muestre a las dos personas que son, y con su nombre completo.
+#
+# Comprobación:  git shortlog -sne
+
+Fabian Santiago Tobón Valero <104570791+pochote17@users.noreply.github.com> Santiago Tobon <104570791+pochote17@users.noreply.github.com>
+
+Daniel Alejandro León Ladino <daniel.leon@co.mcd.com> Daniel Alejandro Leon Ladino <daniel.leon@co.mcd.com>
+Daniel Alejandro León Ladino <daniel.leon@co.mcd.com> Armonik4 <105080855+Armonik4@users.noreply.github.com>
