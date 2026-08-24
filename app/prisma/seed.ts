@@ -57,7 +57,6 @@ async function main() {
     prisma.anotacion.deleteMany(),
     prisma.auditoriaAccesibilidad.deleteMany(),
     prisma.recurso.deleteMany(),
-    prisma.progresoEje.deleteMany(),
     prisma.subseccion.deleteMany(),
     prisma.sesion.deleteMany(),
     prisma.eje.deleteMany(),

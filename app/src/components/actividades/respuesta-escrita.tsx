@@ -32,7 +32,7 @@ export function RespuestaEscrita({
     <div className="animar-aparecer max-w-[1100px]">
       <CabeceraSesion sesion={sesion} />
 
-      <div className="grid items-start gap-[18px] lg:grid-cols-[1.5fr_1fr]">
+      <div className="rejilla-panel">
         <TextoSesion sesion={sesion} />
 
         <form action={accion} className="rounded-xl border border-borde bg-superficie p-5">

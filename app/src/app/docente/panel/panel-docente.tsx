@@ -2,6 +2,7 @@
 
 import { useActionState, useTransition } from "react";
 import { activarProtocolo, alternarPublicacion } from "./actions";
+import { RepartoPesos, type EjePeso } from "./reparto-pesos";
 
 type Sesion = {
   id: string;
@@ -17,12 +18,20 @@ type Props = {
   barras: { label: string; valor: number }[];
   subpoblaciones: { nombre: string; porcentaje: number; color: string }[];
   totalEstudiantes: number;
+  ejes: EjePeso[];
   sesiones: Sesion[];
 };
 
 const COLORES_BARRA = ["#D95D39", "#E4886A", "#1B8A8A", "#EBB035", "#E4886A", "#177575"];
 
-export function PanelDocente({ promedioGlobal, barras, subpoblaciones, totalEstudiantes, sesiones }: Props) {
+export function PanelDocente({
+  promedioGlobal,
+  barras,
+  subpoblaciones,
+  totalEstudiantes,
+  ejes,
+  sesiones,
+}: Props) {
   const [, iniciarTransicion] = useTransition();
   const [estado, accionProtocolo, pendienteProtocolo] = useActionState(
     activarProtocolo,
@@ -38,8 +47,10 @@ export function PanelDocente({ promedioGlobal, barras, subpoblaciones, totalEstu
         Seguimiento de la Ruta Pedagógica y bienestar emocional del grupo.
       </p>
 
-      <div className="grid items-start gap-[18px] xl:grid-cols-[1.5fr_1fr]">
-        <div className="grid gap-[18px]">
+      {/* min-w-0 en las columnas: sin él, un nombre de eje largo ensancha su
+          columna y estruja la de al lado en vez de recortarse. */}
+      <div className="rejilla-panel-ancha">
+        <div className="grid min-w-0 grid-cols-1 gap-[18px]">
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold tracking-[.12em] text-primario">PROGRESO COLECTIVO</span>
@@ -118,7 +129,7 @@ export function PanelDocente({ promedioGlobal, barras, subpoblaciones, totalEstu
           </div>
         </div>
 
-        <div className="grid gap-[18px]">
+        <div className="grid min-w-0 grid-cols-1 gap-[18px]">
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="text-[11px] font-bold tracking-[.12em] text-tenue">SUB-POBLACIONES</div>
             {totalEstudiantes === 0 && (
@@ -189,6 +200,8 @@ export function PanelDocente({ promedioGlobal, barras, subpoblaciones, totalEstu
               </div>
             )}
           </form>
+
+          <RepartoPesos ejes={ejes} />
 
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="text-[11px] font-bold tracking-[.12em] text-tenue">

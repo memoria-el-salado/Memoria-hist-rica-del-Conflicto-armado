@@ -40,7 +40,7 @@ export function GestionDocentes({
         cada docente da de alta a sus estudiantes. Nadie se registra por su cuenta.
       </p>
 
-      <div className="grid items-start gap-[18px] lg:grid-cols-[1.4fr_1fr]">
+      <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
             <span className="text-[13px] font-extrabold">Docentes registrados</span>

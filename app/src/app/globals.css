@@ -108,3 +108,55 @@
 [data-escala="1.25"] {
   font-size: 125%;
 }
+
+/* --------------------------------------------------------------------------
+   Rejillas de dos columnas
+
+   Una pista "1fr" nunca baja de la anchura mínima de su contenido, así que un
+   título largo ensancha su columna y empuja el resto fuera de la pantalla.
+   "minmax(0, 1fr)" le permite encogerse y que el texto se recorte dentro.
+
+   Van aquí, y no como clase de Tailwind, porque su sintaxis de valores
+   arbitrarios no admite las comas que minmax() necesita.
+   -------------------------------------------------------------------------- */
+
+.rejilla-panel,
+.rejilla-panel-ancha {
+  display: grid;
+  align-items: start;
+  gap: 18px;
+}
+
+/* Contenido principal a la izquierda, formulario o resumen a la derecha. */
+@media (min-width: 1024px) {
+  .rejilla-panel {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+/* Igual, pero espera a tener más ancho antes de partirse en dos. */
+@media (min-width: 1280px) {
+  .rejilla-panel-ancha {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+/* Filas de tabla: la primera columna manda y las demás se ajustan. */
+.rejilla-tabla-4 {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.9fr);
+}
+
+.rejilla-tabla-5 {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr)
+    minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.rejilla-subpoblaciones {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr)
+    minmax(0, 1fr) minmax(0, 1.2fr);
+}

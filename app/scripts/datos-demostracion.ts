@@ -250,12 +250,28 @@ async function main() {
     },
   });
 
-  await prisma.progresoEje.createMany({
-    data: [
-      { userId: estudiantes[0].id, ejeId: sesiones[0].ejeId, porcentaje: 65 },
-      { userId: estudiantes[1].id, ejeId: sesiones[0].ejeId, porcentaje: 40 },
-      { userId: estudiantes[2].id, ejeId: sesiones[0].ejeId, porcentaje: 15 },
-    ],
+  // El avance ya no se siembra: se deduce del trabajo de arriba. Lo que sí hace
+  // falta es el reparto de peso entre los ejes, que es decisión del docente.
+  const ejesDelCaso = await prisma.eje.findMany({
+    where: { casoId: caso.id },
+    orderBy: { orden: "asc" },
+    select: { id: true },
+  });
+  const reparto = [30, 10, 10, 30, 10, 10];
+  await prisma.$transaction(
+    ejesDelCaso.map((eje, i) =>
+      prisma.eje.update({ where: { id: eje.id }, data: { peso: reparto[i] ?? 0 } })
+    )
+  );
+
+  // Julián deja hecha una segunda sesión, para que el grupo no vaya parejo.
+  await prisma.respuestaActividad.create({
+    data: {
+      userId: estudiantes[1].id,
+      sesionId: porCodigo("1.2").id,
+      texto:
+        "Me llamó la atención que la copla nombre tantos municipios por su comida. Suena a que la tierra alcanzaba para todos.",
+    },
   });
 
   // Cuenta recién creada, para poder mostrar la pantalla de primer ingreso.

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { avanceDeEstudiantes } from "@/lib/avance";
 import { ReportesSubpoblaciones } from "./reportes-subpoblaciones";
 
 const RECOMENDACIONES: Record<string, string> = {
@@ -18,13 +19,15 @@ export default async function SubpoblacionesPage() {
       select: {
         id: true,
         subpoblacion: true,
-        progresos: { select: { porcentaje: true } },
         entradasDiario: { select: { id: true } },
         anotaciones: { select: { id: true } },
       },
     }),
     prisma.reporteDiferenciado.findMany({ orderBy: { creadoEn: "desc" } }),
   ]);
+
+  // El avance se deduce del trabajo hecho en cada sesión.
+  const avances = await avanceDeEstudiantes(estudiantes.map((e) => e.id));
 
   const grupos = new Map<
     string,
@@ -34,10 +37,7 @@ export default async function SubpoblacionesPage() {
   for (const e of estudiantes) {
     const clave = e.subpoblacion ?? "Sin vínculo directo";
     const actual = grupos.get(clave) ?? { avances: [], entregas: 0, estudiantes: 0 };
-    const promedio = e.progresos.length
-      ? e.progresos.reduce((s, p) => s + p.porcentaje, 0) / e.progresos.length
-      : 0;
-    actual.avances.push(promedio);
+    actual.avances.push(avances.get(e.id)?.total ?? 0);
     actual.entregas += e.entradasDiario.length + e.anotaciones.length;
     actual.estudiantes += 1;
     grupos.set(clave, actual);

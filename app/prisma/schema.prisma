@@ -78,7 +78,6 @@ model User {
   simulaciones    Simulacion[]
   floresJardin    FlorJardin[]
   entradasDiario  EntradaDiario[]
-  progresos       ProgresoEje[]
   respuestas      RespuestaActividad[]
   recursosSubidos Recurso[]
   forosCreados    Foro[]
@@ -111,12 +110,16 @@ model Eje {
   // El Preámbulo "Me cuido y nos cuidamos" antecede a los ejes numerados.
   esPreambulo     Boolean @default(false)
 
+  /// Cuánto pesa este eje en el avance del curso, de los 100 puntos que el
+  /// docente reparte entre todos. Dentro del eje, sus sesiones publicadas se
+  /// reparten ese peso a partes iguales.
+  peso Int @default(0)
+
   casoId String
   caso   Caso   @relation(fields: [casoId], references: [id], onDelete: Cascade)
 
-  sesiones  Sesion[]
-  recursos  Recurso[]
-  progresos ProgresoEje[]
+  sesiones Sesion[]
+  recursos Recurso[]
 
   @@unique([casoId, numero])
 }
@@ -187,18 +190,6 @@ model DocumentoFuente {
 
   casoId String?
   caso   Caso?   @relation(fields: [casoId], references: [id], onDelete: SetNull)
-}
-
-model ProgresoEje {
-  id         String @id @default(cuid())
-  porcentaje Int    @default(0)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ejeId  String
-  eje    Eje    @relation(fields: [ejeId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, ejeId])
 }
 
 model Recurso {

@@ -41,7 +41,7 @@ export function GestionEstudiantes({
         que tú hayas creado, y son los que aparecen en tu panel de seguimiento.
       </p>
 
-      <div className="grid items-start gap-[18px] lg:grid-cols-[1.4fr_1fr]">
+      <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
             <span className="text-[13px] font-extrabold">Estudiantes del grupo</span>

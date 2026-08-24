@@ -78,7 +78,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
 
       <div className="overflow-x-auto rounded-xl border border-borde bg-superficie">
         <div className="min-w-[760px]">
-          <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
+          <div className="rejilla-tabla-5 gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
             <span>CONTENIDO</span>
             <span>TRANSCRIPCIÓN</span>
             <span>CONTRASTE</span>
@@ -90,7 +90,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
             return (
               <div
                 key={f.id}
-                className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1fr] items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
+                className="rejilla-tabla-5 items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
               >
                 <div>
                   <div className="text-[13px] font-bold">{f.titulo}</div>

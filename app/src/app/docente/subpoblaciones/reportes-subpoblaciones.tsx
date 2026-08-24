@@ -34,7 +34,7 @@ export function ReportesSubpoblaciones({ filas, reportes }: Props) {
 
       <div className="mb-[18px] overflow-x-auto rounded-xl border border-borde bg-superficie">
         <div className="min-w-[720px]">
-          <div className="grid grid-cols-[1.6fr_1fr_1fr_1fr_1.2fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
+          <div className="rejilla-subpoblaciones gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
             <span>SUBPOBLACIÓN</span>
             <span>ESTUDIANTES</span>
             <span>AVANCE</span>
@@ -51,7 +51,7 @@ export function ReportesSubpoblaciones({ filas, reportes }: Props) {
           {filas.map((f) => (
             <div
               key={f.nombre}
-              className="grid grid-cols-[1.6fr_1fr_1fr_1fr_1.2fr] items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5 text-[12.5px]"
+              className="rejilla-subpoblaciones items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5 text-[12.5px]"
             >
               <span className="font-bold">{f.nombre}</span>
               <span className="text-apagado">{f.estudiantes}</span>

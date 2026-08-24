@@ -111,9 +111,9 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
         </div>
       )}
 
-      <div className="grid items-start gap-[18px] xl:grid-cols-[1.6fr_1fr]">
+      <div className="rejilla-panel-ancha">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <div className="grid grid-cols-[2.4fr_1fr_1fr_.9fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-4 py-3 text-[10px] font-bold tracking-[.1em] text-suave">
+          <div className="rejilla-tabla-4 gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-4 py-3 text-[10px] font-bold tracking-[.1em] text-suave">
             <span>RECURSO</span>
             <span>EJE</span>
             <span>TIPO</span>
@@ -122,7 +122,7 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
           {recursos.map((r) => (
             <div
               key={r.id}
-              className="grid grid-cols-[2.4fr_1fr_1fr_.9fr] items-center gap-2.5 border-b border-[#F7F2ED] px-4 py-3.5"
+              className="rejilla-tabla-4 items-center gap-2.5 border-b border-[#F7F2ED] px-4 py-3.5"
             >
               <div className="min-w-0">
                 <div className="text-[13px] font-bold">{r.titulo}</div>

@@ -68,7 +68,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
         plantillas de sesión y los componentes de actividad.
       </p>
 
-      <div className="grid items-start gap-[18px] xl:grid-cols-[1.6fr_1fr]">
+      <div className="rejilla-panel-ancha">
         <div className="grid gap-3">
           {casos.map((c) => (
             <div key={c.id} className="rounded-xl border border-borde bg-superficie p-[18px]">

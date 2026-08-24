@@ -59,7 +59,7 @@ export function LecturaAnotada({
     <div className="animar-aparecer">
       <CabeceraSesion sesion={sesion} />
 
-      <div className="grid items-start gap-[18px] xl:grid-cols-[1.7fr_1.1fr]">
+      <div className="rejilla-panel-ancha">
         <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] pb-3">
             <span className="text-[10.5px] font-bold tracking-[.1em] text-suave">

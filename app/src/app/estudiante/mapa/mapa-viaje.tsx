@@ -24,6 +24,8 @@ type Sesion = {
   pantalla: string;
   publicada: boolean;
   tieneContenido: boolean;
+  /** El estudiante ya dejó en ella el trabajo que su actividad pedía. */
+  completada: boolean;
   subsecciones: { codigo: string; titulo: string }[];
 };
 
@@ -36,6 +38,9 @@ type Eje = {
   esPreambulo: boolean;
   tono: string;
   progreso: number;
+  /** Cuánto vale este eje en el avance del curso, según lo repartió el docente. */
+  peso: number;
+  completadas: number;
   sesiones: Sesion[];
 };
 
@@ -174,9 +179,15 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                 </div>
                 <span className="text-[11px] font-bold text-tenue">{e.progreso}%</span>
               </div>
-              <div className="mt-3 border-t border-dashed border-borde pt-3 text-[11.5px] text-suave">
-                {e.sesiones.length} {e.sesiones.length === 1 ? "sesión" : "sesiones"} ·{" "}
-                {e.sesiones.filter((s) => s.publicada).length} publicadas
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 border-t border-dashed border-borde pt-3 text-[11.5px] text-suave">
+                <span>
+                  {e.completadas} de {e.sesiones.filter((s) => s.publicada).length} hechas
+                </span>
+                {e.peso > 0 && (
+                  <span title="Cuánto vale este eje en el total del curso">
+                    vale {e.peso}% del curso
+                  </span>
+                )}
               </div>
             </button>
           );
@@ -217,7 +228,17 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                   {s.codigo}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[13.5px] font-bold">{s.titulo}</div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[13.5px] font-bold">{s.titulo}</span>
+                    {s.publicada && s.completada && (
+                      <span className="flex items-center gap-1 rounded-full bg-secundario-tinte px-2 py-0.5 text-[10px] font-bold text-secundario-fuerte">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        Hecha
+                      </span>
+                    )}
+                  </div>
                   <div className="text-[11px] tracking-[.06em] text-suave">{s.tipo}</div>
                   {s.objetivo && (
                     <p className="mt-1.5 text-[11.5px] leading-[1.6] text-[#7C736C]">{s.objetivo}</p>

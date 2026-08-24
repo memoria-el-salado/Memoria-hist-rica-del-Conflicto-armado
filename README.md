@@ -50,9 +50,9 @@ detalla la instalación manual, la arquitectura y las decisiones técnicas.
 
 ## Estado
 
-Prototipo funcional. Cubre los diez casos de uso del proyecto, con 75 pruebas automatizadas sobre la
+Prototipo funcional. Cubre los diez casos de uso del proyecto, con 94 pruebas automatizadas sobre la
 política de contraseñas, la separación de funciones por rol, las reglas del simulador y la extracción
-de estructura y contenido desde los PDF.
+de estructura y contenido desde los PDF y el cálculo del avance ponderado.
 
 ---
 
@@ -477,3 +477,21 @@ npm run manual:generar                               # arma el .docx
 `demo:cargar` **borra los módulos y las cuentas de docentes y estudiantes**, y deja el administrador
 con la misma contraseña que el resto. Es para preparar una demostración o el manual, no para una
 instalación en uso. La generación del documento necesita Python con `python-docx`.
+
+---
+
+## 16. Herramientas de asistencia con IA
+
+En el desarrollo de este proyecto se usó **Claude** (Anthropic) como herramienta de apoyo, en
+tareas de ingeniería concretas y siempre bajo revisión de los autores:
+
+| Uso | En qué consistió |
+| --- | --- |
+| **Auditoría de código** | Revisión del árbol de dependencias y sus licencias, detección de código muerto y de archivos duplicados, y localización de fallos como migraciones desincronizadas del esquema |
+| **Pruebas** | Redacción de las pruebas automatizadas sobre la lógica pura —política de contraseñas, reglas del simulador, extracción desde PDF y cálculo del avance— y de los guiones de comprobación de extremo a extremo |
+| **Limpieza de código** | Unificación de guiones que se solapaban, retirada de rutas y componentes obsoletos, y corrección de estilos que desbordaban la pantalla |
+| **Control de versiones** | Preparación de los commits y publicación del repositorio en GitHub |
+
+Las decisiones de diseño, la definición de los requisitos, la estructura pedagógica y la validación
+del resultado corresponden a los autores. Los commits en los que hubo asistencia lo declaran en su
+línea `Co-Authored-By`, de modo que el historial del repositorio deja constancia de dónde se usó.

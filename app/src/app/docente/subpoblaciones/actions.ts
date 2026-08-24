@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { avanceDeEstudiantes } from "@/lib/avance";
 
 export async function generarReporte() {
   const sesion = await auth();
@@ -10,20 +11,19 @@ export async function generarReporte() {
 
   const estudiantes = await prisma.user.findMany({
     where: { rol: "ESTUDIANTE", creadoPorId: sesion.user.id },
-    select: { id: true, subpoblacion: true, progresos: { select: { porcentaje: true } } },
+    select: { id: true, subpoblacion: true },
   });
 
   if (estudiantes.length === 0) {
     return { error: "Todavía no tienes estudiantes en el grupo." };
   }
 
+  const avances = await avanceDeEstudiantes(estudiantes.map((e) => e.id));
+
   const grupos = new Map<string, number[]>();
   for (const e of estudiantes) {
     const clave = e.subpoblacion ?? "Sin vínculo directo";
-    const promedio = e.progresos.length
-      ? e.progresos.reduce((s, p) => s + p.porcentaje, 0) / e.progresos.length
-      : 0;
-    grupos.set(clave, [...(grupos.get(clave) ?? []), promedio]);
+    grupos.set(clave, [...(grupos.get(clave) ?? []), avances.get(e.id)?.total ?? 0]);
   }
 
   const promedios = [...grupos.entries()].map(([nombre, valores]) => ({

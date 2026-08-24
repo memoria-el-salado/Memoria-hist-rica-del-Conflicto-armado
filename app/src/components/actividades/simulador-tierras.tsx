@@ -120,7 +120,7 @@ export function SimuladorTierras({ sesion, familias, iniciales }: Props) {
         </div>
       </div>
 
-      <div className="mt-[22px] grid items-start gap-[18px] xl:grid-cols-[1.25fr_1fr]">
+      <div className="mt-[22px] rejilla-panel-ancha">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-4 py-[13px]">
             <span className="text-[12px] font-extrabold tracking-[.05em]">

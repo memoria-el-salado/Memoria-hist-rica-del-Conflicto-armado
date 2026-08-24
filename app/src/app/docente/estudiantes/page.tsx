@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { avanceDeEstudiantes } from "@/lib/avance";
 import { generarContrasenaTemporal } from "@/lib/politica-contrasena";
 import { GestionEstudiantes } from "./gestion-estudiantes";
 
@@ -18,9 +19,11 @@ export default async function EstudiantesPage() {
       subpoblacion: true,
       creadoEn: true,
       debeCambiarContrasena: true,
-      progresos: { select: { porcentaje: true } },
     },
   });
+
+  // El avance de cada estudiante sale de lo que ha producido en las sesiones.
+  const avances = await avanceDeEstudiantes(estudiantes.map((e) => e.id));
 
   return (
     <GestionEstudiantes
@@ -32,9 +35,7 @@ export default async function EstudiantesPage() {
         iniciales: e.iniciales,
         subpoblacion: e.subpoblacion,
         provisional: e.debeCambiarContrasena,
-        avance: e.progresos.length
-          ? Math.round(e.progresos.reduce((s, p) => s + p.porcentaje, 0) / e.progresos.length)
-          : 0,
+        avance: avances.get(e.id)?.total ?? 0,
         creadoEn: e.creadoEn.toLocaleDateString("es-CO", { dateStyle: "medium" }),
       }))}
     />

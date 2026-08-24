@@ -97,7 +97,7 @@ export function CartografiaSocial({
         Lo que sitúes aquí queda en la cartografía de esta sesión.
       </p>
 
-      <div className="grid items-start gap-[18px] lg:grid-cols-[1.5fr_1fr]">
+      <div className="rejilla-panel">
         <div>
           <MapaReal
             centro={CENTRO_EL_SALADO}
