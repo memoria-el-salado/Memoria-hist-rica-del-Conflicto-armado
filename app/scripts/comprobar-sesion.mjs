@@ -6,14 +6,16 @@
  *   node scripts/comprobar-sesion.mjs
  */
 import { PrismaClient } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
 
 const BASE = "http://localhost:3000";
 const CLAVE = "Roble7#cauce.p";
 
-const prisma = new PrismaClient({ adapter: new PrismaMariaDb(process.env.DATABASE_URL) });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
+});
 
 const galleta = new Map();
 

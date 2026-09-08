@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
@@ -12,18 +12,17 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "db:motor": "node scripts/motor-bd.mjs",
     "db:sincronizar": "prisma db push",
     "modulos": "tsx scripts/modulos.ts",
     "pdf": "tsx scripts/ver-pdf.ts",
     "humo:sesiones": "node scripts/comprobar-sesion.mjs",
     "humo:documentos": "node scripts/comprobar-acceso-pdf.mjs",
+    "humo:almacen": "tsx scripts/comprobar-almacen.ts",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",
     "manual:generar": "python scripts/generar-manual.py"
   },
   "dependencies": {
-    "@prisma/adapter-mariadb": "^7.9.1",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "bcryptjs": "^3.0.3",

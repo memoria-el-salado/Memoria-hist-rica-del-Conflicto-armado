@@ -1,7 +1,6 @@
-import { readFile } from "fs/promises";
-import path from "path";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { leerDocumento } from "@/lib/almacen";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -30,12 +29,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     );
   }
 
-  // La ruta se reconstruye desde el identificador, nunca desde la entrada del usuario.
-  const ruta = path.join(process.cwd(), "almacen", "documentos", `${documento.id}.pdf`);
-
+  // El archivo se pide por el identificador de la ficha, nunca por lo que
+  // haya escrito el usuario en la dirección.
   try {
-    const archivo = await readFile(ruta);
-    return new NextResponse(new Uint8Array(archivo), {
+    const archivo = await leerDocumento(documento.id);
+    return new NextResponse(archivo, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `inline; filename="${encodeURIComponent(documento.nombreArchivo)}"`,

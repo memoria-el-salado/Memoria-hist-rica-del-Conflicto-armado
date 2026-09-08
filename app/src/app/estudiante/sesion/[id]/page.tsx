@@ -92,8 +92,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
             lugar: m.lugar,
             relato: m.relato,
             audio: m.audio,
-            // El campo se guarda como JSON para ser compatible con MySQL.
-            tags: Array.isArray(m.tags) ? (m.tags as string[]) : [],
+            tags: m.tags,
             lat: m.lat,
             lon: m.lon,
             autor: m.autor.nombre,

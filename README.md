@@ -40,13 +40,12 @@ Las cuentas nacen con una contraseña provisional que la persona debe cambiar en
 
 ## Puesta en marcha
 
-Requiere **Node.js 20+** y **MySQL 8** o **PostgreSQL 14+**.
+La plataforma está pensada para vivir en la nube: la aplicación en **Vercel**, y la base de datos y
+los documentos en **Supabase**. Los planes gratuitos de ambos bastan.
 
-Doble clic en **`app\instalar.bat`**.
-
-El instalador comprueba los requisitos, crea la base de datos, instala las dependencias, siembra la
-cuenta del administrador y abre la aplicación en `http://localhost:3000`. El resto de este documento
-detalla la instalación manual, la arquitectura y las decisiones técnicas.
+Para trabajar en el proyecto desde tu equipo hacen falta **Node.js 20+** y una base
+**PostgreSQL 14+**, que puede ser la del propio proyecto de Supabase. El resto de este documento
+detalla la instalación, la arquitectura y las decisiones técnicas.
 
 ## Estado
 
@@ -62,36 +61,26 @@ de estructura y contenido desde los PDF y el cálculo del avance ponderado.
 | --- | --- | --- |
 | **Node.js** | 20 o superior (probado en 22) | `node --version` |
 | **npm** | 10 o superior | `npm --version` |
-| **Base de datos** | **MySQL 8** (el de XAMPP) **o** PostgreSQL 14+ | `mysql --version` / `psql --version` |
+| **PostgreSQL** | 14 o superior | `psql --version` |
 
-Descargas: [Node.js](https://nodejs.org) · [XAMPP](https://www.apachefriends.org) ·
-[PostgreSQL](https://www.postgresql.org/download/)
+Descargas: [Node.js](https://nodejs.org) · [PostgreSQL](https://www.postgresql.org/download/)
 
-El proyecto funciona igual con los dos motores; usa el que tengas instalado. Si trabajas con **XAMPP**,
-basta con iniciar MySQL desde su panel de control.
-
-> En Windows, para que los scripts encuentren las herramientas de XAMPP, añade `C:\xampp\mysql\bin`
-> al PATH del sistema.
+No hace falta instalar PostgreSQL si vas a trabajar contra la base del proyecto de Supabase: en ese
+caso basta con su cadena de conexión, y `psql` solo sirve para inspeccionar la base a mano.
 
 ---
 
 ## 2. Crear la base de datos
 
-**Si usas XAMPP con MySQL** (lo más rápido): abre el panel de XAMPP, pulsa **Start** junto a MySQL y
-crea la base desde phpMyAdmin, o por terminal:
+**Contra Supabase** (lo habitual): no hay nada que crear. El proyecto ya trae su base `postgres`;
+solo necesitas la cadena de conexión, en el botón **Connect** del panel.
 
-```bash
-mysql -u root -e "CREATE DATABASE memoria_el_salado CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-```
-
-**Si usas PostgreSQL** (te pedirá la contraseña de `postgres`):
+**Contra un PostgreSQL local** (te pedirá la contraseña de `postgres`):
 
 ```bash
 psql -U postgres -c "CREATE USER memoria WITH PASSWORD 'memoria';"
 psql -U postgres -c "CREATE DATABASE memoria_el_salado OWNER memoria;"
 ```
-
-> Si usas `instalar.bat`, este paso lo hace el script por ti.
 
 ---
 
@@ -103,23 +92,21 @@ Copia la plantilla y edita el archivo resultante:
 cp .env.example .env
 ```
 
-El archivo `.env` debe quedar así, con la línea `DATABASE_URL` según el motor que uses:
+El archivo `.env` debe quedar así:
 
 ```env
-# MySQL / XAMPP (root sin contraseña, que es lo habitual en XAMPP)
-DATABASE_URL="mysql://root@localhost:3306/memoria_el_salado"
-
-# o bien PostgreSQL
-# DATABASE_URL="postgresql://memoria:memoria@localhost:5432/memoria_el_salado?schema=public"
+# En Supabase, la cadena del puerto 5432 (conexión de sesión) es la que admite
+# `npm run db:sincronizar`. La del 6543 con ?pgbouncer=true va en Vercel.
+DATABASE_URL="postgresql://USUARIO:CONTRASENA@HOST:5432/postgres"
 
 AUTH_SECRET="pega-aqui-el-secreto-generado"
 AUTH_TRUST_HOST=true
-```
 
-Además, indícale al proyecto qué motor usar:
-
-```bash
-npm run db:motor mysql        # o: npm run db:motor postgresql
+# Depósito privado de Supabase para los PDF que sube el administrador. Sin
+# estas tres variables los archivos se guardan en app/almacen/.
+SUPABASE_URL="https://REF.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY="la-llave-service_role"
+SUPABASE_BUCKET="documentos"
 ```
 
 Genera el `AUTH_SECRET` con:
@@ -137,12 +124,10 @@ npx auth secret
 
 ```bash
 npm install            # instala dependencias y genera el cliente de Prisma
-npm run db:sincronizar # crea las tablas (sirve para MySQL y PostgreSQL)
+npm run db:sincronizar # crea las tablas a partir del esquema
 npm run db:seed      # crea los usuarios, las 20 familias del simulador y deja
                      # los dos PDF del CNMH ya cargados en el sistema
 ```
-
-> **Atajo:** haz doble clic en `instalar.bat`. Hace los pasos 2 a 5 completos y abre la aplicación.
 
 ---
 
@@ -237,22 +222,23 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | Comando | Para qué sirve |
 | --- | --- |
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Compilación de producción |
+| `npm run build` | Compilación de producción (genera Prisma y compila) |
 | `npm start` | Ejecuta la compilación de producción |
 | `npm test` | Pruebas automatizadas de verificación |
 | `npm run lint` | Análisis estático del código |
-| `npm run db:motor` | Cambia entre MySQL y PostgreSQL |
 | `npm run db:sincronizar` | Crea o actualiza las tablas desde el esquema |
 | `npm run db:seed` | Recarga los datos iniciales |
 | `npm run db:studio` | Explorador visual de la base de datos |
-| `npm run estado` | Resume los módulos y documentos cargados |
-| `npm run modulos:limpiar` | Borra módulos y documentos para repetir una importación |
-| `npm run pdf:revisar <pdf>` | Muestra la estructura y el texto que el importador ve en un PDF |
-| `npm run pdf:clasificar <pdf...>` | Distingue una guía del estudiante de una guía para maestros |
+| `npm run modulos` | Resume los módulos y documentos cargados |
+| `npm run modulos -- limpiar` | Borra módulos y documentos para repetir una importación |
+| `npm run pdf -- <pdf>` | Muestra la estructura y el texto que el importador ve en un PDF |
+| `npm run pdf -- <a.pdf> <b.pdf> --publico` | Distingue una guía del estudiante de una guía para maestros |
 | `npm run humo:sesiones` | Comprueba que las actividades muestran el contenido importado |
 | `npm run humo:documentos` | Comprueba que el estudiante no abre el material reservado al docente |
+| `npm run humo:almacen` | Comprueba el almacén de PDF: guarda, lee y borra un archivo de prueba |
 
-Los dos últimos necesitan la aplicación en marcha (`npm run dev`).
+`humo:sesiones` y `humo:documentos` necesitan la aplicación en marcha (`npm run dev`).
+`humo:almacen` no la necesita.
 
 ---
 
@@ -288,8 +274,8 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 
 - **Next.js (App Router)** con React Server Components: las páginas leen de la base de datos en el
   servidor y las *server actions* escriben, sin necesidad de una API REST separada.
-- **Prisma sobre MySQL o PostgreSQL**: el mismo modelo relacional funciona en los dos motores, lo que
-  facilita desplegar la plataforma en la infraestructura que tenga cada institución.
+- **Prisma sobre PostgreSQL**: el modelo relacional se aplica desde un único esquema, y el mismo
+  código sirve para la base de Supabase en la nube y para un PostgreSQL local de desarrollo.
 - **Codificación modular**: cada caso de estudio hereda ejes y sesiones de la arquitectura base, de modo
   que agregar un municipio nuevo no implica reescribir el sistema (CU09).
 - **Contraseñas cifradas con bcrypt**, sesiones JWT y política de contraseñas seguras verificada en
@@ -393,43 +379,22 @@ objetivos de sesión y el material didáctico no están en el índice del PDF, a
 
 ---
 
-## 12. Motores de base de datos
+## 12. Base de datos
 
-El proyecto funciona sobre **MySQL 8** o sobre **PostgreSQL**, con el mismo modelo de datos y el mismo
-código. El adaptador se elige solo leyendo el esquema de `DATABASE_URL`, y `npm run db:motor` ajusta el
-esquema de Prisma al motor elegido.
+El proyecto funciona sobre **PostgreSQL**, con Prisma por delante. En producción es la base gestionada
+del proyecto de Supabase; en desarrollo puede ser esa misma o un PostgreSQL instalado en el equipo.
+No hay que declarar el motor en ningún sitio: `prisma/schema.prisma` lo fija y no cambia.
 
-Para que un único modelo sirva en los dos motores se evitaron los tipos exclusivos de uno:
+**Cómo se crean las tablas.** Aplicando el esquema con `npm run db:sincronizar`. El proyecto no lleva
+un historial de migraciones versionadas: el esquema es la única fuente de verdad, y una migración
+escrita a mano que se desincronice del esquema produce una base incompleta sin avisar de nada.
 
-- Las sensaciones de una marca de cartografía se guardan en una columna **JSON**, porque MySQL no admite
-  listas de texto como PostgreSQL.
-- Los campos de texto extenso (relatos, testimonios, títulos de sesión) se declaran como **TEXT**: en
-  MySQL un texto normal se limita a 191 caracteres y truncaría el contenido.
+Para desplegar en la nube hay dos cadenas de conexión distintas, y no son intercambiables. La del
+puerto **5432** mantiene abierta la sesión, que es lo que `db:sincronizar` necesita para crear las
+tablas. La del **6543** agrupa las conexiones y es la que debe ir en Vercel, donde cada visita levanta
+una función independiente y las conexiones directas se agotarían en minutos.
 
-**Cómo se crean las tablas.** Con los dos motores por igual, aplicando `prisma/schema.prisma` con
-`npm run db:sincronizar`. El proyecto no lleva historial de migraciones versionadas: mantener a mano
-el SQL de dos motores distintos hacía que se desincronizara del esquema, y una migración desfasada
-produce una base incompleta sin avisar. El esquema es la única fuente de verdad.
-
-Ambos motores han sido probados de extremo a extremo: login por rol, importación de un módulo desde
-PDF y cartografía social con persistencia.
-
----
-
-## 13. Instalación automática
-
-| Script | Cuándo usarlo |
-| --- | --- |
-| `instalar.bat` | **Doble clic.** Detecta si tienes MySQL o PostgreSQL corriendo, crea la base de datos y el `.env`, instala, carga los datos y abre la aplicación |
-
-Se puede volver a ejecutar sin riesgo: conserva el `.env` y los datos que ya existan. Busca por su
-cuenta `node.exe`, `mysql.exe` y `psql.exe` en las rutas habituales de Windows, así que no hace falta
-tocar el PATH. Si tienes una copia portátil de Node, déjala en una carpeta `node-portable` junto al
-proyecto y la encontrará.
-
----
-
-## 14. Licencia y atribuciones
+## 13. Licencia y atribuciones
 
 El código fuente se publica bajo **licencia MIT** (archivo `LICENSE` en la raíz del repositorio).
 
@@ -451,15 +416,19 @@ Licencias de las dependencias directas, todas permisivas y compatibles con MIT:
 | Leaflet, dotenv | BSD-2-Clause |
 | bcryptjs | BSD-3-Clause |
 
-De los 551 paquetes del árbol de dependencias, ocho tienen **copyleft débil**: `mariadb`
-(LGPL-2.1-or-later, el controlador de MySQL), `lightningcss` y `axe-core` (MPL-2.0), `elkjs`
-(EPL-2.0) y el binario de `sharp` para Windows. Ninguna obliga a relicenciar el proyecto: MPL y EPL
-son copyleft por archivo y solo aplican si se modifican sus fuentes, y LGPL permite el uso desde
-software con otra licencia cuando el enlace es dinámico, que es como Node.js carga sus módulos.
+En el árbol de dependencias quedan siete paquetes con **copyleft débil**: `lightningcss` y
+`axe-core` (MPL-2.0), `elkjs` (EPL-2.0), `@vercel/og` (MPL-2.0) y los binarios de `sharp`
+(LGPL-3.0-or-later). El número exacto varía con el sistema operativo, porque `sharp` y
+`lightningcss` instalan un binario distinto en cada uno.
+
+Ninguna obliga a relicenciar el proyecto: MPL y EPL son copyleft por archivo y solo aplican si se
+modifican sus fuentes, y LGPL permite el uso desde software con otra licencia cuando el enlace es
+dinámico, que es como Node.js carga sus módulos. Todas intervienen al compilar o al procesar
+imágenes, no en la lógica de la plataforma.
 
 **No hay ninguna dependencia GPL, AGPL ni SSPL.** El detalle completo está en `LICENSE`.
 
-## 15. Manual de Usuario
+## 14. Manual de Usuario
 
 `MANUAL-DE-USUARIO.docx` es una **guía visual**: una pantalla por página, con la captura grande y
 unos pocos pasos numerados debajo. Va dirigido a quien **usa** la plataforma sin conocerla; este
@@ -480,7 +449,7 @@ instalación en uso. La generación del documento necesita Python con `python-do
 
 ---
 
-## 16. Herramientas de asistencia con IA
+## 15. Herramientas de asistencia con IA
 
 En el desarrollo de este proyecto se usó **Claude** (Anthropic) como herramienta de apoyo, en
 tareas de ingeniería concretas y siempre bajo revisión de los autores:

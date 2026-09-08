@@ -13,16 +13,12 @@
 
 import { PrismaClient, Prioridad, Rol } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
 
-// El proyecto admite PostgreSQL y MySQL; el adaptador se elige por la URL.
-const url = process.env.DATABASE_URL ?? "";
-const adapter = url.startsWith("mysql:")
-  ? new PrismaMariaDb(url)
-  : new PrismaPg({ connectionString: url });
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
+});
 
 /** Apellidos de las 20 familias del ejercicio "¿cómo repartir las tierras?". */
 const APELLIDOS = [

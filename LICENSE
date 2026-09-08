@@ -56,19 +56,20 @@ Dependencias directas, todas con licencias permisivas compatibles con MIT:
     Leaflet, dotenv                                           BSD-2-Clause
     bcryptjs                                                  BSD-3-Clause
 
-Entre las dependencias transitivas (551 paquetes analizados) hay ocho con
-licencias de copyleft DÉBIL. Ninguna obliga a liberar este proyecto bajo su
-misma licencia, porque se usan sin modificar y como módulos independientes,
-pero se declaran por transparencia:
+Entre las dependencias transitivas hay siete con licencias de copyleft DÉBIL.
+Ninguna obliga a liberar este proyecto bajo su misma licencia, porque se usan
+sin modificar y como módulos independientes, pero se declaran por
+transparencia. Ninguna interviene en la lógica de la plataforma: actúan al
+compilar, al procesar imágenes o al ejecutar las pruebas.
 
-    mariadb 3.4.5                    LGPL-2.1-or-later
-      Controlador de MySQL que usa el adaptador de Prisma. Es la única de
-      ejecución; el resto intervienen solo al compilar o al probar.
+    @img/sharp-libvips (y sharp-wasm32)   LGPL-3.0-or-later
+    lightningcss (y su binario)           MPL-2.0
+    @vercel/og                            MPL-2.0
+    axe-core                              MPL-2.0
+    elkjs                                 EPL-2.0
 
-    @img/sharp-win32-x64             Apache-2.0 AND LGPL-3.0-or-later
-    lightningcss (y su binario)      MPL-2.0
-    axe-core                         MPL-2.0
-    elkjs                            EPL-2.0
+El número exacto y el nombre de los binarios varían según el sistema operativo:
+sharp y lightningcss instalan uno distinto en Windows, macOS y Linux.
 
 MPL-2.0 y EPL-2.0 son copyleft por archivo: solo obligan a mantener la licencia
 sobre los archivos originales si se modifican, cosa que este proyecto no hace.

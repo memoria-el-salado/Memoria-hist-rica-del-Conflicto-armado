@@ -5,42 +5,25 @@
  *   npm run modulos -- limpiar   borra módulos y documentos, y sus PDF del disco
  *   npm run modulos -- huerfanos borra los PDF que ya no tienen ficha
  */
-import { readdir, unlink } from "fs/promises";
-import path from "path";
 import { PrismaClient } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
+import { eliminarDocumento, listarDocumentos } from "../src/lib/almacen";
 
-const url = process.env.DATABASE_URL ?? "";
 const prisma = new PrismaClient({
-  adapter: url.startsWith("mysql:") ? new PrismaMariaDb(url) : new PrismaPg({ connectionString: url }),
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
 });
-
-const ALMACEN = path.join(process.cwd(), "almacen", "documentos");
 
 /** Archivos del almacén que ya no corresponden a ningún documento registrado. */
 async function huerfanos(): Promise<string[]> {
-  let archivos: string[];
-  try {
-    archivos = await readdir(ALMACEN);
-  } catch {
-    return [];
-  }
-
+  const guardados = await listarDocumentos();
   const registrados = new Set((await prisma.documentoFuente.findMany()).map((d) => d.id));
-  return archivos.filter((a) => a.endsWith(".pdf") && !registrados.has(path.basename(a, ".pdf")));
+  return guardados.filter((id) => !registrados.has(id));
 }
 
-async function borrarArchivos(nombres: string[]) {
-  for (const nombre of nombres) {
-    // El archivo puede haber desaparecido ya; no debe interrumpir la limpieza.
-    try {
-      await unlink(path.join(ALMACEN, nombre));
-    } catch {
-      /* nada que hacer */
-    }
-  }
+async function borrarArchivos(ids: string[]) {
+  // El archivo puede haber desaparecido ya; eso no interrumpe la limpieza.
+  for (const id of ids) await eliminarDocumento(id);
 }
 
 async function estado() {
@@ -83,7 +66,7 @@ async function limpiar() {
 
   const casos = await prisma.caso.deleteMany();
   await prisma.documentoFuente.deleteMany();
-  await borrarArchivos(documentos.map((d) => `${d.id}.pdf`));
+  await borrarArchivos(documentos.map((d) => d.id));
 
   console.log(`Módulos borrados: ${casos.count} · documentos: ${documentos.length}`);
 }

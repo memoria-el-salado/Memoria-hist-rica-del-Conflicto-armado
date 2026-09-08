@@ -13,7 +13,7 @@ import { mkdir, rm } from "fs/promises";
 import path from "path";
 import puppeteer from "puppeteer-core";
 import { PrismaClient } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
 
 const BASE = "http://localhost:3000";
@@ -26,7 +26,9 @@ const NAVEGADORES = [
   "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
 ];
 
-const prisma = new PrismaClient({ adapter: new PrismaMariaDb(process.env.DATABASE_URL) });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
+});
 
 function navegador() {
   const encontrado = NAVEGADORES.find((r) => existsSync(r));

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
 }
 
 enum Rol {
@@ -241,9 +241,8 @@ model MarcaCartografia {
   lugar    String @db.Text
   relato   String @db.Text
   audio    String   @default("Sin audio")
-  /// Sensaciones asociadas al lugar. Se guarda como JSON para que el modelo
-  /// funcione igual en PostgreSQL y en MySQL, que no admite listas de texto.
-  tags     Json
+  /// Sensaciones que el estudiante asocia al lugar que marcó.
+  tags     String[]
   /// Coordenadas geográficas reales del punto marcado en el mapa.
   lat      Float
   lon      Float

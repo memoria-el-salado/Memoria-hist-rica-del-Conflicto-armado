@@ -8,22 +8,20 @@
  *   npx tsx scripts/datos-demostracion.ts <guia-estudiante.pdf> [guia-maestros.pdf]
  */
 import { randomUUID } from "crypto";
-import { copyFile, mkdir, readFile, unlink } from "fs/promises";
+import { readFile } from "fs/promises";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { extractText, getDocumentProxy } from "unpdf";
+import { eliminarDocumento, guardarDocumento, rutaDe } from "../src/lib/almacen";
 import { armarArbol, detectarEstructura } from "../src/lib/importador-pdf";
 import "dotenv/config";
 
-const url = process.env.DATABASE_URL ?? "";
 const prisma = new PrismaClient({
-  adapter: url.startsWith("mysql:") ? new PrismaMariaDb(url) : new PrismaPg({ connectionString: url }),
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
 });
 
-const CARPETA = path.join(process.cwd(), "almacen", "documentos");
 const TONOS = ["#D95D39", "#1B8A8A", "#EBB035", "#B8482A", "#8C8279", "#177575"];
 const CLAVE = "Roble7#cauce.p";
 
@@ -39,10 +37,9 @@ function extraerPregunta(contenido: string, titulo: string): string | null {
 /** Copia el PDF al almacén con el mismo identificador que su ficha. */
 async function guardar(origen: string, soloDocentes: boolean, casoId: string | null) {
   const id = randomUUID();
-  await mkdir(CARPETA, { recursive: true });
-  await copyFile(origen, path.join(CARPETA, `${id}.pdf`));
-
   const bytes = new Uint8Array(await readFile(origen));
+  await guardarDocumento(id, bytes);
+
   const pdf = await getDocumentProxy(bytes.slice());
   const { text, totalPages } = await extractText(pdf, { mergePages: true });
 
@@ -51,7 +48,7 @@ async function guardar(origen: string, soloDocentes: boolean, casoId: string | n
       id,
       titulo: detectarEstructura(text).titulo ?? path.basename(origen, ".pdf"),
       nombreArchivo: path.basename(origen),
-      rutaArchivo: `almacen/documentos/${id}.pdf`,
+      rutaArchivo: rutaDe(id),
       paginas: totalPages,
       soloDocentes,
       casoId,
@@ -72,13 +69,7 @@ async function main() {
   const previos = await prisma.documentoFuente.findMany();
   await prisma.caso.deleteMany();
   await prisma.documentoFuente.deleteMany();
-  for (const d of previos) {
-    try {
-      await unlink(path.join(CARPETA, `${d.id}.pdf`));
-    } catch {
-      /* el archivo ya no estaba */
-    }
-  }
+  for (const d of previos) await eliminarDocumento(d.id);
 
   await prisma.user.deleteMany({ where: { rol: { in: ["DOCENTE", "ESTUDIANTE"] } } });
 

@@ -5,11 +5,13 @@
  *   node scripts/comprobar-avance.mjs
  */
 import { PrismaClient } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
 import { progresoDeEje, progresoDelCurso, sesionCompletada, TRABAJO_VACIO } from "../src/lib/progreso.ts";
 
-const prisma = new PrismaClient({ adapter: new PrismaMariaDb(process.env.DATABASE_URL) });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
+});
 
 /** Repite el cálculo del servidor a partir de la base, sin pasar por la web. */
 async function avance(userId) {

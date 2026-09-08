@@ -1,16 +1,19 @@
 "use server";
 
 import { randomUUID } from "crypto";
-import { mkdir, readFile, unlink, writeFile } from "fs/promises";
-import path from "path";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { extractText, getDocumentProxy } from "unpdf";
 import { auth } from "@/auth";
+import {
+  eliminarDocumento as borrarDelAlmacen,
+  guardarDocumento,
+  leerDocumento,
+  rutaDe,
+} from "@/lib/almacen";
 import { prisma } from "@/lib/prisma";
 import { ACTIVIDADES, armarArbol, detectarEstructura, type EjeArmado } from "@/lib/importador-pdf";
 
-const CARPETA = path.join(process.cwd(), "almacen", "documentos");
 const TAMANO_MAXIMO = 25 * 1024 * 1024;
 
 const TONOS = ["#D95D39", "#1B8A8A", "#EBB035", "#B8482A", "#8C8279", "#177575"];
@@ -87,16 +90,15 @@ export async function analizarDocumento(
   }
   if (analisis.error) return { error: analisis.error };
 
-  await mkdir(CARPETA, { recursive: true });
   const id = randomUUID();
-  await writeFile(path.join(CARPETA, `${id}.pdf`), bytes);
+  await guardarDocumento(id, bytes);
 
   const documento = await prisma.documentoFuente.create({
     data: {
       id,
       titulo: analisis.titulo ?? archivo.name.replace(/\.pdf$/i, ""),
       nombreArchivo: archivo.name,
-      rutaArchivo: `almacen/documentos/${id}.pdf`,
+      rutaArchivo: rutaDe(id),
       paginas: analisis.paginas!,
     },
   });
@@ -137,11 +139,7 @@ export async function eliminarDocumento(documentoId: string) {
   await prisma.documentoFuente.delete({ where: { id: documentoId } });
 
   // El archivo puede haber desaparecido ya; el borrado no debe fallar por eso.
-  try {
-    await unlink(path.join(CARPETA, `${documento.id}.pdf`));
-  } catch {
-    // Nada que hacer: la ficha es lo que manda y ya se eliminó.
-  }
+  await borrarDelAlmacen(documento.id);
 
   revalidatePath("/admin/importar");
   return { ok: `"${documento.titulo}" se eliminó del repositorio.` };
@@ -211,7 +209,7 @@ export async function analizarDocumentoExistente(documentoId: string): Promise<R
 
   let analisis;
   try {
-    const bytes = new Uint8Array(await readFile(path.join(CARPETA, `${documento.id}.pdf`)));
+    const bytes = await leerDocumento(documento.id);
     analisis = await analizar(bytes);
   } catch {
     return { error: "No se pudo leer el archivo del documento." };
