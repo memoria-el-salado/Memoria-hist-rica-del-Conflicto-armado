@@ -34,6 +34,7 @@
     "humo:revision": "node scripts/pruebas/revision.mjs",
     "humo:recorrido": "node scripts/pruebas/recorrido.mjs",
     "humo:subpoblaciones": "node scripts/pruebas/subpoblaciones.mjs",
+    "humo:panel": "node scripts/pruebas/panel.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

@@ -28,6 +28,12 @@ type Props = {
   /** De quién habla el panel: "en tu grupo" o "en 10A · 2026". */
   ambito: string;
   promedioGlobal: number;
+  /** Año del curso elegido, o el actual. */
+  ciclo: number;
+  /** Promedio del grupo en cada competencia ciudadana. */
+  competencias: { id: string; nombre: string; porcentaje: number }[];
+  /** Trabajos de los estudiantes que esperan comentario. */
+  porRevisar: number;
   barras: { label: string; valor: number }[];
   subpoblaciones: { nombre: string; porcentaje: number; color: string }[];
   /** Estudiantes en grupos de menos de cinco, que no se muestran. */
@@ -44,6 +50,9 @@ export function PanelDocente({
   filtro,
   ambito,
   promedioGlobal,
+  ciclo,
+  competencias,
+  porRevisar,
   barras,
   subpoblaciones,
   subpoblacionesOcultas,
@@ -70,7 +79,7 @@ export function PanelDocente({
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold tracking-[.12em] text-primario">PROGRESO COLECTIVO</span>
               <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[10.5px] font-bold text-primario-fuerte">
-                Ciclo 2026
+                Ciclo {ciclo}
               </span>
             </div>
             <div className="mb-1 mt-2.5 text-[34px] font-extrabold tracking-[-.03em]">
@@ -100,6 +109,28 @@ export function PanelDocente({
               ))}
             </div>
           </div>
+
+          <section aria-labelledby="titulo-competencias-grupo" className="rounded-xl border border-borde bg-superficie p-5">
+            <h2 id="titulo-competencias-grupo" className="text-[11px] font-bold tracking-[.12em] text-secundario-fuerte">
+              COMPETENCIAS DEL GRUPO
+            </h2>
+            <ul className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {competencias.map((c) => (
+                <li key={c.id}>
+                  <div className="flex justify-between text-[12.5px]">
+                    <span className="font-semibold text-tinta-media">{c.nombre}</span>
+                    <span className="font-extrabold">{c.porcentaje}%</span>
+                  </div>
+                  <div className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]">
+                    <div className="h-full bg-secundario" style={{ width: `${c.porcentaje}%` }} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-[11px] leading-snug text-suave">
+              Promedio de las actividades publicadas que trabajan cada competencia, según la guía.
+            </p>
+          </section>
 
           <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
             <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
@@ -160,6 +191,21 @@ export function PanelDocente({
 
         <div className="grid min-w-0 grid-cols-1 content-start gap-[18px]">
           <SolicitudesAcompanamiento solicitudes={solicitudes} />
+
+          <Link
+            href="/docente/revision?pendientes=1"
+            className="flex items-center justify-between gap-3 rounded-xl border border-borde bg-superficie px-5 py-4 text-tinta no-underline hover:border-primario"
+          >
+            <span>
+              <span className="block text-[11px] font-bold tracking-[.12em] text-tenue">REVISIÓN</span>
+              <span className="mt-1 block text-[13px] font-semibold">
+                {porRevisar === 0
+                  ? "No hay trabajos esperando tu comentario."
+                  : `${porRevisar} ${porRevisar === 1 ? "trabajo espera" : "trabajos esperan"} tu comentario`}
+              </span>
+            </span>
+            <span aria-hidden="true" className="text-primario">→</span>
+          </Link>
 
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="text-[11px] font-bold tracking-[.12em] text-tenue">SUB-POBLACIONES</div>

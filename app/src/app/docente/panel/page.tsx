@@ -6,7 +6,12 @@ import { fechaYHora } from "@/lib/fechas";
 import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
 import { FiltroCurso } from "@/components/filtro-curso";
 import { resumenDeSubpoblaciones } from "@/lib/subpoblaciones-datos";
+import { avanceDeCompetencias, promedioDeCompetencias } from "@/lib/competencias";
+import { trabajosDeDocente } from "@/lib/trabajos";
 import { PanelDocente } from "./panel-docente";
+
+/** El año en curso, para rotular el ciclo cuando no hay curso elegido. */
+const anioActual = () => new Date().getFullYear();
 
 
 /** Los atendidos se muestran un tiempo para dejar constancia; luego salen del panel. */
@@ -61,8 +66,16 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
 
   // El avance sale del trabajo que los estudiantes han producido, no de un
   // número guardado que habría que mantener al día.
-  const avances = await avanceDeEstudiantes(estudiantes.map((e) => e.id));
+  const [avances, trabajos] = await Promise.all([
+    avanceDeEstudiantes(estudiantes.map((e) => e.id)),
+    trabajosDeDocente(docenteId, { cursoId: elegido }),
+  ]);
   const lista = [...avances.values()];
+
+  // Las competencias del grupo: el promedio de las de cada estudiante.
+  const competencias = promedioDeCompetencias(
+    lista.map((a) => avanceDeCompetencias(sesiones.map((s) => ({ pantalla: s.pantalla, publicada: s.publicada, completada: a.completadas.has(s.id) }))))
+  );
 
   const barras = ejes.map((eje) => {
     const valores = lista.map((a) => a.ejes.find((x) => x.ejeId === eje.id)?.progreso ?? 0);
@@ -96,6 +109,9 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
       filtro={<FiltroCurso cursos={cursos.map((c) => ({ id: c.id, etiqueta: etiquetaCurso(c) }))} elegido={elegido} />}
       ambito={curso ? `en ${etiquetaCurso(curso)}` : "en tu grupo"}
       promedioGlobal={promedioDelGrupo(lista)}
+      ciclo={curso?.anio ?? anioActual()}
+      competencias={competencias}
+      porRevisar={trabajos.filter((t) => t.pendiente).length}
       barras={barras}
       subpoblaciones={subpoblaciones}
       subpoblacionesOcultas={resumen.ocultos}

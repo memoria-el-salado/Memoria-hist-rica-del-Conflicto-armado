@@ -26,6 +26,9 @@ type Props = {
   children: React.ReactNode;
 };
 
+/** Secciones que se ven en la barra inferior del móvil antes de «Más». */
+const VISIBLES_MOVIL = 4;
+
 const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
 
 export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, avisos, children }: Props) {
@@ -34,6 +37,10 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
   const [alertaAbierta, setAlertaAbierta] = useState(false);
 
   const items = NAV_POR_ROL[rol];
+  // En el móvil caben cinco botones: si hay más secciones, las últimas van a «Más».
+  const conMas = items.length > VISIBLES_MOVIL + 1;
+  const ocultas = conMas ? items.slice(VISIBLES_MOVIL) : [];
+  const [masAbierto, setMasAbierto] = useState(false);
   const titulo = tituloDeRuta(rol, pathname);
 
   function ciclarEscala() {
@@ -59,14 +66,14 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         </div>
 
         <ul
-          className="grid w-full gap-0.5 md:flex md:flex-col"
-          style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+          className="grid w-full grid-cols-[repeat(var(--columnas),minmax(0,1fr))] gap-0.5 md:flex md:flex-col"
+          style={{ "--columnas": conMas ? VISIBLES_MOVIL + 1 : items.length } as React.CSSProperties}
         >
-          {items.map((item) => {
+          {items.map((item, i) => {
             // Dentro de un curso o de un debate, su sección sigue marcada.
             const activo = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <li key={item.href}>
+              <li key={item.href} className={conMas && i >= VISIBLES_MOVIL ? "hidden md:block" : undefined}>
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : activo ? "location" : undefined}
@@ -86,6 +93,42 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
               </li>
             );
           })}
+          {conMas && (
+            <li className="relative md:hidden">
+              <button
+                onClick={() => setMasAbierto((a) => !a)}
+                aria-expanded={masAbierto}
+                aria-label="Más secciones"
+                className={`flex w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 ${
+                  ocultas.some((i) => pathname.startsWith(i.href)) ? "bg-primario-tinte font-bold text-primario-fuerte" : "font-medium text-apagado"
+                }`}
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+                  <path d="M5 12h.01M12 12h.01M19 12h.01" />
+                </svg>
+                <span className="text-[9px] font-bold leading-[1.1]">Más</span>
+              </button>
+              {masAbierto && (
+                <ul className="absolute bottom-[calc(100%+8px)] right-0 z-30 w-[220px] overflow-hidden rounded-xl border border-borde bg-superficie py-1 shadow-[0_-8px_30px_rgba(0,0,0,.12)]">
+                  {ocultas.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMasAbierto(false)}
+                        aria-current={pathname === item.href ? "page" : undefined}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] font-semibold text-tinta no-underline hover:bg-[#F7F2ED]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d={item.icon} />
+                        </svg>
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          )}
         </ul>
 
         <div className="mt-auto hidden flex-col gap-3 md:flex">
