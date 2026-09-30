@@ -128,7 +128,8 @@ model Grupo {
   cursoId String
   curso   Curso  @relation(fields: [cursoId], references: [id], onDelete: Cascade)
 
-  miembros User[] @relation("MiembrosDelGrupo")
+  miembros User[]             @relation("MiembrosDelGrupo")
+  marcas   MarcaCartografia[]
 
   @@unique([cursoId, nombre])
 }
@@ -314,22 +315,35 @@ model Anotacion {
 }
 
 model MarcaCartografia {
-  id       String   @id @default(cuid())
-  lugar    String   @db.Text
-  relato   String   @db.Text
-  audio    String   @default("Sin audio")
+  id            String   @id @default(cuid())
+  lugar         String   @db.Text
+  relato        String   @db.Text
+  /// Texto que mostraba la v1 en lugar del audio. Se mantiene al día para que
+  /// la versión publicada siga leyendo algo con sentido.
+  audio         String   @default("Sin audio")
+  /// El relato grabado en el navegador: ruta en el depósito, tipo y duración.
+  audioArchivo  String?
+  audioMime     String?
+  audioSegundos Int?
+  /// Foto del lugar, ya reducida en el navegador. Ruta en el depósito.
+  foto          String?
   /// Sensaciones que el estudiante asocia al lugar que marcó.
-  tags     String[]
+  tags          String[]
   /// Coordenadas geográficas reales del punto marcado en el mapa.
-  lat      Float
-  lon      Float
-  creadoEn DateTime @default(now())
+  lat           Float
+  lon           Float
+  creadoEn      DateTime @default(now())
 
   autorId String
   autor   User   @relation(fields: [autorId], references: [id], onDelete: Cascade)
 
   sesionId String
   sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  /// Si el lugar lo eligió el grupo de trabajo del autor, como pide la guía.
+  /// Cuenta para todos sus miembros.
+  grupoId String?
+  grupo   Grupo?  @relation(fields: [grupoId], references: [id], onDelete: SetNull)
 
   @@index([sesionId])
 }

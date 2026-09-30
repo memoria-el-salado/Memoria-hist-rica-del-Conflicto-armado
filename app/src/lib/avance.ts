@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { quienesCuentan } from "@/lib/cartografia";
 import {
   TRABAJO_VACIO,
   progresoDeEje,
@@ -51,7 +52,7 @@ function casilla(recuento: Recuento, userId: string, sesionId: string): TrabajoE
 
 /**
  * Recoge, para un grupo de estudiantes, qué produjo cada uno en cada sesión.
- * Son seis consultas agrupadas en vez de una por estudiante y actividad.
+ * Son unas pocas consultas agrupadas en vez de una por estudiante y actividad.
  */
 async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Recuento> {
   const recuento: Recuento = new Map();
@@ -59,9 +60,24 @@ async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Re
 
   const donde = { autorId: { in: userIds }, sesionId: { in: sesionIds } };
 
+  // Una marca de grupo cuenta para todos sus miembros: hace falta saber quién
+  // está en qué grupo.
+  const conGrupo = await prisma.user.findMany({
+    where: { id: { in: userIds }, grupoId: { not: null } },
+    select: { id: true, grupoId: true },
+  });
+  const miembros = new Map<string, string[]>();
+  for (const u of conGrupo) miembros.set(u.grupoId!, [...(miembros.get(u.grupoId!) ?? []), u.id]);
+
   const [anotaciones, marcas, flores, entradas, respuestas, simulaciones] = await Promise.all([
     prisma.anotacion.findMany({ where: donde, select: { autorId: true, sesionId: true } }),
-    prisma.marcaCartografia.findMany({ where: donde, select: { autorId: true, sesionId: true } }),
+    prisma.marcaCartografia.findMany({
+      where: {
+        sesionId: { in: sesionIds },
+        OR: [{ autorId: { in: userIds } }, { grupoId: { in: [...miembros.keys()] } }],
+      },
+      select: { autorId: true, sesionId: true, grupoId: true },
+    }),
     prisma.florJardin.findMany({
       where: { autorId: { in: userIds }, sesionId: { in: sesionIds } },
       select: { autorId: true, sesionId: true },
@@ -81,7 +97,12 @@ async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Re
   ]);
 
   for (const a of anotaciones) casilla(recuento, a.autorId, a.sesionId).anotaciones += 1;
-  for (const m of marcas) casilla(recuento, m.autorId, m.sesionId).marcas += 1;
+  const pedidos = new Set(userIds);
+  for (const m of marcas) {
+    for (const uid of quienesCuentan(m, miembros)) {
+      if (pedidos.has(uid)) casilla(recuento, uid, m.sesionId).marcas += 1;
+    }
+  }
   for (const f of flores) {
     if (f.autorId) casilla(recuento, f.autorId, f.sesionId).flores += 1;
   }

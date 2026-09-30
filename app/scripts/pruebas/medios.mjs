@@ -20,8 +20,11 @@ export function audioWav() {
   return Buffer.concat([cabecera, datos]);
 }
 
-/** Una imagen PNG de 16×16 en el terracota de la plataforma. */
-export function imagenPng() {
+/**
+ * Una imagen PNG en el terracota de la plataforma: de 16×16, o del tamaño que
+ * se pida, por ejemplo el de una foto de teléfono para probar que se reduce.
+ */
+export function imagenPng(ancho = 16, alto = 16) {
   const trozo = (tipo, datos) => {
     const t = Buffer.from(tipo);
     const largo = Buffer.alloc(4); largo.writeUInt32BE(datos.length);
@@ -29,12 +32,12 @@ export function imagenPng() {
     return Buffer.concat([largo, t, datos, crc]);
   };
   const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(16, 0); ihdr.writeUInt32BE(16, 4); ihdr[8] = 8; ihdr[9] = 2;
-  const fila = Buffer.concat([Buffer.from([0]), Buffer.from(Array(16).fill([0xd9, 0x5d, 0x39]).flat())]);
+  ihdr.writeUInt32BE(ancho, 0); ihdr.writeUInt32BE(alto, 4); ihdr[8] = 8; ihdr[9] = 2;
+  const fila = Buffer.concat([Buffer.from([0]), Buffer.from(Array(ancho).fill([0xd9, 0x5d, 0x39]).flat())]);
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     trozo("IHDR", ihdr),
-    trozo("IDAT", deflateSync(Buffer.concat(Array(16).fill(fila)))),
+    trozo("IDAT", deflateSync(Buffer.concat(Array(alto).fill(fila)))),
     trozo("IEND", Buffer.alloc(0)),
   ]);
 }

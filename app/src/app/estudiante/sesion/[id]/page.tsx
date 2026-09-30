@@ -126,23 +126,39 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 async function pantallaDeActividad(pantalla: string, sesionId: string, datos: DatosSesion, userId: string) {
   switch (pantalla) {
     case "cartografia": {
+      const yo = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { creadoPorId: true, cursoId: true, grupo: { select: { nombre: true } } },
+      });
+      // La cartografía es la del propio curso (o, sin curso, la del grupo del
+      // mismo docente): voces y fotos de menores no se muestran a toda la plataforma.
       const marcas = await prisma.marcaCartografia.findMany({
-        where: { sesionId: sesionId },
+        where: {
+          sesionId: sesionId,
+          OR: [
+            { autorId: userId },
+            ...(yo?.creadoPorId ? [{ autor: { creadoPorId: yo.creadoPorId, cursoId: yo.cursoId } }] : []),
+          ],
+        },
         orderBy: { creadoEn: "asc" },
-        include: { autor: { select: { nombre: true } } },
+        include: { autor: { select: { nombre: true } }, grupo: { select: { nombre: true } } },
       });
       return (
         <CartografiaSocial
           sesion={datos}
+          miGrupo={yo?.grupo?.nombre ?? null}
           marcas={marcas.map((m) => ({
             id: m.id,
             lugar: m.lugar,
-            relato: m.relato,
-            audio: m.audio,
+            relato: m.relato === "Sin relato escrito." ? "" : m.relato,
+            audioSegundos: m.audioArchivo ? (m.audioSegundos ?? 0) : null,
+            conFoto: Boolean(m.foto),
             tags: m.tags,
             lat: m.lat,
             lon: m.lon,
             autor: m.autor.nombre,
+            grupo: m.grupo?.nombre ?? null,
+            propia: m.autorId === userId,
           }))}
         />
       );

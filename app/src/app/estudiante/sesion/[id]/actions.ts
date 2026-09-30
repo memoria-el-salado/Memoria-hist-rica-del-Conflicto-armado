@@ -69,43 +69,7 @@ export async function publicarAnotacion(_prev: unknown, formData: FormData) {
   return { ok: "Anotación publicada." };
 }
 
-// --------------------------------------------------------------- Cartografía
-
-const marcaSchema = z.object({
-  sesionId: z.string().min(1),
-  lugar: z.string().trim().min(1, "Escribe el nombre del lugar."),
-  relato: z.string().trim(),
-  tags: z.array(z.string()),
-  lat: z.number().min(-90).max(90),
-  lon: z.number().min(-180).max(180),
-  conAudio: z.boolean(),
-});
-
-export async function guardarMarca(entrada: unknown) {
-  const parsed = marcaSchema.safeParse(entrada);
-  if (!parsed.success) return { error: parsed.error.issues[0].message };
-
-  const contexto = await exigirSesion(parsed.data.sesionId);
-  if ("error" in contexto) return { error: contexto.error };
-
-  const { lugar, relato, tags, lat, lon, conAudio } = parsed.data;
-
-  await prisma.marcaCartografia.create({
-    data: {
-      autorId: contexto.userId,
-      sesionId: contexto.sesionId,
-      lugar,
-      relato: relato || "Sin relato escrito.",
-      audio: conAudio ? "0:18 grabado" : "Sin audio",
-      tags,
-      lat,
-      lon,
-    },
-  });
-
-  refrescar(contexto.sesionId);
-  return { ok: "Lugar sembrado en la cartografía colectiva." };
-}
+// La cartografía, con su grabación y su foto, está en acciones-cartografia.ts.
 
 // ------------------------------------------------------------------- Diario
 

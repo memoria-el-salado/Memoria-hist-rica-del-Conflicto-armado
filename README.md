@@ -245,6 +245,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:recursos` | Sube audio, imagen y video; el estudiante los ve en la sesión y el audio se reproduce desde el depósito privado |
 | `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
 | `npm run humo:cursos` | Cursos y grupos: el docente los arma y reparte; panel, reportes y debates se filtran por curso, y otro docente no los ve |
+| `npm run humo:cartografia` | Un estudiante graba su relato, suma una foto que el navegador reduce y siembra el lugar a nombre de su grupo; solo su curso y su docente lo ven |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -312,7 +313,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Alta de estudiantes por el docente | `/docente/estudiantes` |
 | CU01 | Cambio de contraseña obligatorio en el primer ingreso | `/cambiar-contrasena` |
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
-| CU02 | Cartografía social sobre mapa real | Sesión con actividad `cartografia` |
+| CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
 | CU04 | Jardín de la Memoria | Sesión con actividad `jardin` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |

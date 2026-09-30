@@ -7,7 +7,7 @@
  */
 export function subirConProgreso(
   url: string,
-  archivo: File,
+  archivo: Blob,
   tipo: string,
   alAvanzar: (porcentaje: number) => void
 ): Promise<boolean> {

@@ -59,6 +59,10 @@ export async function borrarCuentasDePrueba() {
     const recursos = await prisma.recurso.findMany({ where: { autorId: { in: ids } }, select: { archivo: true } });
     for (const r of recursos) if (r.archivo) await eliminarArchivo(r.archivo);
     await prisma.recurso.deleteMany({ where: { autorId: { in: ids } } });
+    // Las marcas de la cartografía se borran con su autor, pero su grabación y
+    // su foto viven en el depósito.
+    const marcas = await prisma.marcaCartografia.findMany({ where: { autorId: { in: ids } }, select: { audioArchivo: true, foto: true } });
+    for (const m of marcas) for (const r of [m.audioArchivo, m.foto]) if (r) await eliminarArchivo(r);
     await prisma.user.deleteMany({ where: { id: { in: ids } } });
   }
   return prisma.user.count({ where: { usuario: { startsWith: PREFIJO } } });
@@ -83,7 +87,7 @@ export async function ejecutar(titulo, prueba, limpiar = async () => {}) {
   console.log(`\n${titulo}\n`);
   let navegador;
   try {
-    await prueba({ abrir: async () => (navegador = await abrirNavegador()) });
+    await prueba({ abrir: async (argumentos) => (navegador = await abrirNavegador(argumentos)) });
   } catch (error) {
     comprobar("la prueba terminó sin errores", false, error instanceof Error ? error.message : String(error));
   } finally {
@@ -108,12 +112,18 @@ const NAVEGADORES = [
   "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
 ];
 
-/** Usa el Chrome o el Edge ya instalados: no se descarga ningún navegador. */
-export async function abrirNavegador() {
+/**
+ * Usa el Chrome o el Edge ya instalados: no se descarga ningún navegador.
+ * `argumentos` añade opciones de arranque, como el micrófono simulado.
+ */
+export async function abrirNavegador(argumentos = []) {
   const ruta = NAVEGADORES.find((r) => existsSync(r));
   if (!ruta) throw new Error("No se encontró Chrome ni Edge en el equipo.");
-  return puppeteer.launch({ executablePath: ruta, headless: true, defaultViewport: { width: 1280, height: 900 } });
+  return puppeteer.launch({ executablePath: ruta, headless: true, args: argumentos, defaultViewport: { width: 1280, height: 900 } });
 }
+
+/** Micrófono y cámara simulados, con el permiso ya concedido: para probar la grabación. */
+export const MICROFONO_SIMULADO = ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"];
 
 /** Entra por la pantalla de login, como lo haría una persona. */
 export async function entrar(pagina, usuario, rol) {
