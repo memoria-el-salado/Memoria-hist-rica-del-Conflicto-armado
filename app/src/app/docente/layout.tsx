@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { AppShell } from "@/components/app-shell";
+import { avisosPara } from "@/lib/avisos-datos";
 
 export default async function DocenteLayout({ children }: { children: React.ReactNode }) {
   const sesion = await auth();
@@ -15,6 +16,7 @@ export default async function DocenteLayout({ children }: { children: React.Reac
   return (
     <AppShell
       rol="DOCENTE"
+      avisos={await avisosPara(sesion.user.id, "DOCENTE")}
       nombre={sesion.user.name ?? ""}
       iniciales={sesion.user.iniciales}
       indicador={estudiantes === 1 ? "1 estudiante" : `${estudiantes} estudiantes`}

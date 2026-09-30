@@ -101,6 +101,40 @@ model User {
 
   /// Cómo planteó, como docente, la actividad de cada sesión.
   planteamientos PlanteamientoSesion[]
+
+  /// Última vez que miró la campana: lo publicado después es nuevo.
+  avisosVistosEn DateTime?
+
+  /// Retroalimentación: la que dio como docente y la que recibió como estudiante.
+  comentariosHechos    Comentario[] @relation("ComentarioDelDocente")
+  comentariosRecibidos Comentario[] @relation("ComentarioAlEstudiante")
+}
+
+/// Lo que el docente le dice a un estudiante sobre un trabajo suyo: una
+/// respuesta, una simulación o una entrada del diario que compartió.
+model Comentario {
+  id       String    @id @default(cuid())
+  texto    String    @db.Text
+  creadoEn DateTime  @default(now())
+  /// Cuándo lo vio el estudiante, donde está el trabajo comentado.
+  leidoEn  DateTime?
+
+  docenteId    String
+  docente      User   @relation("ComentarioDelDocente", fields: [docenteId], references: [id], onDelete: Cascade)
+  estudianteId String
+  estudiante   User   @relation("ComentarioAlEstudiante", fields: [estudianteId], references: [id], onDelete: Cascade)
+
+  /// La sesión del trabajo, para mostrarlo allí; vacía en el diario personal.
+  sesionId     String?
+  sesion       Sesion?             @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+  respuestaId  String?
+  respuesta    RespuestaActividad? @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
+  simulacionId String?
+  simulacion   Simulacion?         @relation(fields: [simulacionId], references: [id], onDelete: Cascade)
+  entradaId    String?
+  entrada      EntradaDiario?      @relation(fields: [entradaId], references: [id], onDelete: Cascade)
+
+  @@index([estudianteId, leidoEn])
 }
 
 /// Cómo plantea un docente a sus estudiantes la actividad de una sesión: las
@@ -195,16 +229,18 @@ model Eje {
 }
 
 model Sesion {
-  id            String  @id @default(cuid())
+  id            String    @id @default(cuid())
   codigo        String
-  titulo        String  @db.Text
-  objetivo      String? @db.Text
+  titulo        String    @db.Text
+  objetivo      String?   @db.Text
   tipo          String
   pantalla      String
-  publicada     Boolean @default(false)
-  alertaCuidado Boolean @default(false)
+  publicada     Boolean   @default(false)
+  /// Cuándo se publicó por última vez, para avisar a los estudiantes.
+  publicadaEn   DateTime?
+  alertaCuidado Boolean   @default(false)
   /// Lo que lee el estudiante antes del contenido cuando la alerta está activa.
-  textoAlerta   String? @db.Text
+  textoAlerta   String?   @db.Text
   orden         Int
 
   /// Texto de la sesión tal como venía en el documento importado. Es lo que
@@ -238,6 +274,8 @@ model Sesion {
 
   /// Cómo la plantea cada docente, si su actividad lo pide.
   planteamientos PlanteamientoSesion[]
+
+  comentarios Comentario[]
 
   @@unique([ejeId, codigo])
 }
@@ -384,6 +422,8 @@ model Simulacion {
 
   asignaciones Asignacion[]
 
+  comentarios Comentario[]
+
   /// Cada estudiante tiene una simulación por sesión, no una sola en total.
   @@unique([userId, sesionId])
 }
@@ -466,6 +506,8 @@ model EntradaDiario {
   /// el espacio personal del estudiante.
   sesionId String?
   sesion   Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  comentarios Comentario[]
 
   @@index([sesionId])
 }
@@ -555,6 +597,8 @@ model RespuestaActividad {
 
   sesionId String
   sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  comentarios Comentario[]
 
   @@unique([userId, sesionId])
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { avanceDeEstudiante } from "@/lib/avance";
 import { AppShell } from "@/components/app-shell";
+import { avisosPara } from "@/lib/avisos-datos";
 
 export default async function EstudianteLayout({ children }: { children: React.ReactNode }) {
   const sesion = await auth();
@@ -14,6 +15,7 @@ export default async function EstudianteLayout({ children }: { children: React.R
   return (
     <AppShell
       rol="ESTUDIANTE"
+      avisos={await avisosPara(sesion.user.id, "ESTUDIANTE")}
       nombre={sesion.user.name ?? ""}
       iniciales={sesion.user.iniciales}
       indicador={`Progreso ${avance.total}%`}

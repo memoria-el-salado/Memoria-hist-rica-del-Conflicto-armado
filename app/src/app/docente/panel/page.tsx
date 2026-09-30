@@ -2,12 +2,11 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes, promedioDelGrupo } from "@/lib/avance";
 import { ordenarSolicitudes } from "@/lib/cuidado";
+import { fechaYHora } from "@/lib/fechas";
 import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
 import { FiltroCurso } from "@/components/filtro-curso";
 import { PanelDocente } from "./panel-docente";
 
-/** Fecha y hora en Colombia: el servidor de Vercel corre en UTC. */
-const FECHA = new Intl.DateTimeFormat("es-CO", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Bogota" });
 
 /** Los atendidos se muestran un tiempo para dejar constancia; luego salen del panel. */
 const DIAS_ATENDIDAS = 14;
@@ -125,8 +124,8 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
         estudiante: s.estudiante.nombre,
         sesion: s.sesion ? `${s.sesion.codigo} ${s.sesion.titulo}` : null,
         mensaje: s.mensaje,
-        cuando: FECHA.format(s.creadoEn),
-        atendida: s.atendidaEn ? FECHA.format(s.atendidaEn) : null,
+        cuando: fechaYHora(s.creadoEn),
+        atendida: s.atendidaEn ? fechaYHora(s.atendidaEn) : null,
       }))}
     />
   );

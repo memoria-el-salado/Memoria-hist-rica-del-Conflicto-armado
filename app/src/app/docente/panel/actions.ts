@@ -19,14 +19,14 @@ export async function alternarPublicacion(sesionId: string) {
   const actual = await prisma.sesion.findUnique({ where: { id: sesionId } });
   if (!actual) return { error: "La sesión no existe." };
 
+  // Al publicar se anota la fecha: con ella se avisa a los estudiantes.
   await prisma.sesion.update({
     where: { id: sesionId },
-    data: { publicada: !actual.publicada },
+    data: actual.publicada ? { publicada: false } : { publicada: true, publicadaEn: new Date() },
   });
 
   revalidatePath("/docente/panel");
-  revalidatePath("/estudiante/mapa");
-  revalidatePath(`/estudiante/sesion/${sesionId}`);
+  revalidatePath("/estudiante", "layout");
   return { ok: true };
 }
 

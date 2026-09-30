@@ -20,6 +20,8 @@ import { CoplaDespensa, type ResumenCurso } from "@/components/actividades/copla
 import { leerDatosCopla, PRODUCTOS, resumenDelCurso } from "@/lib/copla";
 import { ActividadGuiada } from "@/components/actividades/actividad-guiada";
 import { DebatesDeSesion } from "@/components/foro/debates-de-sesion";
+import { ComentariosDocente } from "@/components/avisos/comentarios-docente";
+import { fechaYHora } from "@/lib/fechas";
 import {
   esGuiada,
   leerDatosGuiada,
@@ -97,7 +99,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     documento: documento ? { id: documento.id, titulo: documento.titulo } : null,
   };
 
-  const [actividad, recursos, debates] = await Promise.all([
+  const [actividad, recursos, debates, comentarios] = await Promise.all([
     pantallaDeActividad(sesion.pantalla, sesion.id, datos, userId),
     prisma.recurso.findMany({
       // El material de la sesión y el que el docente cargó para todo el eje.
@@ -105,6 +107,12 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       orderBy: { creadoEn: "asc" },
     }),
     debatesDeLaSesion(sesion.id, userId),
+    // Lo que el docente comentó del trabajo del estudiante en esta sesión.
+    prisma.comentario.findMany({
+      where: { estudianteId: userId, sesionId: sesion.id, entradaId: null },
+      orderBy: { creadoEn: "asc" },
+      include: { docente: { select: { nombre: true } } },
+    }),
   ]);
 
   // Solo el material accesible: un audio o un video sin su transcripción no se publica.
@@ -119,6 +127,15 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
   const contenido = (
     <>
       {actividad}
+      <ComentariosDocente
+        comentarios={comentarios.map((c) => ({
+          id: c.id,
+          texto: c.texto,
+          docente: c.docente.nombre,
+          cuando: fechaYHora(c.creadoEn),
+          nuevo: !c.leidoEn,
+        }))}
+      />
       <DebatesDeSesion debates={debates} />
       <MaterialSesion recursos={visibles.map(vistaDeRecurso)} />
     </>

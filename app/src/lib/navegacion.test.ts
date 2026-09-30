@@ -40,6 +40,7 @@ describe("separación de funcionalidades por rol", () => {
     expect(rutas).toContain("/docente/contenidos");
     expect(rutas).toContain("/docente/foros");
     expect(rutas).toContain("/docente/subpoblaciones");
+    expect(rutas).toContain("/docente/revision");
   });
 
   it("cada rol crea únicamente las cuentas del nivel siguiente", () => {

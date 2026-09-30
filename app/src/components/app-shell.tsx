@@ -8,6 +8,8 @@ import type { Rol } from "@prisma/client";
 import { ETIQUETA_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
 import { sesionDeRuta } from "@/lib/cuidado";
 import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
+import { Campana } from "@/components/avisos/campana";
+import type { AvisoVista } from "@/lib/avisos-datos";
 
 const ESCALAS = [1, 1.12, 1.25] as const;
 const ETIQUETA_ESCALA: Record<string, string> = { "1": "A", "1.12": "A+", "1.25": "A++" };
@@ -19,12 +21,14 @@ type Props = {
   indicador: string;
   /** Solo para el docente: pedidos de acompañamiento que esperan respuesta. */
   solicitudesPendientes?: number;
+  /** La campana; el administrador no la tiene. */
+  avisos?: { avisos: AvisoVista[]; nuevos: number } | null;
   children: React.ReactNode;
 };
 
 const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
 
-export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, children }: Props) {
+export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, avisos, children }: Props) {
   const pathname = usePathname();
   const [escala, setEscala] = useState<(typeof ESCALAS)[number]>(1);
   const [alertaAbierta, setAlertaAbierta] = useState(false);
@@ -148,6 +152,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[11px] font-bold text-secundario-fuerte md:block">
               {indicador}
             </div>
+            {avisos && <Campana avisos={avisos.avisos} nuevos={avisos.nuevos} />}
             <button
               onClick={ciclarEscala}
               title="Tamaño de texto"

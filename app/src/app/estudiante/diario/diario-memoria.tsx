@@ -2,6 +2,7 @@
 
 import { useActionState, useRef, useState } from "react";
 import { guardarEntradaDiario } from "@/app/estudiante/sesion/[id]/actions";
+import { ComentariosDocente, type ComentarioVista } from "@/components/avisos/comentarios-docente";
 
 const EMOCIONES = [
   { label: "ALEGRÍA", color: "#EBB035", tinte: "#FBEFD8" },
@@ -19,6 +20,8 @@ type Entrada = {
   /** Sesión en la que se escribió, si no se anotó desde el espacio personal. */
   origen: string | null;
   fecha: string;
+  /** Lo que respondió el docente a una entrada compartida. */
+  comentarios: ComentarioVista[];
 };
 
 export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
@@ -53,7 +56,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
         </svg>
         <div className="text-[12.5px] leading-[1.6] text-[#3F6E6C]">
           Tus entradas son <strong>privadas por defecto</strong>. El docente solo verá las que marques como
-          compartidas, y nunca su contenido completo sin tu autorización.
+          compartidas, y podrá responderte en ellas.
         </div>
       </div>
 
@@ -160,6 +163,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
                 </span>
               </div>
               <p className="mt-2.5 text-[13.5px] leading-[1.7] text-tinta-media">{d.texto}</p>
+              <ComentariosDocente comentarios={d.comentarios} compacto />
             </div>
           );
         })}

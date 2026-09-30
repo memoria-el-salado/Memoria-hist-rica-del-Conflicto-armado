@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { fecha, fechaYHora } from "@/lib/fechas";
 import { DiarioMemoria } from "./diario-memoria";
 
 export default async function DiarioPage() {
@@ -11,7 +12,10 @@ export default async function DiarioPage() {
   const entradas = await prisma.entradaDiario.findMany({
     where: { autorId: sesion!.user.id },
     orderBy: { creadoEn: "desc" },
-    include: { sesion: { select: { codigo: true, titulo: true } } },
+    include: {
+      sesion: { select: { codigo: true, titulo: true } },
+      comentarios: { orderBy: { creadoEn: "asc" }, include: { docente: { select: { nombre: true } } } },
+    },
   });
 
   return (
@@ -22,7 +26,14 @@ export default async function DiarioPage() {
         texto: e.texto,
         privada: e.privada,
         origen: e.sesion ? `${e.sesion.codigo} · ${e.sesion.titulo}` : null,
-        fecha: e.creadoEn.toLocaleDateString("es-CO", { day: "numeric", month: "long" }),
+        fecha: fecha(e.creadoEn),
+        comentarios: e.comentarios.map((c) => ({
+          id: c.id,
+          texto: c.texto,
+          docente: c.docente.nombre,
+          cuando: fechaYHora(c.creadoEn),
+          nuevo: !c.leidoEn,
+        })),
       }))}
     />
   );
