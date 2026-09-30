@@ -16,6 +16,7 @@ import { estadoAccesibilidad } from "@/lib/transcripcion";
 import { PuertaCuidado } from "@/components/cuidado/puerta-cuidado";
 import { TEXTO_ALERTA_PREDETERMINADO } from "@/lib/cuidado";
 import { aportesVisiblesPara } from "@/lib/visibilidad";
+import { recorridoDe } from "@/lib/recorrido-datos";
 import { CoplaDespensa, type ResumenCurso } from "@/components/actividades/copla-despensa";
 import { leerDatosCopla, PRODUCTOS, resumenDelCurso } from "@/lib/copla";
 import { ActividadGuiada } from "@/components/actividades/actividad-guiada";
@@ -77,6 +78,23 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
         </p>
       </div>
     );
+  }
+
+  // En un curso que recorre el mapa en orden, un eje cerrado no se abre por su
+  // dirección: el candado del mapa no es solo visual.
+  if (sesion.eje.caso.activo) {
+    const recorrido = await recorridoDe(userId);
+    if (recorrido.ejes.get(sesion.ejeId)?.abierto === false) {
+      return (
+        <div className="animar-aparecer mx-auto max-w-[560px] py-16 text-center">
+          <h1 className="text-[20px] font-extrabold">Esta sesión todavía no está abierta para tu curso</h1>
+          <p className="mt-2 text-[13.5px] leading-[1.7] text-apagado">
+            Tu curso recorre el mapa en orden: este eje se abre al llegar al {recorrido.umbral}% en el anterior, o
+            cuando tu docente lo abra.
+          </p>
+        </div>
+      );
+    }
   }
 
   const documento = sesion.eje.caso.documentos[0] ?? null;

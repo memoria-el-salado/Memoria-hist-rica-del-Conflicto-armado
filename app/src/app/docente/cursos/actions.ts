@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { puedeAsignar, repartirEnGrupos, validarCurso, validarGrupo } from "@/lib/cursos";
+import { validarRecorrido } from "@/lib/desbloqueo";
 
 type Resultado = { ok?: string; error?: string };
 
@@ -154,4 +155,40 @@ export async function repartirGrupos(cursoId: string): Promise<Resultado> {
 
   refrescar(cursoId);
   return { ok: reparto.size === 1 ? "1 estudiante recibió grupo." : `${reparto.size} estudiantes recibieron grupo.` };
+}
+
+/** Cómo recorre el mapa el curso: libre, o en orden con un umbral de avance. */
+export async function guardarRecorrido(cursoId: string, entrada: { recorrido: unknown; umbral: unknown }): Promise<Resultado> {
+  const docenteId = await docente();
+  if (!docenteId || !(await miCurso(cursoId, docenteId))) return { error: "Ese curso no es tuyo." };
+  const revision = validarRecorrido(entrada);
+  if (!revision) return { error: "Recorrido no válido." };
+
+  await prisma.curso.update({ where: { id: cursoId }, data: revision });
+  refrescar(cursoId);
+  revalidatePath("/estudiante", "layout");
+  return {
+    ok:
+      revision.recorrido === "LIBRE"
+        ? "Recorrido libre: tus estudiantes abren cualquier sesión publicada."
+        : `Recorrido en orden: cada eje se abre al llegar al ${revision.umbral}% en el anterior.`,
+  };
+}
+
+/** Abre (o vuelve a cerrar) un eje para el curso sin esperar el avance. */
+export async function alternarEjeAbierto(cursoId: string, ejeId: string): Promise<Resultado> {
+  const docenteId = await docente();
+  const curso = docenteId ? await miCurso(cursoId, docenteId) : null;
+  if (!curso) return { error: "Ese curso no es tuyo." };
+  const eje = await prisma.eje.findFirst({ where: { id: ejeId, caso: { activo: true } }, select: { numero: true } });
+  if (!eje) return { error: "Ese eje no es del módulo activo." };
+
+  const abierto = curso.ejesAbiertos.includes(ejeId);
+  await prisma.curso.update({
+    where: { id: cursoId },
+    data: { ejesAbiertos: abierto ? curso.ejesAbiertos.filter((e) => e !== ejeId) : [...curso.ejesAbiertos, ejeId] },
+  });
+  refrescar(cursoId);
+  revalidatePath("/estudiante", "layout");
+  return { ok: abierto ? `El eje ${eje.numero} vuelve a abrirse por avance.` : `El eje ${eje.numero} queda abierto para el curso.` };
 }

@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Curso" ADD COLUMN     "ejesAbiertos" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN     "recorrido" TEXT NOT NULL DEFAULT 'LIBRE',
+ADD COLUMN     "umbral" INTEGER NOT NULL DEFAULT 60;
+

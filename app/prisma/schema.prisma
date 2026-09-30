@@ -164,6 +164,14 @@ model Curso {
   docenteId String
   docente   User   @relation("CursosDelDocente", fields: [docenteId], references: [id], onDelete: Cascade)
 
+  /// Cómo se recorre el mapa en este curso: LIBRE (cualquier sesión
+  /// publicada) o EN_ORDEN (cada eje se abre al llegar al umbral de avance en
+  /// el anterior, o cuando el docente lo abre).
+  recorrido    String   @default("LIBRE")
+  umbral       Int      @default(60)
+  /// Ejes que el docente abrió a mano, sin esperar el avance.
+  ejesAbiertos String[] @default([])
+
   estudiantes User[]  @relation("EstudiantesDelCurso")
   grupos      Grupo[]
   foros       Foro[]

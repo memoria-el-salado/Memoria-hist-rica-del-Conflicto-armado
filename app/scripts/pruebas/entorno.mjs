@@ -160,6 +160,8 @@ export async function ejecutar(titulo, prueba, limpiar = async () => {}) {
     await prueba({ abrir: async (argumentos) => (navegador = await abrirNavegador(argumentos)) });
   } catch (error) {
     comprobar("la prueba terminó sin errores", false, error instanceof Error ? error.message : String(error));
+    // Con DEPURAR=1 se imprime la traza completa, para saber dónde se cortó.
+    if (process.env.DEPURAR) console.error(error);
   } finally {
     await navegador?.close().catch(() => {});
     await limpiar().catch((e) => comprobar("limpieza", false, e.message));
@@ -191,7 +193,15 @@ const NAVEGADORES = [
 export async function abrirNavegador(argumentos = []) {
   const ruta = NAVEGADORES.find((r) => existsSync(r));
   if (!ruta) throw new Error("No se encontró Chrome ni Edge en el equipo.");
-  return puppeteer.launch({ executablePath: ruta, headless: true, args: argumentos, defaultViewport: { width: 1280, height: 900 } });
+  return puppeteer.launch({
+    executablePath: ruta,
+    headless: true,
+    args: argumentos,
+    defaultViewport: { width: 1280, height: 900 },
+    // Por encima de la espera más larga (la subida de la guía, hasta 10 min):
+    // con el valor por defecto, 3 min, una conexión lenta corta la espera antes.
+    protocolTimeout: 900_000,
+  });
 }
 
 /** Micrófono y cámara simulados, con el permiso ya concedido: para probar la grabación. */

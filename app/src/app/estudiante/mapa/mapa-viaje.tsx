@@ -41,6 +41,8 @@ type Eje = {
   /** Cuánto vale este eje en el avance del curso, según lo repartió el docente. */
   peso: number;
   completadas: number;
+  /** Si el eje está cerrado para el curso del estudiante, qué falta para abrirlo. */
+  bloqueo: string | null;
   sesiones: Sesion[];
 };
 
@@ -52,9 +54,18 @@ type Props = {
   equidad: number | null;
   /** "Curso 10A · 2026 · Grupo Los Robles", o null si aún no tiene curso. */
   pertenencia: string | null;
+  /** Las cuatro competencias ciudadanas de la guía y cómo va en cada una. */
+  competencias: { id: string; nombre: string; descripcion: string; hechas: number; total: number; porcentaje: number }[];
 };
 
-export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbicar, pertenencia }: Props) {
+const COLOR_COMPETENCIA: Record<string, string> = {
+  EMPATIA: "#D95D39",
+  ESCUCHA: "#1B8A8A",
+  CRITICO: "#A8791C",
+  ASERTIVIDAD: "#177575",
+};
+
+export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbicar, pertenencia, competencias }: Props) {
   const [abierto, setAbierto] = useState<string | null>(null);
   const ejeAbierto = ejes.find((e) => e.id === abierto) ?? null;
 
@@ -148,9 +159,42 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
         </div>
       )}
 
+      {ejes.length > 0 && (
+        <section aria-labelledby="titulo-competencias" className="mb-[18px] rounded-xl border border-borde bg-superficie p-[18px]">
+          <h2 id="titulo-competencias" className="text-[10px] font-extrabold tracking-[.12em] text-tenue">
+            TUS COMPETENCIAS CIUDADANAS
+          </h2>
+          <ul className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+            {competencias.map((c) => (
+              <li key={c.id}>
+                <div className="flex items-baseline justify-between gap-2 text-[12.5px]">
+                  <span className="font-bold text-tinta-media" title={c.descripcion}>
+                    {c.nombre}
+                  </span>
+                  <span className="text-[11px] font-bold text-tenue">
+                    {c.total ? `${c.hechas} de ${c.total} ${c.total === 1 ? "actividad" : "actividades"} · ${c.porcentaje}%` : "Sin actividades publicadas"}
+                  </span>
+                </div>
+                <div
+                  className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]"
+                  role="progressbar"
+                  aria-label={c.nombre}
+                  aria-valuenow={c.porcentaje}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div className="h-full" style={{ width: `${c.porcentaje}%`, background: COLOR_COMPETENCIA[c.id] }} />
+                </div>
+                <p className="mt-1 text-[11px] leading-snug text-suave">{c.descripcion}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {ejes.map((e) => {
-          const estado = e.progreso === 100 ? "COMPLETO" : e.progreso > 0 ? "EN CURSO" : "SIN INICIAR";
+          const estado = e.bloqueo ? "CERRADO" : e.progreso === 100 ? "COMPLETO" : e.progreso > 0 ? "EN CURSO" : "SIN INICIAR";
           const activo = abierto === e.id;
           return (
             <button
@@ -171,14 +215,22 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                 <div
                   className="rounded-full px-[9px] py-1 text-[9.5px] font-extrabold tracking-[.08em]"
                   style={{
-                    background: e.progreso === 100 ? "#E5F1F0" : e.progreso > 0 ? "#FDF4F0" : "#F3F0EC",
-                    color: e.progreso === 100 ? "#177575" : e.progreso > 0 ? "#B8482A" : "#A79E96",
+                    background: e.bloqueo ? "#FDF8EF" : e.progreso === 100 ? "#E5F1F0" : e.progreso > 0 ? "#FDF4F0" : "#F3F0EC",
+                    color: e.bloqueo ? "#A8791C" : e.progreso === 100 ? "#177575" : e.progreso > 0 ? "#B8482A" : "#A79E96",
                   }}
                 >
                   {estado}
                 </div>
               </div>
-              <div className="mt-3.5 text-[17px] font-bold tracking-[-.01em]">{e.nombre}</div>
+              <div className={`mt-3.5 text-[17px] font-bold tracking-[-.01em] ${e.bloqueo ? "text-tenue" : ""}`}>{e.nombre}</div>
+              {e.bloqueo && (
+                <p className="mt-1.5 flex items-start gap-1.5 text-[11.5px] font-semibold text-terciario-fuerte">
+                  <svg className="mt-0.5 flex-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
+                  </svg>
+                  {e.bloqueo}
+                </p>
+              )}
               <p className="mb-3.5 mt-1.5 min-h-[58px] text-[12.5px] leading-[1.6] text-[#7C736C]">
                 {e.descripcion}
               </p>
@@ -262,7 +314,14 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                     </ul>
                   )}
                 </div>
-                {s.publicada ? (
+                {s.publicada && ejeAbierto.bloqueo ? (
+                  <span
+                    title={ejeAbierto.bloqueo}
+                    className="mt-0.5 flex-none rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2 text-[12px] font-bold text-terciario-fuerte"
+                  >
+                    Cerrada
+                  </span>
+                ) : s.publicada ? (
                   <Link
                     href={`/estudiante/sesion/${s.id}`}
                     className="mt-0.5 flex-none rounded-lg border border-primario px-3.5 py-2 text-[12px] font-bold text-primario-fuerte no-underline hover:bg-primario-tinte hover:no-underline"

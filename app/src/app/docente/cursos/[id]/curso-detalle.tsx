@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { LIMITES_CURSO } from "@/lib/cursos";
 import { asignarCurso, asignarGrupo, crearGrupo, eliminarCurso, eliminarGrupo, repartirGrupos } from "../actions";
+import { RecorridoCurso } from "./recorrido-curso";
 
 type Estudiante = { id: string; nombre: string; usuario: string; iniciales: string; grupoId: string | null };
 type Props = {
@@ -11,13 +12,15 @@ type Props = {
   grupos: { id: string; nombre: string }[];
   estudiantes: Estudiante[];
   sinCurso: { id: string; nombre: string }[];
+  recorrido: { recorrido: string; umbral: number; abiertos: string[] };
+  ejes: { id: string; numero: number; nombre: string; esPreambulo: boolean }[];
 };
 
 /**
  * Un curso: quiénes están, en qué grupo trabaja cada uno, y los grupos. Cada
  * cambio se guarda al momento y el aviso dice qué pasó.
  */
-export function CursoDetalle({ curso, grupos, estudiantes, sinCurso }: Props) {
+export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, ejes }: Props) {
   const [aviso, setAviso] = useState<{ ok?: string; error?: string } | null>(null);
   const [pendiente, iniciar] = useTransition();
   const [nombreGrupo, setNombreGrupo] = useState("");
@@ -210,6 +213,8 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso }: Props) {
               </button>
             )}
           </section>
+
+          <RecorridoCurso cursoId={curso.id} recorrido={recorrido} ejes={ejes} />
 
           <section className="rounded-xl border border-borde bg-superficie p-5">
             <h2 className="text-[11px] font-bold tracking-[.12em] text-tenue">ELIMINAR EL CURSO</h2>

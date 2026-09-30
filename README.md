@@ -250,10 +250,11 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:despensa` | La copla «Tierra de abundancia»: ubicar productos en los Montes de María tocando o arrastrando, explicar la despensa y comparar con el curso |
 | `npm run humo:actividades` | Me ubico, Dilema, A investigar, Testimonios y Compromiso: el docente plantea, el estudiante responde y ve lo de su curso; el administrador cambia actividades |
 | `npm run humo:revision` | El docente revisa y comenta respuestas, simulaciones y diarios compartidos; la campana avisa a cada quien y se apaga al leer |
+| `npm run humo:recorrido` | Competencias en el mapa y recorrido en orden: ejes cerrados con lo que falta, apertura por avance o por el docente |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
-Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito. Si una
+Con `DEPURAR=1` imprimen la traza completa si algo falla. Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito. Si una
 prueba se corta a medias, `npm run humo:limpiar` borra lo que haya quedado. Las que necesitan
 una sesión publicada que el módulo real no tiene crean un módulo inactivo, que ningún estudiante
 real ve, y lo borran al terminar.
@@ -319,6 +320,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Alta de estudiantes por el docente | `/docente/estudiantes` |
 | CU01 | Cambio de contraseña obligatorio en el primer ingreso | `/cambiar-contrasena` |
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
+| CU01 | Las cuatro competencias ciudadanas de la guía en el mapa, y recorrido libre o en orden por curso | `/estudiante/mapa`, `/docente/cursos/[id]` |
 | CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
 | Guía 1.2.1 | Copla «Tierra de abundancia»: mapa de productos de los Montes de María y resumen del curso para la plenaria | Sesión con actividad `despensa` |

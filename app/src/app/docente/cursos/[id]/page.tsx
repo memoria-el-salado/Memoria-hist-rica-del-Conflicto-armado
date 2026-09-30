@@ -22,11 +22,18 @@ export default async function CursoPage({ params }: { params: Promise<{ id: stri
   // Un curso ajeno no existe para este docente.
   if (!curso || curso.docenteId !== docenteId) notFound();
 
-  const sinCurso = await prisma.user.findMany({
-    where: { rol: "ESTUDIANTE", creadoPorId: docenteId, cursoId: null },
-    orderBy: { nombre: "asc" },
-    select: { id: true, nombre: true },
-  });
+  const [sinCurso, ejes] = await Promise.all([
+    prisma.user.findMany({
+      where: { rol: "ESTUDIANTE", creadoPorId: docenteId, cursoId: null },
+      orderBy: { nombre: "asc" },
+      select: { id: true, nombre: true },
+    }),
+    prisma.eje.findMany({
+      where: { caso: { activo: true } },
+      orderBy: { orden: "asc" },
+      select: { id: true, numero: true, nombre: true, esPreambulo: true },
+    }),
+  ]);
 
   return (
     <CursoDetalle
@@ -34,6 +41,8 @@ export default async function CursoPage({ params }: { params: Promise<{ id: stri
       grupos={curso.grupos}
       estudiantes={curso.estudiantes}
       sinCurso={sinCurso}
+      recorrido={{ recorrido: curso.recorrido, umbral: curso.umbral, abiertos: curso.ejesAbiertos }}
+      ejes={ejes}
     />
   );
 }

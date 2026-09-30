@@ -32,6 +32,7 @@
     "humo:despensa": "node scripts/pruebas/despensa.mjs",
     "humo:actividades": "node scripts/pruebas/actividades.mjs",
     "humo:revision": "node scripts/pruebas/revision.mjs",
+    "humo:recorrido": "node scripts/pruebas/recorrido.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

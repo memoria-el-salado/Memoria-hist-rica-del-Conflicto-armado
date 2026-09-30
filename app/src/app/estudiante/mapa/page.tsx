@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiante } from "@/lib/avance";
 import { etiquetaCurso } from "@/lib/cursos";
+import { avanceDeCompetencias } from "@/lib/competencias";
+import { recorridoDe } from "@/lib/recorrido-datos";
 
 import { MapaViaje } from "./mapa-viaje";
 
@@ -39,6 +41,13 @@ export default async function MapaPage() {
     : null;
 
   const porEje = new Map(avance.ejes.map((e) => [e.ejeId, e]));
+  const recorrido = await recorridoDe(userId, avance);
+  const nombreDe = new Map(ejes.map((e) => [e.id, e.esPreambulo ? "el preámbulo" : `el eje ${e.numero}`]));
+
+  // Las competencias salen de las mismas sesiones hechas que el avance.
+  const competencias = avanceDeCompetencias(
+    ejes.flatMap((e) => e.sesiones.map((s) => ({ pantalla: s.pantalla, publicada: s.publicada, completada: avance.completadas.has(s.id) })))
+  );
 
   const datos = ejes.map((e) => {
     const suyo = porEje.get(e.id);
@@ -53,6 +62,12 @@ export default async function MapaPage() {
       progreso: suyo?.progreso ?? 0,
       peso: e.peso,
       completadas: suyo?.completadas ?? 0,
+      // En un curso que recorre el mapa en orden, un eje puede estar cerrado.
+      bloqueo: (() => {
+        const estado = recorrido.ejes.get(e.id);
+        if (!estado || estado.abierto) return null;
+        return `Se abre al llegar al ${recorrido.umbral}% en ${nombreDe.get(estado.requiereDe ?? "") ?? "el eje anterior"}, o cuando tu docente lo abra.`;
+      })(),
       sesiones: e.sesiones.map((s) => ({
         id: s.id,
         codigo: s.codigo,
@@ -94,6 +109,7 @@ export default async function MapaPage() {
       estaciones={estaciones}
       casosSinUbicar={casos.length - estaciones.length}
       pertenencia={pertenencia}
+      competencias={competencias.map((c) => ({ id: c.id, nombre: c.nombre, descripcion: c.descripcion, hechas: c.hechas, total: c.total, porcentaje: c.porcentaje }))}
       indicadores={indicadores}
       equidad={
         simulaciones.length
