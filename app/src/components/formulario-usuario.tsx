@@ -7,7 +7,6 @@ import {
   evaluarContrasena,
   generarContrasenaTemporal,
 } from "@/lib/politica-contrasena";
-import { SUBPOBLACIONES } from "@/lib/usuarios";
 
 const COLORES_FUERZA = ["#C0392B", "#C0392B", "#EBB035", "#1B8A8A", "#177575"];
 
@@ -19,8 +18,6 @@ type Props = {
    * primer render coincida con el del navegador.
    */
   sugerencia: string;
-  /** Los estudiantes se agrupan además por subpoblación, para los reportes. */
-  conSubpoblacion?: boolean;
   /** Cursos del docente, para dejar al estudiante en uno desde el alta. */
   cursos?: { id: string; etiqueta: string }[];
   titulo: string;
@@ -40,7 +37,6 @@ type Props = {
  */
 export function FormularioUsuario({
   sugerencia,
-  conSubpoblacion = false,
   cursos,
   titulo,
   textoBoton,
@@ -119,32 +115,6 @@ export function FormularioUsuario({
               </option>
             ))}
           </select>
-        </>
-      )}
-
-      {conSubpoblacion && (
-        <>
-          <label
-            htmlFor="subpoblacion"
-            className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue"
-          >
-            SUBPOBLACIÓN
-          </label>
-          <select
-            id="subpoblacion"
-            name="subpoblacion"
-            defaultValue={SUBPOBLACIONES[SUBPOBLACIONES.length - 1]}
-            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
-          >
-            {SUBPOBLACIONES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          <p className="mt-1.5 text-[11px] text-suave">
-            Se usa solo para los reportes diferenciados; no se muestra a los demás estudiantes.
-          </p>
         </>
       )}
 

@@ -5,6 +5,7 @@ import { ordenarSolicitudes } from "@/lib/cuidado";
 import { fechaYHora } from "@/lib/fechas";
 import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
 import { FiltroCurso } from "@/components/filtro-curso";
+import { resumenDeSubpoblaciones } from "@/lib/subpoblaciones-datos";
 import { PanelDocente } from "./panel-docente";
 
 
@@ -51,7 +52,7 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
     // El panel refleja a los estudiantes del propio docente, o a los del curso elegido.
     prisma.user.findMany({
       where: { rol: "ESTUDIANTE", creadoPorId: docenteId, ...(elegido ? { cursoId: elegido } : {}) },
-      select: { id: true, subpoblacion: true },
+      select: { id: true },
     }),
     solicitudesDe(docenteId),
     prisma.planteamientoSesion.findMany({ where: { docenteId }, select: { sesionId: true } }),
@@ -71,17 +72,14 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
     };
   });
 
-  const grupos = new Map<string, number>();
-  for (const e of estudiantes) {
-    const clave = e.subpoblacion ?? "Sin vínculo directo";
-    grupos.set(clave, (grupos.get(clave) ?? 0) + 1);
-  }
-  const colores = ["#D95D39", "#1B8A8A", "#EBB035", "#177575"];
-  // Sin estudiantes no hay porcentajes que calcular.
-  const subpoblaciones = estudiantes.length
-    ? [...grupos.entries()].map(([nombre, n], i) => ({
-        nombre,
-        porcentaje: Math.round((n / estudiantes.length) * 100),
+  // La misma agregación protegida que los reportes: solo lo autorizado y sin
+  // grupos de menos de cinco.
+  const resumen = await resumenDeSubpoblaciones(docenteId, elegido);
+  const colores = ["#D95D39", "#1B8A8A", "#EBB035", "#177575", "#A79E96"];
+  const subpoblaciones = resumen.total
+    ? resumen.filas.map((f, i) => ({
+        nombre: f.nombre,
+        porcentaje: Math.round((f.estudiantes / resumen.total) * 100),
         color: colores[i % colores.length],
       }))
     : [];
@@ -100,6 +98,7 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
       promedioGlobal={promedioDelGrupo(lista)}
       barras={barras}
       subpoblaciones={subpoblaciones}
+      subpoblacionesOcultas={resumen.ocultos}
       totalEstudiantes={estudiantes.length}
       ejes={ejes.map((e) => ({
         id: e.id,

@@ -251,6 +251,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:actividades` | Me ubico, Dilema, A investigar, Testimonios y Compromiso: el docente plantea, el estudiante responde y ve lo de su curso; el administrador cambia actividades |
 | `npm run humo:revision` | El docente revisa y comenta respuestas, simulaciones y diarios compartidos; la campana avisa a cada quien y se apaga al leer |
 | `npm run humo:recorrido` | Competencias en el mapa y recorrido en orden: ejes cerrados con lo que falta, apertura por avance o por el docente |
+| `npm run humo:subpoblaciones` | La subpoblación se declara solo con autorización del acudiente; reportes y panel sin grupos de menos de cinco; cada docente ve sus reportes |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -331,7 +332,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
 | CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |
 | Seguimiento | Revisión con comentarios del docente y campana de avisos (comentarios, sesiones publicadas, entregas y pedidos de acompañamiento) | `/docente/revision`, cabecera |
-| CU07 | Reportes por subpoblaciones | `/docente/subpoblaciones` |
+| CU07 | Reportes por subpoblaciones, con consentimiento del acudiente y sin grupos de menos de cinco | `/docente/subpoblaciones`, `/docente/estudiantes` |
 | CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |
 | CU09 | Creación de módulos desde documentos PDF | `/admin/importar` |

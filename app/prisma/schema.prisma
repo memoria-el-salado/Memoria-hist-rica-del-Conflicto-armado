@@ -52,15 +52,18 @@ enum Subsidio {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  usuario      String   @unique
-  email        String   @unique
-  passwordHash String
-  nombre       String
-  iniciales    String
-  rol          Rol
-  subpoblacion String?
-  creadoEn     DateTime @default(now())
+  id                       String    @id @default(cuid())
+  usuario                  String    @unique
+  email                    String    @unique
+  passwordHash             String
+  nombre                   String
+  iniciales                String
+  rol                      Rol
+  subpoblacion             String?
+  /// Cuándo registró el docente que el acudiente autorizó declarar la
+  /// subpoblación (Ley 1581). Sin esta fecha, el dato no cuenta en los reportes.
+  subpoblacionConsentidaEn DateTime?
+  creadoEn                 DateTime  @default(now())
 
   /// Las cuentas nacen con una contraseña provisional que entrega quien las
   /// crea. Mientras la marca siga activa, la plataforma solo deja pasar a la
@@ -101,6 +104,9 @@ model User {
 
   /// Cómo planteó, como docente, la actividad de cada sesión.
   planteamientos PlanteamientoSesion[]
+
+  /// Reportes diferenciados que generó como docente.
+  reportes ReporteDiferenciado[] @relation("ReportesDelDocente")
 
   /// Última vez que miró la campana: lo publicado después es nuevo.
   avisosVistosEn DateTime?
@@ -615,6 +621,11 @@ model ReporteDiferenciado {
   id       String   @id @default(cuid())
   resumen  String   @db.Text
   creadoEn DateTime @default(now())
+
+  /// De quién es el reporte: cada docente ve solo los suyos. Los de antes de
+  /// este campo no tienen dueño y no se muestran a nadie.
+  docenteId String?
+  docente   User?   @relation("ReportesDelDocente", fields: [docenteId], references: [id], onDelete: Cascade)
 }
 
 /// Un estudiante pide hablar con su docente, desde una sesión con alerta de

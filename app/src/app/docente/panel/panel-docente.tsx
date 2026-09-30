@@ -30,6 +30,8 @@ type Props = {
   promedioGlobal: number;
   barras: { label: string; valor: number }[];
   subpoblaciones: { nombre: string; porcentaje: number; color: string }[];
+  /** Estudiantes en grupos de menos de cinco, que no se muestran. */
+  subpoblacionesOcultas: number;
   totalEstudiantes: number;
   ejes: EjePeso[];
   sesiones: Sesion[];
@@ -44,6 +46,7 @@ export function PanelDocente({
   promedioGlobal,
   barras,
   subpoblaciones,
+  subpoblacionesOcultas,
   totalEstudiantes,
   ejes,
   sesiones,
@@ -179,6 +182,11 @@ export function PanelDocente({
                 </div>
               ))}
             </div>
+            {subpoblacionesOcultas > 0 && (
+              <p className="mt-3 text-[11px] leading-snug text-suave">
+                {subpoblacionesOcultas} en grupos de menos de cinco: no se muestran, para proteger su identidad.
+              </p>
+            )}
           </div>
 
           <AlertasCuidado sesiones={sesiones} />

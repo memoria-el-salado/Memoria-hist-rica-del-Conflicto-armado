@@ -5,6 +5,7 @@ import { BotonRestablecer } from "@/components/boton-restablecer";
 import { FormularioUsuario, type Entrega } from "@/components/formulario-usuario";
 import { crearEstudiante, restablecerEstudiante } from "./actions";
 import { asignarCurso } from "../cursos/actions";
+import { DeclaracionSubpoblacion } from "./declaracion-subpoblacion";
 
 type Estudiante = {
   id: string;
@@ -12,6 +13,8 @@ type Estudiante = {
   usuario: string;
   iniciales: string;
   subpoblacion: string | null;
+  /** Fecha en que el docente registró la autorización del acudiente. */
+  autorizadaEl: string | null;
   /** Sigue con la contraseña provisional: todavía no ha entrado a elegir la suya. */
   provisional: boolean;
   cursoId: string | null;
@@ -91,7 +94,7 @@ export function GestionEstudiantes({
                   </div>
                   <div className="text-[11px] text-suave">
                     {e.usuario}
-                    {e.subpoblacion ? ` · ${e.subpoblacion}` : ""} · alta el {e.creadoEn}
+                    {" "}· alta el {e.creadoEn}
                   </div>
                 </div>
                 {cursos.length > 0 && (
@@ -121,6 +124,7 @@ export function GestionEstudiantes({
                   </div>
                 </div>
                 <BotonRestablecer id={e.id} nombre={e.nombre} accion={restablecerEstudiante} />
+                <DeclaracionSubpoblacion estudiante={e} />
               </div>
             ))
           )}
@@ -129,7 +133,6 @@ export function GestionEstudiantes({
         <FormularioUsuario
           sugerencia={sugerencia}
           cursos={cursos.length ? cursos : undefined}
-          conSubpoblacion
           titulo="NUEVO ESTUDIANTE"
           textoBoton="Crear estudiante"
           pendiente={pendiente}

@@ -25,7 +25,6 @@ export const usuarioSchema = z.object({
       "El usuario solo admite letras, números, punto, guion y guion bajo."
     ),
   contrasena: z.string(),
-  subpoblacion: z.string().trim().max(60).optional(),
 });
 
 export type DatosUsuario = z.infer<typeof usuarioSchema>;
@@ -37,13 +36,6 @@ export function calcularIniciales(nombre: string): string {
   if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
   return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
 }
-
-export const SUBPOBLACIONES = [
-  "Víctimas directas",
-  "Población desplazada",
-  "Retornados",
-  "Sin vínculo directo",
-];
 
 export const ETIQUETA_ROL_PLURAL: Record<Rol, string> = {
   ESTUDIANTE: "estudiantes",
@@ -61,7 +53,7 @@ export function validarAltaUsuario(entrada: unknown):
   const parsed = usuarioSchema.safeParse(entrada);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
-  const { nombre, usuario, contrasena, subpoblacion } = parsed.data;
+  const { nombre, usuario, contrasena } = parsed.data;
 
   const revision = evaluarContrasena(contrasena, [nombre, usuario]);
   if (!revision.valida) return { error: revision.errores[0] };
@@ -71,7 +63,6 @@ export function validarAltaUsuario(entrada: unknown):
       nombre,
       usuario,
       contrasena,
-      subpoblacion,
       iniciales: calcularIniciales(nombre),
       email: `${usuario}@memoriaelsalado.edu.co`,
     },

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes } from "@/lib/avance";
 import { generarContrasenaTemporal } from "@/lib/politica-contrasena";
 import { etiquetaCurso } from "@/lib/cursos";
+import { fecha } from "@/lib/fechas";
 import { GestionEstudiantes } from "./gestion-estudiantes";
 
 export default async function EstudiantesPage() {
@@ -24,6 +25,7 @@ export default async function EstudiantesPage() {
       usuario: true,
       iniciales: true,
       subpoblacion: true,
+      subpoblacionConsentidaEn: true,
       creadoEn: true,
       debeCambiarContrasena: true,
       cursoId: true,
@@ -43,6 +45,7 @@ export default async function EstudiantesPage() {
         usuario: e.usuario,
         iniciales: e.iniciales,
         subpoblacion: e.subpoblacion,
+        autorizadaEl: e.subpoblacionConsentidaEn ? fecha(e.subpoblacionConsentidaEn) : null,
         provisional: e.debeCambiarContrasena,
         cursoId: e.cursoId,
         avance: avances.get(e.id)?.total ?? 0,
