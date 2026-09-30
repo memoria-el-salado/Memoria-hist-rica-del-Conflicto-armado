@@ -9,7 +9,7 @@ import { CartografiaSocial } from "@/components/actividades/cartografia-social";
 import { SimuladorTierras } from "@/components/actividades/simulador-tierras";
 import { JardinMemoria } from "@/components/actividades/jardin-memoria";
 import { DiarioSesion } from "@/components/actividades/diario-sesion";
-import type { Asignacion } from "@/lib/simulador";
+import type { Reparto } from "@/lib/simulador-lotes";
 import { MaterialSesion } from "@/components/recursos/material-sesion";
 import { vistaDeRecurso } from "@/lib/material";
 import { puedeVerRecurso } from "@/lib/recursos";
@@ -294,14 +294,13 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
         }),
       ]);
 
-      const iniciales: Record<string, Asignacion> = {};
-      for (const familia of familias) {
-        const previa = simulacion?.asignaciones.find((a) => a.familiaId === familia.id);
-        iniciales[familia.id] = {
-          hectareas: previa?.hectareas ?? 0,
-          subsidio: previa?.subsidio ?? "NINGUNO",
-        };
+      // El reparto guardado, por lotes. Una simulación de antes del plano
+      // (solo hectáreas) no se puede dibujar: se avisa para rehacerla.
+      const inicial: Reparto = {};
+      for (const a of simulacion?.asignaciones ?? []) {
+        if (a.lotes.length || a.subsidio !== "NINGUNO") inicial[a.familiaId] = { lotes: a.lotes, subsidio: a.subsidio };
       }
+      const repartoAnterior = Boolean(simulacion?.asignaciones.some((a) => a.hectareas > 0 && a.lotes.length === 0));
 
       return (
         <SimuladorTierras
@@ -316,7 +315,8 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
             retornada: f.retornada,
             prioridad: f.prioridad,
           }))}
-          iniciales={iniciales}
+          inicial={inicial}
+          repartoAnterior={repartoAnterior}
         />
       );
     }

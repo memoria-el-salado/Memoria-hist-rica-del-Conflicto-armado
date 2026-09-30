@@ -4,12 +4,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import {
-  HECTAREAS_MAX_POR_FAMILIA,
-  calcularEquidad,
-  type Asignacion,
-  type Familia,
-} from "@/lib/simulador";
+import { calcularEquidad, type Familia } from "@/lib/simulador";
+import { LOTES, aAsignaciones, validarReparto } from "@/lib/simulador-lotes";
 
 /**
  * Acciones de las actividades del estudiante.
@@ -90,24 +86,34 @@ export async function guardarEntradaDiario(_prev: unknown, formData: FormData) {
 
 const simulacionSchema = z.object({
   sesionId: z.string().min(1),
-  asignaciones: z.record(
+  reparto: z.record(
     z.string(),
     z.object({
-      hectareas: z.number().int().min(0).max(HECTAREAS_MAX_POR_FAMILIA),
+      lotes: z.array(z.string()).max(LOTES.length),
       subsidio: z.enum(["NINGUNO", "RIEGO", "AGRICULTURA"]),
     })
   ),
 });
 
-export async function guardarSimulacion(entrada: unknown) {
+/** Guarda el reparto por lotes: cada lote, de una sola familia y sin pasar del tope. */
+export async function guardarSimulacion(entrada: unknown): Promise<{ ok?: true; equidad?: number; error?: string }> {
   const parsed = simulacionSchema.safeParse(entrada);
   if (!parsed.success) return { error: "La distribución enviada no es válida." };
 
   const contexto = await exigirSesion(parsed.data.sesionId);
   if ("error" in contexto) return { error: contexto.error };
 
-  const asignaciones = parsed.data.asignaciones as Record<string, Asignacion>;
+  const invalido = validarReparto(parsed.data.reparto);
+  if (invalido) return { error: invalido };
+
   const familias = await prisma.familia.findMany({ orderBy: { orden: "asc" } });
+  // Solo las familias del simulador, y solo las que recibieron algo.
+  const reparto = Object.fromEntries(
+    familias
+      .map((f) => [f.id, parsed.data.reparto[f.id]] as const)
+      .filter(([, r]) => r && (r.lotes.length > 0 || r.subsidio !== "NINGUNO"))
+  );
+  const asignaciones = aAsignaciones(reparto);
   const equidad = calcularEquidad(familias as unknown as Familia[], asignaciones);
 
   const clave = { userId_sesionId: { userId: contexto.userId, sesionId: contexto.sesionId } };
@@ -123,16 +129,15 @@ export async function guardarSimulacion(entrada: unknown) {
     update: { indiceEquidad: equidad, validadaEn: new Date() },
   });
 
-  const validas = familias.filter((f) => asignaciones[f.id]);
-
   await prisma.$transaction([
     prisma.asignacion.deleteMany({ where: { simulacionId: simulacion.id } }),
     prisma.asignacion.createMany({
-      data: validas.map((f) => ({
+      data: Object.entries(reparto).map(([familiaId, r]) => ({
         simulacionId: simulacion.id,
-        familiaId: f.id,
-        hectareas: asignaciones[f.id].hectareas,
-        subsidio: asignaciones[f.id].subsidio,
+        familiaId,
+        lotes: r.lotes,
+        hectareas: asignaciones[familiaId].hectareas,
+        subsidio: r.subsidio,
       })),
     }),
   ]);

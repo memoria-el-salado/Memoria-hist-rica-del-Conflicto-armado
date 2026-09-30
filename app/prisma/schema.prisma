@@ -486,6 +486,8 @@ model Asignacion {
   id        String   @id @default(cuid())
   hectareas Int      @default(0)
   subsidio  Subsidio @default(NINGUNO)
+  /// Los lotes del plano (L01…L20) que recibió la familia; las hectáreas son su suma.
+  lotes     String[] @default([])
 
   simulacionId String
   simulacion   Simulacion @relation(fields: [simulacionId], references: [id], onDelete: Cascade)
