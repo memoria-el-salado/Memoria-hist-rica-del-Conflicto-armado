@@ -39,6 +39,24 @@ const ADMIN = {
 };
 
 async function main() {
+  // La semilla vacía la base entera. En una instalación nueva no hay nada que
+  // perder; con la plataforma en uso borraría las cuentas y los módulos reales,
+  // así que solo sigue si se pide de forma explícita.
+  const [usuarios, casos] = await Promise.all([prisma.user.count(), prisma.caso.count()]);
+  if ((usuarios > 1 || casos > 0) && process.env.SEMILLA_BORRAR_TODO !== "si") {
+    console.error(`
+La base ya tiene datos: ${usuarios} cuentas y ${casos} módulos. La semilla los borraría todos.
+
+  Para recuperar el acceso de una cuenta no hace falta: el administrador o el
+  docente la restablecen desde la plataforma.
+
+  Si de verdad quieres vaciar la base, haz antes una copia y repite así:
+    npm run db:respaldar
+    SEMILLA_BORRAR_TODO=si npm run db:seed
+`);
+    process.exit(1);
+  }
+
   console.log("Vaciando la base de datos...");
   // El orden respeta las dependencias entre tablas.
   await prisma.$transaction([

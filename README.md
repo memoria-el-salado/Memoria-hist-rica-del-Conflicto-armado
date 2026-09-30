@@ -96,7 +96,7 @@ El archivo `.env` debe quedar así:
 
 ```env
 # En Supabase, la cadena del puerto 5432 (conexión de sesión) es la que admite
-# `npm run db:sincronizar`. La del 6543 con ?pgbouncer=true va en Vercel.
+# `npm run db:migrar`. La del 6543 con ?pgbouncer=true va en Vercel.
 DATABASE_URL="postgresql://USUARIO:CONTRASENA@HOST:5432/postgres"
 
 AUTH_SECRET="pega-aqui-el-secreto-generado"
@@ -124,9 +124,9 @@ npx auth secret
 
 ```bash
 npm install            # instala dependencias y genera el cliente de Prisma
-npm run db:sincronizar # crea las tablas a partir del esquema
-npm run db:seed      # crea los usuarios, las 20 familias del simulador y deja
-                     # los dos PDF del CNMH ya cargados en el sistema
+npm run db:migrar     # crea las tablas aplicando las migraciones de prisma/migrations
+npm run db:seed       # crea el administrador y las 20 familias del simulador
+                      # (solo en una base vacía: se niega si ya hay datos)
 ```
 
 ---
@@ -165,7 +165,8 @@ sobre los estudiantes que él mismo dio de alta.
 | `admin.sistema` | `Mh7#tQvk.Rz3` |
 
 > Es provisional: al entrar, la plataforma pide cambiarla. Está en `prisma/seed.ts` si necesitas
-> consultarla, y `npm run db:seed` la restablece (borrando los datos).
+> consultarla. `npm run db:seed` solo funciona sobre una base vacía: con la plataforma en uso se
+> niega, porque vaciaría todas las cuentas y los módulos.
 
 En la pantalla de login hay que elegir el rol correcto: el sistema rechaza el ingreso si el rol
 seleccionado no corresponde al usuario.
@@ -226,9 +227,11 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm start` | Ejecuta la compilación de producción |
 | `npm test` | Pruebas automatizadas de verificación |
 | `npm run lint` | Análisis estático del código |
-| `npm run db:sincronizar` | Crea o actualiza las tablas desde el esquema |
+| `npm run db:migrar` | Copia la base y aplica las migraciones pendientes |
+| `npm run db:migracion -- <nombre>` | Crea la migración que lleva la base al esquema, si la versión publicada la tolera |
+| `npm run db:estado` | Qué migraciones están aplicadas y cuáles no |
 | `npm run db:respaldar` | Copia de seguridad de la base en `../respaldos-bd/`, antes de cualquier cambio de esquema |
-| `npm run db:seed` | Recarga los datos iniciales |
+| `npm run db:seed` | Crea el administrador en una base vacía |
 | `npm run db:studio` | Explorador visual de la base de datos |
 | `npm run modulos` | Resume los módulos y documentos cargados |
 | `npm run modulos -- limpiar` | Borra módulos y documentos para repetir una importación |
@@ -387,13 +390,21 @@ El proyecto funciona sobre **PostgreSQL**, con Prisma por delante. En producció
 del proyecto de Supabase; en desarrollo puede ser esa misma o un PostgreSQL instalado en el equipo.
 No hay que declarar el motor en ningún sitio: `prisma/schema.prisma` lo fija y no cambia.
 
-**Cómo se crean las tablas.** Aplicando el esquema con `npm run db:sincronizar`. El proyecto no lleva
-un historial de migraciones versionadas: el esquema es la única fuente de verdad, y una migración
-escrita a mano que se desincronice del esquema produce una base incompleta sin avisar de nada.
+**Cómo cambia el esquema.** Con migraciones versionadas en `prisma/migrations`. La primera,
+`0_inicial`, reproduce la base tal como estaba al publicarse la v1. Mientras el proyecto admitía dos
+motores no se podían mantener; con uno solo son la forma segura de cambiar una base que ya guarda el
+trabajo de estudiantes y docentes, porque un `prisma db push` puede borrar una columna sin preguntar.
+
+Una migración se aplica a la base antes de publicar el código que la usa, así que durante un tiempo
+la versión publicada convive con el esquema nuevo. Por eso `npm run db:migracion` solo deja pasar lo
+que esa versión tolera —tablas nuevas, columnas opcionales o con valor por defecto— y rechaza lo que
+borra, renombra o vuelve obligatorio. `npm run db:migrar` hace una copia con `pg_dump` antes de
+aplicar nada. No se usa `prisma migrate dev`: necesita una base auxiliar y, ante diferencias que no
+sabe explicar, ofrece vaciar la base entera.
 
 Para desplegar en la nube hay dos cadenas de conexión distintas, y no son intercambiables. La del
-puerto **5432** mantiene abierta la sesión, que es lo que `db:sincronizar` necesita para crear las
-tablas. La del **6543** agrupa las conexiones y es la que debe ir en Vercel, donde cada visita levanta
+puerto **5432** mantiene abierta la sesión, que es lo que necesitan las migraciones y las copias de
+seguridad. La del **6543** agrupa las conexiones y es la que debe ir en Vercel, donde cada visita levanta
 una función independiente y las conexiones directas se agotarían en minutos.
 
 ## 13. Licencia y atribuciones
