@@ -57,6 +57,7 @@ export async function crearCaso(_prev: unknown, formData: FormData) {
               tipo: s.tipo,
               pantalla: s.pantalla,
               alertaCuidado: s.alertaCuidado,
+              textoAlerta: s.textoAlerta,
               publicada: false,
               orden: j,
             })),

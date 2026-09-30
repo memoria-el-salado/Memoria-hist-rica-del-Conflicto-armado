@@ -1,12 +1,33 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes, promedioDelGrupo } from "@/lib/avance";
+import { ordenarSolicitudes } from "@/lib/cuidado";
 import { PanelDocente } from "./panel-docente";
+
+/** Fecha y hora en Colombia: el servidor de Vercel corre en UTC. */
+const FECHA = new Intl.DateTimeFormat("es-CO", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Bogota" });
+
+/** Los atendidos se muestran un tiempo para dejar constancia; luego salen del panel. */
+const DIAS_ATENDIDAS = 14;
+
+/** Los pedidos que esperan y los atendidos en los últimos días. */
+function solicitudesDe(docenteId: string) {
+  return prisma.solicitudAcompanamiento.findMany({
+    where: {
+      docenteId,
+      OR: [{ atendidaEn: null }, { atendidaEn: { gte: new Date(Date.now() - DIAS_ATENDIDAS * 86_400_000) } }],
+    },
+    include: {
+      estudiante: { select: { nombre: true } },
+      sesion: { select: { codigo: true, titulo: true } },
+    },
+  });
+}
 
 export default async function PanelPage() {
   const sesion = await auth();
 
-  const [sesiones, ejes, estudiantes] = await Promise.all([
+  const [sesiones, ejes, estudiantes, solicitudes] = await Promise.all([
     prisma.sesion.findMany({
       where: { eje: { caso: { activo: true } } },
       orderBy: [{ eje: { orden: "asc" } }, { orden: "asc" }],
@@ -22,6 +43,7 @@ export default async function PanelPage() {
       where: { rol: "ESTUDIANTE", creadoPorId: sesion!.user.id },
       select: { id: true, subpoblacion: true },
     }),
+    solicitudesDe(sesion!.user.id),
   ]);
 
   // El avance sale del trabajo que los estudiantes han producido, no de un
@@ -79,6 +101,15 @@ export default async function PanelPage() {
         eje: `EJE ${s.eje.numero} · ${s.eje.nombre.toUpperCase()}`,
         publicada: s.publicada,
         alertaCuidado: s.alertaCuidado,
+        textoAlerta: s.textoAlerta,
+      }))}
+      solicitudes={ordenarSolicitudes(solicitudes).map((s) => ({
+        id: s.id,
+        estudiante: s.estudiante.nombre,
+        sesion: s.sesion ? `${s.sesion.codigo} ${s.sesion.titulo}` : null,
+        mensaje: s.mensaje,
+        cuando: FECHA.format(s.creadoEn),
+        atendida: s.atendidaEn ? FECHA.format(s.atendidaEn) : null,
       }))}
     />
   );

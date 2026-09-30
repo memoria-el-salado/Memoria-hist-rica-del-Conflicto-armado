@@ -244,6 +244,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:foros` | Un docente y tres estudiantes debaten; comprueba roles, fuentes, mediación y que otro curso no lo ve |
 | `npm run humo:recursos` | Sube audio, imagen y video; el estudiante los ve en la sesión y el audio se reproduce desde el depósito privado |
 | `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
+| `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
 Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito.
@@ -313,6 +314,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU04 | Jardín de la Memoria | Sesión con actividad `jardin` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
+| CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |
 | CU07 | Reportes por subpoblaciones | `/docente/subpoblaciones` |
 | CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |

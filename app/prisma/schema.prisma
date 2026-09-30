@@ -84,6 +84,10 @@ model User {
   forosCreados    Foro[]
   mensajesForo    MensajeForo[]
   posturasForo    ParticipanteForo[]
+
+  /// Acompañamiento: lo que pidió como estudiante y lo que recibió como docente.
+  solicitudesHechas    SolicitudAcompanamiento[] @relation("SolicitudDeEstudiante")
+  solicitudesRecibidas SolicitudAcompanamiento[] @relation("SolicitudParaDocente")
 }
 
 model Caso {
@@ -136,6 +140,8 @@ model Sesion {
   pantalla      String
   publicada     Boolean @default(false)
   alertaCuidado Boolean @default(false)
+  /// Lo que lee el estudiante antes del contenido cuando la alerta está activa.
+  textoAlerta   String? @db.Text
   orden         Int
 
   /// Texto de la sesión tal como venía en el documento importado. Es lo que
@@ -163,6 +169,9 @@ model Sesion {
 
   /// Material multimedia propio de esta sesión.
   recursos Recurso[]
+
+  /// Solicitudes de acompañamiento hechas desde esta sesión.
+  solicitudes SolicitudAcompanamiento[]
 
   @@unique([ejeId, codigo])
 }
@@ -450,4 +459,23 @@ model ReporteDiferenciado {
   id       String   @id @default(cuid())
   resumen  String   @db.Text
   creadoEn DateTime @default(now())
+}
+
+/// Un estudiante pide hablar con su docente, desde una sesión con alerta de
+/// cuidado o desde el botón general. Le llega solo a su docente.
+model SolicitudAcompanamiento {
+  id         String    @id @default(cuid())
+  /// Opcional: no se le exige explicarse a quien pide ayuda.
+  mensaje    String?   @db.Text
+  creadoEn   DateTime  @default(now())
+  atendidaEn DateTime?
+
+  estudianteId String
+  estudiante   User    @relation("SolicitudDeEstudiante", fields: [estudianteId], references: [id], onDelete: Cascade)
+  docenteId    String
+  docente      User    @relation("SolicitudParaDocente", fields: [docenteId], references: [id], onDelete: Cascade)
+  sesionId     String?
+  sesion       Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  @@index([docenteId, atendidaEn])
 }

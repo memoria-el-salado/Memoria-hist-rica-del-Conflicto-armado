@@ -13,6 +13,8 @@ import { MaterialSesion } from "@/components/recursos/material-sesion";
 import { vistaDeRecurso } from "@/lib/material";
 import { puedeVerRecurso } from "@/lib/recursos";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
+import { PuertaCuidado } from "@/components/cuidado/puerta-cuidado";
+import { TEXTO_ALERTA_PREDETERMINADO } from "@/lib/cuidado";
 
 /**
  * Una sesión, una actividad.
@@ -99,11 +101,24 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     })
   );
 
-  return (
+  const contenido = (
     <>
       {actividad}
       <MaterialSesion recursos={visibles.map(vistaDeRecurso)} />
     </>
+  );
+
+  // Con alerta de cuidado, el estudiante lee el aviso y decide antes de entrar.
+  if (!sesion.alertaCuidado) return contenido;
+  return (
+    <PuertaCuidado
+      sesionId={sesion.id}
+      codigo={sesion.codigo}
+      titulo={sesion.titulo}
+      texto={sesion.textoAlerta ?? TEXTO_ALERTA_PREDETERMINADO}
+    >
+      {contenido}
+    </PuertaCuidado>
   );
 }
 

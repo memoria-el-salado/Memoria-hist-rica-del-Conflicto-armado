@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
-import { activarProtocolo, alternarPublicacion } from "./actions";
+import { useTransition } from "react";
+import { alternarPublicacion } from "./actions";
 import { RepartoPesos, type EjePeso } from "./reparto-pesos";
+import { AlertasCuidado } from "./alertas-cuidado";
+import { SolicitudesAcompanamiento, type SolicitudVista } from "./solicitudes-acompanamiento";
 
 type Sesion = {
   id: string;
@@ -11,6 +13,7 @@ type Sesion = {
   eje: string;
   publicada: boolean;
   alertaCuidado: boolean;
+  textoAlerta: string | null;
 };
 
 type Props = {
@@ -20,6 +23,7 @@ type Props = {
   totalEstudiantes: number;
   ejes: EjePeso[];
   sesiones: Sesion[];
+  solicitudes: SolicitudVista[];
 };
 
 const COLORES_BARRA = ["#D95D39", "#E4886A", "#1B8A8A", "#EBB035", "#E4886A", "#177575"];
@@ -31,14 +35,9 @@ export function PanelDocente({
   totalEstudiantes,
   ejes,
   sesiones,
+  solicitudes,
 }: Props) {
   const [, iniciarTransicion] = useTransition();
-  const [estado, accionProtocolo, pendienteProtocolo] = useActionState(
-    activarProtocolo,
-    null as { ok?: string; error?: string } | null
-  );
-
-  const sensibles = sesiones.filter((s) => s.alertaCuidado || /masacre|dolor|éxodo|desplaza/i.test(s.titulo));
 
   return (
     <div className="animar-aparecer">
@@ -129,7 +128,9 @@ export function PanelDocente({
           </div>
         </div>
 
-        <div className="grid min-w-0 grid-cols-1 gap-[18px]">
+        <div className="grid min-w-0 grid-cols-1 content-start gap-[18px]">
+          <SolicitudesAcompanamiento solicitudes={solicitudes} />
+
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="text-[11px] font-bold tracking-[.12em] text-tenue">SUB-POBLACIONES</div>
             {totalEstudiantes === 0 && (
@@ -153,53 +154,7 @@ export function PanelDocente({
             </div>
           </div>
 
-          <form
-            action={accionProtocolo}
-            className="rounded-xl border border-primario-borde bg-primario-tinte p-5"
-          >
-            <div className="flex items-center gap-2 text-[11px] font-bold tracking-[.1em] text-primario-fuerte">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-              <span>ALERTAS DE CUIDADO</span>
-            </div>
-            <p className="mb-3.5 mt-2.5 text-[12px] leading-[1.65] text-[#7C736C]">
-              Ofrecemos herramientas para mantener un entorno seguro ante contenidos emocionalmente retadores.
-            </p>
-            <label htmlFor="sesionId" className="text-[10px] font-bold tracking-[.1em] text-tenue">
-              APLICAR ALERTA A
-            </label>
-            <select
-              id="sesionId"
-              name="sesionId"
-              defaultValue=""
-              className="mt-1.5 w-full rounded-lg border border-[#E9D3C9] bg-superficie px-3 py-2.5 text-[13px]"
-            >
-              <option value="">Seleccionar sesión...</option>
-              {sensibles.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.codigo} {s.titulo}
-                </option>
-              ))}
-            </select>
-            <button
-              type="submit"
-              disabled={pendienteProtocolo}
-              className="mt-2.5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[11.5px] font-bold tracking-[.06em] text-white hover:bg-primario-hover disabled:opacity-60"
-            >
-              {pendienteProtocolo ? "ACTIVANDO..." : "ACTIVAR PROTOCOLO DE APOYO"}
-            </button>
-            {estado?.ok && (
-              <div role="status" className="mt-2.5 text-[11.5px] font-semibold text-secundario-fuerte">
-                {estado.ok}
-              </div>
-            )}
-            {estado?.error && (
-              <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
-                {estado.error}
-              </div>
-            )}
-          </form>
+          <AlertasCuidado sesiones={sesiones} />
 
           <RepartoPesos ejes={ejes} />
 

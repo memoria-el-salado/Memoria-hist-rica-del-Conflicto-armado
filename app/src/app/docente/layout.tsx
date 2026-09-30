@@ -7,9 +7,10 @@ export default async function DocenteLayout({ children }: { children: React.Reac
   const sesion = await auth();
   if (!sesion?.user || sesion.user.rol !== "DOCENTE") redirect("/login");
 
-  const estudiantes = await prisma.user.count({
-    where: { rol: "ESTUDIANTE", creadoPorId: sesion.user.id },
-  });
+  const [estudiantes, solicitudesPendientes] = await Promise.all([
+    prisma.user.count({ where: { rol: "ESTUDIANTE", creadoPorId: sesion.user.id } }),
+    prisma.solicitudAcompanamiento.count({ where: { docenteId: sesion.user.id, atendidaEn: null } }),
+  ]);
 
   return (
     <AppShell
@@ -17,6 +18,7 @@ export default async function DocenteLayout({ children }: { children: React.Reac
       nombre={sesion.user.name ?? ""}
       iniciales={sesion.user.iniciales}
       indicador={estudiantes === 1 ? "1 estudiante" : `${estudiantes} estudiantes`}
+      solicitudesPendientes={solicitudesPendientes}
     >
       {children}
     </AppShell>

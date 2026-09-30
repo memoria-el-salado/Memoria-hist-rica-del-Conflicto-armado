@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import type { Rol } from "@prisma/client";
 import { ETIQUETA_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
+import { sesionDeRuta } from "@/lib/cuidado";
+import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
 
 const ESCALAS = [1, 1.12, 1.25] as const;
 const ETIQUETA_ESCALA: Record<string, string> = { "1": "A", "1.12": "A+", "1.25": "A++" };
@@ -15,10 +17,14 @@ type Props = {
   nombre: string;
   iniciales: string;
   indicador: string;
+  /** Solo para el docente: pedidos de acompañamiento que esperan respuesta. */
+  solicitudesPendientes?: number;
   children: React.ReactNode;
 };
 
-export function AppShell({ rol, nombre, iniciales, indicador, children }: Props) {
+const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
+
+export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, children }: Props) {
   const pathname = usePathname();
   const [escala, setEscala] = useState<(typeof ESCALAS)[number]>(1);
   const [alertaAbierta, setAlertaAbierta] = useState(false);
@@ -78,15 +84,37 @@ export function AppShell({ rol, nombre, iniciales, indicador, children }: Props)
         </ul>
 
         <div className="mt-auto hidden flex-col gap-3 md:flex">
-          <button
-            onClick={() => setAlertaAbierta(true)}
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[10.5px] font-extrabold tracking-[.07em] text-white hover:bg-primario-hover"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" />
-            </svg>
-            <span>ALERTA DE CUIDADO</span>
-          </button>
+          {/* El estudiante pide acompañamiento; el docente va a los pedidos que le llegaron. */}
+          {rol === "ESTUDIANTE" && (
+            <button
+              onClick={() => setAlertaAbierta(true)}
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[10.5px] font-extrabold tracking-[.07em] text-white hover:bg-primario-hover"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={ICONO_ALERTA} />
+              </svg>
+              <span>ALERTA DE CUIDADO</span>
+            </button>
+          )}
+          {rol === "DOCENTE" && (
+            <Link
+              href="/docente/panel#acompanamiento"
+              className="flex items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[10.5px] font-extrabold tracking-[.07em] text-white no-underline hover:bg-primario-hover"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={ICONO_ALERTA} />
+              </svg>
+              <span>ACOMPAÑAMIENTO</span>
+              {solicitudesPendientes > 0 && (
+                <span
+                  aria-label={`${solicitudesPendientes} ${solicitudesPendientes === 1 ? "pedido pendiente" : "pedidos pendientes"}`}
+                  className="rounded-full bg-white px-1.5 py-px text-[10px] text-primario-fuerte"
+                >
+                  {solicitudesPendientes}
+                </span>
+              )}
+            </Link>
+          )}
           <Link
             href="/cambiar-contrasena"
             className="px-1 text-[11px] font-semibold text-suave hover:text-primario"
@@ -105,6 +133,17 @@ export function AppShell({ rol, nombre, iniciales, indicador, children }: Props)
             <span className="truncate text-[12px] text-suave">{titulo}</span>
           </div>
           <div className="flex items-center gap-2.5">
+            {rol === "ESTUDIANTE" && (
+              <button
+                onClick={() => setAlertaAbierta(true)}
+                aria-label="Alerta de cuidado: pedir acompañamiento"
+                className="flex cursor-pointer items-center rounded-lg bg-primario-fuerte px-2.5 py-[7px] text-white md:hidden"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d={ICONO_ALERTA} />
+                </svg>
+              </button>
+            )}
             <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[11px] font-bold text-secundario-fuerte md:block">
               {indicador}
             </div>
@@ -149,39 +188,34 @@ export function AppShell({ rol, nombre, iniciales, indicador, children }: Props)
           aria-modal="true"
           aria-labelledby="titulo-alerta"
           onClick={() => setAlertaAbierta(false)}
+          onKeyDown={(e) => e.key === "Escape" && setAlertaAbierta(false)}
           className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(45,30,22,.42)] p-6"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="max-w-[460px] rounded-[14px] bg-superficie px-7 py-[26px] shadow-[0_24px_60px_rgba(0,0,0,.22)]"
+            className="w-full max-w-[480px] rounded-[14px] bg-superficie px-7 py-[26px] shadow-[0_24px_60px_rgba(0,0,0,.22)]"
           >
             <div className="flex items-center gap-[9px] text-[11px] font-bold tracking-[.12em] text-primario-fuerte">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={ICONO_ALERTA} />
               </svg>
               <span>ALERTA DE CUIDADO</span>
             </div>
             <h2 id="titulo-alerta" className="mb-2 mt-3 text-[20px] font-extrabold tracking-[-.02em]">
-              Estás por entrar a un contenido sensible
+              ¿Necesitas una pausa o hablar con alguien?
             </h2>
             <p className="mb-4 text-[13.5px] leading-[1.7] text-apagado">
-              Este módulo contiene testimonios sobre la masacre y el desplazamiento. Puedes pausar en cualquier
-              momento, salir del recurso o pedir acompañamiento a tu docente. Nadie está obligado a continuar.
+              Puedes detenerte cuando quieras: nadie está obligado a continuar. Si algo de lo que viste o leíste
+              te removió, pídele a tu docente que te busque. No tienes que explicar nada si no quieres.
             </p>
-            <div className="flex flex-wrap gap-2.5">
-              <button
-                onClick={() => setAlertaAbierta(false)}
-                className="cursor-pointer rounded-lg bg-primario-fuerte px-[17px] py-[11px] text-[13px] font-bold text-white hover:bg-primario-hover"
-              >
-                Entiendo, continuar
-              </button>
-              <button
-                onClick={() => setAlertaAbierta(false)}
-                className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[17px] py-[11px] text-[13px] font-semibold text-apagado"
-              >
-                Pedir acompañamiento
-              </button>
-            </div>
+            <FormularioAcompanamiento sesionId={sesionDeRuta(pathname)} />
+            <button
+              autoFocus
+              onClick={() => setAlertaAbierta(false)}
+              className="mt-3 cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[17px] py-2.5 text-[13px] font-semibold text-apagado hover:border-primario hover:text-primario"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       )}
