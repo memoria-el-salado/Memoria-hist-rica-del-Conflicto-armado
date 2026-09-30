@@ -72,23 +72,6 @@ export function duracion(segundos: number): string {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
-type Persona = { rol: string; id: string; creadoPorId: string | null; cursoId: string | null };
-type Autor = { id: string; creadoPorId: string | null; cursoId: string | null };
-
-/**
- * Quién ve una marca, con su voz y su foto: los compañeros del mismo curso
- * (o, sin curso, los del mismo docente) y el docente del autor. La cartografía
- * es del grupo que la construye, no de toda la plataforma.
- */
-export function puedeVerMarca(quien: Persona, autor: Autor): boolean {
-  if (quien.id === autor.id) return true;
-  if (quien.rol === "DOCENTE") return autor.creadoPorId === quien.id;
-  if (quien.rol === "ESTUDIANTE") {
-    return Boolean(quien.creadoPorId) && autor.creadoPorId === quien.creadoPorId && autor.cursoId === quien.cursoId;
-  }
-  return false;
-}
-
 /**
  * A quién cuenta una marca para el avance: a su autor y, si es del grupo, a
  * todos los miembros del grupo, que eligieron el lugar juntos.

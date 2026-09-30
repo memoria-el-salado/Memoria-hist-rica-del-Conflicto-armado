@@ -246,11 +246,14 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
 | `npm run humo:cursos` | Cursos y grupos: el docente los arma y reparte; panel, reportes y debates se filtran por curso, y otro docente no los ve |
 | `npm run humo:cartografia` | Un estudiante graba su relato, suma una foto que el navegador reduce y siembra el lugar a nombre de su grupo; solo su curso y su docente lo ven |
+| `npm run humo:jardin` | Flores con poema, dibujo hecho en el lienzo y foto de una obra; al abrirlas se ve la creación, solo dentro del curso |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
 Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito. Si una
-prueba se corta a medias, `npm run humo:limpiar` borra lo que haya quedado.
+prueba se corta a medias, `npm run humo:limpiar` borra lo que haya quedado. Las que necesitan
+una sesión publicada que el módulo real no tiene crean un módulo inactivo, que ningún estudiante
+real ve, y lo borran al terminar.
 
 Cada push se comprueba además en GitHub Actions (`.github/workflows/verificacion.yml`): tipos,
 estilo, pruebas, que las migraciones reproduzcan exactamente el esquema, y compilación. Las pruebas
@@ -315,7 +318,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
-| CU04 | Jardín de la Memoria | Sesión con actividad `jardin` |
+| CU04 | Jardín de la Memoria con cartas, poemas, dibujos y fotos de obras, visibles al sembrar | Sesión con actividad `jardin`, `/api/jardin/[id]/imagen` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
 | CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |

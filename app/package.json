@@ -28,6 +28,7 @@
     "humo:cuidado": "node scripts/pruebas/cuidado.mjs",
     "humo:cursos": "node scripts/pruebas/cursos.mjs",
     "humo:cartografia": "node scripts/pruebas/cartografia.mjs",
+    "humo:jardin": "node scripts/pruebas/jardin.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

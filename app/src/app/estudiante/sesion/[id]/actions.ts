@@ -113,44 +113,7 @@ export async function guardarEntradaDiario(_prev: unknown, formData: FormData) {
   return { ok: "Entrada guardada." };
 }
 
-// ------------------------------------------------------------------- Jardín
-
-const TONOS = ["#1B8A8A", "#EBB035", "#D95D39", "#177575"];
-
-const florSchema = z.object({
-  nombre: z.string().trim().min(1, "Escribe el nombre de la persona que quieres honrar."),
-  legado: z.string().trim().min(1, "Escribe el legado que quieres honrar."),
-  epoca: z.enum(["ANTES_1997", "ENTRE_1997_2000", "RETORNO"]),
-  pieza: z.enum(["FLOR", "HOJA", "SEMILLA", "MANO"]),
-});
-
-export async function sembrarMemoria(_prev: unknown, formData: FormData) {
-  const contexto = await exigirSesion(String(formData.get("sesionId") ?? ""));
-  if ("error" in contexto) return { error: contexto.error };
-
-  const parsed = florSchema.safeParse({
-    nombre: formData.get("nombre"),
-    legado: formData.get("legado"),
-    epoca: formData.get("epoca"),
-    pieza: formData.get("pieza"),
-  });
-  if (!parsed.success) return { error: parsed.error.issues[0].message };
-
-  const total = await prisma.florJardin.count({ where: { sesionId: contexto.sesionId } });
-
-  await prisma.florJardin.create({
-    data: {
-      ...parsed.data,
-      autorId: contexto.userId,
-      sesionId: contexto.sesionId,
-      tono: TONOS[total % TONOS.length],
-      altura: 50 + ((total * 23) % 70),
-    },
-  });
-
-  refrescar(contexto.sesionId);
-  return { ok: "Memoria sembrada en el jardín colectivo." };
-}
+// El jardín, con sus creaciones, está en acciones-jardin.ts.
 
 // ---------------------------------------------------------------- Simulador
 

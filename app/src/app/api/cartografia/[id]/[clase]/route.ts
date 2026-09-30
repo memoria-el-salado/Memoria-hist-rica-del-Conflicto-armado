@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { almacenEnUso, rutaEnDisco, urlDeLectura } from "@/lib/almacen";
-import { puedeVerMarca } from "@/lib/cartografia";
+import { puedeVerAporte } from "@/lib/visibilidad";
 import { prisma } from "@/lib/prisma";
 
 /** Una hora da para escuchar el relato y volver a él. */
@@ -27,7 +27,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       select: { audioArchivo: true, audioMime: true, foto: true, autor: { select: { id: true, creadoPorId: true, cursoId: true } } },
     }),
   ]);
-  if (!quien || !marca || !puedeVerMarca(quien, marca.autor)) {
+  if (!quien || !marca || !puedeVerAporte(quien, marca.autor)) {
     return NextResponse.json({ error: "No existe." }, { status: 404 });
   }
 

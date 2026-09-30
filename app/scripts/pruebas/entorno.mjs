@@ -18,8 +18,13 @@ export const BASE = process.env.BASE_PRUEBAS ?? "http://localhost:3000";
 export const CLAVE = "Roble7#cauce.p";
 export const PREFIJO = "prueba.";
 
+/**
+ * Pocas conexiones: el pooler de sesión de Supabase admite 15 clientes, y el
+ * servidor de desarrollo ya abre hasta 10. Con el valor por defecto de `pg`
+ * (10) las dos juntas lo agotan.
+ */
 export const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "", max: 3 }),
 });
 
 const ETIQUETA_ROL = { ESTUDIANTE: "Estudiante", DOCENTE: "Docente", ADMIN: "Administrador" };
@@ -53,6 +58,9 @@ export async function borrarCuentasDePrueba() {
   });
   const ids = cuentas.map((c) => c.id);
   if (ids.length) {
+    // Las flores quedarían sin autor (y sus dibujos, en el depósito): se borran antes.
+    const flores = await prisma.florJardin.findMany({ where: { autorId: { in: ids } }, select: { imagen: true } });
+    for (const f of flores) if (f.imagen) await eliminarArchivo(f.imagen);
     await prisma.florJardin.deleteMany({ where: { autorId: { in: ids } } });
     await prisma.foro.deleteMany({ where: { autorId: { in: ids } } });
     // Los recursos llevan su archivo en el depósito: se borra antes que la ficha.
@@ -66,6 +74,52 @@ export async function borrarCuentasDePrueba() {
     await prisma.user.deleteMany({ where: { id: { in: ids } } });
   }
   return prisma.user.count({ where: { usuario: { startsWith: PREFIJO } } });
+}
+
+/**
+ * Módulos temporales para probar actividades sin publicar una sesión real.
+ * Nacen inactivos, así que ningún estudiante real los ve, y su nombre lleva
+ * este prefijo para que la limpieza no pueda confundirlos con uno de verdad.
+ */
+export const PREFIJO_MODULO = "Módulo de prueba (se borra solo)";
+
+export async function crearModuloDePrueba(pantalla) {
+  const caso = await prisma.caso.create({
+    data: {
+      nombre: `${PREFIJO_MODULO} ${pantalla} ${Date.now()}`,
+      depto: "Prueba",
+      ejes: {
+        create: {
+          numero: 1,
+          nombre: "Eje de prueba",
+          descripcion: "Eje de prueba",
+          tono: "#1B8A8A",
+          orden: 0,
+          sesiones: { create: { codigo: "9.9", titulo: `Sesión de prueba (${pantalla})`, tipo: pantalla, pantalla, publicada: true, orden: 0 } },
+        },
+      },
+    },
+    include: { ejes: { include: { sesiones: true } } },
+  });
+  return { casoId: caso.id, sesionId: caso.ejes[0].sesiones[0].id };
+}
+
+/** Borra los módulos de prueba y los archivos que se subieron en ellos. */
+export async function borrarModulosDePrueba() {
+  const casos = await prisma.caso.findMany({
+    where: { nombre: { startsWith: PREFIJO_MODULO } },
+    include: { ejes: { include: { sesiones: { include: { flores: { select: { imagen: true } }, marcas: { select: { audioArchivo: true, foto: true } } } } } } },
+  });
+  for (const c of casos) {
+    const sesiones = c.ejes.flatMap((e) => e.sesiones);
+    const rutas = [
+      ...sesiones.flatMap((s) => s.flores.map((f) => f.imagen)),
+      ...sesiones.flatMap((s) => s.marcas.flatMap((m) => [m.audioArchivo, m.foto])),
+    ];
+    for (const r of rutas) if (r) await eliminarArchivo(r);
+    await prisma.caso.delete({ where: { id: c.id } });
+  }
+  return prisma.caso.count({ where: { nombre: { startsWith: PREFIJO_MODULO } } });
 }
 
 // ---------------------------------------------------------------------------
@@ -93,6 +147,8 @@ export async function ejecutar(titulo, prueba, limpiar = async () => {}) {
   } finally {
     await navegador?.close().catch(() => {});
     await limpiar().catch((e) => comprobar("limpieza", false, e.message));
+    const modulos = await borrarModulosDePrueba();
+    if (modulos) comprobar("no quedan módulos de prueba", false, `${modulos} sin borrar`);
     const restantes = await borrarCuentasDePrueba();
     comprobar("no quedan cuentas de prueba en la base", restantes === 0);
     await prisma.$disconnect();

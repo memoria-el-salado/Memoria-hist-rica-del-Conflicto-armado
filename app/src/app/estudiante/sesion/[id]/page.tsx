@@ -15,6 +15,7 @@ import { puedeVerRecurso } from "@/lib/recursos";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
 import { PuertaCuidado } from "@/components/cuidado/puerta-cuidado";
 import { TEXTO_ALERTA_PREDETERMINADO } from "@/lib/cuidado";
+import { aportesVisiblesPara } from "@/lib/visibilidad";
 
 /**
  * Una sesión, una actividad.
@@ -135,10 +136,7 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
       const marcas = await prisma.marcaCartografia.findMany({
         where: {
           sesionId: sesionId,
-          OR: [
-            { autorId: userId },
-            ...(yo?.creadoPorId ? [{ autor: { creadoPorId: yo.creadoPorId, cursoId: yo.cursoId } }] : []),
-          ],
+          OR: aportesVisiblesPara({ id: userId, creadoPorId: yo?.creadoPorId ?? null, cursoId: yo?.cursoId ?? null }),
         },
         orderBy: { creadoEn: "asc" },
         include: { autor: { select: { nombre: true } }, grupo: { select: { nombre: true } } },
@@ -201,9 +199,18 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
     }
 
     case "jardin": {
+      const yo = await prisma.user.findUnique({ where: { id: userId }, select: { creadoPorId: true, cursoId: true } });
+      // Como la cartografía: las flores del propio curso, y las curadas sin autor.
       const flores = await prisma.florJardin.findMany({
-        where: { sesionId: sesionId },
+        where: {
+          sesionId: sesionId,
+          OR: [
+            { autorId: null },
+            ...aportesVisiblesPara({ id: userId, creadoPorId: yo?.creadoPorId ?? null, cursoId: yo?.cursoId ?? null }),
+          ],
+        },
         orderBy: { creadoEn: "asc" },
+        include: { autor: { select: { nombre: true } } },
       });
       return (
         <JardinMemoria
@@ -216,6 +223,12 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
             pieza: f.pieza,
             tono: f.tono,
             altura: f.altura,
+            creacion: f.creacion,
+            texto: f.texto,
+            conImagen: Boolean(f.imagen),
+            descripcion: f.descripcion,
+            autor: f.autor?.nombre ?? null,
+            propia: f.autorId === userId,
           }))}
         />
       );

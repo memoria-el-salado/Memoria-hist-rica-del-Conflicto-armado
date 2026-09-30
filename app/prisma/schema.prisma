@@ -403,6 +403,16 @@ model FlorJardin {
   altura   Int
   creadoEn DateTime    @default(now())
 
+  /// La creación que acompaña a la flor (CU04): una carta, un poema, un
+  /// dibujo hecho en la plataforma o la foto de uno hecho en papel.
+  creacion    Creacion @default(NINGUNA)
+  /// Texto de la carta o del poema, con sus saltos de línea.
+  texto       String?  @db.Text
+  /// Dibujo o foto: ruta en el depósito.
+  imagen      String?
+  /// Qué muestra la imagen, para quien no puede verla. Opcional.
+  descripcion String?
+
   autorId String?
   autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
 
@@ -410,6 +420,14 @@ model FlorJardin {
   sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
 
   @@index([sesionId])
+}
+
+enum Creacion {
+  NINGUNA
+  CARTA
+  POEMA
+  DIBUJO
+  FOTO
 }
 
 model EntradaDiario {
