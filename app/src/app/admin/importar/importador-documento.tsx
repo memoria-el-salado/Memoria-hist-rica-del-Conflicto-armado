@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { ACTIVIDADES, type EjeArmado } from "@/lib/importador-pdf";
+import { subirConProgreso } from "@/lib/subir-con-progreso";
 import {
   alternarVisibilidadDocumento,
   analizarDocumento,
@@ -13,25 +14,6 @@ import {
   vincularDocumento,
   type ResultadoAnalisis,
 } from "./actions";
-
-/**
- * Sube el archivo a la dirección firmada e informa del avance. `fetch` no dice
- * cuánto lleva enviado; con una guía de 16 MB y la conexión de un colegio, la
- * subida puede tardar más de un minuto, y sin porcentaje parece colgada.
- */
-function subirConProgreso(url: string, archivo: File, alAvanzar: (porcentaje: number) => void) {
-  return new Promise<boolean>((resolver) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", url);
-    xhr.setRequestHeader("content-type", "application/pdf");
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) alAvanzar(Math.floor((e.loaded / e.total) * 100));
-    };
-    xhr.onload = () => resolver(xhr.status >= 200 && xhr.status < 300);
-    xhr.onerror = () => resolver(false);
-    xhr.send(archivo);
-  });
-}
 
 type Documento = {
   id: string;
@@ -113,7 +95,7 @@ export function ImportadorDocumento({
 
     setPorcentaje(0);
     setFase("subiendo");
-    if (!(await subirConProgreso(subida.url!, archivo, setPorcentaje))) {
+    if (!(await subirConProgreso(subida.url!, archivo, "application/pdf", setPorcentaje))) {
       return { error: "No se pudo subir el archivo. Revisa la conexión e inténtalo de nuevo." };
     }
 

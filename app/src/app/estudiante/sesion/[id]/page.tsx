@@ -9,6 +9,8 @@ import { SimuladorTierras } from "@/components/actividades/simulador-tierras";
 import { JardinMemoria } from "@/components/actividades/jardin-memoria";
 import { DiarioSesion } from "@/components/actividades/diario-sesion";
 import type { Asignacion } from "@/lib/simulador";
+import { MaterialSesion } from "@/components/recursos/material-sesion";
+import { vistaDeRecurso } from "@/lib/material";
 
 /**
  * Una sesión, una actividad.
@@ -77,10 +79,31 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     documento: documento ? { id: documento.id, titulo: documento.titulo } : null,
   };
 
-  switch (sesion.pantalla) {
+  const [actividad, recursos] = await Promise.all([
+    pantallaDeActividad(sesion.pantalla, sesion.id, datos, userId),
+    prisma.recurso.findMany({
+      // El material de la sesión y el que el docente cargó para todo el eje.
+      where: { OR: [{ sesionId: sesion.id }, { sesionId: null, ejeId: sesion.ejeId }] },
+      orderBy: { creadoEn: "asc" },
+    }),
+  ]);
+
+  const visibles = sesion.eje.caso.activo ? recursos : [];
+
+  return (
+    <>
+      {actividad}
+      <MaterialSesion recursos={visibles.map(vistaDeRecurso)} />
+    </>
+  );
+}
+
+/** La pantalla de la actividad que el administrador asignó a la sesión. */
+async function pantallaDeActividad(pantalla: string, sesionId: string, datos: DatosSesion, userId: string) {
+  switch (pantalla) {
     case "cartografia": {
       const marcas = await prisma.marcaCartografia.findMany({
-        where: { sesionId: sesion.id },
+        where: { sesionId: sesionId },
         orderBy: { creadoEn: "asc" },
         include: { autor: { select: { nombre: true } } },
       });
@@ -105,7 +128,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       const [familias, simulacion] = await Promise.all([
         prisma.familia.findMany({ orderBy: { orden: "asc" } }),
         prisma.simulacion.findUnique({
-          where: { userId_sesionId: { userId, sesionId: sesion.id } },
+          where: { userId_sesionId: { userId, sesionId: sesionId } },
           include: { asignaciones: true },
         }),
       ]);
@@ -139,7 +162,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
     case "jardin": {
       const flores = await prisma.florJardin.findMany({
-        where: { sesionId: sesion.id },
+        where: { sesionId: sesionId },
         orderBy: { creadoEn: "asc" },
       });
       return (
@@ -160,7 +183,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
     case "diario": {
       const entradas = await prisma.entradaDiario.findMany({
-        where: { sesionId: sesion.id, autorId: userId },
+        where: { sesionId: sesionId, autorId: userId },
         orderBy: { creadoEn: "desc" },
       });
       return (
@@ -179,14 +202,14 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
     case "copla": {
       const previa = await prisma.respuestaActividad.findUnique({
-        where: { userId_sesionId: { userId, sesionId: sesion.id } },
+        where: { userId_sesionId: { userId, sesionId: sesionId } },
       });
       return <RespuestaEscrita sesion={datos} respuestaPrevia={previa?.texto ?? ""} />;
     }
 
     default: {
       const anotaciones = await prisma.anotacion.findMany({
-        where: { sesionId: sesion.id },
+        where: { sesionId: sesionId },
         orderBy: { creadoEn: "desc" },
         include: { autor: { select: { nombre: true, iniciales: true, rol: true } } },
       });

@@ -12,6 +12,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import puppeteer from "puppeteer-core";
 import "dotenv/config";
+import { eliminarArchivo } from "../../src/lib/almacen.ts";
 
 export const BASE = process.env.BASE_PRUEBAS ?? "http://localhost:3000";
 export const CLAVE = "Roble7#cauce.p";
@@ -54,6 +55,9 @@ export async function borrarCuentasDePrueba() {
   if (ids.length) {
     await prisma.florJardin.deleteMany({ where: { autorId: { in: ids } } });
     await prisma.foro.deleteMany({ where: { autorId: { in: ids } } });
+    // Los recursos llevan su archivo en el depósito: se borra antes que la ficha.
+    const recursos = await prisma.recurso.findMany({ where: { autorId: { in: ids } }, select: { archivo: true } });
+    for (const r of recursos) if (r.archivo) await eliminarArchivo(r.archivo);
     await prisma.recurso.deleteMany({ where: { autorId: { in: ids } } });
     await prisma.user.deleteMany({ where: { id: { in: ids } } });
   }

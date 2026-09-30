@@ -17,6 +17,7 @@ enum TipoRecurso {
   AUDIO
   DOCUMENTO
   SIMULADOR
+  IMAGEN
 }
 
 enum EstadoCaso {
@@ -160,6 +161,9 @@ model Sesion {
   /// Debates que el docente asoció a esta sesión, como el de la 1.3.
   foros Foro[]
 
+  /// Material multimedia propio de esta sesión.
+  recursos Recurso[]
+
   @@unique([ejeId, codigo])
 }
 
@@ -207,6 +211,18 @@ model Recurso {
 
   ejeId String
   eje   Eje    @relation(fields: [ejeId], references: [id], onDelete: Cascade)
+
+  /// Sesión concreta en que se usa. Vacía: el recurso es de todo el eje.
+  sesionId String?
+  sesion   Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  /// El recurso en sí: un archivo del depósito o un enlace externo, nunca los dos.
+  /// `archivo` es la ruta dentro del depósito, p. ej. `recursos/<id>.mp3`.
+  archivo String?
+  mime    String?
+  tamano  Int?
+  /// Video alojado fuera, p. ej. en YouTube: los largos no caben en el depósito.
+  enlace  String? @db.Text
 
   autorId String?
   autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)

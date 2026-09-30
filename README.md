@@ -242,9 +242,10 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:almacen` | Comprueba el almacén de PDF: guarda, lee y borra un archivo de prueba |
 | `npm run humo:subida` | Sube la guía completa del CNMH desde el navegador y comprueba que va directa al depósito |
 | `npm run humo:foros` | Un docente y tres estudiantes debaten; comprueba roles, fuentes, mediación y que otro curso no lo ve |
+| `npm run humo:recursos` | Sube audio, imagen y video; el estudiante los ve en la sesión y el audio se reproduce desde el depósito privado |
 
-`humo:sesiones`, `humo:documentos`, `humo:subida` y `humo:foros` necesitan la aplicación en marcha (`npm run dev`).
-`humo:almacen` no la necesita. Las pruebas crean cuentas `prueba.*` y las borran al terminar.
+Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
+Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito.
 
 Cada push se comprueba además en GitHub Actions (`.github/workflows/verificacion.yml`): tipos,
 estilo, pruebas, que las migraciones reproduzcan exactamente el esquema, y compilación. Las pruebas
@@ -310,7 +311,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
 | CU04 | Jardín de la Memoria | Sesión con actividad `jardin` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
-| CU06 | Gestión de contenido multimedia (LCMS) | `/docente/contenidos` |
+| CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
 | CU07 | Reportes por subpoblaciones | `/docente/subpoblaciones` |
 | CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |
