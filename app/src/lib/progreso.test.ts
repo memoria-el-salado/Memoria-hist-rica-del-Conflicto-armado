@@ -15,6 +15,7 @@ describe("cuándo se da una sesión por hecha", () => {
   it("cada actividad se completa con el trabajo que pide", () => {
     expect(sesionCompletada("cartografia", con({ marcas: 1 }))).toBe(true);
     expect(sesionCompletada("copla", con({ respondio: true }))).toBe(true);
+    expect(sesionCompletada("despensa", con({ respondio: true, ubicaciones: 4 }))).toBe(true);
     expect(sesionCompletada("simulador", con({ simulacionValidada: true }))).toBe(true);
     expect(sesionCompletada("jardin", con({ flores: 2 }))).toBe(true);
     expect(sesionCompletada("diario", con({ entradasDiario: 1 }))).toBe(true);
@@ -28,12 +29,17 @@ describe("cuándo se da una sesión por hecha", () => {
     expect(sesionCompletada("simulador", con({ respondio: true }))).toBe(false);
   });
 
+  it("la copla de la despensa pide el mapa además de la respuesta", () => {
+    expect(sesionCompletada("despensa", con({ respondio: true }))).toBe(false);
+    expect(sesionCompletada("despensa", con({ ubicaciones: 6 }))).toBe(false);
+  });
+
   it("una simulación sin validar todavía no cuenta", () => {
     expect(sesionCompletada("simulador", con({ simulacionValidada: false }))).toBe(false);
   });
 
   it("sin trabajo, ninguna actividad está hecha", () => {
-    for (const actividad of ["zona", "copla", "cartografia", "simulador", "jardin", "diario"]) {
+    for (const actividad of ["zona", "copla", "despensa", "cartografia", "simulador", "jardin", "diario"]) {
       expect(sesionCompletada(actividad, TRABAJO_VACIO)).toBe(false);
     }
   });

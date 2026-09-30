@@ -523,6 +523,9 @@ model MensajeForo {
 model RespuestaActividad {
   id            String   @id @default(cuid())
   texto         String   @db.Text
+  /// Lo que la actividad pide además del texto, según su tipo: dónde ubicó
+  /// cada producto de la copla, qué opción eligió en un dilema...
+  datos         Json?
   actualizadoEn DateTime @updatedAt
 
   userId String

@@ -16,6 +16,8 @@ import { estadoAccesibilidad } from "@/lib/transcripcion";
 import { PuertaCuidado } from "@/components/cuidado/puerta-cuidado";
 import { TEXTO_ALERTA_PREDETERMINADO } from "@/lib/cuidado";
 import { aportesVisiblesPara } from "@/lib/visibilidad";
+import { CoplaDespensa, type ResumenCurso } from "@/components/actividades/copla-despensa";
+import { leerDatosCopla, PRODUCTOS, resumenDelCurso } from "@/lib/copla";
 
 /**
  * Una sesión, una actividad.
@@ -249,6 +251,37 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
             privada: e.privada,
             fecha: e.creadoEn.toLocaleDateString("es-CO", { day: "numeric", month: "long" }),
           }))}
+        />
+      );
+    }
+
+    case "despensa": {
+      const [previa, yo] = await Promise.all([
+        prisma.respuestaActividad.findUnique({ where: { userId_sesionId: { userId, sesionId } } }),
+        prisma.user.findUnique({ where: { id: userId }, select: { creadoPorId: true, cursoId: true } }),
+      ]);
+      // El resumen del curso se muestra después de guardar el propio mapa:
+      // primero se escucha la copla, después se compara.
+      let curso: ResumenCurso | null = null;
+      if (previa && yo?.creadoPorId) {
+        const delCurso = await prisma.respuestaActividad.findMany({
+          where: { sesionId, user: { creadoPorId: yo.creadoPorId, cursoId: yo.cursoId } },
+          select: { datos: true },
+        });
+        const mapas = delCurso.map((r) => leerDatosCopla(r.datos).ubicaciones).filter((u) => Object.keys(u).length);
+        curso = {
+          total: mapas.length,
+          productos: [...resumenDelCurso(mapas)]
+            .map(([productoId, lugares]) => ({ productoId, lugares }))
+            .sort((a, b) => PRODUCTOS.findIndex((p) => p.id === a.productoId) - PRODUCTOS.findIndex((p) => p.id === b.productoId)),
+        };
+      }
+      const guardado = leerDatosCopla(previa?.datos);
+      return (
+        <CoplaDespensa
+          sesion={datos}
+          previa={previa ? { ubicaciones: guardado.ubicaciones, texto: previa.texto, versos: guardado.versos } : null}
+          curso={curso}
         />
       );
     }

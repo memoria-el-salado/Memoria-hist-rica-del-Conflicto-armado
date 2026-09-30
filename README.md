@@ -247,6 +247,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:cursos` | Cursos y grupos: el docente los arma y reparte; panel, reportes y debates se filtran por curso, y otro docente no los ve |
 | `npm run humo:cartografia` | Un estudiante graba su relato, suma una foto que el navegador reduce y siembra el lugar a nombre de su grupo; solo su curso y su docente lo ven |
 | `npm run humo:jardin` | Flores con poema, dibujo hecho en el lienzo y foto de una obra; al abrirlas se ve la creación, solo dentro del curso |
+| `npm run humo:despensa` | La copla «Tierra de abundancia»: ubicar productos en los Montes de María tocando o arrastrando, explicar la despensa y comparar con el curso |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -318,6 +319,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
+| Guía 1.2.1 | Copla «Tierra de abundancia»: mapa de productos de los Montes de María y resumen del curso para la plenaria | Sesión con actividad `despensa` |
 | CU04 | Jardín de la Memoria con cartas, poemas, dibujos y fotos de obras, visibles al sembrar | Sesión con actividad `jardin`, `/api/jardin/[id]/imagen` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |

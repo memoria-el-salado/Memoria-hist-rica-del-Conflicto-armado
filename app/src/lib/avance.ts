@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { quienesCuentan } from "@/lib/cartografia";
+import { leerDatosCopla } from "@/lib/copla";
 import {
   TRABAJO_VACIO,
   progresoDeEje,
@@ -88,7 +89,7 @@ async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Re
     }),
     prisma.respuestaActividad.findMany({
       where: { userId: { in: userIds }, sesionId: { in: sesionIds } },
-      select: { userId: true, sesionId: true },
+      select: { userId: true, sesionId: true, datos: true },
     }),
     prisma.simulacion.findMany({
       where: { userId: { in: userIds }, sesionId: { in: sesionIds }, validadaEn: { not: null } },
@@ -109,7 +110,11 @@ async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Re
   for (const e of entradas) {
     if (e.sesionId) casilla(recuento, e.autorId, e.sesionId).entradasDiario += 1;
   }
-  for (const r of respuestas) casilla(recuento, r.userId, r.sesionId).respondio = true;
+  for (const r of respuestas) {
+    const trabajo = casilla(recuento, r.userId, r.sesionId);
+    trabajo.respondio = true;
+    trabajo.ubicaciones = Object.keys(leerDatosCopla(r.datos).ubicaciones).length;
+  }
   for (const s of simulaciones) casilla(recuento, s.userId, s.sesionId).simulacionValidada = true;
 
   return recuento;

@@ -15,8 +15,10 @@
  * El módulo es puro para poder verificarlo con pruebas automatizadas.
  */
 
+import { coplaCompleta } from "./copla";
+
 /** Actividades que puede llevar una sesión, y qué cuenta como haberla hecho. */
-export type Actividad = "zona" | "copla" | "cartografia" | "simulador" | "jardin" | "diario";
+export type Actividad = "zona" | "copla" | "despensa" | "cartografia" | "simulador" | "jardin" | "diario";
 
 /** Lo que el estudiante produjo dentro de una sesión. */
 export type TrabajoEnSesion = {
@@ -28,6 +30,8 @@ export type TrabajoEnSesion = {
   respondio: boolean;
   /** La simulación cuenta cuando se validó, no con solo abrirla. */
   simulacionValidada: boolean;
+  /** Productos que ubicó en el mapa de la copla. */
+  ubicaciones: number;
 };
 
 export const TRABAJO_VACIO: TrabajoEnSesion = {
@@ -37,6 +41,7 @@ export const TRABAJO_VACIO: TrabajoEnSesion = {
   entradasDiario: 0,
   respondio: false,
   simulacionValidada: false,
+  ubicaciones: 0,
 };
 
 /**
@@ -49,6 +54,9 @@ export function sesionCompletada(actividad: string, trabajo: TrabajoEnSesion): b
       return trabajo.marcas > 0;
     case "copla":
       return trabajo.respondio;
+    case "despensa":
+      // El mapa de productos y la explicación de «la despensa del Caribe».
+      return coplaCompleta(trabajo.ubicaciones, trabajo.respondio);
     case "simulador":
       return trabajo.simulacionValidada;
     case "jardin":

@@ -568,6 +568,7 @@ export const ACTIVIDADES = [
   { valor: "zona", etiqueta: "Archivo y anotaciones" },
   { valor: "cartografia", etiqueta: "Cartografía social" },
   { valor: "copla", etiqueta: "Tradición oral (copla)" },
+  { valor: "despensa", etiqueta: "Copla y mapa de la despensa (Montes de María)" },
   { valor: "simulador", etiqueta: "Simulador de tierras" },
   { valor: "jardin", etiqueta: "Jardín de la memoria" },
   { valor: "diario", etiqueta: "Diario personal" },
@@ -584,7 +585,11 @@ export function sugerirActividad(titulo: string, subtitulos: string[] = []): Act
   const texto = [titulo, ...subtitulos].join(" ").toLowerCase();
 
   if (/repartir las tierras|repartici[óo]n de tierras/.test(texto)) return "simulador";
-  if (/tierra de abundancia|copla|tradici[óo]n oral/.test(texto)) return "copla";
+  // La copla «Tierra de abundancia» tiene su propia actividad: ubicar en el
+  // mapa de los Montes de María lo que produce cada lugar. Otra copla, de otro
+  // módulo, se responde por escrito.
+  if (/tierra de abundancia/.test(texto)) return "despensa";
+  if (/copla|tradici[óo]n oral/.test(texto)) return "copla";
   if (/espacios y lugares|cartograf[íi]a|lugares? significativos?/.test(texto)) return "cartografia";
   if (/iniciativas? de memoria|monumento|museo|jard[íi]n/.test(texto)) return "jardin";
   if (/a qu[ée] te comprometes|compromiso|diario/.test(texto)) return "diario";

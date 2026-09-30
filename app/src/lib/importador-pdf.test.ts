@@ -136,10 +136,14 @@ describe("sugerirActividad", () => {
     );
   });
 
-  it("reconoce la copla por su subsección", () => {
+  it("reconoce la copla de la despensa por su subsección", () => {
     expect(
       sugerirActividad("Arraigos campesinos, una tierra de abundancia", ["Tierra de abundancia"])
-    ).toBe("copla");
+    ).toBe("despensa");
+  });
+
+  it("otra copla, de otro módulo, se responde por escrito", () => {
+    expect(sugerirActividad("La tradición oral wayuu", ["Coplas de la Alta Guajira"])).toBe("copla");
   });
 
   it("reconoce la cartografía social", () => {
@@ -165,7 +169,7 @@ describe("sugerirActividad", () => {
     const sesiones = new Map(arbol.flatMap((e) => e.sesiones.map((s) => [s.codigo, s.actividad])));
 
     expect(sesiones.get("1.4")).toBe("simulador");
-    expect(sesiones.get("1.2")).toBe("copla");
+    expect(sesiones.get("1.2")).toBe("despensa");
     expect(sesiones.get("1.1")).toBe("cartografia");
     expect(sesiones.get("2.2")).toBe("zona");
   });
