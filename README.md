@@ -253,6 +253,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:recorrido` | Competencias en el mapa y recorrido en orden: ejes cerrados con lo que falta, apertura por avance o por el docente |
 | `npm run humo:subpoblaciones` | La subpoblación se declara solo con autorización del acudiente; reportes y panel sin grupos de menos de cinco; cada docente ve sus reportes |
 | `npm run humo:panel` | El panel reúne progreso, competencias del grupo y revisión pendiente; en el móvil, la barra con «Más» y ninguna pantalla desbordada |
+| `npm run humo:portada` | Sin cuenta, «/» muestra la portada pública; quien ya entró va a su espacio; no se desborda en el móvil |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -317,6 +318,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 
 | Caso | Descripción | Dónde está |
 | --- | --- | --- |
+| Mockups | Portada pública «Descubre el legado de un pueblo valiente» | `/` |
 | CU01 | Autenticación diferenciada por rol | `/login` |
 | CU01 | Alta de docentes por la administración | `/admin/docentes` |
 | CU01 | Alta de estudiantes por el docente | `/docente/estudiantes` |
