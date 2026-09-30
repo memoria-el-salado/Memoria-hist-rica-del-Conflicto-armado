@@ -52,6 +52,21 @@ function cabeceras(d: Deposito): Record<string, string> {
   return { Authorization: `Bearer ${d.llave}`, apikey: d.llave };
 }
 
+/**
+ * Toda petición a Supabase pasa por aquí. Si la red se corta antes de que llegue
+ * la respuesta, se reintenta una vez: sin esto, una subida de 16 MB que sí llegó
+ * al depósito se daba por perdida por un corte al leerla. Un error que responde
+ * el propio Supabase (un 400, un 404) no se reintenta: repetirlo daría lo mismo.
+ */
+async function pedir(url: string, init: RequestInit): Promise<Response> {
+  try {
+    return await fetch(url, init);
+  } catch {
+    await new Promise((r) => setTimeout(r, 800));
+    return fetch(url, init);
+  }
+}
+
 async function fallo(res: Response, verbo: string): Promise<Error> {
   const detalle = await res.text().catch(() => "");
   return new Error(`No se pudo ${verbo} en Supabase Storage (${res.status}). ${detalle}`.trim());
@@ -67,7 +82,7 @@ export async function guardarDocumento(id: string, bytes: Uint8Array<ArrayBuffer
     return;
   }
 
-  const res = await fetch(direccion(d, id), {
+  const res = await pedir(direccion(d, id), {
     method: "POST",
     headers: { ...cabeceras(d), "content-type": "application/pdf", "x-upsert": "true" },
     body: bytes,
@@ -76,13 +91,38 @@ export async function guardarDocumento(id: string, bytes: Uint8Array<ArrayBuffer
   if (!res.ok) throw await fallo(res, "guardar el documento");
 }
 
+/**
+ * Autoriza al navegador a subir un PDF directamente al depósito.
+ *
+ * Vercel corta cualquier petición a partir de 4,5 MB, y las guías completas del
+ * CNMH pesan más de 15. Con esta dirección firmada el archivo va del navegador a
+ * Supabase sin pasar por el servidor de la aplicación, y la llave `service_role`
+ * nunca sale de aquí: la firma solo sirve para escribir ese archivo, una vez.
+ *
+ * Devuelve `null` cuando se guarda en disco: ahí no hay a dónde subir directo.
+ */
+export async function firmarSubidaDocumento(id: string): Promise<string | null> {
+  const d = deposito();
+  if (!d) return null;
+
+  const res = await pedir(`${d.url}/storage/v1/object/upload/sign/${d.nombre}/${PREFIJO}/${id}.pdf`, {
+    method: "POST",
+    headers: cabeceras(d),
+    cache: "no-store",
+  });
+  if (!res.ok) throw await fallo(res, "preparar la subida");
+
+  const { url }: { url: string } = await res.json();
+  return `${d.url}/storage/v1${url}`;
+}
+
 /** Devuelve el PDF. Lanza si ya no está: quien llama decide qué responder. */
 export async function leerDocumento(id: string): Promise<Uint8Array<ArrayBuffer>> {
   const d = deposito();
 
   if (!d) return new Uint8Array(await readFile(path.join(CARPETA, `${id}.pdf`)));
 
-  const res = await fetch(direccion(d, id), { headers: cabeceras(d), cache: "no-store" });
+  const res = await pedir(direccion(d, id), { headers: cabeceras(d), cache: "no-store" });
   if (!res.ok) throw await fallo(res, "leer el documento");
 
   return new Uint8Array(await res.arrayBuffer());
@@ -104,7 +144,7 @@ export async function eliminarDocumento(id: string): Promise<void> {
     return;
   }
 
-  await fetch(direccion(d, id), { method: "DELETE", headers: cabeceras(d) }).catch(() => null);
+  await pedir(direccion(d, id), { method: "DELETE", headers: cabeceras(d) }).catch(() => null);
 }
 
 /** Identificadores de los PDF que hay en el almacén, para buscar huérfanos. */
@@ -120,7 +160,7 @@ export async function listarDocumentos(): Promise<string[]> {
     }
   }
 
-  const res = await fetch(`${d.url}/storage/v1/object/list/${d.nombre}`, {
+  const res = await pedir(`${d.url}/storage/v1/object/list/${d.nombre}`, {
     method: "POST",
     headers: { ...cabeceras(d), "content-type": "application/json" },
     body: JSON.stringify({ prefix: `${PREFIJO}/`, limit: 1000, offset: 0 }),
@@ -144,7 +184,7 @@ export async function depositoEsPublico(): Promise<boolean | null> {
   const d = deposito();
   if (!d) return null;
 
-  const res = await fetch(`${d.url}/storage/v1/bucket/${d.nombre}`, {
+  const res = await pedir(`${d.url}/storage/v1/bucket/${d.nombre}`, {
     headers: cabeceras(d),
     cache: "no-store",
   });

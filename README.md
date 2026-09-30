@@ -237,9 +237,10 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:sesiones` | Comprueba que las actividades muestran el contenido importado |
 | `npm run humo:documentos` | Comprueba que el estudiante no abre el material reservado al docente |
 | `npm run humo:almacen` | Comprueba el almacén de PDF: guarda, lee y borra un archivo de prueba |
+| `npm run humo:subida` | Sube la guía completa del CNMH desde el navegador y comprueba que va directa al depósito |
 
-`humo:sesiones` y `humo:documentos` necesitan la aplicación en marcha (`npm run dev`).
-`humo:almacen` no la necesita.
+`humo:sesiones`, `humo:documentos` y `humo:subida` necesitan la aplicación en marcha (`npm run dev`).
+`humo:almacen` no la necesita. Las pruebas crean cuentas `prueba.*` y las borran al terminar.
 
 ---
 

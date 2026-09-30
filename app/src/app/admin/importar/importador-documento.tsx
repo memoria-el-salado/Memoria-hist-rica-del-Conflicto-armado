@@ -6,11 +6,32 @@ import {
   alternarVisibilidadDocumento,
   analizarDocumento,
   analizarDocumentoExistente,
+  analizarDocumentoSubido,
   crearModuloDesdeDocumento,
   eliminarDocumento,
+  prepararSubida,
   vincularDocumento,
   type ResultadoAnalisis,
 } from "./actions";
+
+/**
+ * Sube el archivo a la dirección firmada e informa del avance. `fetch` no dice
+ * cuánto lleva enviado; con una guía de 16 MB y la conexión de un colegio, la
+ * subida puede tardar más de un minuto, y sin porcentaje parece colgada.
+ */
+function subirConProgreso(url: string, archivo: File, alAvanzar: (porcentaje: number) => void) {
+  return new Promise<boolean>((resolver) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", url);
+    xhr.setRequestHeader("content-type", "application/pdf");
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) alAvanzar(Math.floor((e.loaded / e.total) * 100));
+    };
+    xhr.onload = () => resolver(xhr.status >= 200 && xhr.status < 300);
+    xhr.onerror = () => resolver(false);
+    xhr.send(archivo);
+  });
+}
 
 type Documento = {
   id: string;
@@ -44,6 +65,9 @@ export function ImportadorDocumento({
   const [borrando, iniciarBorrado] = useTransition();
   /** Sesión cuyo texto está desplegado para revisar; solo una a la vez. */
   const [textoAbierto, setTextoAbierto] = useState<string | null>(null);
+  /** Las guías completas tardan en subir: se dice en qué parte va el proceso. */
+  const [fase, setFase] = useState<"subiendo" | "analizando">("analizando");
+  const [porcentaje, setPorcentaje] = useState(0);
 
   /** Reserva un documento al docente o lo vuelve a abrir a los estudiantes. */
   function alternarVisibilidad(id: string) {
@@ -70,9 +94,36 @@ export function ImportadorDocumento({
     });
   }
 
+  /**
+   * Sube el PDF y lo analiza. Con Supabase el archivo va directo del navegador
+   * al depósito, y al servidor solo le llega su identificador: así no lo corta
+   * el límite de 4,5 MB de Vercel.
+   */
+  async function subirYAnalizar(prev: unknown, formData: FormData): Promise<ResultadoAnalisis> {
+    const archivo = formData.get("archivo");
+    if (!(archivo instanceof File) || archivo.size === 0) return { error: "Selecciona un archivo PDF." };
+
+    const subida = await prepararSubida({ nombre: archivo.name, tipo: archivo.type, tamano: archivo.size });
+    if (subida.error) return { error: subida.error };
+
+    if (!subida.directa) {
+      setFase("analizando");
+      return analizarDocumento(prev, formData);
+    }
+
+    setPorcentaje(0);
+    setFase("subiendo");
+    if (!(await subirConProgreso(subida.url!, archivo, setPorcentaje))) {
+      return { error: "No se pudo subir el archivo. Revisa la conexión e inténtalo de nuevo." };
+    }
+
+    setFase("analizando");
+    return analizarDocumentoSubido(subida.id!, archivo.name);
+  }
+
   const [analisis, accionAnalizar, analizando] = useActionState(
     async (prev: unknown, formData: FormData) => {
-      const res = await analizarDocumento(prev, formData);
+      const res = await subirYAnalizar(prev, formData);
       if (res.arbol) {
         setArbol(res.arbol);
         setNombre("");
@@ -242,11 +293,16 @@ export function ImportadorDocumento({
             disabled={analizando}
             className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-2.5 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
-            {analizando ? "Analizando..." : "Analizar documento"}
+            {!analizando
+              ? "Analizar documento"
+              : fase === "subiendo"
+                ? `Subiendo ${porcentaje} %`
+                : "Analizando..."}
           </button>
         </div>
         <p className="mt-2 text-[11px] text-suave">
-          El PDF debe tener texto seleccionable. Si está escaneado como imagen, primero necesita OCR.
+          Admite las guías completas del CNMH, de hasta 50 MB. El PDF debe tener texto
+          seleccionable: si está escaneado como imagen, primero necesita OCR.
         </p>
         {analisis?.error && (
           <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">

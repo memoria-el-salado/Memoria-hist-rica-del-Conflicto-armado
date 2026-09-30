@@ -6,15 +6,22 @@ import { z } from "zod";
 import { extractText, getDocumentProxy } from "unpdf";
 import { auth } from "@/auth";
 import {
+  almacenEnUso,
   eliminarDocumento as borrarDelAlmacen,
+  firmarSubidaDocumento,
   guardarDocumento,
   leerDocumento,
   rutaDe,
 } from "@/lib/almacen";
 import { prisma } from "@/lib/prisma";
 import { ACTIVIDADES, armarArbol, detectarEstructura, type EjeArmado } from "@/lib/importador-pdf";
-
-const TAMANO_MAXIMO = 25 * 1024 * 1024;
+import {
+  esIdentificadorDeSubida,
+  MAXIMO_DIRECTO,
+  MAXIMO_SERVIDOR,
+  validarPdf,
+  type ArchivoPropuesto,
+} from "@/lib/subida-documento";
 
 const TONOS = ["#D95D39", "#1B8A8A", "#EBB035", "#B8482A", "#8C8279", "#177575"];
 
@@ -59,45 +66,19 @@ async function analizar(bytes: Uint8Array) {
   return { titulo: estructura.titulo, arbol, paginas: totalPages };
 }
 
-/**
- * Paso 1a · Sube un PDF nuevo, lo guarda y propone su estructura.
- * No crea nada del módulo todavía: el administrador revisa primero.
- */
-export async function analizarDocumento(
-  _prev: unknown,
-  formData: FormData
+type Analisis = Awaited<ReturnType<typeof analizar>>;
+
+/** Crea la ficha del documento ya guardado y devuelve la estructura para revisar. */
+async function registrar(
+  id: string,
+  nombreArchivo: string,
+  analisis: Analisis
 ): Promise<ResultadoAnalisis> {
-  if (!(await exigirAdmin())) return { error: "No autorizado." };
-
-  const archivo = formData.get("archivo");
-  if (!(archivo instanceof File) || archivo.size === 0) {
-    return { error: "Selecciona un archivo PDF." };
-  }
-  if (archivo.type !== "application/pdf" && !archivo.name.toLowerCase().endsWith(".pdf")) {
-    return { error: "El archivo debe ser un PDF." };
-  }
-  if (archivo.size > TAMANO_MAXIMO) {
-    return { error: "El PDF supera el tamaño máximo de 25 MB." };
-  }
-
-  const bytes = new Uint8Array(await archivo.arrayBuffer());
-
-  let analisis;
-  try {
-    analisis = await analizar(bytes);
-  } catch {
-    return { error: "No se pudo leer el PDF. Puede estar dañado o protegido con contraseña." };
-  }
-  if (analisis.error) return { error: analisis.error };
-
-  const id = randomUUID();
-  await guardarDocumento(id, bytes);
-
   const documento = await prisma.documentoFuente.create({
     data: {
       id,
-      titulo: analisis.titulo ?? archivo.name.replace(/\.pdf$/i, ""),
-      nombreArchivo: archivo.name,
+      titulo: analisis.titulo ?? nombreArchivo.replace(/\.pdf$/i, ""),
+      nombreArchivo,
       rutaArchivo: rutaDe(id),
       paginas: analisis.paginas!,
     },
@@ -110,6 +91,116 @@ export async function analizarDocumento(
     paginas: documento.paginas,
     arbol: analisis.arbol,
   };
+}
+
+const PDF_ILEGIBLE = "No se pudo leer el PDF. Puede estar dañado o protegido con contraseña.";
+
+export type Subida = { error?: string; directa?: boolean; id?: string; url?: string };
+
+/**
+ * Paso 1a · Prepara la subida de un PDF nuevo.
+ *
+ * Con Supabase devuelve una dirección firmada para que el navegador suba el
+ * archivo directamente al depósito: por el servidor no pasaría de 4,5 MB. En
+ * un equipo local, que guarda en disco, el archivo va por `analizarDocumento`.
+ */
+export async function prepararSubida(archivo: ArchivoPropuesto): Promise<Subida> {
+  if (!(await exigirAdmin())) return { error: "No autorizado." };
+
+  const directa = almacenEnUso() === "Supabase Storage";
+  const error = validarPdf(archivo, directa ? MAXIMO_DIRECTO : MAXIMO_SERVIDOR);
+  if (error) return { error };
+  if (!directa) return { directa: false };
+
+  const id = randomUUID();
+  try {
+    return { directa: true, id, url: (await firmarSubidaDocumento(id))! };
+  } catch {
+    return { error: "No se pudo preparar la subida. Inténtalo de nuevo en unos segundos." };
+  }
+}
+
+/**
+ * Paso 1b · Analiza el PDF que el navegador ya subió al depósito.
+ * No crea nada del módulo todavía: el administrador revisa primero.
+ */
+export async function analizarDocumentoSubido(
+  id: string,
+  nombreArchivo: string
+): Promise<ResultadoAnalisis> {
+  if (!(await exigirAdmin())) return { error: "No autorizado." };
+  if (!esIdentificadorDeSubida(id)) return { error: "La subida no es válida. Vuelve a elegir el archivo." };
+
+  if (await prisma.documentoFuente.findUnique({ where: { id } })) {
+    return { error: "Ese documento ya estaba registrado." };
+  }
+
+  let bytes;
+  try {
+    bytes = await leerDocumento(id);
+  } catch {
+    // Puede que no llegara, o que llegara y fallara la lectura por la red. En
+    // el segundo caso quedaría en el depósito sin ficha: el reintento usará
+    // otro identificador, así que este se borra por si acaso.
+    await borrarDelAlmacen(id);
+    return { error: "No se pudo recibir el archivo. Vuelve a subirlo." };
+  }
+
+  // La firma autoriza escribir el archivo, no su tamaño: se comprueba otra vez.
+  if (bytes.byteLength > MAXIMO_DIRECTO) {
+    await borrarDelAlmacen(id);
+    return { error: validarPdf({ nombre: nombreArchivo, tipo: "application/pdf", tamano: bytes.byteLength }, MAXIMO_DIRECTO)! };
+  }
+
+  let analisis;
+  try {
+    analisis = await analizar(bytes);
+  } catch {
+    analisis = { error: PDF_ILEGIBLE };
+  }
+
+  // Un PDF que no sirve no se queda ocupando el depósito.
+  if (analisis.error) {
+    await borrarDelAlmacen(id);
+    return { error: analisis.error };
+  }
+
+  return registrar(id, nombreArchivo.trim().slice(0, 200) || "documento.pdf", analisis);
+}
+
+/**
+ * Paso 1b, en un equipo local · Recibe el PDF por el servidor, lo guarda en
+ * disco y propone su estructura.
+ */
+export async function analizarDocumento(
+  _prev: unknown,
+  formData: FormData
+): Promise<ResultadoAnalisis> {
+  if (!(await exigirAdmin())) return { error: "No autorizado." };
+
+  const archivo = formData.get("archivo");
+  const error = validarPdf(
+    archivo instanceof File
+      ? { nombre: archivo.name, tipo: archivo.type, tamano: archivo.size }
+      : { nombre: "", tipo: "", tamano: 0 },
+    MAXIMO_SERVIDOR
+  );
+  if (error) return { error };
+
+  const pdf = archivo as File;
+  const bytes = new Uint8Array(await pdf.arrayBuffer());
+
+  let analisis;
+  try {
+    analisis = await analizar(bytes);
+  } catch {
+    return { error: PDF_ILEGIBLE };
+  }
+  if (analisis.error) return { error: analisis.error };
+
+  const id = randomUUID();
+  await guardarDocumento(id, bytes);
+  return registrar(id, pdf.name, analisis);
 }
 
 /**
