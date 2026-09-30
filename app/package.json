@@ -30,6 +30,7 @@
     "humo:cartografia": "node scripts/pruebas/cartografia.mjs",
     "humo:jardin": "node scripts/pruebas/jardin.mjs",
     "humo:despensa": "node scripts/pruebas/despensa.mjs",
+    "humo:actividades": "node scripts/pruebas/actividades.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

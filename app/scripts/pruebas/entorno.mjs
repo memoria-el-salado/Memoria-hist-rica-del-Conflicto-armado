@@ -83,10 +83,16 @@ export async function borrarCuentasDePrueba() {
  */
 export const PREFIJO_MODULO = "Módulo de prueba (se borra solo)";
 
-export async function crearModuloDePrueba(pantalla) {
+/**
+ * Crea el módulo con una sesión publicada por actividad. Recibe una pantalla,
+ * o una lista de pantallas o de { pantalla, titulo }. Con una sola pantalla
+ * devuelve { casoId, sesionId }; con una lista, { casoId, sesiones: [ids] }.
+ */
+export async function crearModuloDePrueba(pantallas) {
+  const lista = (Array.isArray(pantallas) ? pantallas : [pantallas]).map((p) => (typeof p === "string" ? { pantalla: p } : p));
   const caso = await prisma.caso.create({
     data: {
-      nombre: `${PREFIJO_MODULO} ${pantalla} ${Date.now()}`,
+      nombre: `${PREFIJO_MODULO} ${lista.map((p) => p.pantalla).join("-")} ${Date.now()}`,
       depto: "Prueba",
       ejes: {
         create: {
@@ -95,13 +101,23 @@ export async function crearModuloDePrueba(pantalla) {
           descripcion: "Eje de prueba",
           tono: "#1B8A8A",
           orden: 0,
-          sesiones: { create: { codigo: "9.9", titulo: `Sesión de prueba (${pantalla})`, tipo: pantalla, pantalla, publicada: true, orden: 0 } },
+          sesiones: {
+            create: lista.map((p, i) => ({
+              codigo: `9.${i + 1}`,
+              titulo: p.titulo ?? `Sesión de prueba (${p.pantalla})`,
+              tipo: p.pantalla,
+              pantalla: p.pantalla,
+              publicada: true,
+              orden: i,
+            })),
+          },
         },
       },
     },
-    include: { ejes: { include: { sesiones: true } } },
+    include: { ejes: { include: { sesiones: { orderBy: { orden: "asc" } } } } },
   });
-  return { casoId: caso.id, sesionId: caso.ejes[0].sesiones[0].id };
+  const sesiones = caso.ejes[0].sesiones.map((s) => s.id);
+  return Array.isArray(pantallas) ? { casoId: caso.id, sesiones } : { casoId: caso.id, sesionId: sesiones[0] };
 }
 
 /** Borra los módulos de prueba y los archivos que se subieron en ellos. */

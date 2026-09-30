@@ -29,6 +29,16 @@ describe("cuándo se da una sesión por hecha", () => {
     expect(sesionCompletada("simulador", con({ respondio: true }))).toBe(false);
   });
 
+  it("los formatos de la guía: responder, y en el dilema y la investigación algo más", () => {
+    expect(sesionCompletada("meubico", con({ respondio: true }))).toBe(true);
+    expect(sesionCompletada("testimonios", con({ respondio: true }))).toBe(true);
+    expect(sesionCompletada("compromiso", con({ respondio: true }))).toBe(true);
+    expect(sesionCompletada("dilema", con({ respondio: true }))).toBe(false);
+    expect(sesionCompletada("dilema", con({ respondio: true, opcionElegida: true }))).toBe(true);
+    expect(sesionCompletada("investigar", con({ respondio: true }))).toBe(false);
+    expect(sesionCompletada("investigar", con({ respondio: true, fuentes: 2 }))).toBe(true);
+  });
+
   it("la copla de la despensa pide el mapa además de la respuesta", () => {
     expect(sesionCompletada("despensa", con({ respondio: true }))).toBe(false);
     expect(sesionCompletada("despensa", con({ ubicaciones: 6 }))).toBe(false);
@@ -39,7 +49,7 @@ describe("cuándo se da una sesión por hecha", () => {
   });
 
   it("sin trabajo, ninguna actividad está hecha", () => {
-    for (const actividad of ["zona", "copla", "despensa", "cartografia", "simulador", "jardin", "diario"]) {
+    for (const actividad of ["zona", "copla", "despensa", "cartografia", "simulador", "jardin", "diario", "meubico", "dilema", "investigar", "testimonios", "compromiso"]) {
       expect(sesionCompletada(actividad, TRABAJO_VACIO)).toBe(false);
     }
   });

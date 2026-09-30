@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { quienesCuentan } from "@/lib/cartografia";
 import { leerDatosCopla } from "@/lib/copla";
+import { leerDatosGuiada } from "@/lib/actividades";
 import {
   TRABAJO_VACIO,
   progresoDeEje,
@@ -114,6 +115,9 @@ async function reunirTrabajo(userIds: string[], sesionIds: string[]): Promise<Re
     const trabajo = casilla(recuento, r.userId, r.sesionId);
     trabajo.respondio = true;
     trabajo.ubicaciones = Object.keys(leerDatosCopla(r.datos).ubicaciones).length;
+    const guiada = leerDatosGuiada(r.datos);
+    trabajo.opcionElegida = Boolean(guiada.opcion);
+    trabajo.fuentes = guiada.fuentes?.length ?? 0;
   }
   for (const s of simulaciones) casilla(recuento, s.userId, s.sesionId).simulacionValidada = true;
 

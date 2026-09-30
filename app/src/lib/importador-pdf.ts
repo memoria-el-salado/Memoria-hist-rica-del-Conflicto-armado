@@ -572,6 +572,11 @@ export const ACTIVIDADES = [
   { valor: "simulador", etiqueta: "Simulador de tierras" },
   { valor: "jardin", etiqueta: "Jardín de la memoria" },
   { valor: "diario", etiqueta: "Diario personal" },
+  { valor: "meubico", etiqueta: "Me ubico (reflexión personal)" },
+  { valor: "dilema", etiqueta: "Dilema" },
+  { valor: "investigar", etiqueta: "A investigar" },
+  { valor: "testimonios", etiqueta: "Testimonios" },
+  { valor: "compromiso", etiqueta: "Compromiso" },
 ] as const;
 
 export type Actividad = (typeof ACTIVIDADES)[number]["valor"];
@@ -591,8 +596,15 @@ export function sugerirActividad(titulo: string, subtitulos: string[] = []): Act
   if (/tierra de abundancia/.test(texto)) return "despensa";
   if (/copla|tradici[óo]n oral/.test(texto)) return "copla";
   if (/espacios y lugares|cartograf[íi]a|lugares? significativos?/.test(texto)) return "cartografia";
+  // Los formatos que la guía repite en varios ejes. El orden importa: una
+  // sesión de testimonios o de dilema puede traer además un «A investigar».
+  if (/testimonios?/.test(texto)) return "testimonios";
+  if (/dilemas?/.test(texto)) return "dilema";
+  if (/a qu[ée] te comprometes|compromiso/.test(texto)) return "compromiso";
   if (/iniciativas? de memoria|monumento|museo|jard[íi]n/.test(texto)) return "jardin";
-  if (/a qu[ée] te comprometes|compromiso|diario/.test(texto)) return "diario";
+  if (/a investigar/.test(texto)) return "investigar";
+  if (/diario/.test(texto)) return "diario";
+  if (/me ubico/.test(texto)) return "meubico";
 
   return "zona";
 }

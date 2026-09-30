@@ -18,6 +18,17 @@ import { TEXTO_ALERTA_PREDETERMINADO } from "@/lib/cuidado";
 import { aportesVisiblesPara } from "@/lib/visibilidad";
 import { CoplaDespensa, type ResumenCurso } from "@/components/actividades/copla-despensa";
 import { leerDatosCopla, PRODUCTOS, resumenDelCurso } from "@/lib/copla";
+import { ActividadGuiada } from "@/components/actividades/actividad-guiada";
+import { DebatesDeSesion } from "@/components/foro/debates-de-sesion";
+import {
+  esGuiada,
+  leerDatosGuiada,
+  leerDilema,
+  leerInvestigacion,
+  repartoDeOpciones,
+  SE_PLANTEA,
+  type Guiada,
+} from "@/lib/actividades";
 
 /**
  * Una sesión, una actividad.
@@ -86,13 +97,14 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     documento: documento ? { id: documento.id, titulo: documento.titulo } : null,
   };
 
-  const [actividad, recursos] = await Promise.all([
+  const [actividad, recursos, debates] = await Promise.all([
     pantallaDeActividad(sesion.pantalla, sesion.id, datos, userId),
     prisma.recurso.findMany({
       // El material de la sesión y el que el docente cargó para todo el eje.
       where: { OR: [{ sesionId: sesion.id }, { sesionId: null, ejeId: sesion.ejeId }] },
       orderBy: { creadoEn: "asc" },
     }),
+    debatesDeLaSesion(sesion.id, userId),
   ]);
 
   // Solo el material accesible: un audio o un video sin su transcripción no se publica.
@@ -107,12 +119,15 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
   const contenido = (
     <>
       {actividad}
+      <DebatesDeSesion debates={debates} />
       <MaterialSesion recursos={visibles.map(vistaDeRecurso)} />
     </>
   );
 
   // Con alerta de cuidado, el estudiante lee el aviso y decide antes de entrar.
-  if (!sesion.alertaCuidado) return contenido;
+  // Los testimonios de las víctimas la llevan siempre: la guía pide preparar
+  // al grupo antes de escucharlos.
+  if (!sesion.alertaCuidado && sesion.pantalla !== "testimonios") return contenido;
   return (
     <PuertaCuidado
       sesionId={sesion.id}
@@ -125,8 +140,78 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
   );
 }
 
+/**
+ * Los debates que el docente del estudiante abrió sobre esta sesión, para
+ * todos sus estudiantes o para su curso.
+ */
+async function debatesDeLaSesion(sesionId: string, userId: string) {
+  const yo = await prisma.user.findUnique({ where: { id: userId }, select: { creadoPorId: true, cursoId: true } });
+  if (!yo?.creadoPorId) return [];
+  const foros = await prisma.foro.findMany({
+    where: { sesionId, autorId: yo.creadoPorId, OR: [{ cursoId: null }, ...(yo.cursoId ? [{ cursoId: yo.cursoId }] : [])] },
+    orderBy: { creadoEn: "asc" },
+    select: { id: true, pregunta: true, abierto: true },
+  });
+  return foros;
+}
+
+/**
+ * Me ubico, Dilema, A investigar, Testimonios y Compromiso. El dilema y la
+ * investigación los plantea el docente del estudiante; lo que se ve del curso
+ * (cómo eligió, qué compromisos compartió) es solo del curso propio.
+ */
+async function actividadGuiada(tipo: Guiada, sesionId: string, datos: DatosSesion, userId: string) {
+  const [previa, yo] = await Promise.all([
+    prisma.respuestaActividad.findUnique({ where: { userId_sesionId: { userId, sesionId } } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { creadoPorId: true, cursoId: true } }),
+  ]);
+  const planteamiento =
+    SE_PLANTEA[tipo] && yo?.creadoPorId
+      ? await prisma.planteamientoSesion.findUnique({ where: { sesionId_docenteId: { sesionId, docenteId: yo.creadoPorId } } })
+      : null;
+  const dilema = tipo === "dilema" ? leerDilema(planteamiento?.datos) : null;
+  const pregunta = tipo === "investigar" ? (leerInvestigacion(planteamiento?.datos)?.pregunta ?? datos.preguntaOrientadora) : null;
+  const companeros = yo?.creadoPorId ? { creadoPorId: yo.creadoPorId, cursoId: yo.cursoId } : null;
+
+  // El reparto del dilema se ve después de elegir, para no dejarse llevar.
+  let reparto: { opcion: string; cuantos: number }[] | null = null;
+  if (tipo === "dilema" && dilema && previa && companeros) {
+    const delCurso = await prisma.respuestaActividad.findMany({ where: { sesionId, user: companeros }, select: { datos: true } });
+    reparto = repartoDeOpciones(
+      dilema.opciones,
+      delCurso.map((r) => leerDatosGuiada(r.datos).opcion).filter((o): o is string => Boolean(o))
+    );
+  }
+
+  let muro: { autor: string; texto: string; propio: boolean }[] | null = null;
+  if (tipo === "compromiso" && companeros) {
+    const delCurso = await prisma.respuestaActividad.findMany({
+      where: { sesionId, user: companeros },
+      orderBy: { actualizadoEn: "desc" },
+      include: { user: { select: { nombre: true } } },
+    });
+    muro = delCurso
+      .filter((r) => leerDatosGuiada(r.datos).compartido)
+      .map((r) => ({ autor: r.user.nombre, texto: r.texto, propio: r.userId === userId }));
+  }
+
+  return (
+    <ActividadGuiada
+      sesion={datos}
+      tipo={tipo}
+      previa={previa ? { texto: previa.texto, datos: leerDatosGuiada(previa.datos) } : null}
+      dilema={dilema}
+      pregunta={pregunta}
+      reparto={reparto}
+      muro={muro}
+    />
+  );
+}
+
 /** La pantalla de la actividad que el administrador asignó a la sesión. */
 async function pantallaDeActividad(pantalla: string, sesionId: string, datos: DatosSesion, userId: string) {
+  if (esGuiada(pantalla)) return actividadGuiada(pantalla, sesionId, datos, userId);
+
   switch (pantalla) {
     case "cartografia": {
       const yo = await prisma.user.findUnique({

@@ -142,6 +142,21 @@ describe("sugerirActividad", () => {
     ).toBe("despensa");
   });
 
+  it("reconoce los formatos que la guía repite en los ejes", () => {
+    expect(sugerirActividad("Me ubico: descubro que algunos de mis problemas son también los de otros")).toBe("meubico");
+    expect(sugerirActividad("Dilemas y consecuencias frente a las opciones por las que personas y grupos han optado")).toBe("dilema");
+    expect(sugerirActividad("Los testimonios de los salaeros y las salaeras", ["¿Cómo fue el abandono en El Salado?"])).toBe("testimonios");
+    expect(sugerirActividad("Y tú ¿a qué te comprometes? Las solidaridades con otros")).toBe("compromiso");
+    expect(sugerirActividad("Resistencias de la sociedad civil", ["A investigar: acciones contestatarias transformadoras"])).toBe("investigar");
+  });
+
+  it("el título de la sesión manda sobre un apartado que se repite", () => {
+    // 1.4 trae un dilema en 1.4.2, pero la sesión es el ejercicio de repartición.
+    expect(sugerirActividad("Ejercicios de repartición de tierras", ["Dilema: los significados de la tierra"])).toBe("simulador");
+    // 1.1 es «Me ubico», pero su actividad es la cartografía.
+    expect(sugerirActividad("Me ubico: espacios y lugares cotidianos significativos")).toBe("cartografia");
+  });
+
   it("otra copla, de otro módulo, se responde por escrito", () => {
     expect(sugerirActividad("La tradición oral wayuu", ["Coplas de la Alta Guajira"])).toBe("copla");
   });
@@ -156,8 +171,8 @@ describe("sugerirActividad", () => {
     expect(sugerirActividad("Las iniciativas de memoria de El Salado")).toBe("jardin");
   });
 
-  it("reconoce el compromiso personal como el diario", () => {
-    expect(sugerirActividad("Y tú, ¿a qué te comprometes? Las solidaridades con otros")).toBe("diario");
+  it("el diario sigue siendo el diario", () => {
+    expect(sugerirActividad("Mi diario de la memoria")).toBe("diario");
   });
 
   it("usa el archivo con anotaciones cuando no hay una actividad clara", () => {

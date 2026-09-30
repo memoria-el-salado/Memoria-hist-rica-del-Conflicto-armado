@@ -98,6 +98,25 @@ model User {
 
   /// Los cursos que dicta, si es docente.
   cursosDictados Curso[] @relation("CursosDelDocente")
+
+  /// Cómo planteó, como docente, la actividad de cada sesión.
+  planteamientos PlanteamientoSesion[]
+}
+
+/// Cómo plantea un docente a sus estudiantes la actividad de una sesión: las
+/// opciones de un dilema, la pregunta de una investigación. Las sesiones son
+/// comunes a todos; el planteamiento es de cada docente.
+model PlanteamientoSesion {
+  id            String   @id @default(cuid())
+  datos         Json
+  actualizadoEn DateTime @updatedAt
+
+  sesionId  String
+  sesion    Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+  docenteId String
+  docente   User   @relation(fields: [docenteId], references: [id], onDelete: Cascade)
+
+  @@unique([sesionId, docenteId])
 }
 
 /// Un curso de un docente, con su año lectivo. Organiza a sus estudiantes: el
@@ -216,6 +235,9 @@ model Sesion {
 
   /// Solicitudes de acompañamiento hechas desde esta sesión.
   solicitudes SolicitudAcompanamiento[]
+
+  /// Cómo la plantea cada docente, si su actividad lo pide.
+  planteamientos PlanteamientoSesion[]
 
   @@unique([ejeId, codigo])
 }

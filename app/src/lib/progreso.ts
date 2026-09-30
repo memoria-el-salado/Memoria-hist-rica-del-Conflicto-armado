@@ -18,7 +18,19 @@
 import { coplaCompleta } from "./copla";
 
 /** Actividades que puede llevar una sesión, y qué cuenta como haberla hecho. */
-export type Actividad = "zona" | "copla" | "despensa" | "cartografia" | "simulador" | "jardin" | "diario";
+export type Actividad =
+  | "zona"
+  | "copla"
+  | "despensa"
+  | "cartografia"
+  | "simulador"
+  | "jardin"
+  | "diario"
+  | "meubico"
+  | "dilema"
+  | "investigar"
+  | "testimonios"
+  | "compromiso";
 
 /** Lo que el estudiante produjo dentro de una sesión. */
 export type TrabajoEnSesion = {
@@ -32,6 +44,10 @@ export type TrabajoEnSesion = {
   simulacionValidada: boolean;
   /** Productos que ubicó en el mapa de la copla. */
   ubicaciones: number;
+  /** En un dilema, si eligió una de las opciones. */
+  opcionElegida: boolean;
+  /** En una investigación, cuántas fuentes anotó. */
+  fuentes: number;
 };
 
 export const TRABAJO_VACIO: TrabajoEnSesion = {
@@ -42,6 +58,8 @@ export const TRABAJO_VACIO: TrabajoEnSesion = {
   respondio: false,
   simulacionValidada: false,
   ubicaciones: 0,
+  opcionElegida: false,
+  fuentes: 0,
 };
 
 /**
@@ -63,6 +81,15 @@ export function sesionCompletada(actividad: string, trabajo: TrabajoEnSesion): b
       return trabajo.flores > 0;
     case "diario":
       return trabajo.entradasDiario > 0;
+    case "meubico":
+    case "testimonios":
+    case "compromiso":
+      return trabajo.respondio;
+    case "dilema":
+      // Elegir y justificar: la sola justificación no basta.
+      return trabajo.respondio && trabajo.opcionElegida;
+    case "investigar":
+      return trabajo.respondio && trabajo.fuentes > 0;
     default:
       // "zona" y cualquier actividad futura se dan por hechas con una anotación.
       return trabajo.anotaciones > 0;

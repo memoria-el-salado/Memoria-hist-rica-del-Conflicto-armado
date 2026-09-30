@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { ACTIVIDADES, sugerirActividad } from "@/lib/importador-pdf";
 
 const casoSchema = z.object({
   nombre: z.string().trim().min(1, "Indica el corregimiento o municipio."),
@@ -103,4 +104,63 @@ export async function eliminarCaso(casoId: string) {
   return {
     ok: `Módulo "${caso.nombre}" eliminado, con sus ${caso.ejes.length} ejes y ${sesiones} sesiones.`,
   };
+}
+
+const PANTALLAS = new Set<string>(ACTIVIDADES.map((a) => a.valor));
+
+/**
+ * Cambia la actividad de una sesión ya importada, sin volver a importar el
+ * módulo (lo que borraría el trabajo de los estudiantes). Lo que ya hicieron
+ * se conserva; el avance pasa a medirse con el criterio de la nueva actividad.
+ *
+ * Los testimonios llevan siempre alerta de cuidado: la guía pide preparar al
+ * grupo antes de escucharlos.
+ */
+export async function cambiarActividad(sesionId: string, pantalla: string) {
+  const sesion = await auth();
+  if (!sesion?.user || sesion.user.rol !== "ADMIN") return { error: "No autorizado." };
+  if (!PANTALLAS.has(pantalla)) return { error: "Actividad no válida." };
+
+  const actual = await prisma.sesion.findUnique({ where: { id: sesionId }, select: { codigo: true, eje: { select: { casoId: true } } } });
+  if (!actual) return { error: "La sesión no existe." };
+
+  await prisma.sesion.update({
+    where: { id: sesionId },
+    data: { pantalla, ...(pantalla === "testimonios" ? { alertaCuidado: true } : {}) },
+  });
+
+  revalidatePath(`/admin/casos/${actual.eje.casoId}`);
+  revalidatePath(`/estudiante/sesion/${sesionId}`);
+  revalidatePath("/estudiante/mapa");
+  revalidatePath("/docente/panel");
+  const etiqueta = ACTIVIDADES.find((a) => a.valor === pantalla)!.etiqueta;
+  return { ok: `La sesión ${actual.codigo} ahora es «${etiqueta}».` };
+}
+
+/** Aplica a todas las sesiones del módulo la actividad que hoy sugiere el importador. */
+export async function aplicarSugeridas(casoId: string) {
+  const sesion = await auth();
+  if (!sesion?.user || sesion.user.rol !== "ADMIN") return { error: "No autorizado." };
+
+  const sesiones = await prisma.sesion.findMany({
+    where: { eje: { casoId } },
+    select: { id: true, titulo: true, pantalla: true, subsecciones: { select: { titulo: true } } },
+  });
+  const cambios = sesiones
+    .map((s) => ({ s, sugerida: sugerirActividad(s.titulo, s.subsecciones.map((x) => x.titulo)) }))
+    .filter(({ s, sugerida }) => s.pantalla !== sugerida);
+
+  await prisma.$transaction(
+    cambios.map(({ s, sugerida }) =>
+      prisma.sesion.update({
+        where: { id: s.id },
+        data: { pantalla: sugerida, ...(sugerida === "testimonios" ? { alertaCuidado: true } : {}) },
+      })
+    )
+  );
+
+  revalidatePath(`/admin/casos/${casoId}`);
+  revalidatePath("/estudiante/mapa");
+  revalidatePath("/docente/panel");
+  return { ok: cambios.length === 1 ? "1 sesión cambió de actividad." : `${cambios.length} sesiones cambiaron de actividad.` };
 }

@@ -38,7 +38,7 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
   const elegido = cursoElegido((await searchParams).curso, cursos);
   const curso = cursos.find((c) => c.id === elegido);
 
-  const [sesiones, ejes, estudiantes, solicitudes] = await Promise.all([
+  const [sesiones, ejes, estudiantes, solicitudes, planteamientos] = await Promise.all([
     prisma.sesion.findMany({
       where: { eje: { caso: { activo: true } } },
       orderBy: [{ eje: { orden: "asc" } }, { orden: "asc" }],
@@ -55,7 +55,9 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
       select: { id: true, subpoblacion: true },
     }),
     solicitudesDe(docenteId),
+    prisma.planteamientoSesion.findMany({ where: { docenteId }, select: { sesionId: true } }),
   ]);
+  const planteadas = new Set(planteamientos.map((p) => p.sesionId));
 
   // El avance sale del trabajo que los estudiantes han producido, no de un
   // número guardado que habría que mantener al día.
@@ -115,6 +117,8 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
         publicada: s.publicada,
         alertaCuidado: s.alertaCuidado,
         textoAlerta: s.textoAlerta,
+        pantalla: s.pantalla,
+        planteada: planteadas.has(s.id),
       }))}
       solicitudes={ordenarSolicitudes(solicitudes).map((s) => ({
         id: s.id,

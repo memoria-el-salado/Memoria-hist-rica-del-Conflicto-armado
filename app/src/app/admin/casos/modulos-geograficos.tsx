@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useRef, useState, useTransition } from "react";
 import { crearCaso, eliminarCaso } from "./actions";
 
@@ -107,10 +108,16 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 <span>
                   Versión módulo: <strong className="text-tinta">{c.version}</strong>
                 </span>
+                <Link
+                  href={`/admin/casos/${c.id}`}
+                  className="ml-auto text-[11.5px] font-bold text-secundario-fuerte no-underline hover:underline"
+                >
+                  Actividades de sus sesiones →
+                </Link>
                 <button
                   onClick={() => borrar(c.id, c.nombre, c.sesiones)}
                   disabled={borrando}
-                  className="ml-auto cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
+                  className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
                 >
                   {borrando ? "Eliminando..." : "Eliminar módulo"}
                 </button>

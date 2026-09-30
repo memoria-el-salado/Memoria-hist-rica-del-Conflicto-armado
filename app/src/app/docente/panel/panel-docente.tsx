@@ -1,6 +1,9 @@
 "use client";
 
 import { useTransition } from "react";
+import Link from "next/link";
+import { esGuiada, SE_PLANTEA } from "@/lib/actividades";
+import { ACTIVIDADES } from "@/lib/importador-pdf";
 import { alternarPublicacion } from "./actions";
 import { RepartoPesos, type EjePeso } from "./reparto-pesos";
 import { AlertasCuidado } from "./alertas-cuidado";
@@ -14,6 +17,9 @@ type Sesion = {
   publicada: boolean;
   alertaCuidado: boolean;
   textoAlerta: string | null;
+  pantalla: string;
+  /** Si el docente ya planteó el dilema o la pregunta de esta sesión. */
+  planteada: boolean;
 };
 
 type Props = {
@@ -110,8 +116,22 @@ export function PanelDocente({
                     <div className="text-[13.5px] font-bold">{s.titulo}</div>
                     <div className="text-[10.5px] tracking-[.06em] text-suave">
                       {s.eje}
+                      {" · "}
+                      {(ACTIVIDADES.find((a) => a.valor === s.pantalla)?.etiqueta ?? s.pantalla).toUpperCase()}
                       {s.alertaCuidado && " · CON ALERTA DE CUIDADO"}
                     </div>
+                    {esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && (
+                      <Link
+                        href={`/docente/sesiones/${s.id}`}
+                        className={`mt-1 inline-block text-[11.5px] font-bold no-underline hover:underline ${s.planteada ? "text-secundario-fuerte" : "text-primario-fuerte"}`}
+                      >
+                        {s.planteada
+                          ? "Ver el planteamiento"
+                          : s.pantalla === "dilema"
+                            ? "Plantear el dilema a tus estudiantes →"
+                            : "Plantear la pregunta de investigación →"}
+                      </Link>
+                    )}
                   </div>
                   <span className="text-[10.5px] font-bold text-suave">
                     {s.publicada ? "PUBLICADA" : "BORRADOR"}
