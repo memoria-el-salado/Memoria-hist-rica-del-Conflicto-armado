@@ -13,6 +13,7 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "db:sincronizar": "prisma db push",
+    "db:respaldar": "node scripts/respaldar-bd.mjs",
     "modulos": "tsx scripts/modulos.ts",
     "pdf": "tsx scripts/ver-pdf.ts",
     "humo:sesiones": "node scripts/comprobar-sesion.mjs",

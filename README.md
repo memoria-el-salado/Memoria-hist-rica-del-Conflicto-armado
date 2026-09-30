@@ -227,6 +227,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm test` | Pruebas automatizadas de verificación |
 | `npm run lint` | Análisis estático del código |
 | `npm run db:sincronizar` | Crea o actualiza las tablas desde el esquema |
+| `npm run db:respaldar` | Copia de seguridad de la base en `../respaldos-bd/`, antes de cualquier cambio de esquema |
 | `npm run db:seed` | Recarga los datos iniciales |
 | `npm run db:studio` | Explorador visual de la base de datos |
 | `npm run modulos` | Resume los módulos y documentos cargados |
