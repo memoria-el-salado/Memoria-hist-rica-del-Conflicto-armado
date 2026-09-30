@@ -11,6 +11,8 @@ import { DiarioSesion } from "@/components/actividades/diario-sesion";
 import type { Asignacion } from "@/lib/simulador";
 import { MaterialSesion } from "@/components/recursos/material-sesion";
 import { vistaDeRecurso } from "@/lib/material";
+import { puedeVerRecurso } from "@/lib/recursos";
+import { estadoAccesibilidad } from "@/lib/transcripcion";
 
 /**
  * Una sesión, una actividad.
@@ -88,7 +90,14 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     }),
   ]);
 
-  const visibles = sesion.eje.caso.activo ? recursos : [];
+  // Solo el material accesible: un audio o un video sin su transcripción no se publica.
+  const visibles = recursos.filter((r) =>
+    puedeVerRecurso("ESTUDIANTE", {
+      casoActivo: sesion.eje.caso.activo,
+      sesionPublicada: true,
+      accesible: estadoAccesibilidad(r).visibleParaEstudiantes,
+    })
+  );
 
   return (
     <>

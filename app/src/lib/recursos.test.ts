@@ -122,17 +122,22 @@ describe("validarEnlace", () => {
 
 describe("puedeVerRecurso", () => {
   it("el docente y el administrador lo ven todo", () => {
-    expect(puedeVerRecurso("DOCENTE", { casoActivo: false, sesionPublicada: false })).toBe(true);
-    expect(puedeVerRecurso("ADMIN", { casoActivo: false, sesionPublicada: null })).toBe(true);
+    expect(puedeVerRecurso("DOCENTE", { casoActivo: false, sesionPublicada: false, accesible: true })).toBe(true);
+    expect(puedeVerRecurso("ADMIN", { casoActivo: false, sesionPublicada: null, accesible: true })).toBe(true);
   });
 
   it("el estudiante ve el material del módulo activo", () => {
-    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: null })).toBe(true);
-    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: true })).toBe(true);
+    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: null, accesible: true })).toBe(true);
+    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: true, accesible: true })).toBe(true);
+  });
+
+  it("ni un audio o video que todavía no es accesible, aunque sí lo vea el docente", () => {
+    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: true, accesible: false })).toBe(false);
+    expect(puedeVerRecurso("DOCENTE", { casoActivo: true, sesionPublicada: true, accesible: false })).toBe(true);
   });
 
   it("pero no el de una sesión sin publicar ni el de otro módulo", () => {
-    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: false })).toBe(false);
-    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: false, sesionPublicada: null })).toBe(false);
+    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: true, sesionPublicada: false, accesible: true })).toBe(false);
+    expect(puedeVerRecurso("ESTUDIANTE", { casoActivo: false, sesionPublicada: null, accesible: true })).toBe(false);
   });
 });

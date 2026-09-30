@@ -9,61 +9,13 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:recursos
  */
-import { writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { crc32, deflateSync } from "node:zlib";
 import { infoArchivo, listarRecursos } from "../../src/lib/almacen.ts";
-import { BASE, capturar, comprobar, crearCuenta, ejecutar, entrar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { archivosDePrueba, audioWav } from "./medios.mjs";
 
-// --- Archivos de prueba, generados aquí: nada se descarga -----------------
-
-/** Dos segundos de un tono de 440 Hz, en WAV. Lo bastante real para reproducirse. */
-function audioWav() {
-  const frecuencia = 8000, muestras = frecuencia * 2;
-  const datos = Buffer.alloc(muestras * 2);
-  for (let i = 0; i < muestras; i++) datos.writeInt16LE(Math.round(8000 * Math.sin((2 * Math.PI * 440 * i) / frecuencia)), i * 2);
-  const cabecera = Buffer.alloc(44);
-  cabecera.write("RIFF", 0); cabecera.writeUInt32LE(36 + datos.length, 4); cabecera.write("WAVE", 8);
-  cabecera.write("fmt ", 12); cabecera.writeUInt32LE(16, 16); cabecera.writeUInt16LE(1, 20); cabecera.writeUInt16LE(1, 22);
-  cabecera.writeUInt32LE(frecuencia, 24); cabecera.writeUInt32LE(frecuencia * 2, 28); cabecera.writeUInt16LE(2, 32);
-  cabecera.writeUInt16LE(16, 34); cabecera.write("data", 36); cabecera.writeUInt32LE(datos.length, 40);
-  return Buffer.concat([cabecera, datos]);
-}
-
-/** Una imagen PNG de 16×16 en el terracota de la plataforma. */
-function imagenPng() {
-  const trozo = (tipo, datos) => {
-    const t = Buffer.from(tipo);
-    const largo = Buffer.alloc(4); largo.writeUInt32BE(datos.length);
-    const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(Buffer.concat([t, datos])));
-    return Buffer.concat([largo, t, datos, crc]);
-  };
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(16, 0); ihdr.writeUInt32BE(16, 4); ihdr[8] = 8; ihdr[9] = 2;
-  const fila = Buffer.concat([Buffer.from([0]), Buffer.from(Array(16).fill([0xd9, 0x5d, 0x39]).flat())]);
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    trozo("IHDR", ihdr),
-    trozo("IDAT", deflateSync(Buffer.concat(Array(16).fill(fila)))),
-    trozo("IEND", Buffer.alloc(0)),
-  ]);
-}
-
-const AUDIO = join(tmpdir(), "testimonio-prueba.wav");
-const IMAGEN = join(tmpdir(), "foto-prueba.png");
-writeFileSync(AUDIO, audioWav());
-writeFileSync(IMAGEN, imagenPng());
+const { audio: AUDIO, imagen: IMAGEN } = archivosDePrueba();
 
 // --- Ayudas ----------------------------------------------------------------
-
-async function como(navegador, usuario, rol) {
-  const contexto = await navegador.createBrowserContext();
-  const pagina = await contexto.newPage();
-  pagina.on("dialog", (d) => d.accept());
-  await entrar(pagina, usuario, rol);
-  return pagina;
-}
 
 async function esperarRecursos(autorId, cuantos) {
   for (let i = 0; i < 120; i++) {
@@ -187,10 +139,31 @@ await ejecutar("1.2 · Recursos multimedia de verdad", async ({ abrir }) => {
     oculto = await prisma.recurso.findFirst({ where: { autorId: docente.id, sesionId: sinPublicar.id } });
   }
   await doc.goto(`${BASE}/docente/contenidos`, { waitUntil: "networkidle0" });
+
+  // --- Sin transcripción, el audio no se publica (CU10) ---------------------
+  const est = await como(navegador, "prueba.est", "ESTUDIANTE");
+  await est.goto(`${BASE}/estudiante/sesion/${publicada.id}`, { waitUntil: "networkidle0" });
+  comprobar(
+    "un audio sin transcripción no le llega al estudiante",
+    !(await est.evaluate(() => document.body.innerText.includes("Testimonio de retorno (prueba)")))
+  );
+
+  // El audio y el video enlazado necesitan su transcripción para publicarse (1.3).
+  const video = await prisma.recurso.findFirst({ where: { autorId: docente.id, tipo: "VIDEO" } });
+  for (const [recurso, titulo, texto] of [
+    [audio, "Testimonio de retorno (prueba)", "0:00 Nosotros vivíamos de la tierra."],
+    [video, "Documental (prueba)", "Transcripción del documental. Prueba automática."],
+  ]) {
+    await doc.goto(`${BASE}/docente/contenidos`, { waitUntil: "networkidle0" });
+    const tarjeta = `//article[.//div[contains(., '${titulo}')]]`;
+    await doc.click(`::-p-xpath(${tarjeta}//button[normalize-space()='Transcripción'])`);
+    await doc.type(`#transcripcion-${recurso.id}`, texto);
+    await doc.click(`::-p-xpath(${tarjeta}//button[normalize-space()='Guardar transcripción'])`);
+    await esperarTexto(doc, "Transcripción guardada.");
+  }
   await capturar(doc, "recursos-docente");
 
   // --- El estudiante, dentro de la sesión -----------------------------------
-  const est = await como(navegador, "prueba.est", "ESTUDIANTE");
   await est.goto(`${BASE}/estudiante/sesion/${publicada.id}`, { waitUntil: "networkidle0" });
   const texto = await est.evaluate(() => document.body.innerText);
   comprobar("ve el material de la sesión", texto.includes("MATERIAL DE LA SESIÓN") && texto.includes("Testimonio de retorno (prueba)"));

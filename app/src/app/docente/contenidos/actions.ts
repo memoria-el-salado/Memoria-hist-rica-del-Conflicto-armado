@@ -18,6 +18,7 @@ import {
   type TipoRecurso,
 } from "@/lib/recursos";
 import { esIdentificadorDeSubida } from "@/lib/subida-documento";
+import { estadoAccesibilidad, leerTranscripcion, requisitoDe, serializar } from "@/lib/transcripcion";
 
 const TIPOS = ["VIDEO", "AUDIO", "IMAGEN", "DOCUMENTO", "SIMULADOR"] as const;
 
@@ -151,22 +152,25 @@ export async function cargarRecurso(entrada: unknown) {
     data: { id, ...datos, sesionId: sesionId || null, ...archivo, enlace, autorId: quien.id },
   });
 
-  // Todo recurso entra a la cola de auditoría de accesibilidad (CU10). Un audio
-  // o un video necesitan transcripción; un documento o una imagen se describen
-  // con su contexto, que es obligatorio.
-  const necesitaTranscripcion = datos.tipo === "AUDIO" || datos.tipo === "VIDEO";
+  // Todo recurso entra a la auditoría de accesibilidad (CU10), con su estado
+  // calculado: un audio o un video recién subidos todavía no tienen transcripción.
+  const estado = estadoAccesibilidad(recurso);
   await prisma.auditoriaAccesibilidad.create({
     data: {
       recursoId: recurso.id,
       descripcion: `${definicionDe(datos.tipo).etiqueta} · nuevo`,
-      transcripcion: !necesitaTranscripcion,
+      transcripcion: estado.alternativa,
       contraste: true,
       responsivo: true,
     },
   });
 
   refrescar();
-  return { ok: "Recurso cargado al módulo." };
+  return {
+    ok: estado.alternativa
+      ? "Recurso cargado al módulo."
+      : "Recurso cargado. Añade su transcripción: sin ella los estudiantes no lo ven.",
+  };
 }
 
 /** Solo quien cargó el recurso lo cambia o lo retira. */
@@ -184,6 +188,43 @@ export async function alternarAlertaRecurso(recursoId: string) {
   await prisma.recurso.update({ where: { id: recursoId }, data: { alerta: !recurso.alerta } });
   refrescar();
   return { ok: true };
+}
+
+/**
+ * Guarda la transcripción del audio o del video. Un video subido necesita
+ * tiempos, porque se muestra como subtítulos; al audio y al video enlazado les
+ * basta el texto.
+ */
+export async function guardarTranscripcion(recursoId: string, entrada: string) {
+  const recurso = await recursoPropio(recursoId);
+  if (!recurso) return { error: "Solo quien cargó el recurso puede cambiarlo." };
+
+  const requisito = requisitoDe(recurso.tipo, Boolean(recurso.enlace));
+  if (requisito === "ninguno") return { error: "Este tipo de recurso no lleva transcripción." };
+
+  const { transcripcion, error } = leerTranscripcion(String(entrada ?? ""));
+  if (error) return { error };
+  if (requisito === "sincronizada" && !transcripcion!.sincronizada) {
+    return {
+      error: "Un video subido se muestra con subtítulos: escribe cada línea con su minuto, como 0:07 El tabaco se secaba…",
+    };
+  }
+
+  const actualizado = await prisma.recurso.update({
+    where: { id: recursoId },
+    data: { transcripcion: serializar(transcripcion!) },
+  });
+  await prisma.auditoriaAccesibilidad.updateMany({
+    where: { recursoId },
+    data: { transcripcion: estadoAccesibilidad(actualizado).alternativa, revisadaEn: new Date() },
+  });
+
+  refrescar();
+  return {
+    ok: transcripcion!.sincronizada
+      ? `Transcripción guardada con ${transcripcion!.cues.length} líneas sincronizadas. Los estudiantes ya lo ven.`
+      : "Transcripción guardada. Los estudiantes ya lo ven.",
+  };
 }
 
 /** Retira el recurso y borra su archivo del depósito. */

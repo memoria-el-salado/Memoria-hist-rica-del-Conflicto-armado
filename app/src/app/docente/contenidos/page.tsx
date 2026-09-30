@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { quienSoy } from "@/lib/debate";
 import { vistaDeRecurso } from "@/lib/material";
 import { prisma } from "@/lib/prisma";
+import { requisitoDe } from "@/lib/transcripcion";
 import { GestionContenido } from "./gestion-contenido";
 
 export default async function ContenidosPage() {
@@ -48,6 +49,8 @@ export default async function ContenidosPage() {
         alerta: r.alerta,
         propio: r.autorId === quien.id,
         vista: vistaDeRecurso(r),
+        requisito: requisitoDe(r.tipo, Boolean(r.enlace)),
+        transcripcionTexto: r.autorId === quien.id ? r.transcripcion : null,
       }))}
       ejes={ejes.map((e) => ({
         id: e.id,

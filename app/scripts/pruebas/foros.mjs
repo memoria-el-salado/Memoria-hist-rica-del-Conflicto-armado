@@ -9,21 +9,12 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:foros
  */
-import { BASE, capturar, comprobar, crearCuenta, ejecutar, entrar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
 
 const PREGUNTA = "¿La Ley 135 de 1961 resolvió el problema de la tierra en los Montes de María? (prueba)";
 const ARGUMENTO_A =
   "La Ley 135 creó el INCORA para repartir las tierras incultas entre quienes las trabajaban sin poseerlas.";
 const RESPUESTA_B = "Pero en El Salado el reparto llegó tarde y la concentración siguió.";
-
-/** Abre una sesión de navegador aislada, con sus propias cookies. */
-async function como(navegador, usuario, rol) {
-  const contexto = await navegador.createBrowserContext();
-  const pagina = await contexto.newPage();
-  pagina.on("dialog", (d) => d.accept());
-  await entrar(pagina, usuario, rol);
-  return pagina;
-}
 
 async function estado(pagina, url) {
   const res = await pagina.goto(`${BASE}${url}`, { waitUntil: "networkidle0" });

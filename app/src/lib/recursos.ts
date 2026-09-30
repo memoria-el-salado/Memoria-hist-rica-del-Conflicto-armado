@@ -183,13 +183,14 @@ export function validarEnlace(enlace: string): string | null {
 
 /**
  * El docente y el administrador ven todo el material. El estudiante, el del
- * módulo activo, y si el recurso es de una sesión concreta, solo cuando esa
- * sesión está publicada: antes no sabría de dónde sale.
+ * módulo activo; si el recurso es de una sesión concreta, solo cuando esa
+ * sesión está publicada, porque antes no sabría de dónde sale; y solo si es
+ * accesible: un audio o un video sin su transcripción no se publica (CU10).
  */
 export function puedeVerRecurso(
   rol: "ESTUDIANTE" | "DOCENTE" | "ADMIN",
-  recurso: { casoActivo: boolean; sesionPublicada: boolean | null }
+  recurso: { casoActivo: boolean; sesionPublicada: boolean | null; accesible: boolean }
 ): boolean {
   if (rol !== "ESTUDIANTE") return true;
-  return recurso.casoActivo && recurso.sesionPublicada !== false;
+  return recurso.casoActivo && recurso.sesionPublicada !== false && recurso.accesible;
 }

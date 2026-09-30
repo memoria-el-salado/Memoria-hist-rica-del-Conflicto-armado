@@ -128,6 +128,18 @@ export async function entrar(pagina, usuario, rol) {
 }
 
 /**
+ * Abre una sesión de navegador aislada, con sus propias cookies, y entra. Los
+ * diálogos de confirmación se aceptan, como haría quien pulsa «Aceptar».
+ */
+export async function como(navegador, usuario, rol) {
+  const contexto = await navegador.createBrowserContext();
+  const pagina = await contexto.newPage();
+  pagina.on("dialog", (d) => d.accept());
+  await entrar(pagina, usuario, rol);
+  return pagina;
+}
+
+/**
  * Guarda una captura si se pidió con CAPTURAS=<carpeta>, para revisar a ojo
  * cómo queda la pantalla. Sin la variable no hace nada.
  */

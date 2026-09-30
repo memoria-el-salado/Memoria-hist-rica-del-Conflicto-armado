@@ -243,6 +243,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:subida` | Sube la guía completa del CNMH desde el navegador y comprueba que va directa al depósito |
 | `npm run humo:foros` | Un docente y tres estudiantes debaten; comprueba roles, fuentes, mediación y que otro curso no lo ve |
 | `npm run humo:recursos` | Sube audio, imagen y video; el estudiante los ve en la sesión y el audio se reproduce desde el depósito privado |
+| `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
 Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito.
@@ -316,7 +317,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |
 | CU09 | Creación de módulos desde documentos PDF | `/admin/importar` |
-| CU10 | Validación de accesibilidad universal | `/admin/accesibilidad` |
+| CU10 | Transcripciones y subtítulos obligatorios, auditoría calculada a partir de los datos | `/admin/accesibilidad` |
 
 **Las dos guías del CNMH.** Cada caso se publica en dos documentos: la guía del estudiante, que es
 la que se importa para construir el módulo, y la guía para maestros, que trae las orientaciones y lo
@@ -335,8 +336,8 @@ asociado a la sesión en la que se produjo.
 (latitud y longitud), no posiciones aproximadas sobre una imagen. Al importar un módulo se pueden
 indicar sus coordenadas para ubicarlo en el mapa de Colombia.
 
-**Accesibilidad**: control de tamaño de texto (A / A+ / A++), transcripción sincronizada en los recursos
-de audio (WCAG 1.2.2), etiquetas y roles ARIA en formularios y controles, foco de teclado visible, y
+**Accesibilidad**: control de tamaño de texto (A / A+ / A++), transcripción obligatoria de los audios
+(WCAG 1.2.1) y subtítulos sincronizados de los videos (WCAG 1.2.2), etiquetas y roles ARIA en formularios y controles, foco de teclado visible, y
 diseño responsivo que conmuta a navegación inferior por debajo de 960 px.
 
 ---

@@ -224,6 +224,10 @@ model Recurso {
   /// Video alojado fuera, p. ej. en YouTube: los largos no caben en el depósito.
   enlace  String? @db.Text
 
+  /// Transcripción del audio o del video: WebVTT si trae tiempos, texto si no.
+  /// Sin la que le corresponde, el estudiante no ve el recurso (CU10).
+  transcripcion String? @db.Text
+
   autorId String?
   autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
 

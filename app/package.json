@@ -24,6 +24,7 @@
     "humo:subida": "node scripts/pruebas/subida-directa.mjs",
     "humo:foros": "node scripts/pruebas/foros.mjs",
     "humo:recursos": "node scripts/pruebas/recursos.mjs",
+    "humo:transcripciones": "node scripts/pruebas/transcripciones.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",
     "manual:generar": "python scripts/generar-manual.py"

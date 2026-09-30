@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { almacenEnUso, rutaEnDisco, urlDeLectura } from "@/lib/almacen";
 import { prisma } from "@/lib/prisma";
 import { puedeVerRecurso } from "@/lib/recursos";
+import { estadoAccesibilidad } from "@/lib/transcripcion";
 
 /** Lo que dura la dirección firmada: da para ver un video largo con pausas. */
 const VIGENCIA = 3 * 60 * 60;
@@ -30,6 +31,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const visible = puedeVerRecurso(sesion.user.rol, {
     casoActivo: recurso.eje.caso.activo,
     sesionPublicada: recurso.sesion?.publicada ?? null,
+    accesible: estadoAccesibilidad(recurso).visibleParaEstudiantes,
   });
   if (!visible) return NextResponse.json({ error: "Este recurso no está disponible." }, { status: 403 });
 

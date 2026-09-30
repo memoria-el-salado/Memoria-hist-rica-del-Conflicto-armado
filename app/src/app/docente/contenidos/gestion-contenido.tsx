@@ -5,11 +5,13 @@ import { ReproductorRecurso } from "@/components/recursos/reproductor-recurso";
 import type { RecursoVista } from "@/lib/material";
 import { definicionDe, MAXIMO_RECURSO, TIPOS_RECURSO, type TipoRecurso } from "@/lib/recursos";
 import { subirConProgreso } from "@/lib/subir-con-progreso";
+import type { Requisito } from "@/lib/transcripcion";
 import {
   alternarAlertaRecurso,
   cargarRecurso,
   descartarSubida,
   eliminarRecurso,
+  guardarTranscripcion,
   prepararSubidaRecurso,
   subirRecursoLocal,
 } from "./actions";
@@ -25,6 +27,9 @@ type Recurso = {
   /** Solo quien lo cargó puede cambiarlo o retirarlo. */
   propio: boolean;
   vista: RecursoVista;
+  requisito: Requisito;
+  /** Lo guardado, para editarlo. Solo llega en los recursos propios. */
+  transcripcionTexto: string | null;
 };
 
 type Documento = {
@@ -111,8 +116,88 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
   );
 }
 
+function EstadoAccesible({ r }: { r: Recurso }) {
+  if (r.requisito === "ninguno") return null;
+  if (r.vista.pendiente) {
+    return (
+      <div className="mt-2 rounded-md border border-primario-borde bg-primario-tinte px-2.5 py-1.5 text-[11px] text-primario-fuerte">
+        <span className="font-extrabold tracking-[.05em]">NO LO VEN LOS ESTUDIANTES · </span>
+        {r.vista.pendiente}
+      </div>
+    );
+  }
+  return (
+    <div className="mt-2 text-[10px] font-extrabold tracking-[.06em] text-secundario-fuerte">
+      {r.vista.transcripcion?.sincronizada ? "TRANSCRIPCIÓN SINCRONIZADA" : "TRANSCRIPCIÓN EN TEXTO"}
+    </div>
+  );
+}
+
+function EditorTranscripcion({ r, alTerminar }: { r: Recurso; alTerminar: () => void }) {
+  const [texto, setTexto] = useState(r.transcripcionTexto ?? "");
+  const [estado, setEstado] = useState<{ ok?: string; error?: string } | null>(null);
+  const [pendiente, iniciar] = useTransition();
+  const id = `transcripcion-${r.id}`;
+
+  return (
+    <div className="mt-3 rounded-lg border border-borde bg-superficie-suave p-3">
+      <label htmlFor={id} className="text-[10px] font-bold tracking-[.12em] text-tenue">
+        TRANSCRIPCIÓN
+      </label>
+      <p className="mt-1 text-[11px] leading-relaxed text-apagado">
+        {r.requisito === "sincronizada"
+          ? "Se mostrará como subtítulos: escribe cada línea con el minuto en que se dice."
+          : "Basta el texto. Si pones el minuto al principio de cada línea, el estudiante podrá seguirla mientras escucha."}
+        {" "}También puedes cargar un archivo WebVTT (.vtt) o de texto.
+      </p>
+      <textarea
+        id={id}
+        value={texto}
+        onChange={(e) => setTexto(e.target.value)}
+        rows={6}
+        placeholder={"0:00 Nosotros vivíamos de la tierra.\n0:07 El tabaco se secaba en los caneyes."}
+        className="mt-2 w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 font-mono text-[12px]"
+      />
+      <div className="mt-2 flex flex-wrap items-center gap-3">
+        <label className="cursor-pointer text-[11.5px] font-bold text-primario">
+          Cargar archivo…
+          <input
+            type="file"
+            accept=".vtt,.txt,text/vtt,text/plain"
+            className="sr-only"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              if (f) setTexto(await f.text());
+            }}
+          />
+        </label>
+        <button
+          type="button"
+          disabled={pendiente}
+          onClick={() =>
+            iniciar(async () => {
+              const res = await guardarTranscripcion(r.id, texto);
+              setEstado(res);
+              if (res.ok) alTerminar();
+            })
+          }
+          className="cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white disabled:opacity-60"
+        >
+          {pendiente ? "Guardando..." : "Guardar transcripción"}
+        </button>
+      </div>
+      {estado?.error && (
+        <div role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+          {estado.error}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
   const [abierto, setAbierto] = useState<string | null>(null);
+  const [editando, setEditando] = useState<string | null>(null);
   const [aviso, setAviso] = useState("");
   const [pendiente, iniciar] = useTransition();
 
@@ -146,6 +231,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
             </span>
           </div>
           <p className="mt-1.5 text-[12px] leading-relaxed text-apagado">{r.contexto}</p>
+          <EstadoAccesible r={r} />
 
           <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11.5px] font-bold">
             <button
@@ -155,6 +241,15 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
             >
               {abierto === r.id ? "Ocultar" : "Ver"}
             </button>
+            {r.propio && r.requisito !== "ninguno" && (
+              <button
+                onClick={() => setEditando((a) => (a === r.id ? null : r.id))}
+                aria-expanded={editando === r.id}
+                className="cursor-pointer text-primario hover:text-primario-fuerte"
+              >
+                Transcripción
+              </button>
+            )}
             {r.propio ? (
               <>
                 <button
@@ -189,6 +284,16 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
               r.alerta && <span className="text-[10px] font-extrabold tracking-[.06em] text-primario-fuerte">ALERTA ACTIVA</span>
             )}
           </div>
+
+          {editando === r.id && (
+            <EditorTranscripcion
+              r={r}
+              alTerminar={() => {
+                setEditando(null);
+                setAviso("Transcripción guardada.");
+              }}
+            />
+          )}
 
           {abierto === r.id && (
             <div className="mt-3">
