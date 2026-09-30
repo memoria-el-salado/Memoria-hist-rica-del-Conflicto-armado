@@ -25,9 +25,11 @@ describe("separación de funcionalidades por rol", () => {
 
   it("el estudiante navega por el mapa, no por una lista fija de actividades", () => {
     // Las actividades dependen de la sesión que se abra, así que no pueden ser
-    // destinos fijos del menú: solo el mapa y el diario personal lo son.
+    // destinos fijos del menú. Sí lo son lo que existe aunque cambie el módulo
+    // activo: el mapa, los debates que abre el docente y el diario personal.
     expect(NAV_POR_ROL.ESTUDIANTE.map((i) => i.href)).toEqual([
       "/estudiante/mapa",
+      "/estudiante/foros",
       "/estudiante/diario",
     ]);
   });

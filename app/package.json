@@ -22,6 +22,7 @@
     "humo:documentos": "node scripts/comprobar-acceso-pdf.mjs",
     "humo:almacen": "tsx scripts/comprobar-almacen.ts",
     "humo:subida": "node scripts/pruebas/subida-directa.mjs",
+    "humo:foros": "node scripts/pruebas/foros.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",
     "manual:generar": "python scripts/generar-manual.py"

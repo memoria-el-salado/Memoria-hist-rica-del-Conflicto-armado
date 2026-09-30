@@ -123,6 +123,15 @@ export async function entrar(pagina, usuario, rol) {
   ]);
 }
 
+/**
+ * Guarda una captura si se pidió con CAPTURAS=<carpeta>, para revisar a ojo
+ * cómo queda la pantalla. Sin la variable no hace nada.
+ */
+export async function capturar(pagina, nombre) {
+  if (!process.env.CAPTURAS) return;
+  await pagina.screenshot({ path: `${process.env.CAPTURAS}/${nombre}.png`, fullPage: true });
+}
+
 /** Espera a que aparezca un texto en la página. */
 export function esperarTexto(pagina, texto, timeout = 30_000) {
   return pagina.waitForFunction((t) => document.body.innerText.includes(t), { timeout }, texto);

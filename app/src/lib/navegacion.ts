@@ -9,10 +9,11 @@ export type ItemNav = {
 
 export const NAV_POR_ROL: Record<Rol, ItemNav[]> = {
   // Las actividades no son destinos fijos del menú: se abren desde el mapa, y
-  // cuál se muestra depende de la sesión. Solo el mapa y el diario personal
-  // existen con independencia del módulo que esté activo.
+  // cuál se muestra depende de la sesión. Solo el mapa, los debates y el diario
+  // personal existen con independencia del módulo que esté activo.
   ESTUDIANTE: [
     { href: "/estudiante/mapa", label: "Mapa del Viaje", icon: "M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3v15", titulo: "Ruta Pedagógica · Mapa del Viaje" },
+    { href: "/estudiante/foros", label: "Debates", icon: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", titulo: "Contraste de fuentes · Debates" },
     { href: "/estudiante/diario", label: "Mi Diario", icon: "M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2zM8 4v16", titulo: "Espacio privado · Diario de la Memoria" },
   ],
   DOCENTE: [

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useRef, useTransition } from "react";
 import { alternarForo, crearForo } from "./actions";
 
@@ -10,9 +11,14 @@ type Foro = {
   rolB: string;
   fuentes: string;
   abierto: boolean;
+  sesion: string | null;
+  mensajes: number;
+  participantes: number;
 };
 
-export function MediacionForos({ foros }: { foros: Foro[] }) {
+type Opciones = { caso: string; sesiones: { id: string; codigo: string; titulo: string }[] }[];
+
+export function MediacionForos({ foros, sesiones }: { foros: Foro[]; sesiones: Opciones }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [, iniciarTransicion] = useTransition();
   const [estado, accion, pendiente] = useActionState(
@@ -82,12 +88,53 @@ export function MediacionForos({ foros }: { foros: Foro[] }) {
             {pendiente ? "Abriendo..." : "Abrir foro"}
           </button>
         </div>
+        <div className="mt-3 grid gap-3 lg:grid-cols-[2fr_1fr]">
+          <div>
+            <label htmlFor="fuentes" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              FUENTES OBLIGATORIAS
+            </label>
+            <input
+              id="fuentes"
+              name="fuentes"
+              placeholder="ej. Ley 135 de 1961 · Guía del CNMH, sesiones 1.3.1 y 1.3.2"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            />
+          </div>
+          <div>
+            <label htmlFor="sesionId" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              SESIÓN (OPCIONAL)
+            </label>
+            <select
+              id="sesionId"
+              name="sesionId"
+              defaultValue=""
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            >
+              <option value="">Sin sesión</option>
+              {sesiones.map((c) => (
+                <optgroup key={c.caso} label={c.caso}>
+                  {c.sesiones.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.codigo} · {s.titulo.slice(0, 60)}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+        </div>
         {estado?.error && (
           <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
             {estado.error}
           </div>
         )}
       </form>
+
+      {foros.length === 0 && (
+        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[13px] text-apagado">
+          Todavía no has abierto ningún debate.
+        </p>
+      )}
 
       <div className="grid gap-3">
         {foros.map((f) => (
@@ -121,7 +168,18 @@ export function MediacionForos({ foros }: { foros: Foro[] }) {
                 <div className="mt-1 text-[13px] font-semibold text-[#8A6516]">{f.rolB}</div>
               </div>
             </div>
-            <div className="mt-3 text-[11.5px] text-suave">Fuentes obligatorias: {f.fuentes}</div>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <div className="text-[11.5px] text-suave">
+                Fuentes obligatorias: {f.fuentes}
+                {f.sesion && <> · Sesión {f.sesion}</>}
+              </div>
+              <Link
+                href={`/docente/foros/${f.id}`}
+                className="rounded-lg border border-primario-borde bg-primario-tinte px-3 py-1.5 text-[11.5px] font-bold text-primario-fuerte hover:bg-primario-borde"
+              >
+                Abrir debate · {f.mensajes} {f.mensajes === 1 ? "mensaje" : "mensajes"} · {f.participantes} con rol
+              </Link>
+            </div>
           </div>
         ))}
       </div>

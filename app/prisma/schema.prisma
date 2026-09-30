@@ -81,12 +81,14 @@ model User {
   respuestas      RespuestaActividad[]
   recursosSubidos Recurso[]
   forosCreados    Foro[]
+  mensajesForo    MensajeForo[]
+  posturasForo    ParticipanteForo[]
 }
 
 model Caso {
   id       String     @id @default(cuid())
   nombre   String     @unique
-  depto    String @db.Text
+  depto    String     @db.Text
   estado   EstadoCaso @default(EN_CURADURIA)
   version  String     @default("0.1.0")
   activo   Boolean    @default(false)
@@ -103,7 +105,7 @@ model Eje {
   id              String  @id @default(cuid())
   numero          Int
   nombre          String
-  descripcion     String @db.Text
+  descripcion     String  @db.Text
   objetivoGeneral String? @db.Text
   tono            String
   orden           Int
@@ -127,7 +129,7 @@ model Eje {
 model Sesion {
   id            String  @id @default(cuid())
   codigo        String
-  titulo        String @db.Text
+  titulo        String  @db.Text
   objetivo      String? @db.Text
   tipo          String
   pantalla      String
@@ -148,12 +150,15 @@ model Sesion {
   subsecciones Subseccion[]
 
   /// Trabajo que los estudiantes producen dentro de esta sesión.
-  anotaciones     Anotacion[]
-  marcas          MarcaCartografia[]
-  flores          FlorJardin[]
-  entradasDiario  EntradaDiario[]
-  respuestas      RespuestaActividad[]
-  simulaciones    Simulacion[]
+  anotaciones    Anotacion[]
+  marcas         MarcaCartografia[]
+  flores         FlorJardin[]
+  entradasDiario EntradaDiario[]
+  respuestas     RespuestaActividad[]
+  simulaciones   Simulacion[]
+
+  /// Debates que el docente asoció a esta sesión, como el de la 1.3.
+  foros Foro[]
 
   @@unique([ejeId, codigo])
 }
@@ -176,12 +181,12 @@ model Subseccion {
 
 /// Documento del que se derivó un módulo (guía o informe del CNMH).
 model DocumentoFuente {
-  id             String   @id @default(cuid())
-  titulo         String @db.Text
-  nombreArchivo  String @db.Text
-  rutaArchivo    String @db.Text
-  paginas        Int
-  subidoEn       DateTime @default(now())
+  id            String   @id @default(cuid())
+  titulo        String   @db.Text
+  nombreArchivo String   @db.Text
+  rutaArchivo   String   @db.Text
+  paginas       Int
+  subidoEn      DateTime @default(now())
 
   /// Las guías para maestros traen las respuestas esperadas y las
   /// orientaciones para conducir la sesión. Ponerlas al alcance del estudiante
@@ -194,8 +199,8 @@ model DocumentoFuente {
 
 model Recurso {
   id       String      @id @default(cuid())
-  titulo   String @db.Text
-  contexto String @db.Text
+  titulo   String      @db.Text
+  contexto String      @db.Text
   tipo     TipoRecurso
   alerta   Boolean     @default(false)
   creadoEn DateTime    @default(now())
@@ -211,7 +216,7 @@ model Recurso {
 
 model AuditoriaAccesibilidad {
   id            String   @id @default(cuid())
-  descripcion   String @db.Text
+  descripcion   String   @db.Text
   transcripcion Boolean  @default(false)
   contraste     Boolean  @default(false)
   responsivo    Boolean  @default(false)
@@ -223,8 +228,8 @@ model AuditoriaAccesibilidad {
 
 model Anotacion {
   id       String   @id @default(cuid())
-  texto    String @db.Text
-  cita     String? @db.Text
+  texto    String   @db.Text
+  cita     String?  @db.Text
   creadoEn DateTime @default(now())
 
   autorId String
@@ -238,8 +243,8 @@ model Anotacion {
 
 model MarcaCartografia {
   id       String   @id @default(cuid())
-  lugar    String @db.Text
-  relato   String @db.Text
+  lugar    String   @db.Text
+  relato   String   @db.Text
   audio    String   @default("Sin audio")
   /// Sensaciones que el estudiante asocia al lugar que marcó.
   tags     String[]
@@ -258,10 +263,10 @@ model MarcaCartografia {
 }
 
 model Simulacion {
-  id             String   @id @default(cuid())
-  indiceEquidad  Int      @default(0)
-  validadaEn     DateTime?
-  actualizadoEn  DateTime @updatedAt
+  id            String    @id @default(cuid())
+  indiceEquidad Int       @default(0)
+  validadaEn    DateTime?
+  actualizadoEn DateTime  @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -276,23 +281,23 @@ model Simulacion {
 }
 
 model Familia {
-  id           String    @id @default(cuid())
-  nombre       String @db.Text
-  personas     Int
-  menores      Int
-  cabezaMujer  Boolean
-  etnica       Boolean
-  retornada    Boolean
-  prioridad    Prioridad
-  orden        Int       @unique
+  id          String    @id @default(cuid())
+  nombre      String    @db.Text
+  personas    Int
+  menores     Int
+  cabezaMujer Boolean
+  etnica      Boolean
+  retornada   Boolean
+  prioridad   Prioridad
+  orden       Int       @unique
 
   asignaciones Asignacion[]
 }
 
 model Asignacion {
-  id       String   @id @default(cuid())
-  hectareas Int     @default(0)
-  subsidio Subsidio @default(NINGUNO)
+  id        String   @id @default(cuid())
+  hectareas Int      @default(0)
+  subsidio  Subsidio @default(NINGUNO)
 
   simulacionId String
   simulacion   Simulacion @relation(fields: [simulacionId], references: [id], onDelete: Cascade)
@@ -304,8 +309,8 @@ model Asignacion {
 
 model FlorJardin {
   id       String      @id @default(cuid())
-  nombre   String @db.Text
-  legado   String @db.Text
+  nombre   String      @db.Text
+  legado   String      @db.Text
   epoca    Epoca
   pieza    PiezaJardin
   tono     String
@@ -324,7 +329,7 @@ model FlorJardin {
 model EntradaDiario {
   id       String   @id @default(cuid())
   emocion  String
-  texto    String @db.Text
+  texto    String   @db.Text
   privada  Boolean  @default(true)
   creadoEn DateTime @default(now())
 
@@ -341,22 +346,75 @@ model EntradaDiario {
 
 model Foro {
   id       String   @id @default(cuid())
-  pregunta String @db.Text
-  rolA     String @db.Text
-  rolB     String @db.Text
+  pregunta String   @db.Text
+  rolA     String   @db.Text
+  rolB     String   @db.Text
   fuentes  String   @default("Por asignar")
   abierto  Boolean  @default(true)
   creadoEn DateTime @default(now())
 
   autorId String?
   autor   User?   @relation(fields: [autorId], references: [id], onDelete: SetNull)
+
+  /// Sesión en la que se debate, si el docente la indicó. Opcional: un foro
+  /// también puede abrirse suelto.
+  sesionId String?
+  sesion   Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  participantes ParticipanteForo[]
+  mensajes      MensajeForo[]
+}
+
+/// Los dos bandos del debate. La mediación del docente no toma partido.
+enum Postura {
+  A
+  B
+}
+
+/// Rol que asume cada estudiante en un foro. El docente lo asigna; si alguien
+/// entra sin rol, se le da el del bando con menos gente.
+model ParticipanteForo {
+  id      String  @id @default(cuid())
+  postura Postura
+
+  foroId String
+  foro   Foro   @relation(fields: [foroId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([foroId, userId])
+}
+
+model MensajeForo {
+  id        String   @id @default(cuid())
+  texto     String   @db.Text
+  /// Documento o pasaje en que se apoya el argumento. La guía pide construir
+  /// los argumentos sobre fuentes históricas, así que en un argumento es
+  /// obligatoria; en una respuesta, no.
+  fuente    String?  @db.Text
+  /// Bando desde el que se escribe. Vacío en los mensajes del docente.
+  postura   Postura?
+  destacado Boolean  @default(false)
+  creadoEn  DateTime @default(now())
+
+  foroId  String
+  foro    Foro   @relation(fields: [foroId], references: [id], onDelete: Cascade)
+  autorId String
+  autor   User   @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  /// Mensaje al que responde. Vacío en un argumento que abre hilo.
+  respuestaAId String?
+  respuestaA   MensajeForo?  @relation("Respuestas", fields: [respuestaAId], references: [id], onDelete: Cascade)
+  respuestas   MensajeForo[] @relation("Respuestas")
+
+  @@index([foroId])
 }
 
 /// Respuesta escrita del estudiante a una sesión. Sustituye a la antigua
 /// RespuestaCopla, que solo servía para un ejercicio concreto del prototipo.
 model RespuestaActividad {
-  id           String   @id @default(cuid())
-  texto        String   @db.Text
+  id            String   @id @default(cuid())
+  texto         String   @db.Text
   actualizadoEn DateTime @updatedAt
 
   userId String
@@ -370,6 +428,6 @@ model RespuestaActividad {
 
 model ReporteDiferenciado {
   id       String   @id @default(cuid())
-  resumen  String @db.Text
+  resumen  String   @db.Text
   creadoEn DateTime @default(now())
 }
