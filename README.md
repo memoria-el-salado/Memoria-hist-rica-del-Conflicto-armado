@@ -17,9 +17,15 @@ sesión y extrae el texto que la acompaña. Tras la revisión humana, esa estruc
 ruta pedagógica que recorre el estudiante.
 
 Cada sesión abre **su propia actividad con su propio contenido**: cartografía social sobre un mapa
-real, simulador de repartición de tierras, jardín de la memoria, diario personal, lectura anotada o
-respuesta escrita. Es lo que permite que la plataforma sirva para otro caso de la memoria histórica
-colombiana sin reescribir código.
+real, con voz y foto; la copla de «la despensa del Caribe»; lectura anotada en hilo; el simulador de
+repartición de tierras sobre un plano de lotes; el jardín de la memoria con cartas, poemas y dibujos;
+Me ubico, Dilema, A investigar, Testimonios y Compromiso, los formatos que la guía del CNMH repite en
+cada eje; y el diario personal. Es lo que permite que la plataforma sirva para otro caso de la memoria
+histórica colombiana sin reescribir código.
+
+El docente organiza a sus estudiantes en cursos y grupos, decide si los ejes se recorren libres o en
+orden, comenta el trabajo desde Revisión y recibe los pedidos de acompañamiento que llegan desde las
+alertas de cuidado. Lo que un estudiante comparte lo ven solo su curso y su docente.
 
 ## Cadena de responsabilidad
 
@@ -49,9 +55,11 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 
 ## Estado
 
-Prototipo funcional. Cubre los diez casos de uso del proyecto, con 94 pruebas automatizadas sobre la
-política de contraseñas, la separación de funciones por rol, las reglas del simulador y la extracción
-de estructura y contenido desde los PDF y el cálculo del avance ponderado.
+Versión 2.0. Cubre por completo los diez casos de uso del proyecto y los mockups revisados del
+documento de avance. Tiene 328 pruebas unitarias —política de contraseñas, separación de funciones
+por rol, visibilidad entre cursos, reglas del simulador, importación de los PDF, avance ponderado,
+competencias y subpoblaciones— y 21 pruebas de extremo a extremo que recorren cada funcionalidad en
+un navegador real (`npm run humo:*`, sección 7).
 
 ---
 
@@ -484,15 +492,17 @@ README está dirigido a quien la **instala y mantiene**.
 Se regenera desde la aplicación en marcha, para que nunca muestre pantallas que ya no existen:
 
 ```bash
-npm run dev                                          # en otra terminal
-npm run demo:cargar <guia.pdf> <guia-maestros.pdf>   # datos con los que se ve algo real
-npm run manual:capturar                              # 20 capturas en manual/capturas
-npm run manual:generar                               # arma el .docx
+npm run dev                # en otra terminal
+npm run manual:capturar    # 32 capturas en manual/capturas
+npm run manual:generar     # arma el .docx
 ```
 
-`demo:cargar` **borra los módulos y las cuentas de docentes y estudiantes**, y deja el administrador
-con la misma contraseña que el resto. Es para preparar una demostración o el manual, no para una
-instalación en uso. La generación del documento necesita Python con `python-docx`.
+`manual:capturar` no necesita datos de demostración ni toca cuentas reales: crea cuentas `prueba.manual.*`
+con nombres de ejemplo, un curso y un módulo de prueba que copia algunas sesiones del módulo activo con
+las actividades de la v2, deja algo de trabajo hecho, captura y lo borra todo al terminar. En las
+pantallas que listan datos de toda la plataforma (los docentes, los módulos) oculta las filas reales
+antes de capturar. Necesita un módulo activo importado. La generación del documento necesita Python con
+`python-docx`.
 
 ---
 

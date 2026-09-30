@@ -6,12 +6,12 @@ El manual es visual a proposito: cada pantalla ocupa una pagina, con la imagen
 grande y unos pocos pasos numerados debajo. Va dirigido a personas que no han
 usado la plataforma, y para ellas una imagen explica mas que un parrafo.
 
-    python scripts/generar-manual.py
+    npm run manual:generar
 
-Antes hay que tener las capturas:
+Antes hay que tener las capturas, que salen de la aplicacion en marcha con
+cuentas y un modulo de ejemplo que el propio guion crea y borra:
     npm run dev
-    npx tsx scripts/datos-demostracion.ts <guia.pdf> <guia-maestros.pdf>
-    node scripts/capturar-manual.mjs
+    npm run manual:capturar
 """
 
 from pathlib import Path
@@ -116,9 +116,11 @@ def parrafo(doc, trozos, tamano=11, color=None, espacio=6):
 def imagen(doc, archivo, pie):
     """Coloca una captura a lo ancho de la caja de texto, con su pie."""
     global figura
-    ruta = CAPTURAS / archivo
-    if not ruta.exists():
+    # Las capturas van numeradas por orden de toma; aqui se buscan por su nombre.
+    encontradas = sorted(CAPTURAS.glob(f"[0-9][0-9]-{archivo}.png"))
+    if not encontradas:
         raise SystemExit(f"Falta la captura: {archivo}")
+    ruta = encontradas[0]
 
     figura += 1
     p = doc.add_paragraph()
@@ -246,7 +248,7 @@ def portada(doc):
     c.font.size = Pt(13)
     c.font.color.rgb = GRIS
 
-    imagen(doc, "10-estudiante-mapa.png", "La pantalla de inicio del estudiante: el Mapa del Viaje.")
+    imagen(doc, "portada", "La portada pública de la plataforma.")
 
     for texto in [
         "Trabajo de grado — Programa de Ingeniería de Software",
@@ -265,12 +267,22 @@ def portada(doc):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_before = Pt(10)
-    c = p.add_run("Versión 2.0 · Agosto de 2026")
+    c = p.add_run("Versión 2.0 · Septiembre de 2026")
     c.font.name = FUENTE
     c.font.size = Pt(9.5)
     c.font.color.rgb = GRIS
 
     salto(doc)
+
+
+def b(texto):
+    """Un trozo en negrita, para los pasos."""
+    return (texto, True)
+
+
+def t(texto):
+    """Un trozo normal."""
+    return (texto, False)
 
 
 # --------------------------------------------------------------------- Guia
@@ -283,84 +295,95 @@ def construir():
     # ------------------------------------------------------------ Qué es
     titulo(doc, "Qué es esta plataforma")
     parrafo(doc, [
-        ("Memoria El Salado es una plataforma para trabajar en clase la memoria histórica del "
-         "conflicto armado colombiano. El contenido no viene escrito dentro del programa: se "
-         "construye a partir de las guías del ", False),
-        ("Centro Nacional de Memoria Histórica", True),
-        (" en PDF.", False),
+        t("Memoria El Salado es una plataforma para trabajar en clase la memoria histórica del "
+          "conflicto armado colombiano. El contenido no viene escrito dentro del programa: se "
+          "construye a partir de las guías del "),
+        b("Centro Nacional de Memoria Histórica"),
+        t(" en PDF."),
     ])
 
     titulo(doc, "Quién puede hacer qué", 3)
     tabla(doc, [
         ["Perfil", "Qué hace", "A quién da de alta"],
-        ["Administrador", "Importa las guías y arma los módulos", "A los docentes"],
-        ["Docente", "Publica sesiones y sigue al grupo", "A sus estudiantes"],
-        ["Estudiante", "Recorre la ruta y hace las actividades", "A nadie"],
+        ["Administrador", "Importa las guías, arma los módulos y elige la actividad de cada sesión", "A los docentes"],
+        ["Docente", "Organiza cursos, publica sesiones, plantea actividades y comenta el trabajo", "A sus estudiantes"],
+        ["Estudiante", "Recorre la ruta, hace las actividades y conversa con su curso", "A nadie"],
     ], anchos=[Cm(3.6), Cm(8.4), Cm(4.5)])
 
-    aviso(doc, "Nadie se registra por su cuenta. Cada persona recibe su usuario de quien está "
-               "un nivel por encima.")
+    aviso(doc, "Nadie se registra por su cuenta y la plataforma no pide correo. Cada persona recibe "
+               "su usuario de quien está un nivel por encima.")
 
     titulo(doc, "Cómo está organizado el contenido", 3)
     parrafo(doc, [
-        ("Un ", False), ("módulo", True), (" (por ejemplo, El Salado) se divide en ", False),
-        ("ejes", True), (", cada eje en ", False), ("sesiones", True),
-        (", y cada sesión tiene ", False), ("una actividad", True),
-        (". El estudiante abre las sesiones desde el mapa.", False),
+        t("Un "), b("módulo"), t(" (por ejemplo, El Salado) se divide en "), b("ejes"),
+        t(", cada eje en "), b("sesiones"), t(", y cada sesión tiene "), b("una actividad"),
+        t(". El docente agrupa a sus estudiantes en "), b("cursos"),
+        t(": lo que un estudiante comparte lo ven su curso y su docente."),
     ])
     salto(doc)
 
     # ---------------------------------------------------------- Entrar
     titulo(doc, "1.  Entrar a la plataforma")
-    imagen(doc, "01-login-vacio.png", "Pantalla de entrada.")
+    imagen(doc, "login", "Pantalla de entrada, con el rol elegido.")
     pasos(doc, [
-        [("Abre el navegador en ", False), ("http://localhost:3000", True), (".", False)],
-        [("Pulsa tu ", False), ("rol", True), (": Estudiante, Docente o Administrador.", False)],
-        [("Escribe tu ", False), ("usuario", True), (" y tu ", False), ("contraseña", True), (".", False)],
-        [("Pulsa ", False), ("Entrar a la Plataforma", True), (".", False)],
+        [t("En la portada, pulsa "), b("Entrar"), t(" o "), b("Comenzar viaje"), t(".")],
+        [t("Pulsa tu "), b("rol"), t(": Estudiante, Docente o Administrador.")],
+        [t("Escribe tu "), b("usuario"), t(" y tu "), b("contraseña"), t(". El ojo deja verla mientras la escribes.")],
+        [t("Pulsa "), b("Entrar a la Plataforma"), t(".")],
     ])
-    aviso(doc, "Si eliges un rol que no es el tuyo, el sistema no te deja entrar aunque la "
-               "contraseña sea correcta. Es la causa más común de error al iniciar sesión.")
+    aviso(doc, "Si olvidaste tu contraseña, pulsa «¿Olvidaste tu contraseña?»: te dice a quién pedirla. "
+               "Al estudiante se la restablece su docente; al docente, la administración.")
     salto(doc)
 
     pantalla(
         doc,
         "2.  La primera vez: elige tu contraseña",
-        "09-primer-ingreso.png",
+        "primer-ingreso",
         "Hasta que elijas tu contraseña, la plataforma no te deja pasar a ninguna otra pantalla.",
         [
-            [("Escribe la ", False), ("contraseña provisional", True), (" que te entregaron.", False)],
-            [("Escribe la ", False), ("nueva", True), (" y ", False), ("repítela", True), (" debajo.", False)],
-            [("Mira la lista roja: te dice qué le falta a tu contraseña.", False)],
-            [("Cuando no quede ningún aviso, pulsa ", False), ("Guardar y continuar", True), (".", False)],
+            [t("Escribe la "), b("contraseña provisional"), t(" que te entregaron.")],
+            [t("Escribe la "), b("nueva"), t(" y "), b("repítela"), t(" debajo.")],
+            [t("Mira la lista: te dice qué le falta a tu contraseña.")],
+            [t("Cuando no quede ningún aviso, pulsa "), b("Guardar y continuar"), t(".")],
         ],
         "Tu contraseña necesita 10 caracteres o más, con mayúscula, minúscula, número y símbolo. "
         "No puede llevar tu nombre ni tu usuario.",
     )
 
+    pantalla(
+        doc,
+        "3.  Estudiante: elige tu explorador",
+        "explorador",
+        "En la primera entrada, el estudiante elige quién lo acompaña en el viaje.",
+        [
+            [t("Elige uno de los cuatro exploradores: "), b("Curioso, Investigador, Guardián o Semillero"), t(".")],
+            [t("Pulsa "), b("Continuar al mapa"), t(".")],
+            [t("Tu explorador aparece en la cabecera. Lo puedes cambiar desde "), b("Cambiar mi explorador"), t(", al pie del menú.")],
+        ],
+    )
+
     # ---------------------------------------------------------- Estudiante
     titulo(doc, "Guía del estudiante")
     parrafo(doc, [
-        ("Tu menú tiene solo dos opciones: el ", False), ("Mapa del Viaje", True),
-        (", desde donde entras a todo, y ", False), ("Mi Diario", True), (".", False),
+        t("Tu menú tiene el "), b("Mapa del Viaje"), t(", desde donde entras a todo, los "),
+        b("Debates"), t(" de tu curso y "), b("Mi Diario"), t("."),
     ])
-    imagen(doc, "10-estudiante-mapa.png", "Cada tarjeta es un eje, con su avance.")
+    imagen(doc, "estudiante-mapa", "El Mapa del Viaje: los ejes, tu avance y tus competencias.")
     pasos(doc, [
-        [("Arriba ves tus ", False), ("aportes", True), (", ", False), ("lugares marcados", True),
-         (" y ", False), ("memorias sembradas", True), (".", False)],
-        [("Pulsa una tarjeta de eje para ver sus sesiones.", False)],
+        [t("Arriba ves tu avance y las cuatro "), b("competencias"), t(" de la guía: empatía, escucha activa, pensamiento crítico y asertividad.")],
+        [t("Pulsa una tarjeta de eje para ver sus sesiones.")],
+        [t("Si tu docente abre los ejes en orden, los siguientes aparecen con candado hasta que terminas el anterior.")],
     ])
     salto(doc)
 
     pantalla(
         doc,
         "Abrir una sesión",
-        "11-estudiante-mapa-eje.png",
-        "Al desplegar un eje aparecen sus sesiones con el botón Abrir.",
+        "estudiante-mapa-eje",
+        "Al desplegar un eje aparecen sus sesiones.",
         [
-            [("Las sesiones ", False), ("publicadas", True), (" tienen el botón ", False), ("Abrir", True), (".", False)],
-            [("Las que están en gris aún no las habilitó tu docente.", False)],
-            [("Pulsa ", False), ("Abrir", True), (" para entrar a la actividad.", False)],
+            [t("Las sesiones "), b("publicadas"), t(" tienen el botón "), b("Abrir"), t(".")],
+            [t("Las que están en gris aún no las habilitó tu docente.")],
         ],
         "Cada sesión lleva su propia actividad y su propio texto, tomado de la guía del CNMH.",
         nivel=3,
@@ -368,70 +391,135 @@ def construir():
 
     pantalla(
         doc,
-        "Actividad: cartografía social",
-        "12-estudiante-cartografia.png",
+        "Cartografía social",
+        "estudiante-cartografia",
         "Marca en un mapa real los lugares que tienen significado para ti.",
         [
-            [("Haz clic en el ", False), ("mapa", True), (" sobre el lugar que quieres marcar.", False)],
-            [("Escribe el ", False), ("nombre del lugar", True), (" y tu ", False), ("relato", True), (".", False)],
-            [("Elige las ", False), ("sensaciones", True), (" que te evoca.", False)],
-            [("Guarda. Tu marca aparece para todo el grupo.", False)],
+            [t("Haz clic en el "), b("mapa"), t(" sobre el lugar que quieres marcar.")],
+            [t("Escribe el "), b("nombre del lugar"), t(" y tu "), b("relato"), t(". Si prefieres, "), b("grábalo con tu voz"), t(".")],
+            [t("Añade una "), b("foto"), t(" del lugar si la tienes, y elige las sensaciones que te evoca.")],
+            [t("Pulsa "), b("Sembrar en el mapa"), t(". Tu marca la ven tu curso y tu docente; si tu docente armó grupos, puedes marcar en nombre del tuyo.")],
         ],
         nivel=3,
     )
 
     pantalla(
         doc,
-        "Actividad: tradición oral",
-        "13-estudiante-tradicion-oral.png",
-        "A la izquierda, el texto de la guía; a la derecha, tu respuesta.",
+        "La despensa del Caribe (copla)",
+        "estudiante-despensa",
+        "Ubica en el mapa de los Montes de María lo que produce la región.",
         [
-            [("Lee el ", False), ("texto de la sesión", True), (" en el panel izquierdo.", False)],
-            [("Escribe tu respuesta en el panel derecho.", False)],
-            [("Pulsa ", False), ("Guardar respuesta", True), (". Puedes volver y cambiarla.", False)],
+            [t("Toca un "), b("producto"), t(" y luego el "), b("lugar"), t(" donde se da. También puedes arrastrarlo.")],
+            [t("Explica por qué la región se llamaba «la despensa del Caribe» y, si quieres, escribe tus versos.")],
+            [t("Pulsa "), b("Guardar"), t(": después verás cómo lo ubicó tu curso.")],
         ],
         nivel=3,
     )
 
     pantalla(
         doc,
-        "Actividad: archivo y anotaciones",
-        "14-estudiante-anotaciones.png",
-        "El texto del documento, con las anotaciones del grupo al lado.",
+        "Archivo y anotaciones",
+        "estudiante-anotaciones",
+        "El texto de la sesión y, al lado, la conversación de tu curso.",
         [
-            [("Lee el documento. Está dividido por apartados.", False)],
-            [("Haz ", False), ("clic sobre un párrafo", True), (" para citarlo.", False)],
-            [("Escribe tu reflexión abajo a la derecha.", False)],
-            [("Pulsa ", False), ("Publicar anotación", True), (".", False)],
+            [t("Haz "), b("clic sobre un párrafo"), t(" para citarlo, escribe tu reflexión y pulsa "), b("Publicar anotación"), t(".")],
+            [t("Pulsa "), b("Responder"), t(" para contestar la anotación de un compañero, y el pulgar si "), b("te sirve"), t(".")],
+            [t("En "), b("Destacados"), t(" están las anotaciones que tu docente marcó para la discusión.")],
         ],
         nivel=3,
     )
 
     pantalla(
         doc,
-        "Actividad: simulador de tierras",
-        "15-estudiante-simulador.png",
-        "Repartes 200 hectáreas y $100.000 entre 20 familias.",
+        "Simulador de repartición de tierras",
+        "estudiante-simulador",
+        "Repartes los 20 lotes de la finca «La Esperanza» y $100.000 en subsidios entre 20 familias.",
         [
-            [("Asigna ", False), ("hectáreas", True), (" a cada familia.", False)],
-            [("Añade ", False), ("subsidios", True), (" de riego o agricultura si lo ves necesario.", False)],
-            [("Vigila el panel de ", False), ("criterios de validación", True), (".", False)],
-            [("Guarda cuando estés conforme.", False)],
+            [b("Arrastra"), t(" una familia a un lote, o pulsa "), b("Elegir"), t(" en su tarjeta y toca el lote.")],
+            [t("También puedes tocar un lote y escoger en la lista a qué familia dárselo, o dejarlo libre.")],
+            [t("Elige el "), b("subsidio"), t(" de cada familia en su tarjeta. Cada lote dice si la tierra alcanza y si el subsidio es suficiente.")],
+            [t("Vigila la "), b("equidad"), t(" y el "), b("riesgo"), t(", y pulsa "), b("Validar distribución"), t(" para guardar.")],
         ],
         "No hay una única respuesta correcta. El ejercicio sirve para ver las tensiones entre "
-        "atender a todos y atender bien a quien más lo necesita.",
+        "atender a todos y atender bien a quien más lo necesita. Una familia puede tener varios lotes, hasta 40 ha.",
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Dilema",
+        "estudiante-dilema",
+        "Tu docente plantea el dilema; tú eliges y lo justificas.",
+        [
+            [t("Lee la pregunta y "), b("elige una opción"), t(".")],
+            [t("Escribe por qué y pulsa "), b("Guardar"), t(".")],
+            [t("Después verás "), b("cómo eligió tu curso"), t(", y el debate que tu docente haya abierto sobre la sesión.")],
+        ],
+        "Me ubico, A investigar, Testimonios y Compromiso funcionan igual: una pregunta, tu respuesta y, "
+        "cuando corresponde, lo que compartió tu curso.",
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Alerta de cuidado",
+        "estudiante-cuidado",
+        "Antes de los contenidos más duros, la plataforma avisa y ofrece acompañamiento.",
+        [
+            [t("Lee el aviso antes de empezar.")],
+            [t("Pulsa "), b("Entiendo, continuar"), t(" cuando te sientas listo, o "), b("Dejarlo para después"), t(".")],
+            [t("Si prefieres hablar antes, pulsa "), b("Hablar con mi docente"), t(": el pedido le llega a él, no a tu curso.")],
+        ],
+        "El botón «Alerta de cuidado» del menú está siempre disponible.",
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Jardín de la Memoria",
+        "estudiante-jardin",
+        "Cada flor recuerda a una persona o un lugar, con una carta, un poema, un dibujo o una foto.",
+        [
+            [t("Pulsa "), b("Sembrar una Memoria"), t(" y escribe a quién o qué recuerdas, y su legado.")],
+            [t("Elige qué dejar: "), b("una carta, un poema, un dibujo o la foto de una obra"), t(".")],
+            [t("Pulsa "), b("Sembrar en el jardín"), t(". La flor aparece en el jardín de tu curso con tu nombre.")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Compromiso",
+        "estudiante-compromiso",
+        "Al cerrar la ruta, cada estudiante escribe a qué se compromete.",
+        [
+            [t("Escribe tu compromiso y pulsa "), b("Guardar"), t(".")],
+            [t("Si marcas "), b("Compartirlo con mi curso"), t(", aparece con tu nombre en los "), b("compromisos de tu curso"), t(".")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Avisos",
+        "estudiante-avisos",
+        "La campana de la cabecera avisa de los comentarios de tu docente y de las sesiones nuevas.",
+        [
+            [t("El número sobre la campana dice cuántos avisos nuevos tienes.")],
+            [t("Pulsa la campana para verlos, y el aviso para ir a donde está.")],
+        ],
         nivel=3,
     )
 
     pantalla(
         doc,
         "Mi Diario",
-        "16-estudiante-diario.png",
+        "estudiante-diario",
         "Espacio personal. Tú decides qué se comparte.",
         [
-            [("Elige ", False), ("cómo te sientes", True), (".", False)],
-            [("Escribe lo que quieras recordar.", False)],
-            [("Marca ", False), ("compartir", True), (" solo si quieres que tu docente lo lea.", False)],
+            [t("Elige "), b("cómo te sientes"), t(".")],
+            [t("Escribe lo que quieras recordar.")],
+            [t("Marca "), b("compartir"), t(" solo si quieres que tu docente lo lea. Sus comentarios aparecen debajo de la entrada.")],
         ],
         "Tus entradas son privadas por defecto. Nadie puede leer una entrada que no hayas "
         "marcado como compartida.",
@@ -440,24 +528,49 @@ def construir():
 
     # ------------------------------------------------------------- Docente
     titulo(doc, "Guía del docente")
-    imagen(doc, "03-docente-panel.png", "Panel del docente: avance del grupo y control de sesiones.")
+    imagen(doc, "docente-panel", "Panel del docente: avance, competencias, sesiones y pedidos de acompañamiento.")
     pasos(doc, [
-        [("Mira el ", False), ("progreso colectivo", True), (" y el avance por eje.", False)],
-        [("En ", False), ("Gestión de Sesiones", True), (", el interruptor publica o retira cada sesión.", False)],
-        [("Solo las publicadas aparecen en el mapa del estudiante.", False)],
+        [t("Arriba eliges el "), b("curso"), t(" que quieres ver.")],
+        [t("En "), b("Gestión de Sesiones"), t(", el interruptor publica o retira cada sesión, y el enlace de cada una lleva a su página.")],
+        [t("A la derecha llegan los "), b("pedidos de acompañamiento"), t(" y los trabajos por revisar.")],
     ])
     salto(doc)
 
     pantalla(
         doc,
+        "Cursos y grupos",
+        "docente-cursos",
+        "Tus cursos, con su año lectivo.",
+        [
+            [t("Escribe el nombre y el año, y pulsa "), b("Crear curso"), t(".")],
+            [t("Abre un curso para asignarle estudiantes y armar grupos de trabajo.")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "El recorrido de un curso",
+        "docente-curso",
+        "Dentro del curso decides si los ejes se recorren libres o en orden.",
+        [
+            [t("Suma estudiantes con "), b("Sumar"), t(" y arma grupos de trabajo con "), b("Crear grupo"), t(".")],
+            [t("En "), b("Recorrido del mapa"), t(", elige "), b("Libre"), t(" o "), b("En orden, eje por eje"), t(", y pulsa "), b("Guardar recorrido"), t(".")],
+            [t("En orden, puedes abrir un eje para todo el curso antes de tiempo con "), b("Abrir ya"), t(".")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
         "Dar de alta a tus estudiantes",
-        "05-docente-estudiantes.png",
+        "docente-estudiantes",
         "El formulario ya propone una contraseña provisional.",
         [
-            [("Escribe el ", False), ("nombre", True), (" y el ", False), ("usuario", True), (".", False)],
-            [("Elige la ", False), ("subpoblación", True), (" (solo se usa en los reportes).", False)],
-            [("Pulsa ", False), ("Crear estudiante", True), (".", False)],
-            [("Copia las ", False), ("credenciales", True), (" y entrégaselas.", False)],
+            [t("Escribe el "), b("nombre"), t(" y el "), b("usuario"), t(", y elige su curso.")],
+            [t("Pulsa "), b("Crear estudiante"), t(" y entrégale las credenciales.")],
+            [t("Si el acudiente lo autoriza, registra su "), b("subpoblación"), t(" con el consentimiento.")],
+            [t("Si alguien olvida su contraseña, usa "), b("Restablecer contraseña"), t(".")],
         ],
         "La contraseña provisional no se vuelve a mostrar. Anótala antes de salir de la pantalla.",
         nivel=3,
@@ -465,13 +578,51 @@ def construir():
 
     pantalla(
         doc,
-        "Consultar las guías del módulo",
-        "04-docente-contenidos.png",
+        "Revisión",
+        "docente-revision",
+        "Las respuestas, las simulaciones validadas y los diarios compartidos de tus estudiantes.",
+        [
+            [t("Filtra por "), b("curso"), t(" o por "), b("pendientes"), t(".")],
+            [t("Escribe tu comentario y pulsa "), b("Comentar"), t(". Al estudiante le llega en la campana.")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Las anotaciones de una sesión",
+        "docente-anotaciones",
+        "La conversación de tus estudiantes sobre el texto de la sesión.",
+        [
+            [t("Filtra por "), b("curso"), t(" si tienes varios.")],
+            [t("Pulsa "), b("Responder"), t(" para entrar en un hilo, o anota tú también.")],
+            [t("Pulsa "), b("Destacar"), t(" en las que ayudan a todo el curso: aparecen en su pestaña Destacados.")],
+        ],
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Plantear un dilema",
+        "docente-dilema",
+        "El dilema lo escribe cada docente, adaptado a su contexto.",
+        [
+            [t("Escribe la pregunta y entre dos y cuatro "), b("opciones"), t(".")],
+            [t("Pulsa "), b("Plantear el dilema"), t(". Debajo verás cómo eligieron tus estudiantes.")],
+        ],
+        "En «A investigar» se plantea igual la pregunta de investigación.",
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Contenidos y recursos",
+        "docente-contenidos",
         "Las guías del CNMH, incluida la de maestros que el estudiante no puede abrir.",
         [
-            [("Arriba están las ", False), ("guías del módulo activo", True), (".", False)],
-            [("La marcada ", False), ("Solo docentes", True), (" es tu material de preparación.", False)],
-            [("Debajo cargas ", False), ("recursos", True), (" (vídeo, audio, documentos).", False)],
+            [t("Arriba están las "), b("guías del módulo activo"), t(".")],
+            [t("Debajo subes "), b("recursos"), t(": audio, video, imagen o PDF, o un video de YouTube o Vimeo.")],
+            [t("Los audios y videos piden "), b("transcripción"), t(" o subtítulos antes de publicarse.")],
         ],
         nivel=3,
     )
@@ -479,60 +630,58 @@ def construir():
     pantalla(
         doc,
         "Reportes por subpoblaciones",
-        "06-docente-subpoblaciones.png",
-        "Avance comparado según el vínculo de cada estudiante con el conflicto.",
+        "docente-subpoblaciones",
+        "Avance comparado según el vínculo de cada estudiante con el conflicto, solo con consentimiento.",
         [
-            [("Revisa el ", False), ("avance", True), (" y las ", False), ("entregas", True),
-             (" de cada subpoblación.", False)],
-            [("Lee la ", False), ("recomendación", True), (" pedagógica de cada fila.", False)],
-            [("Pulsa ", False), ("Generar reporte", True), (" para dejarlo por escrito.", False)],
+            [t("Revisa el "), b("avance"), t(" de cada subpoblación.")],
+            [t("Pulsa "), b("Generar reporte diferenciado"), t(" para dejarlo por escrito.")],
         ],
-        "Sirve para ver si el curso está afectando de forma distinta a unos y a otros. No es "
-        "una calificación.",
+        "Los grupos de menos de cinco estudiantes no se muestran, para que nadie pueda ser identificado. "
+        "No es una calificación.",
         nivel=3,
     )
 
     pantalla(
         doc,
         "Debates y foros",
-        "07-docente-foros.png",
-        "Debate estructurado en dos roles contrapuestos.",
+        "docente-foros",
+        "Debate estructurado en dos roles contrapuestos, con argumentos y fuentes.",
         [
-            [("Escribe la ", False), ("pregunta orientadora", True), (".", False)],
-            [("Define los dos ", False), ("roles", True), (" que sostendrán posiciones distintas.", False)],
-            [("El interruptor abre o cierra la participación.", False)],
+            [t("Escribe la "), b("pregunta orientadora"), t(" y los dos "), b("roles"), t(".")],
+            [t("Si quieres, asócialo a una sesión: aparecerá dentro de ella.")],
+            [t("Pulsa "), b("Abrir foro"), t(". Puedes cerrarlo cuando termine el debate.")],
         ],
         nivel=3,
     )
 
     # ------------------------------------------------------- Administrador
     titulo(doc, "Guía del administrador")
-    imagen(doc, "17-admin-docentes.png", "Alta de docentes y entrega de credenciales.")
+    imagen(doc, "admin-docentes", "Alta de docentes y entrega de credenciales.")
     pasos(doc, [
-        [("Escribe el ", False), ("nombre", True), (" y el ", False), ("usuario", True), (" del docente.", False)],
-        [("Acepta la contraseña propuesta o pulsa ", False), ("Generar otra", True), (".", False)],
-        [("Pulsa ", False), ("Crear docente", True), (" y copia las credenciales.", False)],
-        [("Si alguien la pierde, usa ", False), ("Restablecer contraseña", True), (".", False)],
+        [t("Escribe el "), b("nombre"), t(" y el "), b("usuario"), t(" del docente.")],
+        [t("Acepta la contraseña propuesta o pulsa "), b("Generar otra"), t(".")],
+        [t("Pulsa "), b("Crear docente"), t(" y copia las credenciales.")],
+        [t("Si alguien la pierde, usa "), b("Restablecer contraseña"), t(".")],
     ])
     salto(doc)
 
     pantalla(
         doc,
         "Importar una guía en PDF",
-        "18-admin-importar.png",
+        "admin-importar",
         "Los documentos cargados, con su módulo y su visibilidad.",
         [
-            [("Sube el PDF y pulsa ", False), ("Analizar documento", True), (".", False)],
-            [("Revisa la estructura: títulos, actividad y ", False), ("texto de cada sesión", True), (".", False)],
-            [("Completa a mano el texto que no se haya podido extraer.", False)],
-            [("Da nombre al módulo y créalo.", False)],
+            [t("Sube el PDF y pulsa "), b("Analizar documento"), t(".")],
+            [t("Revisa la estructura: títulos, actividad y "), b("texto de cada sesión"), t(".")],
+            [t("Completa a mano el texto que no se haya podido extraer.")],
+            [t("Da nombre al módulo y créalo.")],
         ],
         nivel=3,
     )
 
     titulo(doc, "Las dos guías del CNMH", 3)
     parrafo(doc, [
-        ("Cada caso se publica en dos documentos, y no cumplen la misma función:", False),
+        t("Cada caso se publica en dos documentos, y no cumplen la misma función:"),
     ])
     tabla(doc, [
         ["Documento", "Para qué sirve", "Quién puede abrirlo"],
@@ -544,10 +693,10 @@ def construir():
     ], anchos=[Cm(5.2), Cm(7.5), Cm(3.8)])
 
     pasos(doc, [
-        [("Importa la ", False), ("guía del estudiante", True), (" y crea el módulo con ella.", False)],
-        [("Sube la ", False), ("guía para maestros", True), (".", False)],
-        [("Pulsa ", False), ("Reservar al docente", True), (" sobre ella.", False)],
-        [("En su selector, elige el módulo para asociarla.", False)],
+        [t("Importa la "), b("guía del estudiante"), t(" y crea el módulo con ella.")],
+        [t("Sube la "), b("guía para maestros"), t(".")],
+        [t("Pulsa "), b("Reservar al docente"), t(" sobre ella.")],
+        [t("En su selector, elige el módulo para asociarla.")],
     ])
     aviso(doc, "Si el estudiante puede abrir la guía para maestros, la actividad pierde sentido: "
                "le entrega de antemano las respuestas a las que debía llegar solo.")
@@ -556,12 +705,12 @@ def construir():
     pantalla(
         doc,
         "Módulos geográficos",
-        "19-admin-casos.png",
+        "admin-casos",
         "Los casos de estudio creados, ubicados en el mapa de Colombia.",
         [
-            [("Consulta el ", False), ("estado", True), (" y el número de sesiones de cada módulo.", False)],
-            [("Crea un caso nuevo heredando la estructura del activo.", False)],
-            [("Usa ", False), ("Eliminar módulo", True), (" para rehacer una importación.", False)],
+            [t("Consulta el "), b("estado"), t(" y el número de sesiones de cada módulo.")],
+            [t("Crea un caso nuevo heredando la estructura del activo.")],
+            [t("Abre un módulo para cambiar la actividad de sus sesiones.")],
         ],
         "Eliminar un módulo borra también el trabajo que los estudiantes hicieron en sus "
         "sesiones. El PDF de origen no se toca.",
@@ -570,24 +719,37 @@ def construir():
 
     pantalla(
         doc,
-        "Auditoría de accesibilidad",
-        "20-admin-accesibilidad.png",
-        "Revisión de transcripción, contraste y adaptación a pantallas pequeñas.",
+        "La actividad de cada sesión",
+        "admin-actividades",
+        "Cada sesión del módulo con su actividad y la que sugiere el importador.",
         [
-            [("Lanza la auditoría sobre los recursos cargados.", False)],
-            [("Revisa el ", False), ("cumplimiento global", True), (" y el detalle por recurso.", False)],
-            [("Registra las correcciones desde la columna de acción.", False)],
+            [t("Cambia la actividad de una sesión en su selector, o pulsa "), b("Usar la sugerida"), t(".")],
+            [t("Pulsa "), b("Aplicar todas las sugeridas"), t(" para usar las del importador en todo el módulo.")],
+        ],
+        "Cambiar la actividad de una sesión que ya se trabajó no borra lo que los estudiantes hicieron, "
+        "pero la pantalla que verán será la nueva.",
+        nivel=3,
+    )
+
+    pantalla(
+        doc,
+        "Auditoría de accesibilidad",
+        "admin-accesibilidad",
+        "Transcripciones, subtítulos y contraste de los recursos, calculados a partir de los datos.",
+        [
+            [t("Revisa el "), b("cumplimiento global"), t(" y el detalle por recurso.")],
+            [t("Los recursos sin transcripción aparecen marcados para corregir.")],
         ],
         nivel=3,
     )
 
     # ------------------------------------------------------- Cosas comunes
     titulo(doc, "Cambiar tu contraseña cuando quieras")
-    imagen(doc, "08-cambiar-contrasena.png", "Se llega desde «Cambiar mi contraseña», al pie del menú.")
+    imagen(doc, "cambiar-contrasena", "Se llega desde «Cambiar mi contraseña», al pie del menú.")
     pasos(doc, [
-        [("Escribe tu ", False), ("contraseña actual", True), (".", False)],
-        [("Escribe la ", False), ("nueva", True), (" dos veces.", False)],
-        [("Pulsa ", False), ("Guardar y continuar", True), (".", False)],
+        [t("Escribe tu "), b("contraseña actual"), t(".")],
+        [t("Escribe la "), b("nueva"), t(" dos veces.")],
+        [t("Pulsa "), b("Guardar y continuar"), t(".")],
     ])
     salto(doc)
 
@@ -604,6 +766,9 @@ def construir():
         ["No veo ninguna sesión",
          "El docente no las ha publicado",
          "Pídele que las habilite en su panel"],
+        ["Un eje aparece con candado",
+         "Tu curso recorre los ejes en orden",
+         "Termina el anterior o pregúntale a tu docente"],
         ["«El documento no traía texto para esta sesión»",
          "El PDF no desarrollaba esa parte",
          "El administrador puede pegarlo al importar"],
@@ -612,13 +777,13 @@ def construir():
          "Nada: la actividad funciona igual"],
         ["Olvidé mi contraseña",
          "No se puede recuperar, está cifrada",
-         "Pide una nueva a quien creó tu cuenta"],
+         "Pide una provisional nueva a tu docente, o a la administración si eres docente"],
     ], anchos=[Cm(5.2), Cm(5.5), Cm(5.8)])
 
     titulo(doc, "Antes de cerrar", 3)
     parrafo(doc, [
-        ("Pulsa ", False), ("Salir", True),
-        (" en la esquina superior derecha, sobre todo si el computador es compartido.", False),
+        t("Pulsa "), b("Salir"),
+        t(" en la esquina superior derecha, sobre todo si el computador es compartido."),
     ])
 
     doc.save(SALIDA)
