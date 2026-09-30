@@ -42,6 +42,9 @@ export async function crearCuenta(sufijo, rol, extra = {}) {
       rol,
       passwordHash: await bcrypt.hash(CLAVE, 10),
       debeCambiarContrasena: false,
+      // Sin explorador, el mapa pide elegirlo: las pruebas que no tratan de eso
+      // entran como si ya lo hubieran hecho.
+      ...(rol === "ESTUDIANTE" ? { explorador: "CURIOSO" } : {}),
       ...extra,
     },
   });
@@ -238,6 +241,17 @@ export async function como(navegador, usuario, rol) {
 export async function capturar(pagina, nombre) {
   if (!process.env.CAPTURAS) return;
   await pagina.screenshot({ path: `${process.env.CAPTURAS}/${nombre}.png`, fullPage: true });
+}
+
+/**
+ * Abre una página y espera a que cargue, y como mucho diez segundos más a que
+ * la red se calme. Para pantallas con mapa: sus mosaicos vienen de
+ * OpenStreetMap, y un servidor ajeno lento no debe tumbar una prueba.
+ */
+export async function visitar(pagina, url) {
+  const respuesta = await pagina.goto(url, { waitUntil: "load" });
+  await pagina.waitForNetworkIdle({ idleTime: 500, timeout: 10_000 }).catch(() => {});
+  return respuesta;
 }
 
 /** Espera a que aparezca un texto en la página. */

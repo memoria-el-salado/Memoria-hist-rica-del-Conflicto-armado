@@ -8,6 +8,7 @@
  *   npx tsx scripts/datos-demostracion.ts <guia-estudiante.pdf> [guia-maestros.pdf]
  */
 import { randomUUID } from "crypto";
+import { EXPLORADORES } from "../src/lib/exploradores";
 import { readFile } from "fs/promises";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
@@ -175,6 +176,9 @@ async function main() {
           iniciales: e.ini,
           rol: "ESTUDIANTE",
           subpoblacion: e.sub,
+          // Datos ficticios: se da por registrada la autorización del acudiente.
+          subpoblacionConsentidaEn: e.sub ? new Date() : null,
+          explorador: EXPLORADORES[estudiantes.length % EXPLORADORES.length].id,
           passwordHash: await bcrypt.hash(CLAVE, 10),
           debeCambiarContrasena: false,
           creadoPorId: docente.id,

@@ -53,6 +53,8 @@ async function main() {
       rol: "ESTUDIANTE",
       passwordHash: await bcrypt.hash(CLAVE, 10),
       debeCambiarContrasena: false,
+      // Ya eligió explorador: si no, el mapa lo mandaría a elegirlo.
+      explorador: "CURIOSO",
       creadoPorId,
     },
   });

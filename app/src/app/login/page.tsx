@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { LoginForm } from "./login-form";
 
 export default function LoginPage() {
@@ -36,7 +37,12 @@ export default function LoginPage() {
             </Suspense>
 
             <p className="mt-5 text-center text-[11.5px] text-tenue">
-              ¿No tienes cuenta? Las credenciales las entrega tu docente.
+              ¿Eres nuevo aquí? <strong className="text-primario-fuerte">Pide a tu docente</strong> que cree tu cuenta.
+            </p>
+            <p className="mt-2 text-center text-[11.5px]">
+              <Link href="/" className="font-semibold text-apagado hover:text-primario">
+                ← Volver al inicio
+              </Link>
             </p>
           </div>
         </div>
@@ -48,9 +54,10 @@ export default function LoginPage() {
           LCMS · 2026
         </span>
         <span className="flex gap-[18px]">
-          <a href="#">Guía Pedagógica</a>
-          <a href="#">Privacidad</a>
-          <a href="#">Contacto</a>
+          <a href="https://centrodememoriahistorica.gov.co" target="_blank" rel="noreferrer">
+            Centro Nacional de Memoria Histórica
+          </a>
+          <Link href="/#privacidad">Privacidad</Link>
         </span>
       </div>
     </div>

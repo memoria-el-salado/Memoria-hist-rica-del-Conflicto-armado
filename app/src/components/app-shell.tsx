@@ -10,6 +10,8 @@ import { sesionDeRuta } from "@/lib/cuidado";
 import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
 import { Campana } from "@/components/avisos/campana";
 import type { AvisoVista } from "@/lib/avisos-datos";
+import { AvatarExplorador } from "@/components/explorador";
+import type { Explorador } from "@/lib/exploradores";
 
 const ESCALAS = [1, 1.12, 1.25] as const;
 const ETIQUETA_ESCALA: Record<string, string> = { "1": "A", "1.12": "A+", "1.25": "A++" };
@@ -21,6 +23,8 @@ type Props = {
   indicador: string;
   /** Solo para el docente: pedidos de acompañamiento que esperan respuesta. */
   solicitudesPendientes?: number;
+  /** El explorador del estudiante, que sustituye a sus iniciales. */
+  explorador?: Explorador | null;
   /** La campana; el administrador no la tiene. */
   avisos?: { avisos: AvisoVista[]; nuevos: number } | null;
   children: React.ReactNode;
@@ -31,7 +35,7 @@ const VISIBLES_MOVIL = 4;
 
 const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
 
-export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, avisos, children }: Props) {
+export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, explorador, avisos, children }: Props) {
   const pathname = usePathname();
   const [escala, setEscala] = useState<(typeof ESCALAS)[number]>(1);
   const [alertaAbierta, setAlertaAbierta] = useState(false);
@@ -163,6 +167,11 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
               )}
             </Link>
           )}
+          {rol === "ESTUDIANTE" && (
+            <Link href="/estudiante/explorador" className="px-1 text-[11px] font-semibold text-suave hover:text-primario">
+              Cambiar mi explorador
+            </Link>
+          )}
           <Link
             href="/cambiar-contrasena"
             className="px-1 text-[11px] font-semibold text-suave hover:text-primario"
@@ -210,12 +219,18 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </button>
             <div className="flex items-center gap-2 rounded-full border border-borde py-[5px] pl-2.5 pr-1.5">
               <span className="text-[11px] font-bold text-apagado">{ETIQUETA_ROL[rol]}</span>
-              <div
-                title={nombre}
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-secundario text-[11px] font-bold text-white"
-              >
-                {iniciales}
-              </div>
+              {explorador ? (
+                <span title={nombre}>
+                  <AvatarExplorador tipo={explorador} tamano={24} />
+                </span>
+              ) : (
+                <div
+                  title={nombre}
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-secundario text-[11px] font-bold text-white"
+                >
+                  {iniciales}
+                </div>
+              )}
             </div>
             <button
               onClick={() => signOut({ redirectTo: "/login" })}

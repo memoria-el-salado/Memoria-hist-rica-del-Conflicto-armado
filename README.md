@@ -254,6 +254,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:subpoblaciones` | La subpoblación se declara solo con autorización del acudiente; reportes y panel sin grupos de menos de cinco; cada docente ve sus reportes |
 | `npm run humo:panel` | El panel reúne progreso, competencias del grupo y revisión pendiente; en el móvil, la barra con «Más» y ninguna pantalla desbordada |
 | `npm run humo:portada` | Sin cuenta, «/» muestra la portada pública; quien ya entró va a su espacio; no se desborda en el móvil |
+| `npm run humo:login` | El login deja ver la contraseña y dice quién la restablece; en su primera entrada el estudiante elige a su explorador |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -323,6 +324,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Alta de docentes por la administración | `/admin/docentes` |
 | CU01 | Alta de estudiantes por el docente | `/docente/estudiantes` |
 | CU01 | Cambio de contraseña obligatorio en el primer ingreso | `/cambiar-contrasena` |
+| CU01 | Elección del explorador en la primera entrada, que acompaña al estudiante en la cabecera | `/estudiante/explorador` |
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU01 | Las cuatro competencias ciudadanas de la guía en el mapa, y recorrido libre o en orden por curso | `/estudiante/mapa`, `/docente/cursos/[id]` |
 | CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |

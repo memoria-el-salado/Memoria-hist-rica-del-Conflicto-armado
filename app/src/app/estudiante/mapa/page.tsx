@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiante } from "@/lib/avance";
@@ -31,9 +32,12 @@ export default async function MapaPage() {
     avanceDeEstudiante(userId),
     prisma.user.findUnique({
       where: { id: userId },
-      select: { curso: { select: { nombre: true, anio: true } }, grupo: { select: { nombre: true } } },
+      select: { explorador: true, curso: { select: { nombre: true, anio: true } }, grupo: { select: { nombre: true } } },
     }),
   ]);
+
+  // En la primera entrada, el estudiante elige a su explorador.
+  if (!yo?.explorador) redirect("/estudiante/explorador");
 
   // Con quién hace el viaje: su curso y, si el docente lo armó, su grupo de trabajo.
   const pertenencia = yo?.curso

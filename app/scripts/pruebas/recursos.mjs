@@ -10,7 +10,7 @@
  *   npm run humo:recursos
  */
 import { infoArchivo, listarRecursos } from "../../src/lib/almacen.ts";
-import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
 import { archivosDePrueba, audioWav } from "./medios.mjs";
 
 const { audio: AUDIO, imagen: IMAGEN } = archivosDePrueba();
@@ -142,7 +142,7 @@ await ejecutar("1.2 · Recursos multimedia de verdad", async ({ abrir }) => {
 
   // --- Sin transcripción, el audio no se publica (CU10) ---------------------
   const est = await como(navegador, "prueba.est", "ESTUDIANTE");
-  await est.goto(`${BASE}/estudiante/sesion/${publicada.id}`, { waitUntil: "networkidle0" });
+  await visitar(est, `${BASE}/estudiante/sesion/${publicada.id}`);
   comprobar(
     "un audio sin transcripción no le llega al estudiante",
     !(await est.evaluate(() => document.body.innerText.includes("Testimonio de retorno (prueba)")))
@@ -164,7 +164,7 @@ await ejecutar("1.2 · Recursos multimedia de verdad", async ({ abrir }) => {
   await capturar(doc, "recursos-docente");
 
   // --- El estudiante, dentro de la sesión -----------------------------------
-  await est.goto(`${BASE}/estudiante/sesion/${publicada.id}`, { waitUntil: "networkidle0" });
+  await visitar(est, `${BASE}/estudiante/sesion/${publicada.id}`);
   const texto = await est.evaluate(() => document.body.innerText);
   comprobar("ve el material de la sesión", texto.includes("MATERIAL DE LA SESIÓN") && texto.includes("Testimonio de retorno (prueba)"));
   comprobar("y el que el docente cargó para todo el eje", texto.includes("Fotografía de la plaza (prueba)") && texto.includes("Documental (prueba)"));

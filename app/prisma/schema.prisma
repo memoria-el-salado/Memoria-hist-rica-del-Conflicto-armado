@@ -60,6 +60,9 @@ model User {
   iniciales                String
   rol                      Rol
   subpoblacion             String?
+  /// El explorador que eligió el estudiante en su primera entrada: CURIOSO,
+  /// INVESTIGADOR, GUARDIAN o SEMILLERO. Lo acompaña en la cabecera.
+  explorador               String?
   /// Cuándo registró el docente que el acudiente autorizó declarar la
   /// subpoblación (Ley 1581). Sin esta fecha, el dato no cuenta en los reportes.
   subpoblacionConsentidaEn DateTime?

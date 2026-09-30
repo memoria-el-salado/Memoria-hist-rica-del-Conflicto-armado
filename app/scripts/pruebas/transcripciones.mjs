@@ -14,7 +14,7 @@ import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { listarRecursos } from "../../src/lib/almacen.ts";
-import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
 import { archivosDePrueba } from "./medios.mjs";
 
 const { audio: AUDIO } = archivosDePrueba();
@@ -126,7 +126,7 @@ await ejecutar("1.3 · Transcripciones sincronizadas", async ({ abrir }) => {
     }, TITULO_AUDIO)
   );
 
-  await est.goto(`${BASE}/estudiante/sesion/${sesion.id}`, { waitUntil: "networkidle0" });
+  await visitar(est, `${BASE}/estudiante/sesion/${sesion.id}`);
   comprobar("el estudiante no lo ve en la sesión", !(await est.evaluate((t) => document.body.innerText.includes(t), TITULO_AUDIO)));
   comprobar(
     "ni por su dirección",
@@ -161,7 +161,7 @@ await ejecutar("1.3 · Transcripciones sincronizadas", async ({ abrir }) => {
   comprobar("la tarjeta pasa a transcripción sincronizada", sincronizada);
 
   // --- El estudiante lo escucha y sigue la lectura ---------------------------
-  await est.goto(`${BASE}/estudiante/sesion/${sesion.id}`, { waitUntil: "networkidle0" });
+  await visitar(est, `${BASE}/estudiante/sesion/${sesion.id}`);
   comprobar("ahora el estudiante sí lo ve", await est.evaluate((t) => document.body.innerText.includes(t), TITULO_AUDIO));
   const lineas = await est.$$eval('ol[aria-label="Transcripción sincronizada"] li', (xs) => xs.map((x) => x.innerText));
   comprobar("con la transcripción debajo, línea a línea", lineas.length === 2 && lineas[1].includes("Segunda línea"), `${lineas.length} líneas`);
@@ -206,7 +206,7 @@ await ejecutar("1.3 · Transcripciones sincronizadas", async ({ abrir }) => {
   const conTiempos = await transcribir(doc, recursoVideo, TITULO_VIDEO, "0:00 Llegamos a la vereda.\n0:01 Aquí estaba la escuela.");
   comprobar("con sus minutos, sí", conTiempos === "Transcripción guardada.", conTiempos);
 
-  await est.goto(`${BASE}/estudiante/sesion/${sesion.id}`, { waitUntil: "networkidle0" });
+  await visitar(est, `${BASE}/estudiante/sesion/${sesion.id}`);
   const cues = await est.$eval(`video[src="/api/recursos/${recursoVideo.id}"]`, async (v) => {
     const pista = v.querySelector("track");
     if (!pista) return -1;

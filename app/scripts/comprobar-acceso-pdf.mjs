@@ -57,6 +57,7 @@ async function crear(usuario, rol, nombre, iniciales) {
       rol,
       passwordHash: await bcrypt.hash(CLAVE, 10),
       debeCambiarContrasena: false,
+      ...(rol === "ESTUDIANTE" ? { explorador: "CURIOSO" } : {}),
     },
   });
 }
