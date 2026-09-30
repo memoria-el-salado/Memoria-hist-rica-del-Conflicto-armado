@@ -245,6 +245,10 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 `humo:sesiones`, `humo:documentos` y `humo:subida` necesitan la aplicación en marcha (`npm run dev`).
 `humo:almacen` no la necesita. Las pruebas crean cuentas `prueba.*` y las borran al terminar.
 
+Cada push se comprueba además en GitHub Actions (`.github/workflows/verificacion.yml`): tipos,
+estilo, pruebas, que las migraciones reproduzcan exactamente el esquema, y compilación. Las pruebas
+de humo no corren ahí, porque necesitan el Supabase real.
+
 ---
 
 ## 8. Arquitectura

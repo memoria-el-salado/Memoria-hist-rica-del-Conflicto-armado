@@ -1,0 +1,78 @@
+# Comprueba cada push y cada pull request antes de que llegue a producción.
+#
+# Vercel publica cada push a main sin mirar si el código compila o si pasan las
+# pruebas. Este flujo es la red: si falla, no se fusiona.
+#
+# No ejecuta las pruebas de humo (npm run humo:*): necesitan la aplicación en
+# marcha y el Supabase real, y aquí no hay credenciales. Esas se ejecutan en
+# local antes de cada commit.
+
+name: Verificación
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app
+
+    # Base desechable: solo sirve para comprobar que las migraciones construyen
+    # exactamente el esquema. Nunca se conecta a la base de producción.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: memoria_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/memoria_ci
+      AUTH_SECRET: solo-para-compilar-en-la-verificacion
+      AUTH_TRUST_HOST: "true"
+      PRISMA_HIDE_UPDATE_MESSAGE: "1"
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      # npm ci, igual que Vercel: falla si package-lock.json no cuadra.
+      - name: Dependencias
+        run: npm ci
+
+      - name: Tipos
+        run: npx tsc --noEmit
+
+      - name: Estilo
+        run: npm run lint
+
+      - name: Pruebas
+        run: npm test
+
+      # Si alguien cambia el esquema y olvida la migración, esto lo detecta:
+      # aplicadas sobre una base vacía, las migraciones tienen que dar
+      # exactamente el esquema.
+      - name: Las migraciones reproducen el esquema
+        run: |
+          npx prisma migrate deploy
+          npx prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
+
+      - name: Compilación
+        run: npm run build
