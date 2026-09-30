@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import type { DatosSesion } from "@/components/actividades/cabecera-sesion";
 import { LecturaAnotada } from "@/components/actividades/lectura-anotada";
+import { cargarAnotaciones } from "@/lib/anotaciones-datos";
 import { RespuestaEscrita } from "@/components/actividades/respuesta-escrita";
 import { CartografiaSocial } from "@/components/actividades/cartografia-social";
 import { SimuladorTierras } from "@/components/actividades/simulador-tierras";
@@ -414,25 +415,14 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
     }
 
     default: {
-      const anotaciones = await prisma.anotacion.findMany({
-        where: { sesionId: sesionId },
-        orderBy: { creadoEn: "desc" },
-        include: { autor: { select: { nombre: true, iniciales: true, rol: true } } },
+      const yo = await prisma.user.findUnique({ where: { id: userId }, select: { creadoPorId: true, cursoId: true } });
+      const hilos = await cargarAnotaciones(sesionId, {
+        id: userId,
+        rol: "ESTUDIANTE",
+        creadoPorId: yo?.creadoPorId ?? null,
+        cursoId: yo?.cursoId ?? null,
       });
-      return (
-        <LecturaAnotada
-          sesion={datos}
-          anotaciones={anotaciones.map((a) => ({
-            id: a.id,
-            autor: a.autor.nombre,
-            iniciales: a.autor.iniciales,
-            rol: a.autor.rol === "DOCENTE" ? "DOCENTE" : "ESTUDIANTE",
-            cita: a.cita,
-            texto: a.texto,
-            hora: a.creadoEn.toLocaleDateString("es-CO", { day: "numeric", month: "short" }),
-          }))}
-        />
-      );
+      return <LecturaAnotada sesion={datos} hilos={hilos} />;
     }
   }
 }

@@ -37,6 +37,7 @@
     "humo:panel": "node scripts/pruebas/panel.mjs",
     "humo:portada": "node scripts/pruebas/portada.mjs",
     "humo:login": "node scripts/pruebas/login.mjs",
+    "humo:anotaciones": "node scripts/pruebas/anotaciones.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

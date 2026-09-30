@@ -31,3 +31,16 @@ export function aportesVisiblesPara(yo: { id: string; creadoPorId: string | null
     ...(yo.creadoPorId ? [{ autor: { creadoPorId: yo.creadoPorId, cursoId: yo.cursoId } }] : []),
   ];
 }
+
+/**
+ * Las anotaciones siguen la regla de los aportes y suman al docente: el
+ * estudiante lee también lo que su docente anotó o respondió en la sesión.
+ */
+export function puedeVerAnotacion(quien: Persona, autor: Autor): boolean {
+  return puedeVerAporte(quien, autor) || (quien.rol === "ESTUDIANTE" && autor.id === quien.creadoPorId);
+}
+
+/** La misma regla como condición de consulta, para el estudiante. */
+export function anotacionesVisiblesPara(yo: { id: string; creadoPorId: string | null; cursoId: string | null }) {
+  return [...aportesVisiblesPara(yo), ...(yo.creadoPorId ? [{ autorId: yo.creadoPorId }] : [])];
+}

@@ -108,6 +108,9 @@ model User {
   /// Cómo planteó, como docente, la actividad de cada sesión.
   planteamientos PlanteamientoSesion[]
 
+  /// Anotaciones que le sirvieron.
+  meSirve MeSirve[]
+
   /// Reportes diferenciados que generó como docente.
   reportes ReporteDiferenciado[] @relation("ReportesDelDocente")
 
@@ -388,7 +391,27 @@ model Anotacion {
   sesionId String
   sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
 
+  /// Si responde a otra anotación, a cuál: así se arman los hilos.
+  respuestaAId String?
+  respuestaA   Anotacion?  @relation("HiloDeAnotaciones", fields: [respuestaAId], references: [id], onDelete: Cascade)
+  respuestas   Anotacion[] @relation("HiloDeAnotaciones")
+  /// El docente la destacó para la discusión.
+  destacada    Boolean     @default(false)
+  meSirve      MeSirve[]
+
   @@index([sesionId])
+}
+
+/// Un lector dice que una anotación le sirvió. Uno por persona y anotación.
+model MeSirve {
+  creadoEn DateTime @default(now())
+
+  anotacionId String
+  anotacion   Anotacion @relation(fields: [anotacionId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([anotacionId, userId])
 }
 
 model MarcaCartografia {

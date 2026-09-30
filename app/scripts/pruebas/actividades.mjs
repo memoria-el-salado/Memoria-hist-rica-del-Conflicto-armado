@@ -87,7 +87,11 @@ await ejecutar("2.4 · Me ubico, Dilema, A investigar, Testimonios y Compromiso"
   await vaciar(doc, "#pregunta-planteamiento");
   await doc.type("#pregunta-planteamiento", PREGUNTA);
   comprobar("plantea la pregunta de investigación", await enviar(doc, "::-p-text(Plantear la pregunta)", "Pregunta planteada."));
-  comprobar("una sesión que no se plantea no tiene esa página", (await doc.goto(`${BASE}/docente/sesiones/${sMeUbico}`)).status() === 404);
+  await doc.goto(`${BASE}/docente/sesiones/${sMeUbico}`, { waitUntil: "networkidle0" });
+  comprobar(
+    "una sesión que no se plantea no ofrece planteamiento, y remite a Revisión",
+    !(await doc.$("#pregunta-planteamiento")) && (await hay(doc, "Lo que tus estudiantes entregan en esta sesión"))
+  );
 
   // --- Un estudiante hace las cinco -------------------------------------------
   const est1 = await como(navegador, "prueba.est1", "ESTUDIANTE");

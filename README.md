@@ -255,6 +255,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:panel` | El panel reúne progreso, competencias del grupo y revisión pendiente; en el móvil, la barra con «Más» y ninguna pantalla desbordada |
 | `npm run humo:portada` | Sin cuenta, «/» muestra la portada pública; quien ya entró va a su espacio; no se desborda en el móvil |
 | `npm run humo:login` | El login deja ver la contraseña y dice quién la restablece; en su primera entrada el estudiante elige a su explorador |
+| `npm run humo:anotaciones` | Anotaciones en hilo: cita, respuesta y «me sirve» entre compañeros; el docente filtra por curso, destaca y responde; otro curso no ve el hilo |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -334,6 +335,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU09 | Cambiar la actividad de las sesiones ya importadas, con la que sugiere el importador | `/admin/casos/[id]` |
 | CU04 | Jardín de la Memoria con cartas, poemas, dibujos y fotos de obras, visibles al sembrar | Sesión con actividad `jardin`, `/api/jardin/[id]/imagen` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
+| CU06 | Lectura anotada en hilo: responder, «me sirve», destacadas del docente y pestañas Recientes y Destacados | Sesión con actividad `zona`, `/docente/sesiones/[id]` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
 | CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |
 | Seguimiento | Revisión con comentarios del docente y campana de avisos (comentarios, sesiones publicadas, entregas y pedidos de acompañamiento) | `/docente/revision`, cabecera |

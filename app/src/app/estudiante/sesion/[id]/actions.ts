@@ -39,36 +39,7 @@ function refrescar(sesionId: string) {
   revalidatePath("/estudiante/mapa");
 }
 
-// ---------------------------------------------------------------- Anotaciones
-
-const anotacionSchema = z.object({
-  texto: z.string().trim().min(1, "Escribe tu anotación antes de publicar."),
-  cita: z.string().trim().optional(),
-});
-
-export async function publicarAnotacion(_prev: unknown, formData: FormData) {
-  const contexto = await exigirSesion(String(formData.get("sesionId") ?? ""));
-  if ("error" in contexto) return { error: contexto.error };
-
-  const parsed = anotacionSchema.safeParse({
-    texto: formData.get("texto"),
-    cita: formData.get("cita") ?? undefined,
-  });
-  if (!parsed.success) return { error: parsed.error.issues[0].message };
-
-  await prisma.anotacion.create({
-    data: {
-      autorId: contexto.userId,
-      sesionId: contexto.sesionId,
-      texto: parsed.data.texto,
-      cita: parsed.data.cita || null,
-    },
-  });
-
-  refrescar(contexto.sesionId);
-  return { ok: "Anotación publicada." };
-}
-
+// Las anotaciones, en hilo, están en components/anotaciones/acciones.ts.
 // La cartografía, con su grabación y su foto, está en acciones-cartografia.ts.
 
 // ------------------------------------------------------------------- Diario

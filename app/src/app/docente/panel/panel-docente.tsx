@@ -44,6 +44,16 @@ type Props = {
   solicitudes: SolicitudVista[];
 };
 
+/** Lo que el docente hace en la página de cada sesión. */
+function textoEnlace(s: Sesion): string {
+  if (esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla]) {
+    if (s.planteada) return "Ver el planteamiento";
+    return s.pantalla === "dilema" ? "Plantear el dilema a tus estudiantes →" : "Plantear la pregunta de investigación →";
+  }
+  if (!ACTIVIDADES.some((a) => a.valor === s.pantalla && a.valor !== "zona")) return "Ver las anotaciones →";
+  return "Abrir la sesión";
+}
+
 const COLORES_BARRA = ["#D95D39", "#E4886A", "#1B8A8A", "#EBB035", "#E4886A", "#177575"];
 
 export function PanelDocente({
@@ -154,18 +164,15 @@ export function PanelDocente({
                       {(ACTIVIDADES.find((a) => a.valor === s.pantalla)?.etiqueta ?? s.pantalla).toUpperCase()}
                       {s.alertaCuidado && " · CON ALERTA DE CUIDADO"}
                     </div>
-                    {esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && (
-                      <Link
-                        href={`/docente/sesiones/${s.id}`}
-                        className={`mt-1 inline-block text-[11.5px] font-bold no-underline hover:underline ${s.planteada ? "text-secundario-fuerte" : "text-primario-fuerte"}`}
-                      >
-                        {s.planteada
-                          ? "Ver el planteamiento"
-                          : s.pantalla === "dilema"
-                            ? "Plantear el dilema a tus estudiantes →"
-                            : "Plantear la pregunta de investigación →"}
-                      </Link>
-                    )}
+                    <Link
+                      href={`/docente/sesiones/${s.id}`}
+                      aria-label={`${textoEnlace(s)}: sesión ${s.codigo}`}
+                      className={`mt-1 inline-block text-[11.5px] font-bold no-underline hover:underline ${
+                        esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && !s.planteada ? "text-primario-fuerte" : "text-secundario-fuerte"
+                      }`}
+                    >
+                      {textoEnlace(s)}
+                    </Link>
                   </div>
                   <span className="text-[10.5px] font-bold text-suave">
                     {s.publicada ? "PUBLICADA" : "BORRADOR"}
