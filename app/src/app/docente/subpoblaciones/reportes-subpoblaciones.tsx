@@ -13,11 +13,13 @@ type Fila = {
 };
 
 type Props = {
+  /** Selector del curso por el que se filtran los reportes. */
+  filtro: React.ReactNode;
   filas: Fila[];
   reportes: { id: string; resumen: string }[];
 };
 
-export function ReportesSubpoblaciones({ filas, reportes }: Props) {
+export function ReportesSubpoblaciones({ filtro, filas, reportes }: Props) {
   const [pendiente, iniciarTransicion] = useTransition();
   const [aviso, setAviso] = useState<string | null>(null);
 
@@ -31,6 +33,7 @@ export function ReportesSubpoblaciones({ filas, reportes }: Props) {
         Reportes diferenciados para identificar si el diseño del curso afecta de forma distinta a los
         estudiantes según su nivel o contexto previo.
       </p>
+      {filtro}
 
       <div className="mb-[18px] overflow-x-auto rounded-xl border border-borde bg-superficie">
         <div className="min-w-[720px]">

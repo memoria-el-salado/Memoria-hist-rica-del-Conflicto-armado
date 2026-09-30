@@ -134,3 +134,27 @@ describe("quién ve y escribe en un foro", () => {
     expect(puedeEscribir(docente, cerrado)).toBe(true);
   });
 });
+
+describe("puedeVerForo con curso", () => {
+  const foro = { autorId: "d1", cursoId: "c1" };
+  const base = { rol: "ESTUDIANTE" as const, creadoPorId: "d1" };
+
+  it("un debate abierto a un curso lo ven solo sus estudiantes", () => {
+    expect(puedeVerForo({ ...base, id: "e1", cursoId: "c1" }, foro)).toBe(true);
+    expect(puedeVerForo({ ...base, id: "e2", cursoId: "c2" }, foro)).toBe(false);
+    expect(puedeVerForo({ ...base, id: "e3", cursoId: null }, foro)).toBe(false);
+  });
+
+  it("uno sin curso lo ven todos los estudiantes del docente, tengan curso o no", () => {
+    expect(puedeVerForo({ ...base, id: "e1", cursoId: "c1" }, { autorId: "d1", cursoId: null })).toBe(true);
+    expect(puedeVerForo({ ...base, id: "e3", cursoId: null }, { autorId: "d1" })).toBe(true);
+  });
+
+  it("el docente ve todos los suyos, sea cual sea el curso", () => {
+    expect(puedeVerForo({ rol: "DOCENTE", id: "d1", creadoPorId: "a1" }, foro)).toBe(true);
+  });
+
+  it("un curso cerrado tampoco deja escribir a quien no es del curso", () => {
+    expect(puedeEscribir({ ...base, id: "e2", cursoId: "c2" }, { ...foro, abierto: true })).toBe(false);
+  });
+});

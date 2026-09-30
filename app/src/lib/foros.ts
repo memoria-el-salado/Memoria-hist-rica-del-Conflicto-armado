@@ -106,21 +106,31 @@ export function armarHilos<T extends Encadenable>(mensajes: T[]): (T & { respues
   return [...hilos.values()].sort(orden);
 }
 
-export type Quien = { rol: "ESTUDIANTE" | "DOCENTE" | "ADMIN"; id: string; creadoPorId: string | null };
+export type Quien = {
+  rol: "ESTUDIANTE" | "DOCENTE" | "ADMIN";
+  id: string;
+  creadoPorId: string | null;
+  cursoId?: string | null;
+};
+
+type ForoVisible = { autorId: string | null; cursoId?: string | null };
 
 /**
  * El foro es de su docente y lo ven sus estudiantes: la misma cadena de
- * responsabilidad con la que se crean las cuentas.
+ * responsabilidad con la que se crean las cuentas. Si el docente lo abrió para
+ * un curso, solo lo ven los estudiantes de ese curso.
  */
-export function puedeVerForo(quien: Quien, foro: { autorId: string | null }): boolean {
+export function puedeVerForo(quien: Quien, foro: ForoVisible): boolean {
   if (!foro.autorId) return false;
   if (quien.rol === "DOCENTE") return foro.autorId === quien.id;
-  if (quien.rol === "ESTUDIANTE") return foro.autorId === quien.creadoPorId;
+  if (quien.rol === "ESTUDIANTE") {
+    return foro.autorId === quien.creadoPorId && (!foro.cursoId || foro.cursoId === quien.cursoId);
+  }
   return false;
 }
 
 /** Un foro cerrado se puede leer, pero ya no admite mensajes de estudiantes. */
-export function puedeEscribir(quien: Quien, foro: { autorId: string | null; abierto: boolean }): boolean {
+export function puedeEscribir(quien: Quien, foro: ForoVisible & { abierto: boolean }): boolean {
   if (!puedeVerForo(quien, foro)) return false;
   return quien.rol === "DOCENTE" || foro.abierto;
 }

@@ -244,10 +244,12 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:foros` | Un docente y tres estudiantes debaten; comprueba roles, fuentes, mediación y que otro curso no lo ve |
 | `npm run humo:recursos` | Sube audio, imagen y video; el estudiante los ve en la sesión y el audio se reproduce desde el depósito privado |
 | `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
+| `npm run humo:cursos` | Cursos y grupos: el docente los arma y reparte; panel, reportes y debates se filtran por curso, y otro docente no los ve |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
-Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito.
+Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito. Si una
+prueba se corta a medias, `npm run humo:limpiar` borra lo que haya quedado.
 
 Cada push se comprueba además en GitHub Actions (`.github/workflows/verificacion.yml`): tipos,
 estilo, pruebas, que las migraciones reproduzcan exactamente el esquema, y compilación. Las pruebas
@@ -309,6 +311,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Alta de docentes por la administración | `/admin/docentes` |
 | CU01 | Alta de estudiantes por el docente | `/docente/estudiantes` |
 | CU01 | Cambio de contraseña obligatorio en el primer ingreso | `/cambiar-contrasena` |
+| CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU02 | Cartografía social sobre mapa real | Sesión con actividad `cartografia` |
 | CU03 | Simulador de repartición de tierras | Sesión con actividad `simulador` |
 | CU04 | Jardín de la Memoria | Sesión con actividad `jardin` |

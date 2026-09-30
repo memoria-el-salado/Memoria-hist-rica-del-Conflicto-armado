@@ -15,9 +15,11 @@ export async function quienSoy(): Promise<Quien | null> {
 
   const usuario = await prisma.user.findUnique({
     where: { id: sesion.user.id },
-    select: { id: true, rol: true, creadoPorId: true },
+    select: { id: true, rol: true, creadoPorId: true, cursoId: true },
   });
-  return usuario ? { id: usuario.id, rol: usuario.rol, creadoPorId: usuario.creadoPorId } : null;
+  return usuario
+    ? { id: usuario.id, rol: usuario.rol, creadoPorId: usuario.creadoPorId, cursoId: usuario.cursoId }
+    : null;
 }
 
 export type MensajeVista = {
@@ -34,7 +36,14 @@ export type MensajeVista = {
 
 export type HiloVista = MensajeVista & { respuestas: MensajeVista[] };
 
-const FECHA: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" };
+// En hora de Colombia: el servidor de Vercel corre en UTC.
+const FECHA: Intl.DateTimeFormatOptions = {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "America/Bogota",
+};
 
 /**
  * Carga un debate para quien lo abre. Devuelve `null` si no le corresponde
@@ -48,6 +57,7 @@ export async function cargarDebate(foroId: string, quien: Quien) {
     where: { id: foroId },
     include: {
       sesion: { select: { codigo: true, titulo: true } },
+      curso: { select: { nombre: true, anio: true } },
       participantes: { select: { userId: true, postura: true } },
     },
   });
@@ -105,6 +115,8 @@ export async function cargarDebate(foroId: string, quien: Quien) {
       fuentes: foro.fuentes,
       abierto: foro.abierto,
       sesion: foro.sesion ? `${foro.sesion.codigo} · ${foro.sesion.titulo}` : null,
+      cursoId: foro.cursoId,
+      curso: foro.curso ? `${foro.curso.nombre} · ${foro.curso.anio}` : null,
     },
     hilos,
     miPostura,

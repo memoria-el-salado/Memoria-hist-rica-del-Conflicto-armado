@@ -50,9 +50,11 @@ type Props = {
   casosSinUbicar: number;
   indicadores: { nombre: string; valor: number; color: string }[];
   equidad: number | null;
+  /** "Curso 10A · 2026 · Grupo Los Robles", o null si aún no tiene curso. */
+  pertenencia: string | null;
 };
 
-export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbicar }: Props) {
+export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbicar, pertenencia }: Props) {
   const [abierto, setAbierto] = useState<string | null>(null);
   const ejeAbierto = ejes.find((e) => e.id === abierto) ?? null;
 
@@ -60,7 +62,14 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
     <div className="animar-aparecer">
       <div className="mb-6 grid items-end gap-[18px] lg:grid-cols-2">
         <div>
-          <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">TU VIAJE</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10.5px] font-bold tracking-[.14em] text-primario">TU VIAJE</span>
+            {pertenencia && (
+              <span className="rounded-full bg-secundario-tinte px-2.5 py-0.5 text-[11px] font-bold text-secundario-fuerte">
+                {pertenencia}
+              </span>
+            )}
+          </div>
           <h1 className="mb-1.5 mt-2 text-[30px] font-extrabold tracking-[-.02em]">
             Mapa del Viaje por la Memoria
           </h1>

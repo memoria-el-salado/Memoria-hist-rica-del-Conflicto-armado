@@ -21,6 +21,8 @@ type Props = {
   sugerencia: string;
   /** Los estudiantes se agrupan además por subpoblación, para los reportes. */
   conSubpoblacion?: boolean;
+  /** Cursos del docente, para dejar al estudiante en uno desde el alta. */
+  cursos?: { id: string; etiqueta: string }[];
   titulo: string;
   textoBoton: string;
   pendiente: boolean;
@@ -39,6 +41,7 @@ type Props = {
 export function FormularioUsuario({
   sugerencia,
   conSubpoblacion = false,
+  cursos,
   titulo,
   textoBoton,
   pendiente,
@@ -97,6 +100,27 @@ export function FormularioUsuario({
         autoComplete="off"
         className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
       />
+
+      {cursos && (
+        <>
+          <label htmlFor="cursoId" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">
+            CURSO
+          </label>
+          <select
+            id="cursoId"
+            name="cursoId"
+            defaultValue={cursos[0]?.id ?? ""}
+            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+          >
+            <option value="">Sin curso por ahora</option>
+            {cursos.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.etiqueta}
+              </option>
+            ))}
+          </select>
+        </>
+      )}
 
       {conSubpoblacion && (
         <>

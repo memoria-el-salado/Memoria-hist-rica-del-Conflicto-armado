@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes, promedioDelGrupo } from "@/lib/avance";
 import { ordenarSolicitudes } from "@/lib/cuidado";
+import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
+import { FiltroCurso } from "@/components/filtro-curso";
 import { PanelDocente } from "./panel-docente";
 
 /** Fecha y hora en Colombia: el servidor de Vercel corre en UTC. */
@@ -24,8 +26,17 @@ function solicitudesDe(docenteId: string) {
   });
 }
 
-export default async function PanelPage() {
+export default async function PanelPage({ searchParams }: { searchParams: Promise<{ curso?: string | string[] }> }) {
   const sesion = await auth();
+  const docenteId = sesion!.user.id;
+
+  const cursos = await prisma.curso.findMany({
+    where: { docenteId },
+    orderBy: [{ anio: "desc" }, { nombre: "asc" }],
+    select: { id: true, nombre: true, anio: true },
+  });
+  const elegido = cursoElegido((await searchParams).curso, cursos);
+  const curso = cursos.find((c) => c.id === elegido);
 
   const [sesiones, ejes, estudiantes, solicitudes] = await Promise.all([
     prisma.sesion.findMany({
@@ -38,12 +49,12 @@ export default async function PanelPage() {
       orderBy: { orden: "asc" },
       select: { id: true, numero: true, nombre: true, peso: true },
     }),
-    // El panel refleja al grupo del propio docente.
+    // El panel refleja a los estudiantes del propio docente, o a los del curso elegido.
     prisma.user.findMany({
-      where: { rol: "ESTUDIANTE", creadoPorId: sesion!.user.id },
+      where: { rol: "ESTUDIANTE", creadoPorId: docenteId, ...(elegido ? { cursoId: elegido } : {}) },
       select: { id: true, subpoblacion: true },
     }),
-    solicitudesDe(sesion!.user.id),
+    solicitudesDe(docenteId),
   ]);
 
   // El avance sale del trabajo que los estudiantes han producido, no de un
@@ -83,6 +94,8 @@ export default async function PanelPage() {
 
   return (
     <PanelDocente
+      filtro={<FiltroCurso cursos={cursos.map((c) => ({ id: c.id, etiqueta: etiquetaCurso(c) }))} elegido={elegido} />}
+      ambito={curso ? `en ${etiquetaCurso(curso)}` : "en tu grupo"}
       promedioGlobal={promedioDelGrupo(lista)}
       barras={barras}
       subpoblaciones={subpoblaciones}

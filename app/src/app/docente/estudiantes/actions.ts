@@ -28,6 +28,13 @@ export async function crearEstudiante(_prev: unknown, formData: FormData) {
   const existente = await prisma.user.findFirst({ where: { OR: [{ usuario }, { email }] } });
   if (existente) return { error: `El usuario "${usuario}" ya está registrado.` };
 
+  // El curso es opcional, y solo puede ser uno del propio docente.
+  const cursoId = String(formData.get("cursoId") ?? "") || null;
+  if (cursoId) {
+    const curso = await prisma.curso.findUnique({ where: { id: cursoId }, select: { docenteId: true } });
+    if (curso?.docenteId !== sesion.user.id) return { error: "Ese curso no es tuyo." };
+  }
+
   await prisma.user.create({
     data: {
       nombre,
@@ -38,6 +45,7 @@ export async function crearEstudiante(_prev: unknown, formData: FormData) {
       subpoblacion: subpoblacion || null,
       passwordHash: await bcrypt.hash(contrasena, 10),
       creadoPorId: sesion.user.id,
+      cursoId,
       // La contraseña es provisional: el estudiante elegirá la suya al entrar.
       debeCambiarContrasena: true,
     },
@@ -46,6 +54,7 @@ export async function crearEstudiante(_prev: unknown, formData: FormData) {
   revalidatePath("/docente/estudiantes");
   revalidatePath("/docente/panel");
   revalidatePath("/docente/subpoblaciones");
+  revalidatePath("/docente/cursos");
   return { ok: `Estudiante "${nombre}" creado.`, entrega: { nombre, usuario, contrasena } };
 }
 

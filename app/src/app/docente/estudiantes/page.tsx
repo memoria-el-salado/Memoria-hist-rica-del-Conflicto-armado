@@ -2,10 +2,17 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes } from "@/lib/avance";
 import { generarContrasenaTemporal } from "@/lib/politica-contrasena";
+import { etiquetaCurso } from "@/lib/cursos";
 import { GestionEstudiantes } from "./gestion-estudiantes";
 
 export default async function EstudiantesPage() {
   const sesion = await auth();
+
+  const cursos = await prisma.curso.findMany({
+    where: { docenteId: sesion!.user.id },
+    orderBy: [{ anio: "desc" }, { nombre: "asc" }],
+    select: { id: true, nombre: true, anio: true },
+  });
 
   // Cada docente ve y administra únicamente a los estudiantes que dio de alta.
   const estudiantes = await prisma.user.findMany({
@@ -19,6 +26,7 @@ export default async function EstudiantesPage() {
       subpoblacion: true,
       creadoEn: true,
       debeCambiarContrasena: true,
+      cursoId: true,
     },
   });
 
@@ -28,6 +36,7 @@ export default async function EstudiantesPage() {
   return (
     <GestionEstudiantes
       sugerencia={generarContrasenaTemporal()}
+      cursos={cursos.map((c) => ({ id: c.id, etiqueta: etiquetaCurso(c) }))}
       estudiantes={estudiantes.map((e) => ({
         id: e.id,
         nombre: e.nombre,
@@ -35,6 +44,7 @@ export default async function EstudiantesPage() {
         iniciales: e.iniciales,
         subpoblacion: e.subpoblacion,
         provisional: e.debeCambiarContrasena,
+        cursoId: e.cursoId,
         avance: avances.get(e.id)?.total ?? 0,
         creadoEn: e.creadoEn.toLocaleDateString("es-CO", { dateStyle: "medium" }),
       }))}

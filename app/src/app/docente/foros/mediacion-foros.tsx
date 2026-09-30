@@ -12,13 +12,22 @@ type Foro = {
   fuentes: string;
   abierto: boolean;
   sesion: string | null;
+  curso: string | null;
   mensajes: number;
   participantes: number;
 };
 
 type Opciones = { caso: string; sesiones: { id: string; codigo: string; titulo: string }[] }[];
 
-export function MediacionForos({ foros, sesiones }: { foros: Foro[]; sesiones: Opciones }) {
+export function MediacionForos({
+  foros,
+  sesiones,
+  cursos,
+}: {
+  foros: Foro[];
+  sesiones: Opciones;
+  cursos: { id: string; etiqueta: string }[];
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const [, iniciarTransicion] = useTransition();
   const [estado, accion, pendiente] = useActionState(
@@ -88,7 +97,7 @@ export function MediacionForos({ foros, sesiones }: { foros: Foro[]; sesiones: O
             {pendiente ? "Abriendo..." : "Abrir foro"}
           </button>
         </div>
-        <div className="mt-3 grid gap-3 lg:grid-cols-[2fr_1fr]">
+        <div className={`mt-3 grid gap-3 ${cursos.length ? "lg:grid-cols-[2fr_1fr_1fr]" : "lg:grid-cols-[2fr_1fr]"}`}>
           <div>
             <label htmlFor="fuentes" className="text-[10px] font-bold tracking-[.12em] text-tenue">
               FUENTES OBLIGATORIAS
@@ -122,6 +131,26 @@ export function MediacionForos({ foros, sesiones }: { foros: Foro[]; sesiones: O
               ))}
             </select>
           </div>
+          {cursos.length > 0 && (
+            <div>
+              <label htmlFor="cursoId" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+                PARA
+              </label>
+              <select
+                id="cursoId"
+                name="cursoId"
+                defaultValue=""
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              >
+                <option value="">Todos mis estudiantes</option>
+                {cursos.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
         {estado?.error && (
           <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
@@ -172,6 +201,8 @@ export function MediacionForos({ foros, sesiones }: { foros: Foro[]; sesiones: O
               <div className="text-[11.5px] text-suave">
                 Fuentes obligatorias: {f.fuentes}
                 {f.sesion && <> · Sesión {f.sesion}</>}
+                {" · "}
+                {f.curso ? `Curso ${f.curso}` : "Todos tus estudiantes"}
               </div>
               <Link
                 href={`/docente/foros/${f.id}`}

@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiantes } from "@/lib/avance";
+import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
+import { FiltroCurso } from "@/components/filtro-curso";
 import { ReportesSubpoblaciones } from "./reportes-subpoblaciones";
 
 const RECOMENDACIONES: Record<string, string> = {
@@ -10,12 +12,19 @@ const RECOMENDACIONES: Record<string, string> = {
   "Sin vínculo directo": "Sumar actividades de escucha activa.",
 };
 
-export default async function SubpoblacionesPage() {
+export default async function SubpoblacionesPage({ searchParams }: { searchParams: Promise<{ curso?: string | string[] }> }) {
   const sesion = await auth();
+
+  const cursos = await prisma.curso.findMany({
+    where: { docenteId: sesion!.user.id },
+    orderBy: [{ anio: "desc" }, { nombre: "asc" }],
+    select: { id: true, nombre: true, anio: true },
+  });
+  const elegido = cursoElegido((await searchParams).curso, cursos);
 
   const [estudiantes, reportes] = await Promise.all([
     prisma.user.findMany({
-      where: { rol: "ESTUDIANTE", creadoPorId: sesion!.user.id },
+      where: { rol: "ESTUDIANTE", creadoPorId: sesion!.user.id, ...(elegido ? { cursoId: elegido } : {}) },
       select: {
         id: true,
         subpoblacion: true,
@@ -57,6 +66,7 @@ export default async function SubpoblacionesPage() {
 
   return (
     <ReportesSubpoblaciones
+      filtro={<FiltroCurso cursos={cursos.map((c) => ({ id: c.id, etiqueta: etiquetaCurso(c) }))} elegido={elegido} />}
       filas={filas}
       reportes={reportes.map((r) => ({ id: r.id, resumen: r.resumen }))}
     />

@@ -41,6 +41,7 @@ export function DebateForo({
 
       <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario">
         CU08 · DEBATE{foro.sesion ? ` · SESIÓN ${foro.sesion.toUpperCase()}` : ""}
+        {foro.curso ? ` · CURSO ${foro.curso.toUpperCase()}` : ""}
       </div>
       <h1 className="mb-1.5 mt-2 max-w-[760px] text-[24px] font-extrabold leading-tight tracking-[-.02em]">
         {foro.pregunta}

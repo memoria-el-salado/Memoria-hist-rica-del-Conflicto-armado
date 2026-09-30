@@ -46,6 +46,9 @@ describe("separación de funcionalidades por rol", () => {
     // El administrador da de alta docentes; el docente, sus estudiantes.
     expect(NAV_POR_ROL.ADMIN.map((i) => i.href)).toContain("/admin/docentes");
     expect(NAV_POR_ROL.DOCENTE.map((i) => i.href)).toContain("/docente/estudiantes");
+    // Y los organiza en cursos y grupos; el estudiante no ve esa gestión.
+    expect(NAV_POR_ROL.DOCENTE.map((i) => i.href)).toContain("/docente/cursos");
+    expect(NAV_POR_ROL.ESTUDIANTE.some((i) => /cursos/.test(i.href))).toBe(false);
     expect(NAV_POR_ROL.ESTUDIANTE.some((i) => /docentes|estudiantes/.test(i.href))).toBe(false);
   });
 
@@ -61,5 +64,12 @@ describe("separación de funcionalidades por rol", () => {
   it("resuelve el título de la ruta activa y devuelve vacío para rutas ajenas", () => {
     expect(tituloDeRuta("ESTUDIANTE", "/estudiante/mapa")).toBe("Ruta Pedagógica · Mapa del Viaje");
     expect(tituloDeRuta("ESTUDIANTE", "/docente/panel")).toBe("");
+  });
+
+  it("una página interior lleva el título de su sección", () => {
+    expect(tituloDeRuta("DOCENTE", "/docente/cursos/abc123")).toBe("Organización · Cursos y grupos");
+    expect(tituloDeRuta("DOCENTE", "/docente/foros/xyz")).toBe("LMS · Mediación de debates");
+    // Sin confundir una sección con otra que empieza igual.
+    expect(tituloDeRuta("DOCENTE", "/docente/cursosviejos")).toBe("");
   });
 });

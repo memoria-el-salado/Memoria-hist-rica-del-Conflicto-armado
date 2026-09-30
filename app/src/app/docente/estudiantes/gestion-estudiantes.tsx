@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useActionState, useRef, useState, useTransition } from "react";
 import { BotonRestablecer } from "@/components/boton-restablecer";
 import { FormularioUsuario, type Entrega } from "@/components/formulario-usuario";
 import { crearEstudiante, restablecerEstudiante } from "./actions";
+import { asignarCurso } from "../cursos/actions";
 
 type Estudiante = {
   id: string;
@@ -13,6 +14,7 @@ type Estudiante = {
   subpoblacion: string | null;
   /** Sigue con la contraseña provisional: todavía no ha entrado a elegir la suya. */
   provisional: boolean;
+  cursoId: string | null;
   avance: number;
   creadoEn: string;
 };
@@ -20,10 +22,15 @@ type Estudiante = {
 export function GestionEstudiantes({
   estudiantes,
   sugerencia,
+  cursos,
 }: {
   estudiantes: Estudiante[];
   sugerencia: string;
+  cursos: { id: string; etiqueta: string }[];
 }) {
+  const [moviendo, iniciar] = useTransition();
+  const [avisoCurso, setAvisoCurso] = useState<{ ok?: string; error?: string } | null>(null);
+
   const formRef = useRef<HTMLFormElement>(null);
   const [estado, accion, pendiente] = useActionState(
     crearEstudiante,
@@ -47,6 +54,16 @@ export function GestionEstudiantes({
             <span className="text-[13px] font-extrabold">Estudiantes del grupo</span>
             <span className="text-[11px] font-bold text-suave">{estudiantes.length}</span>
           </div>
+          {avisoCurso && (
+            <div
+              role={avisoCurso.error ? "alert" : "status"}
+              className={`border-b border-[#F1EBE5] px-[18px] py-2 text-[11.5px] font-semibold ${
+                avisoCurso.error ? "text-peligro" : "text-secundario-fuerte"
+              }`}
+            >
+              {avisoCurso.error ?? avisoCurso.ok}
+            </div>
+          )}
 
           {estudiantes.length === 0 ? (
             <p className="px-5 py-10 text-center text-[12.5px] leading-[1.6] text-tenue">
@@ -58,7 +75,7 @@ export function GestionEstudiantes({
             estudiantes.map((e) => (
               <div
                 key={e.id}
-                className="flex items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
+                className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
               >
                 <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[11px] font-extrabold text-white">
                   {e.iniciales}
@@ -77,6 +94,24 @@ export function GestionEstudiantes({
                     {e.subpoblacion ? ` · ${e.subpoblacion}` : ""} · alta el {e.creadoEn}
                   </div>
                 </div>
+                {cursos.length > 0 && (
+                  <select
+                    aria-label={`Curso de ${e.nombre}`}
+                    value={e.cursoId ?? ""}
+                    disabled={moviendo}
+                    onChange={(ev) =>
+                      iniciar(async () => setAvisoCurso(await asignarCurso(e.id, ev.target.value || null)))
+                    }
+                    className="max-w-[150px] rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[12px] disabled:opacity-60"
+                  >
+                    <option value="">Sin curso</option>
+                    {cursos.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.etiqueta}
+                      </option>
+                    ))}
+                  </select>
+                )}
                 <div className="w-24 flex-none">
                   <div className="mb-1 text-right text-[10.5px] font-bold text-tenue">
                     {e.avance}%
@@ -93,6 +128,7 @@ export function GestionEstudiantes({
 
         <FormularioUsuario
           sugerencia={sugerencia}
+          cursos={cursos.length ? cursos : undefined}
           conSubpoblacion
           titulo="NUEVO ESTUDIANTE"
           textoBoton="Crear estudiante"

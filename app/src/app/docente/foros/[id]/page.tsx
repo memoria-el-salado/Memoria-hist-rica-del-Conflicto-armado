@@ -15,7 +15,7 @@ export default async function DebateDocentePage({ params }: { params: Promise<{ 
 
   const [estudiantes, participantes] = await Promise.all([
     prisma.user.findMany({
-      where: { rol: "ESTUDIANTE", creadoPorId: quien.id },
+      where: { rol: "ESTUDIANTE", creadoPorId: quien.id, ...(debate.foro.cursoId ? { cursoId: debate.foro.cursoId } : {}) },
       orderBy: { nombre: "asc" },
       select: { id: true, nombre: true },
     }),

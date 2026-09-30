@@ -17,6 +17,10 @@ type Sesion = {
 };
 
 type Props = {
+  /** Selector del curso por el que se filtra el panel. */
+  filtro: React.ReactNode;
+  /** De quién habla el panel: "en tu grupo" o "en 10A · 2026". */
+  ambito: string;
   promedioGlobal: number;
   barras: { label: string; valor: number }[];
   subpoblaciones: { nombre: string; porcentaje: number; color: string }[];
@@ -29,6 +33,8 @@ type Props = {
 const COLORES_BARRA = ["#D95D39", "#E4886A", "#1B8A8A", "#EBB035", "#E4886A", "#177575"];
 
 export function PanelDocente({
+  filtro,
+  ambito,
   promedioGlobal,
   barras,
   subpoblaciones,
@@ -45,6 +51,7 @@ export function PanelDocente({
       <p className="mb-5 text-[13.5px] text-tenue">
         Seguimiento de la Ruta Pedagógica y bienestar emocional del grupo.
       </p>
+      {filtro}
 
       {/* min-w-0 en las columnas: sin él, un nombre de eje largo ensancha su
           columna y estruja la de al lado en vez de recortarse. */}
@@ -62,8 +69,8 @@ export function PanelDocente({
             </div>
             <div className="mb-[18px] text-[11.5px] text-suave">
               {totalEstudiantes === 0
-                ? "Sin estudiantes en el grupo todavía"
-                : `${totalEstudiantes} ${totalEstudiantes === 1 ? "estudiante" : "estudiantes"} en tu grupo`}
+                ? `Sin estudiantes ${ambito} todavía`
+                : `${totalEstudiantes} ${totalEstudiantes === 1 ? "estudiante" : "estudiantes"} ${ambito}`}
             </div>
             <div
               className="grid h-[130px] items-end gap-2"

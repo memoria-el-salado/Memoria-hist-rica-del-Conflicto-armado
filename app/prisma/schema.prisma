@@ -88,6 +88,49 @@ model User {
   /// Acompañamiento: lo que pidió como estudiante y lo que recibió como docente.
   solicitudesHechas    SolicitudAcompanamiento[] @relation("SolicitudDeEstudiante")
   solicitudesRecibidas SolicitudAcompanamiento[] @relation("SolicitudParaDocente")
+
+  /// El estudiante pertenece a lo sumo a un curso de su docente, y dentro de
+  /// él a un grupo de trabajo. Sin curso, sigue siendo del docente que lo creó.
+  cursoId String?
+  curso   Curso?  @relation("EstudiantesDelCurso", fields: [cursoId], references: [id], onDelete: SetNull)
+  grupoId String?
+  grupo   Grupo?  @relation("MiembrosDelGrupo", fields: [grupoId], references: [id], onDelete: SetNull)
+
+  /// Los cursos que dicta, si es docente.
+  cursosDictados Curso[] @relation("CursosDelDocente")
+}
+
+/// Un curso de un docente, con su año lectivo. Organiza a sus estudiantes: el
+/// panel y los reportes se pueden mirar curso por curso.
+model Curso {
+  id       String   @id @default(cuid())
+  nombre   String
+  anio     Int
+  creadoEn DateTime @default(now())
+
+  docenteId String
+  docente   User   @relation("CursosDelDocente", fields: [docenteId], references: [id], onDelete: Cascade)
+
+  estudiantes User[]  @relation("EstudiantesDelCurso")
+  grupos      Grupo[]
+  foros       Foro[]
+
+  @@unique([docenteId, nombre, anio])
+}
+
+/// Grupo de trabajo dentro de un curso, para las actividades colectivas que
+/// pide la guía, como elegir juntos el lugar significativo de la cartografía.
+model Grupo {
+  id       String   @id @default(cuid())
+  nombre   String
+  creadoEn DateTime @default(now())
+
+  cursoId String
+  curso   Curso  @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+
+  miembros User[] @relation("MiembrosDelGrupo")
+
+  @@unique([cursoId, nombre])
 }
 
 model Caso {
@@ -389,6 +432,10 @@ model Foro {
   /// también puede abrirse suelto.
   sesionId String?
   sesion   Sesion? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  /// Curso al que se abre. Sin curso, lo ven todos los estudiantes del docente.
+  cursoId String?
+  curso   Curso?  @relation(fields: [cursoId], references: [id], onDelete: SetNull)
 
   participantes ParticipanteForo[]
   mensajes      MensajeForo[]

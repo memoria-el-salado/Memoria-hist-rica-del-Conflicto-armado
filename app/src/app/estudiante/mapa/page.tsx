@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { avanceDeEstudiante } from "@/lib/avance";
+import { etiquetaCurso } from "@/lib/cursos";
 
 import { MapaViaje } from "./mapa-viaje";
 
@@ -8,7 +9,7 @@ export default async function MapaPage() {
   const sesion = await auth();
   const userId = sesion!.user.id;
 
-  const [ejes, casos, anotaciones, marcas, simulaciones, flores, avance] = await Promise.all([
+  const [ejes, casos, anotaciones, marcas, simulaciones, flores, avance, yo] = await Promise.all([
     prisma.eje.findMany({
       where: { caso: { activo: true } },
       orderBy: { orden: "asc" },
@@ -26,7 +27,16 @@ export default async function MapaPage() {
     prisma.florJardin.count({ where: { autorId: userId } }),
     // El avance sale del trabajo hecho, sesión por sesión.
     avanceDeEstudiante(userId),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { curso: { select: { nombre: true, anio: true } }, grupo: { select: { nombre: true } } },
+    }),
   ]);
+
+  // Con quién hace el viaje: su curso y, si el docente lo armó, su grupo de trabajo.
+  const pertenencia = yo?.curso
+    ? [`Curso ${etiquetaCurso(yo.curso)}`, yo.grupo && `Grupo ${yo.grupo.nombre}`].filter(Boolean).join(" · ")
+    : null;
 
   const porEje = new Map(avance.ejes.map((e) => [e.ejeId, e]));
 
@@ -83,6 +93,7 @@ export default async function MapaPage() {
       ejes={datos}
       estaciones={estaciones}
       casosSinUbicar={casos.length - estaciones.length}
+      pertenencia={pertenencia}
       indicadores={indicadores}
       equidad={
         simulaciones.length

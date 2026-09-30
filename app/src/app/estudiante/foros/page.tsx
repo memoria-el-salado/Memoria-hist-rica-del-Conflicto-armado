@@ -7,9 +7,10 @@ export default async function ForosEstudiantePage() {
   const quien = await quienSoy();
   if (!quien?.creadoPorId) redirect("/login");
 
-  // Los debates que abrió su docente: la misma cadena con la que se creó su cuenta.
+  // Los debates que abrió su docente —la misma cadena con la que se creó su
+  // cuenta—, para todos o para el curso del estudiante.
   const foros = await prisma.foro.findMany({
-    where: { autorId: quien.creadoPorId },
+    where: { autorId: quien.creadoPorId, OR: [{ cursoId: null }, ...(quien.cursoId ? [{ cursoId: quien.cursoId }] : [])] },
     orderBy: [{ abierto: "desc" }, { creadoEn: "desc" }],
     include: {
       sesion: { select: { codigo: true } },

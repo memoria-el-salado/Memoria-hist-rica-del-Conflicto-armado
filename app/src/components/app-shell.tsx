@@ -59,12 +59,13 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
           style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
         >
           {items.map((item) => {
-            const activo = pathname === item.href;
+            // Dentro de un curso o de un debate, su sección sigue marcada.
+            const activo = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={activo ? "page" : undefined}
+                  aria-current={pathname === item.href ? "page" : activo ? "location" : undefined}
                   className={`flex w-full flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 text-center md:flex-row md:justify-start md:gap-[11px] md:px-[13px] md:py-2.5 md:text-left ${
                     activo
                       ? "bg-primario-tinte font-bold text-primario-fuerte"

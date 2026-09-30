@@ -21,6 +21,7 @@ export const NAV_POR_ROL: Record<Rol, ItemNav[]> = {
     { href: "/docente/contenidos", label: "Gestión de Contenido", icon: "M4 6h16M4 12h16M4 18h10", titulo: "LCMS · Repositorio de recursos" },
     { href: "/docente/foros", label: "Debates y Foros", icon: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", titulo: "LMS · Mediación de debates" },
     { href: "/docente/subpoblaciones", label: "Subpoblaciones", icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.9", titulo: "LMS · Reportes diferenciados" },
+    { href: "/docente/cursos", label: "Cursos y Grupos", icon: "M3 7l9-4 9 4-9 4-9-4zM3 12l9 4 9-4M3 17l9 4 9-4", titulo: "Organización · Cursos y grupos" },
     { href: "/docente/estudiantes", label: "Mis Estudiantes", icon: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M19 8v6M22 11h-6", titulo: "Gestión de cuentas · Estudiantes" },
   ],
   ADMIN: [
@@ -49,6 +50,11 @@ export const PREFIJO_POR_ROL: Record<Rol, string> = {
   ADMIN: "/admin",
 };
 
+/**
+ * El título de la cabecera. Una página interior, como un curso o un debate,
+ * lleva el de la sección a la que pertenece.
+ */
 export function tituloDeRuta(rol: Rol, pathname: string): string {
-  return NAV_POR_ROL[rol].find((i) => i.href === pathname)?.titulo ?? "";
+  const item = NAV_POR_ROL[rol].find((i) => pathname === i.href || pathname.startsWith(`${i.href}/`));
+  return item?.titulo ?? "";
 }
