@@ -188,3 +188,9 @@ export function promedioDelGrupo(avances: AvanceEstudiante[]): number {
   if (avances.length === 0) return 0;
   return Math.round(avances.reduce((s, a) => s + a.total, 0) / avances.length);
 }
+
+/** Si el estudiante ya dejó en esta sesión el trabajo que su actividad pide. */
+export async function sesionHecha(userId: string, sesion: { id: string; pantalla: string }): Promise<boolean> {
+  const trabajo = await reunirTrabajo([userId], [sesion.id]);
+  return sesionCompletada(sesion.pantalla, trabajo.get(userId)?.get(sesion.id) ?? TRABAJO_VACIO);
+}

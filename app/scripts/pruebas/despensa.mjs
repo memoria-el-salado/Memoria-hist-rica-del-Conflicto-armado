@@ -24,8 +24,14 @@ const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.in
 
 /** Tocar el producto y después el lugar: el camino del dedo y del teclado. */
 async function tocar(pagina, producto, lugar) {
-  await pagina.click(`::-p-xpath(//section[@aria-labelledby="titulo-productos"]//button[normalize-space()="${producto}"])`);
-  await pagina.click(`[aria-label="Ubicar ${producto} en ${lugar}"]`);
+  // Al centro de la pantalla: arriba del todo quedaría bajo la cabecera fija y el clic no le llegaría.
+  const centrar = async (selector) => {
+    const el = await pagina.waitForSelector(selector);
+    await el.evaluate((e) => e.scrollIntoView({ block: "center" }));
+    await el.click();
+  };
+  await centrar(`::-p-xpath(//section[@aria-labelledby="titulo-productos"]//button[normalize-space()="${producto}"])`);
+  await centrar(`[aria-label="Ubicar ${producto} en ${lugar}"]`);
   await pagina.waitForSelector(`[aria-label="Quitar ${producto} de ${lugar}"]`);
 }
 

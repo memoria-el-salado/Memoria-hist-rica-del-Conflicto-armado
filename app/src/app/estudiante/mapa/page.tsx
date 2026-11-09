@@ -5,6 +5,10 @@ import { avanceDeEstudiante } from "@/lib/avance";
 import { etiquetaCurso } from "@/lib/cursos";
 import { avanceDeCompetencias } from "@/lib/competencias";
 import { recorridoDe } from "@/lib/recorrido-datos";
+import { ACTIVIDADES } from "@/lib/importador-pdf";
+import { puedeVerRecurso } from "@/lib/recursos";
+import { siguienteDelViaje } from "@/lib/ruta";
+import { estadoAccesibilidad } from "@/lib/transcripcion";
 
 import { MapaViaje } from "./mapa-viaje";
 
@@ -12,7 +16,7 @@ export default async function MapaPage() {
   const sesion = await auth();
   const userId = sesion!.user.id;
 
-  const [ejes, casos, anotaciones, marcas, simulaciones, flores, avance, yo] = await Promise.all([
+  const [ejes, casos, anotaciones, marcas, simulaciones, flores, avance, yo, recursos] = await Promise.all([
     prisma.eje.findMany({
       where: { caso: { activo: true } },
       orderBy: { orden: "asc" },
@@ -34,7 +38,28 @@ export default async function MapaPage() {
       where: { id: userId },
       select: { explorador: true, curso: { select: { nombre: true, anio: true } }, grupo: { select: { nombre: true } } },
     }),
+    // El material del módulo, para decir en el mapa cuánto trae cada sesión.
+    prisma.recurso.findMany({
+      where: { eje: { caso: { activo: true } } },
+      select: { ejeId: true, sesionId: true, tipo: true, enlace: true, contexto: true, transcripcion: true, sesion: { select: { publicada: true } } },
+    }),
   ]);
+
+  // Solo cuenta el material que el estudiante puede ver.
+  const visibles = recursos.filter((r) =>
+    puedeVerRecurso("ESTUDIANTE", {
+      casoActivo: true,
+      sesionPublicada: r.sesion ? r.sesion.publicada : null,
+      accesible: estadoAccesibilidad(r).visibleParaEstudiantes,
+    })
+  );
+  const materialDeSesion = new Map<string, number>();
+  const materialDeEje = new Map<string, number>();
+  for (const r of visibles) {
+    if (r.sesionId) materialDeSesion.set(r.sesionId, (materialDeSesion.get(r.sesionId) ?? 0) + 1);
+    else materialDeEje.set(r.ejeId, (materialDeEje.get(r.ejeId) ?? 0) + 1);
+  }
+  const actividadDe = new Map<string, string>(ACTIVIDADES.map((a) => [a.valor, a.etiqueta]));
 
   // En la primera entrada, el estudiante elige a su explorador.
   if (!yo?.explorador) redirect("/estudiante/explorador");
@@ -66,6 +91,7 @@ export default async function MapaPage() {
       progreso: suyo?.progreso ?? 0,
       peso: e.peso,
       completadas: suyo?.completadas ?? 0,
+      material: materialDeEje.get(e.id) ?? 0,
       // En un curso que recorre el mapa en orden, un eje puede estar cerrado.
       bloqueo: (() => {
         const estado = recorrido.ejes.get(e.id);
@@ -77,7 +103,8 @@ export default async function MapaPage() {
         codigo: s.codigo,
         titulo: s.titulo,
         objetivo: s.objetivo,
-        tipo: s.tipo,
+        tipo: actividadDe.get(s.pantalla) ?? s.tipo,
+        material: materialDeSesion.get(s.id) ?? 0,
         pantalla: s.pantalla,
         publicada: s.publicada,
         // Con el texto del documento la sesión se puede leer; sin él, el
@@ -88,6 +115,16 @@ export default async function MapaPage() {
       })),
     };
   });
+
+  // Por dónde sigue el viaje: la primera sesión publicada y sin hacer de un eje abierto.
+  const siguiente = siguienteDelViaje(
+    datos.map((e) => ({
+      id: e.id,
+      nombre: e.nombre,
+      bloqueado: Boolean(e.bloqueo),
+      sesiones: e.sesiones.map((s) => ({ id: s.id, codigo: s.codigo, titulo: s.titulo, publicada: s.publicada, completada: s.completada })),
+    }))
+  );
 
   // Solo se ubican en el mapa los casos que tienen coordenadas registradas.
   const estaciones = casos
@@ -113,6 +150,7 @@ export default async function MapaPage() {
       estaciones={estaciones}
       casosSinUbicar={casos.length - estaciones.length}
       pertenencia={pertenencia}
+      siguiente={siguiente ? { ejeId: siguiente.ejeId, id: siguiente.sesion.id, codigo: siguiente.sesion.codigo, titulo: siguiente.sesion.titulo } : null}
       competencias={competencias.map((c) => ({ id: c.id, nombre: c.nombre, descripcion: c.descripcion, hechas: c.hechas, total: c.total, porcentaje: c.porcentaje }))}
       indicadores={indicadores}
       equidad={

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import type { Rol } from "@prisma/client";
-import { ETIQUETA_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
+import { ETIQUETA_ROL, INICIO_POR_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
 import { sesionDeRuta } from "@/lib/cuidado";
 import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
 import { Campana } from "@/components/avisos/campana";
@@ -57,7 +57,13 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         aria-label="Navegación principal"
         className="sticky bottom-0 z-20 flex border-t border-borde bg-superficie px-2 py-1.5 md:top-0 md:h-screen md:w-[236px] md:flex-none md:flex-col md:gap-[18px] md:border-r md:border-t-0 md:px-3.5 md:py-5"
       >
-        <div className="hidden items-center gap-2.5 border-b border-[#F1EBE5] px-1 pb-4 md:flex">
+        {/* La marca lleva al inicio de cada rol: los docentes que probaron la
+            plataforma esperaban que «Ruta Pedagógica» abriera la ruta. */}
+        <Link
+          href={INICIO_POR_ROL[rol]}
+          aria-label="Ruta Pedagógica: ir al inicio"
+          className="hidden items-center gap-2.5 border-b border-[#F1EBE5] px-1 pb-4 text-inherit no-underline hover:no-underline md:flex"
+        >
           <div className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-lg bg-primario">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9.5 12 3l9 6.5V21H3zM9 21v-7h6v7" />
@@ -67,7 +73,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             <div className="text-[12px] font-extrabold tracking-[.06em] text-primario-fuerte">RUTA PEDAGÓGICA</div>
             <div className="text-[9.5px] tracking-[.08em] text-suave">ARCHIVO VIVO DE EL SALADO</div>
           </div>
-        </div>
+        </Link>
 
         <ul
           className="grid w-full grid-cols-[repeat(var(--columnas),minmax(0,1fr))] gap-0.5 md:flex md:flex-col"

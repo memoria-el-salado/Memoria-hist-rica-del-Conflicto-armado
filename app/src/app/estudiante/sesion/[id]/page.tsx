@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
@@ -10,7 +11,9 @@ import { SimuladorTierras } from "@/components/actividades/simulador-tierras";
 import { JardinMemoria } from "@/components/actividades/jardin-memoria";
 import { DiarioSesion } from "@/components/actividades/diario-sesion";
 import type { Reparto } from "@/lib/simulador-lotes";
-import { MaterialSesion } from "@/components/recursos/material-sesion";
+import { componerLectura } from "@/lib/lectura-sesion";
+import { pasosDeSesion, sesionPosterior } from "@/lib/ruta";
+import { sesionHecha } from "@/lib/avance";
 import { vistaDeRecurso } from "@/lib/material";
 import { puedeVerRecurso } from "@/lib/recursos";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
@@ -100,6 +103,41 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
   const documento = sesion.eje.caso.documentos[0] ?? null;
 
+  // Lo que el estudiante encuentra en la sesión, antes de armar la actividad:
+  // el material, si ya la hizo, lo que su docente le comentó y la sesión que
+  // sigue. Con eso se arma la ruta de cuatro pasos de la cabecera.
+  const [recursos, comentarios, hecha, publicadasDelModulo] = await Promise.all([
+    prisma.recurso.findMany({
+      // El material de la sesión y el que el docente cargó para todo el eje.
+      where: { OR: [{ sesionId: sesion.id }, { sesionId: null, ejeId: sesion.ejeId }] },
+      orderBy: { creadoEn: "asc" },
+    }),
+    // Lo que el docente comentó del trabajo del estudiante en esta sesión.
+    prisma.comentario.findMany({
+      where: { estudianteId: userId, sesionId: sesion.id, entradaId: null },
+      orderBy: { creadoEn: "asc" },
+      include: { docente: { select: { nombre: true } } },
+    }),
+    sesionHecha(userId, { id: sesion.id, pantalla: sesion.pantalla }),
+    prisma.sesion.findMany({
+      where: { publicada: true, eje: { casoId: sesion.eje.casoId } },
+      orderBy: [{ eje: { orden: "asc" } }, { orden: "asc" }],
+      select: { id: true, codigo: true, titulo: true },
+    }),
+  ]);
+
+  // Solo el material accesible: un audio o un video sin su transcripción no se publica.
+  const visibles = recursos
+    .filter((r) =>
+      puedeVerRecurso("ESTUDIANTE", {
+        casoActivo: sesion.eje.caso.activo,
+        sesionPublicada: true,
+        accesible: estadoAccesibilidad(r).visibleParaEstudiantes,
+      })
+    )
+    .map(vistaDeRecurso);
+  const siguiente = sesionPosterior(publicadasDelModulo, sesion.id);
+
   const datos: DatosSesion = {
     id: sesion.id,
     codigo: sesion.codigo,
@@ -116,47 +154,54 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       contenido: s.contenido,
     })),
     documento: documento ? { id: documento.id, titulo: documento.titulo } : null,
+    ruta: {
+      material: visibles,
+      pasos: pasosDeSesion({
+        material: visibles.length,
+        tieneTexto: componerLectura(sesion.contenido, sesion.subsecciones).length > 0,
+        tieneDocumento: Boolean(documento),
+        pregunta: Boolean(sesion.preguntaOrientadora),
+        hecha,
+        comentarios: comentarios.length,
+      }),
+    },
   };
 
-  const [actividad, recursos, debates, comentarios] = await Promise.all([
+  const [actividad, debates] = await Promise.all([
     pantallaDeActividad(sesion.pantalla, sesion.id, datos, userId),
-    prisma.recurso.findMany({
-      // El material de la sesión y el que el docente cargó para todo el eje.
-      where: { OR: [{ sesionId: sesion.id }, { sesionId: null, ejeId: sesion.ejeId }] },
-      orderBy: { creadoEn: "asc" },
-    }),
     debatesDeLaSesion(sesion.id, userId),
-    // Lo que el docente comentó del trabajo del estudiante en esta sesión.
-    prisma.comentario.findMany({
-      where: { estudianteId: userId, sesionId: sesion.id, entradaId: null },
-      orderBy: { creadoEn: "asc" },
-      include: { docente: { select: { nombre: true } } },
-    }),
   ]);
-
-  // Solo el material accesible: un audio o un video sin su transcripción no se publica.
-  const visibles = recursos.filter((r) =>
-    puedeVerRecurso("ESTUDIANTE", {
-      casoActivo: sesion.eje.caso.activo,
-      sesionPublicada: true,
-      accesible: estadoAccesibilidad(r).visibleParaEstudiantes,
-    })
-  );
 
   const contenido = (
     <>
       {actividad}
-      <ComentariosDocente
-        comentarios={comentarios.map((c) => ({
-          id: c.id,
-          texto: c.texto,
-          docente: c.docente.nombre,
-          cuando: fechaYHora(c.creadoEn),
-          nuevo: !c.leidoEn,
-        }))}
-      />
+      {/* Cuarto paso de la ruta: lo que el docente responde al trabajo. */}
+      <div id="retroalimentacion" className="scroll-mt-24">
+        {comentarios.length ? (
+          <ComentariosDocente
+            comentarios={comentarios.map((c) => ({
+              id: c.id,
+              texto: c.texto,
+              docente: c.docente.nombre,
+              cuando: fechaYHora(c.creadoEn),
+              nuevo: !c.leidoEn,
+            }))}
+          />
+        ) : (
+          <section aria-labelledby="titulo-retroalimentacion" className="mt-[22px] rounded-xl border border-dashed border-borde bg-superficie px-5 py-4">
+            <h2 id="titulo-retroalimentacion" className="text-[11px] font-extrabold tracking-[.1em] text-tinta-media">
+              RETROALIMENTACIÓN DE TU DOCENTE
+            </h2>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-apagado">
+              {hecha
+                ? "Ya hiciste la actividad. Cuando tu docente la comente, lo verás aquí y te llegará un aviso a la campana."
+                : "Cuando hagas la actividad, tu docente podrá comentarla. Sus comentarios aparecerán aquí."}
+            </p>
+          </section>
+        )}
+      </div>
       <DebatesDeSesion debates={debates} />
-      <MaterialSesion recursos={visibles.map(vistaDeRecurso)} />
+      <SiguientePaso siguiente={siguiente} />
     </>
   );
 
@@ -173,6 +218,27 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     >
       {contenido}
     </PuertaCuidado>
+  );
+}
+
+/** Al terminar, por dónde sigue el viaje. */
+function SiguientePaso({ siguiente }: { siguiente: { id: string; codigo: string; titulo: string } | null }) {
+  return (
+    <nav aria-label="Siguiente paso del viaje" className="mt-[22px] flex flex-wrap items-center justify-between gap-3 border-t border-borde pt-5">
+      <Link href="/estudiante/mapa" className="text-[12.5px] font-semibold text-apagado no-underline hover:text-primario">
+        ← Volver al mapa del viaje
+      </Link>
+      {siguiente ? (
+        <Link
+          href={`/estudiante/sesion/${siguiente.id}`}
+          className="rounded-lg bg-primario-fuerte px-4 py-2.5 text-[12.5px] font-bold text-white no-underline hover:bg-primario-hover hover:no-underline"
+        >
+          Siguiente sesión: {siguiente.codigo} {siguiente.titulo.length > 60 ? `${siguiente.titulo.slice(0, 60)}…` : siguiente.titulo} →
+        </Link>
+      ) : (
+        <span className="text-[12.5px] font-semibold text-suave">Es la última sesión publicada del módulo.</span>
+      )}
+    </nav>
   );
 }
 

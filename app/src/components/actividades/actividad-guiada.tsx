@@ -24,7 +24,7 @@ const CONSIGNA: Record<Guiada, { rotulo: string; campo: string; ayuda: string }>
   testimonios: {
     rotulo: "TESTIMONIOS",
     campo: "¿Qué te dejaron estos testimonios? ¿Qué vivieron y qué perdieron quienes hablan?",
-    ayuda: "Escucha o lee los testimonios del material de esta sesión, más abajo; todos tienen transcripción. Tómate tu tiempo.",
+    ayuda: "Escucha o lee los testimonios del material de esta sesión, arriba; todos tienen transcripción. Tómate tu tiempo.",
   },
   compromiso: {
     rotulo: "Y TÚ, ¿A QUÉ TE COMPROMETES?",

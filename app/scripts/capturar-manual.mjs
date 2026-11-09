@@ -262,14 +262,14 @@ await ejecutar("Capturas del manual de usuario", async ({ abrir }) => {
   const est = await nueva();
   await entrar(est, `${PREFIJO}manual.maria`, "ESTUDIANTE");
   await capturar(est, "estudiante-mapa", 1200);
-  // La tarjeta del eje 1 despliega sus sesiones debajo de la rejilla: se lleva a la vista.
-  await est.evaluate(() => [...document.querySelectorAll("button[aria-expanded]")].find((b) => /Identidad/i.test(b.textContent))?.click());
-  await esperarTexto(est, "Cerrar");
+  // El eje 1 se despliega en su sitio y la página baja hasta él; si ya llega
+  // abierto (es por donde sigue el viaje), se lleva a la vista.
   await est.evaluate(() => {
-    const cerrar = [...document.querySelectorAll("button")].find((b) => b.textContent.trim() === "Cerrar");
-    cerrar?.parentElement?.scrollIntoView({ block: "start" });
-    window.scrollBy(0, -90);
+    const eje = [...document.querySelectorAll("button[aria-expanded]")].find((b) => /Identidad/i.test(b.textContent));
+    if (eje?.getAttribute("aria-expanded") === "false") eje.click();
+    else eje?.closest("li")?.scrollIntoView({ block: "start" });
   });
+  await est.waitForSelector('button[aria-expanded="true"]');
   await capturar(est, "estudiante-mapa-eje", 1200);
 
   await ir(est, url("cartografia"), 2500);

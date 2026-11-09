@@ -3,9 +3,9 @@
  *
  * El docente pone a un curso a recorrer el mapa en orden. Sus estudiantes ven
  * los ejes siguientes cerrados, con lo que falta para abrirlos; los de un
- * curso libre, no. El docente abre un eje a mano; el estudiante hace la sesión
- * publicada del eje 1 y, al pasar el umbral, se le abren los siguientes. Sus
- * competencias suben con esa sesión. Volver a libre lo abre todo.
+ * curso libre, no. El docente abre un eje a mano y lo vuelve a cerrar; el estudiante
+ * hace las sesiones publicadas del eje 1 y, al pasar el umbral, se le abre el siguiente. Sus
+ * competencias suben con ellas. Volver a libre lo abre todo.
  *
  * Usa el módulo activo y su sesión publicada, con cuentas de prueba: no se
  * publica ni se cambia nada real.
@@ -18,12 +18,53 @@ import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, esperarTexto, p
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 const cerrados = (pagina) => pagina.evaluate(() => (document.body.innerText.match(/\bCERRADO\b/g) ?? []).length);
 
+/** Deja en la sesión el trabajo que su actividad pide para darse por hecha (src/lib/progreso.ts). */
+async function hacer(autorId, s) {
+  const respuesta = (datos = undefined) =>
+    prisma.respuestaActividad.create({ data: { userId: autorId, sesionId: s.id, texto: "Respuesta de prueba del recorrido.", datos } });
+  switch (s.pantalla) {
+    case "cartografia":
+      return prisma.marcaCartografia.create({ data: { autorId, sesionId: s.id, lugar: "Prueba recorrido", relato: "Mi lugar de prueba.", lat: 9.7, lon: -75.1 } });
+    case "copla":
+    case "meubico":
+    case "testimonios":
+    case "compromiso":
+      return respuesta();
+    case "despensa":
+      return respuesta({ ubicaciones: { aguacate: "carmen", tabaco: "ovejas", hamacas: "jacinto", name: "salado" } });
+    case "dilema":
+      return respuesta({ opcion: "Opción de prueba" });
+    case "investigar":
+      return respuesta({ fuentes: ["Fuente de prueba"] });
+    case "simulador":
+      return prisma.simulacion.create({ data: { userId: autorId, sesionId: s.id, validadaEn: new Date() } });
+    case "jardin":
+      return prisma.florJardin.create({ data: { autorId, sesionId: s.id, nombre: "Prueba", legado: "Prueba", epoca: "RETORNO", pieza: "FLOR", tono: "#D95D39", altura: 60 } });
+    case "diario":
+      return prisma.entradaDiario.create({ data: { autorId, sesionId: s.id, emocion: "ESPERANZA", texto: "Entrada de prueba." } });
+    default:
+      return prisma.anotacion.create({ data: { autorId, sesionId: s.id, texto: "Anotación de prueba del recorrido." } });
+  }
+}
+
+/** Borra todo el trabajo del estudiante de prueba. */
+async function deshacer(autorId) {
+  await Promise.all([
+    prisma.marcaCartografia.deleteMany({ where: { autorId } }),
+    prisma.respuestaActividad.deleteMany({ where: { userId: autorId } }),
+    prisma.simulacion.deleteMany({ where: { userId: autorId } }),
+    prisma.florJardin.deleteMany({ where: { autorId } }),
+    prisma.entradaDiario.deleteMany({ where: { autorId } }),
+    prisma.anotacion.deleteMany({ where: { autorId } }),
+  ]);
+}
+
 await ejecutar("3.3 · Competencias y desbloqueo del mapa", async ({ abrir }) => {
   const ejes = await prisma.eje.findMany({ where: { caso: { activo: true } }, orderBy: { orden: "asc" }, include: { sesiones: true } });
   const primero = ejes.find((e) => !e.esPreambulo && e.sesiones.some((s) => s.publicada));
   if (!primero || ejes.filter((e) => !e.esPreambulo).length < 2) throw new Error("El módulo activo necesita al menos dos ejes y una sesión publicada en el primero.");
   const segundo = ejes[ejes.indexOf(primero) + 1];
-  const sesion = primero.sesiones.find((s) => s.publicada);
+  const publicadas = primero.sesiones.filter((s) => s.publicada);
   const siguientes = ejes.length - ejes.indexOf(primero) - 1;
 
   const docente = await crearCuenta("docente", "DOCENTE");
@@ -64,19 +105,28 @@ await ejecutar("3.3 · Competencias y desbloqueo del mapa", async ({ abrir }) =>
   comprobar("un eje abierto por el docente deja de estar cerrado", (await cerrados(a)) === siguientes - 1);
 
   // --- Por avance ---------------------------------------------------------------
-  // Hace la sesión publicada del eje 1 (cómo se hace lo prueba humo:cartografia).
-  await prisma.marcaCartografia.create({
-    data: { autorId: estA.id, sesionId: sesion.id, lugar: "Prueba recorrido", relato: "Mi lugar de prueba.", lat: 9.7, lon: -75.1 },
-  });
+  // Hace todas las sesiones publicadas del eje 1, cada una con el trabajo que su
+  // actividad pide (cómo se hace cada una lo prueba su propio humo:*). Así la
+  // prueba no depende de cuántas haya publicado el docente real.
+  // Antes, el docente deja de abrir a mano el segundo eje: así se ve que lo abre el avance.
+  await doc.click(`[aria-label="Dejar de abrir a mano el eje ${segundo.numero}"]`);
+  await doc.waitForSelector(`[aria-label="Abrir ya el eje ${segundo.numero}"]`, { timeout: 20_000 });
   await a.reload({ waitUntil: "networkidle0" });
-  comprobar("al pasar el umbral en el primer eje, se abren los siguientes", (await cerrados(a)) === 0);
-  comprobar("y sus competencias suben con la sesión hecha", await hay(a, "1 de 1 actividad · 100%"));
+  comprobar("sin la apertura a mano, el segundo eje vuelve a cerrarse", (await cerrados(a)) === siguientes);
+  for (const s of publicadas) await hacer(estA.id, s);
+  await a.reload({ waitUntil: "networkidle0" });
+  const segundoCerrado = await a.evaluate(
+    (nombre) => [...document.querySelectorAll('section[aria-labelledby="titulo-ruta"] li')].some((li) => li.innerText.includes(nombre) && /\bCERRADO\b/.test(li.innerText)),
+    segundo.nombre
+  );
+  comprobar("al pasar el umbral en el primer eje, se abre el siguiente", !segundoCerrado && (await cerrados(a)) < siguientes, `${publicadas.length} sesiones hechas`);
+  comprobar("y sus competencias suben con las sesiones hechas", await a.evaluate(() => /\b[1-9]\d* de \d+ actividad(es)? · [1-9]\d*%/.test(document.body.innerText)));
   await capturar(a, "recorrido-estudiante");
 
   // --- De vuelta a libre ---------------------------------------------------------
-  await prisma.marcaCartografia.deleteMany({ where: { autorId: estA.id } });
+  await deshacer(estA.id);
   await a.reload({ waitUntil: "networkidle0" });
-  comprobar("sin el avance, vuelven a cerrarse (menos el que abrió el docente)", (await cerrados(a)) === siguientes - 1);
+  comprobar("sin el avance, vuelven a cerrarse", (await cerrados(a)) === siguientes);
   await doc.click("::-p-text(Libre: cualquier sesión publicada)");
   await doc.click("::-p-text(Guardar recorrido)");
   await esperarTexto(doc, "Recorrido libre");

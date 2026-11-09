@@ -93,7 +93,7 @@ export function CoplaDespensa({
     <div className="animar-aparecer max-w-[1180px]">
       <CabeceraSesion sesion={sesion} />
       <p className="mb-4 max-w-[760px] text-[13.5px] leading-[1.7] text-apagado">
-        Escucha y lee la copla «Tierra de abundancia» —el audio está en el material de esta sesión, más abajo—.
+        Escucha y lee la copla «Tierra de abundancia» —el audio está en el material de esta sesión, arriba—.
         Después, de acuerdo con lo que cuenta, ubica en los Montes de María lo que se produce en cada lugar.
       </p>
 

@@ -480,6 +480,11 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
           {tipo === "VIDEO" && (
             <p className="mt-1 text-[11px] text-suave">Los videos de YouTube y Vimeo se ven dentro de la sesión.</p>
           )}
+          {tipo === "SIMULADOR" && (
+            <p className="mt-1 text-[11px] text-suave">
+              Pega la dirección del OVA, el simulador o el sitio web. El estudiante lo abre en una pestaña nueva desde la sesión.
+            </p>
+          )}
         </>
       )}
 

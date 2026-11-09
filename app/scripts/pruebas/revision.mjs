@@ -85,9 +85,21 @@ await ejecutar(
     // --- El estudiante recibe ----------------------------------------------------
     const est = await como(navegador, "prueba.est1", "ESTUDIANTE");
     await est.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
-    comprobar("la campana del estudiante cuenta los dos comentarios", (await campana(est)) === "Avisos: 2 nuevos");
+    // La campana también avisa de las sesiones reales publicadas en los últimos 30 días:
+    // se descuentan, para que la prueba no dependa de lo que el docente real haya publicado.
+    const publicadasRecientes = await prisma.sesion.count({
+      where: { publicada: true, publicadaEn: { gte: new Date(Date.now() - 30 * 86_400_000) }, eje: { caso: { activo: true } } },
+    });
+    const nuevos = Number((await campana(est)).match(/\d+/)?.[0] ?? 0);
+    // La campana muestra como mucho 20 avisos (MAXIMO_AVISOS); los comentarios, por recientes, van primero.
+    comprobar(
+      "la campana del estudiante cuenta los dos comentarios",
+      nuevos === Math.min(20, publicadasRecientes + 2),
+      `${nuevos} nuevos, ${publicadasRecientes} de sesiones`
+    );
     await est.click('[aria-haspopup="true"][aria-label^="Avisos"]');
     await esperarTexto(est, "Prueba Docente comentó tu trabajo en la sesión 9.1.");
+    comprobar("y la lista trae los dos comentarios", await hay(est, "respondió a una entrada de tu diario"));
     await capturar(est, "revision-campana");
     await est.click("::-p-text(comentó tu trabajo en la sesión 9.1)");
     await est.waitForFunction(() => location.pathname.startsWith("/estudiante/sesion/"), { timeout: 20_000 });

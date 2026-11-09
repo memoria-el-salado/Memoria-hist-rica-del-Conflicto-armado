@@ -56,9 +56,9 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0. Cubre por completo los diez casos de uso del proyecto y los mockups revisados del
-documento de avance. Tiene 328 pruebas unitarias —política de contraseñas, separación de funciones
+documento de avance. Tiene 337 pruebas unitarias —política de contraseñas, separación de funciones
 por rol, visibilidad entre cursos, reglas del simulador, importación de los PDF, avance ponderado,
-competencias y subpoblaciones— y 21 pruebas de extremo a extremo que recorren cada funcionalidad en
+competencias y subpoblaciones— y 22 pruebas de extremo a extremo que recorren cada funcionalidad en
 un navegador real (`npm run humo:*`, sección 7).
 
 ---
@@ -265,6 +265,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:login` | El login deja ver la contraseña y dice quién la restablece; en su primera entrada el estudiante elige a su explorador |
 | `npm run humo:anotaciones` | Anotaciones en hilo: cita, respuesta y «me sirve» entre compañeros; el docente filtra por curso, destaca y responde; otro curso no ve el hilo |
 | `npm run humo:simulador` | Simulador por lotes: arrastrar, elegir y tocar, o asignar desde el lote; tope de 40 ha, subsidios, equidad y riesgo; guarda los lotes y reinicia |
+| `npm run humo:ruta` | El mapa como ruta en orden (cómo funciona, por dónde seguir, ejes que se despliegan en su sitio) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
@@ -337,6 +338,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Elección del explorador en la primera entrada, que acompaña al estudiante en la cabecera | `/estudiante/explorador` |
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU01 | Las cuatro competencias ciudadanas de la guía en el mapa, y recorrido libre o en orden por curso | `/estudiante/mapa`, `/docente/cursos/[id]` |
+| CU01 | El mapa como ruta en orden, con «Continúa tu viaje», y cada sesión en cuatro pasos: explorar, reflexionar, hacer la actividad y leer la retroalimentación | `/estudiante/mapa`, `/estudiante/sesion/[id]` |
 | CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Simulador de repartición de tierras sobre el plano de la finca «La Esperanza»: 20 lotes que se arrastran o se tocan, subsidios por familia, equidad y riesgo | Sesión con actividad `simulador` |
 | Guía 1.2.1 | Copla «Tierra de abundancia»: mapa de productos de los Montes de María y resumen del curso para la plenaria | Sesión con actividad `despensa` |

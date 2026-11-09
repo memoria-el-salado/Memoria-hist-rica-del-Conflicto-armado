@@ -38,7 +38,9 @@ export const TIPOS_RECURSO: readonly Definicion[] = [
     extensiones: ["jpg", "jpeg", "png", "webp", "gif"],
   },
   { valor: "DOCUMENTO", etiqueta: "Documento", mimes: ["application/pdf"], extensiones: ["pdf"] },
-  { valor: "SIMULADOR", etiqueta: "Simulador", mimes: [], extensiones: [] },
+  // Los docentes que probaron la plataforma pidieron poder vincular un OVA: un
+  // recurso interactivo (OVA, simulador o sitio web) se enlaza y se abre aparte.
+  { valor: "SIMULADOR", etiqueta: "Recurso interactivo (OVA, simulador o sitio web)", mimes: [], extensiones: [] },
 ];
 
 const MB = 1024 * 1024;
