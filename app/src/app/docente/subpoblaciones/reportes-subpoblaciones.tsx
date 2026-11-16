@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { generarReporte } from "./actions";
+import { textoSobreBlanco } from "@/lib/contraste";
 
 type Fila = {
   nombre: string;
@@ -28,7 +29,7 @@ export function ReportesSubpoblaciones({ filtro, filas, ocultos, total, reportes
 
   return (
     <div className="animar-aparecer max-w-[1000px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU07</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU07</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
         Seguimiento de Subpoblaciones
       </h1>
@@ -48,7 +49,13 @@ export function ReportesSubpoblaciones({ filtro, filas, ocultos, total, reportes
       </div>
       {filtro}
 
-      <div className="mb-[18px] overflow-x-auto rounded-xl border border-borde bg-superficie">
+      {/* En el celular la tabla se desplaza de lado: con el foco, también con las flechas del teclado. */}
+      <div
+        role="region"
+        aria-label="Reporte por subpoblación"
+        tabIndex={0}
+        className="mb-[18px] overflow-x-auto rounded-xl border border-borde bg-superficie"
+      >
         <div className="min-w-[720px]">
           <div className="rejilla-subpoblaciones gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
             <span>SUBPOBLACIÓN</span>
@@ -77,11 +84,11 @@ export function ReportesSubpoblaciones({ filtro, filas, ocultos, total, reportes
             >
               <span className="font-bold">{f.nombre}</span>
               <span className="text-apagado">{f.estudiantes}</span>
-              <span className="font-extrabold" style={{ color: f.color }}>
+              <span className="font-extrabold" style={{ color: textoSobreBlanco(f.color) }}>
                 {f.avance}%
               </span>
               <span className="text-apagado">{f.entregas}</span>
-              <span className="text-[11.5px] text-[#7C736C]">{f.recomendacion}</span>
+              <span className="text-[11.5px] text-apagado">{f.recomendacion}</span>
             </div>
           ))}
         </div>

@@ -87,8 +87,8 @@ export function PanelDocente({
         <div className="grid min-w-0 grid-cols-1 gap-[18px]">
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold tracking-[.12em] text-primario">PROGRESO COLECTIVO</span>
-              <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[10.5px] font-bold text-primario-fuerte">
+              <span className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PROGRESO COLECTIVO</span>
+              <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[10.5px] font-bold text-primario-hover">
                 Ciclo {ciclo}
               </span>
             </div>
@@ -155,7 +155,7 @@ export function PanelDocente({
                   key={s.id}
                   className="flex items-center gap-3.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
                 >
-                  <div className="w-[34px] text-[13px] font-extrabold text-[#DCD3CB]">{s.codigo}</div>
+                  <div className="w-[34px] text-[13px] font-extrabold text-tenue">{s.codigo}</div>
                   <div className="min-w-0 flex-1">
                     <div className="text-[13.5px] font-bold">{s.titulo}</div>
                     <div className="text-[10.5px] tracking-[.06em] text-suave">
@@ -211,7 +211,7 @@ export function PanelDocente({
                   : `${porRevisar} ${porRevisar === 1 ? "trabajo espera" : "trabajos esperan"} tu comentario`}
               </span>
             </span>
-            <span aria-hidden="true" className="text-primario">→</span>
+            <span aria-hidden="true" className="text-primario-texto">→</span>
           </Link>
 
           <div className="rounded-xl border border-borde bg-superficie p-5">

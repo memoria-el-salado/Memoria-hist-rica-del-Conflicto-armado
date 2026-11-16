@@ -60,15 +60,15 @@ export default async function SesionDocentePage({
 
   return (
     <div className="animar-aparecer max-w-[860px]">
-      <Link href="/docente/panel" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario">
+      <Link href="/docente/panel" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Panel del docente
       </Link>
-      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario">
+      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
         EJE {sesion.eje.numero} · {etiqueta.toUpperCase()}
         {!sesion.publicada && <span className="text-suave"> · BORRADOR</span>}
       </div>
       <h1 className="mb-1.5 mt-1.5 text-[24px] font-extrabold leading-tight tracking-[-.02em]">
-        <span className="text-primario">{sesion.codigo}</span> {sesion.titulo}
+        <span className="text-primario-texto">{sesion.codigo}</span> {sesion.titulo}
       </h1>
 
       <CartillasSesion cartillas={cartillas} codigo={sesion.codigo} className="mb-6 mt-3" />

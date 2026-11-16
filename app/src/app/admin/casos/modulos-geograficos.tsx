@@ -60,7 +60,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU09 · MANTENIBILIDAD</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU09 · MANTENIBILIDAD</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
         Escalabilidad de Módulos Geográficos
       </h1>
@@ -82,7 +82,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                   className="rounded-full px-2.5 py-1 text-[9.5px] font-extrabold tracking-[.07em]"
                   style={{
                     background: c.estado === "ACTIVO" ? "#E5F1F0" : "#FDF8EF",
-                    color: c.estado === "ACTIVO" ? "#177575" : "#A8791C",
+                    color: c.estado === "ACTIVO" ? "#177575" : "#886216",
                   }}
                 >
                   {ETIQUETA_ESTADO[c.estado] ?? c.estado}
@@ -92,7 +92,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 {c.ejes.map((e) => (
                   <span
                     key={e}
-                    className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-semibold text-[#7C736C]"
+                    className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-semibold text-apagado"
                   >
                     {e}
                   </span>
@@ -172,8 +172,8 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                   className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold"
                   style={
                     activo
-                      ? { background: "#1B8A8A", borderColor: "#1B8A8A", color: "#fff" }
-                      : { background: "#fff", borderColor: "#E4DDD6", color: "#7C736C" }
+                      ? { background: "#177D7D", borderColor: "#177D7D", color: "#fff" }
+                      : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
                   }
                 >
                   <input

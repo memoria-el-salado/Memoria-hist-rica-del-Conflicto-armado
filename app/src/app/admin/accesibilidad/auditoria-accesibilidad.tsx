@@ -36,11 +36,11 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
   const accesibles = filas.filter((f) => f.alternativa && f.descripcion).length;
   const porcentaje = filas.length ? Math.round((accesibles / filas.length) * 100) : 100;
   const ocultos = filas.filter((f) => !f.visible).length;
-  const color = porcentaje >= 90 ? "#177575" : porcentaje >= 70 ? "#A8791C" : "#C0392B";
+  const color = porcentaje >= 90 ? "#177575" : porcentaje >= 70 ? "#886216" : "#C0392B";
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU10 · CALIDAD</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU10 · CALIDAD</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
         Validación de Accesibilidad Universal
       </h1>
@@ -86,7 +86,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
           Todavía no hay recursos multimedia cargados.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-borde bg-superficie">
+        <div role="region" aria-label="Recursos auditados" tabIndex={0} className="overflow-x-auto rounded-xl border border-borde bg-superficie">
           <div className="min-w-[760px]">
             <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
               <span>CONTENIDO</span>

@@ -50,7 +50,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
         </svg>
         <span>ALERTAS DE CUIDADO</span>
       </div>
-      <p className="mb-3.5 mt-2.5 text-[12px] leading-[1.65] text-[#7C736C]">
+      <p className="mb-3.5 mt-2.5 text-[12px] leading-[1.65] text-apagado">
         Antes de una sesión con alerta, el estudiante lee este aviso y decide si continúa, lo deja para después
         o te pide acompañamiento.
       </p>

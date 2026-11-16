@@ -21,7 +21,7 @@ export default async function ForosEstudiantePage() {
 
   return (
     <div className="animar-aparecer max-w-[860px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU08 · CONTRASTE DE FUENTES</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU08 · CONTRASTE DE FUENTES</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Debates</h1>
       <p className="mb-5 max-w-[620px] text-[13.5px] leading-[1.65] text-apagado">
         En cada debate asumes uno de dos roles y defiendes tu posición con argumentos apoyados en

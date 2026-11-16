@@ -278,7 +278,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                   >
                     <span
                       className={`absolute left-1/2 top-1 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-[2px] text-[9px] font-extrabold ${
-                        familia ? (bien ? "bg-[#2E9B5E] text-white" : "bg-peligro text-white") : "bg-[#E9DDD3] text-apagado"
+                        familia ? (bien ? "bg-[#2E9B5E] text-white" : "bg-peligro text-white") : "bg-[#E9DDD3] text-tinta-media"
                       }`}
                     >
                       {pequeno ? (
@@ -351,7 +351,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
               <ul className="mt-3 grid gap-2.5" aria-live="polite">
                 {(criterios.length
                   ? criterios
-                  : [{ color: "#A79E96", titulo: "Sin validar", detalle: "Reparte los lotes y los subsidios, y pulsa «Validar distribución» para ver el dictamen." }]
+                  : [{ color: "#6D6762", titulo: "Sin validar", detalle: "Reparte los lotes y los subsidios, y pulsa «Validar distribución» para ver el dictamen." }]
                 ).map((c) => (
                   <li key={c.titulo} className="flex items-start gap-2.5">
                     <span className="mt-[5px] h-[9px] w-[9px] flex-none rounded-full" style={{ background: c.color }} />
@@ -359,7 +359,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                       <div className="text-[12.5px] font-bold" style={{ color: c.color }}>
                         {c.titulo}
                       </div>
-                      <div className="text-[11.5px] leading-[1.55] text-[#7C736C]">{c.detalle}</div>
+                      <div className="text-[11.5px] leading-[1.55] text-apagado">{c.detalle}</div>
                     </div>
                   </li>
                 ))}
@@ -397,7 +397,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                 </svg>
                 <span>NOTA DEL ARCHIVO</span>
               </div>
-              <p className="mt-2 text-[12px] italic leading-[1.65] text-[#7C736C]">
+              <p className="mt-2 text-[12px] italic leading-[1.65] text-apagado">
                 «La tierra no es solo un recurso productivo; es el cimiento de la dignidad del retorno. En El Salado, la
                 repartición fue un hito de autogestión comunitaria.»
               </p>
@@ -412,7 +412,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
 function Indicador({ titulo, valor, color, fondo }: { titulo: string; valor: string; color: string; fondo: string }) {
   return (
     <div className="min-w-[96px] rounded-[10px] border px-3.5 py-2" style={{ borderColor: color, background: fondo, color }}>
-      <dt className="text-[9px] font-bold tracking-[.1em] opacity-80">{titulo}</dt>
+      <dt className="text-[9px] font-bold tracking-[.1em]">{titulo}</dt>
       <dd className="text-[19px] font-extrabold">{valor}</dd>
     </div>
   );

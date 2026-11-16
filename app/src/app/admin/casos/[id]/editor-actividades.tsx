@@ -55,7 +55,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
           <ul>
             {e.sesiones.map((s) => (
               <li key={s.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
-                <span className="w-[34px] text-[13px] font-extrabold text-[#DCD3CB]">{s.codigo}</span>
+                <span className="w-[34px] text-[13px] font-extrabold text-tenue">{s.codigo}</span>
                 <div className="min-w-[220px] flex-1">
                   <div className="text-[13px] font-bold">{s.titulo}</div>
                   <div className="text-[10.5px] text-suave">

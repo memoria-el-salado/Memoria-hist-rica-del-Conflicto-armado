@@ -221,7 +221,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 function SiguientePaso({ siguiente }: { siguiente: { id: string; codigo: string; titulo: string } | null }) {
   return (
     <nav aria-label="Siguiente paso del viaje" className="mt-[22px] flex flex-wrap items-center justify-between gap-3 border-t border-borde pt-5">
-      <Link href="/estudiante/mapa" className="text-[12.5px] font-semibold text-apagado no-underline hover:text-primario">
+      <Link href="/estudiante/mapa" className="text-[12.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Volver al mapa del viaje
       </Link>
       {siguiente ? (

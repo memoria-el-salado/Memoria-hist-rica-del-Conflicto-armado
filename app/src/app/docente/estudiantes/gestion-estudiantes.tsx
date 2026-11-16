@@ -42,7 +42,7 @@ export function GestionEstudiantes({
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
         CU01 · GESTIÓN DE CUENTAS
       </div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Mis estudiantes</h1>

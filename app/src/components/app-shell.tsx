@@ -53,6 +53,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
 
   return (
     <div className="flex min-h-screen flex-col-reverse bg-fondo md:flex-row">
+      <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
       <nav
         aria-label="Navegación principal"
         className="sticky bottom-0 z-20 flex border-t border-borde bg-superficie px-2 py-1.5 md:top-0 md:h-screen md:w-[236px] md:flex-none md:flex-col md:gap-[18px] md:border-r md:border-t-0 md:px-3.5 md:py-5"
@@ -174,13 +175,13 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </Link>
           )}
           {rol === "ESTUDIANTE" && (
-            <Link href="/estudiante/explorador" className="px-1 text-[11px] font-semibold text-suave hover:text-primario">
+            <Link href="/estudiante/explorador" className="px-1 text-[11px] font-semibold text-suave hover:text-primario-texto">
               Cambiar mi explorador
             </Link>
           )}
           <Link
             href="/cambiar-contrasena"
-            className="px-1 text-[11px] font-semibold text-suave hover:text-primario"
+            className="px-1 text-[11px] font-semibold text-suave hover:text-primario-texto"
           >
             Cambiar mi contraseña
           </Link>
@@ -240,14 +241,14 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </div>
             <button
               onClick={() => signOut({ redirectTo: "/login" })}
-              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[11px] py-[7px] text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario"
+              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[11px] py-[7px] text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
             >
               Salir
             </button>
           </div>
         </header>
 
-        <main data-escala={escala} className="flex-1 px-4 pb-8 pt-5 md:px-[30px] md:pb-15 md:pt-7">
+        <main id="contenido" tabIndex={-1} data-escala={escala} className="outline-none flex-1 px-4 pb-8 pt-5 md:px-[30px] md:pb-15 md:pt-7">
           {children}
         </main>
       </div>
@@ -282,7 +283,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             <button
               autoFocus
               onClick={() => setAlertaAbierta(false)}
-              className="mt-3 cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[17px] py-2.5 text-[13px] font-semibold text-apagado hover:border-primario hover:text-primario"
+              className="mt-3 cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[17px] py-2.5 text-[13px] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
             >
               Cerrar
             </button>

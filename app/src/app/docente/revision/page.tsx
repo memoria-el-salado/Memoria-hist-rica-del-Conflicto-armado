@@ -32,7 +32,7 @@ export default async function RevisionPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="animar-aparecer max-w-[920px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">LMS · RETROALIMENTACIÓN</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">LMS · RETROALIMENTACIÓN</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Revisión</h1>
       <p className="mb-4 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
         Lo que entregan tus estudiantes: respuestas a las actividades, simulaciones validadas y las entradas del

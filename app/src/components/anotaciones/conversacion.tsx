@@ -68,7 +68,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
         </div>
       </div>
 
-      <div className="flex max-h-[460px] flex-col gap-3 overflow-auto bg-[#FBF8F5] px-3.5 py-3.5">
+      <div role="region" aria-label="Anotaciones de la conversación" tabIndex={0} className="flex max-h-[460px] flex-col gap-3 overflow-auto bg-[#FBF8F5] px-3.5 py-3.5">
         {ordenados.length === 0 ? (
           <p className="py-6 text-center text-[12.5px] leading-[1.6] text-tenue">
             {modo === "DESTACADOS" ? "El docente todavía no ha destacado ninguna anotación." : "Todavía no hay anotaciones. La tuya sería la primera."}
@@ -81,7 +81,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
       <form onSubmit={publicar} className="border-t border-[#F1EBE5] px-[18px] py-3.5">
         {cita && (
           <div className="mb-2 flex items-start gap-2 border-l-2 border-terciario bg-terciario-tinte px-[11px] py-2">
-            <span className="flex-1 text-[11.5px] italic text-[#7C736C]">{cita.length > 160 ? `${cita.slice(0, 160)}…` : cita}</span>
+            <span className="flex-1 text-[11.5px] italic text-apagado">{cita.length > 160 ? `${cita.slice(0, 160)}…` : cita}</span>
             <button type="button" onClick={onQuitarCita} aria-label="Quitar la cita" className="cursor-pointer text-[11px] font-bold text-tenue">
               ✕
             </button>
@@ -132,7 +132,7 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
       <Cabecera a={hilo} />
       {hilo.destacada && <div className="mt-1.5 text-[9.5px] font-extrabold tracking-[.1em] text-terciario-fuerte">DESTACADA POR EL DOCENTE</div>}
       {hilo.cita && (
-        <blockquote className="mt-2 border-l-2 border-primario bg-primario-tinte px-[11px] py-2 text-[11.5px] italic text-[#7C736C]">
+        <blockquote className="mt-2 border-l-2 border-primario bg-primario-tinte px-[11px] py-2 text-[11.5px] italic text-apagado">
           {hilo.cita.length > 220 ? `${hilo.cita.slice(0, 220)}…` : hilo.cita}
         </blockquote>
       )}
@@ -233,7 +233,7 @@ function Acciones({
         aria-pressed={a.yoMeSirve}
         aria-label={`Me sirve la anotación de ${a.autor}${a.meSirve ? `, ${a.meSirve}` : ""}`}
         title={a.propia ? "Es tuya" : "Me sirve"}
-        className={`flex cursor-pointer items-center gap-1 disabled:cursor-default ${a.yoMeSirve ? "text-primario-fuerte" : "hover:text-primario"}`}
+        className={`flex cursor-pointer items-center gap-1 disabled:cursor-default ${a.yoMeSirve ? "text-primario-fuerte" : "hover:text-primario-texto"}`}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill={a.yoMeSirve ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M7 10v12M15 5.9 14 10h5.8a2 2 0 0 1 2 2.3l-1.4 8a2 2 0 0 1-2 1.7H7V10l4-8a3 3 0 0 1 4 3.9z" />
@@ -241,7 +241,7 @@ function Acciones({
         {a.meSirve}
       </button>
       {onResponder && (
-        <button type="button" onClick={onResponder} aria-expanded={respondiendo} className="cursor-pointer hover:text-primario">
+        <button type="button" onClick={onResponder} aria-expanded={respondiendo} className="cursor-pointer hover:text-primario-texto">
           Responder
         </button>
       )}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { fondoParaTextoBlanco } from "@/lib/contraste";
 import { componerLectura, subseccionesSinTexto } from "@/lib/lectura-sesion";
 import type { RecursoVista } from "@/lib/material";
 import type { PasoDeSesion } from "@/lib/ruta";
@@ -43,7 +44,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
     <header className="mb-5">
       <Link
         href="/estudiante/mapa"
-        className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:text-primario"
+        className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M11 18l-6-6 6-6" />
@@ -54,7 +55,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
       <div className="mt-2.5 flex flex-wrap items-center gap-2">
         <span
           className="rounded-full px-2.5 py-1 text-[10.5px] font-bold text-white"
-          style={{ background: sesion.eje.tono }}
+          style={{ background: fondoParaTextoBlanco(sesion.eje.tono) }}
         >
           EJE {sesion.eje.numero}
         </span>
@@ -67,7 +68,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
       </div>
 
       <h1 className="mt-2 text-[24px] font-extrabold leading-[1.2] tracking-[-.02em]">
-        <span className="text-primario">{sesion.codigo}</span> {sesion.titulo}
+        <span className="text-primario-texto">{sesion.codigo}</span> {sesion.titulo}
       </h1>
 
       {sesion.objetivo && (
@@ -82,7 +83,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
 
       {sesion.preguntaOrientadora && (
         <div id="pregunta-orientadora" className="mt-3.5 scroll-mt-24 rounded-xl border border-primario-borde bg-primario-tinte px-5 py-4">
-          <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">
+          <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
             PREGUNTA ORIENTADORA
           </div>
           <p className="mt-1.5 text-[15.5px] font-semibold leading-[1.45] text-[#5B524B]">
@@ -159,7 +160,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
               key={bloque.id}
               className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
             >
-              <span className="text-primario">{bloque.codigo}</span>
+              <span className="text-primario-texto">{bloque.codigo}</span>
               <span>{bloque.texto}</span>
             </h3>
           ) : (
@@ -186,7 +187,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
           <ol className="mt-2.5 grid gap-1.5">
             {sinTexto.map((sub) => (
               <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
-                <span className="font-bold text-primario">{sub.codigo}</span>
+                <span className="font-bold text-primario-texto">{sub.codigo}</span>
                 <span>{sub.titulo}</span>
               </li>
             ))}

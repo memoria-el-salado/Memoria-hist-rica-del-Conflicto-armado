@@ -53,7 +53,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                     key={bloque.id}
                     className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
                   >
-                    <span className="text-primario">{bloque.codigo}</span>
+                    <span className="text-primario-texto">{bloque.codigo}</span>
                     <span>{bloque.texto}</span>
                   </h3>
                 ) : (
@@ -91,7 +91,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
               <ol className="mt-2.5 grid gap-1.5">
                 {sinTexto.map((sub) => (
                   <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
-                    <span className="font-bold text-primario">{sub.codigo}</span>
+                    <span className="font-bold text-primario-texto">{sub.codigo}</span>
                     <span>{sub.titulo}</span>
                   </li>
                 ))}

@@ -31,7 +31,7 @@ export function GestionDocentes({
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
         CU01 · GESTIÓN DE CUENTAS
       </div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Docentes</h1>
@@ -59,7 +59,7 @@ export function GestionDocentes({
                 key={d.id}
                 className="flex items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
               >
-                <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-terciario text-[11px] font-extrabold text-white">
+                <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-terciario-fuerte text-[11px] font-extrabold text-white">
                   {d.iniciales}
                 </div>
                 <div className="min-w-0 flex-1">

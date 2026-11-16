@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { fondoParaTextoBlanco } from "@/lib/contraste";
 import { CENTRO_COLOMBIA } from "@/lib/datos-geograficos";
 
 // Leaflet necesita el DOM, así que el mapa solo se carga en el navegador.
@@ -118,7 +119,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
       <div className="mb-6 grid items-end gap-[18px] lg:grid-cols-2">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10.5px] font-bold tracking-[.14em] text-primario">TU VIAJE</span>
+            <span className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">TU VIAJE</span>
             {pertenencia && (
               <span className="rounded-full bg-secundario-tinte px-2.5 py-0.5 text-[11px] font-bold text-secundario-fuerte">
                 {pertenencia}
@@ -322,7 +323,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                     >
                       <span
                         className="flex h-[34px] min-w-[34px] flex-none items-center justify-center rounded-[9px] px-2 text-[14px] font-extrabold text-white"
-                        style={{ background: e.tono }}
+                        style={{ background: fondoParaTextoBlanco(e.tono) }}
                       >
                         {e.esPreambulo ? "0" : e.numero}
                       </span>
@@ -333,7 +334,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                             className="rounded-full px-[9px] py-1 text-[9.5px] font-extrabold tracking-[.08em]"
                             style={{
                               background: e.bloqueo ? "#FDF8EF" : e.progreso === 100 ? "#E5F1F0" : e.progreso > 0 ? "#FDF4F0" : "#F3F0EC",
-                              color: e.bloqueo ? "#A8791C" : e.progreso === 100 ? "#177575" : e.progreso > 0 ? "#B8482A" : "#A79E96",
+                              color: e.bloqueo ? "#886216" : e.progreso === 100 ? "#177575" : e.progreso > 0 ? "#B24528" : "#6D6762",
                             }}
                           >
                             {estado}
@@ -347,7 +348,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                             {e.bloqueo}
                           </span>
                         )}
-                        <span className="mt-1 block text-[12.5px] leading-[1.6] text-[#7C736C]">{e.descripcion}</span>
+                        <span className="mt-1 block text-[12.5px] leading-[1.6] text-apagado">{e.descripcion}</span>
                         <span className="mt-2.5 flex items-center gap-2.5">
                           <span className="h-1.5 max-w-[260px] flex-1 overflow-hidden rounded-[9px] bg-[#F0EAE4]">
                             <span className="block h-full" style={{ width: `${e.progreso}%`, background: e.tono }} />
@@ -420,7 +421,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                                   <span>Actividad: {s.tipo}</span>
                                   {s.material > 0 && <span className="font-semibold text-secundario-fuerte">Material: {recursos(s.material)}</span>}
                                 </div>
-                                {s.objetivo && <p className="mt-1.5 text-[11.5px] leading-[1.6] text-[#7C736C]">{s.objetivo}</p>}
+                                {s.objetivo && <p className="mt-1.5 text-[11.5px] leading-[1.6] text-apagado">{s.objetivo}</p>}
                                 {s.subsecciones.length > 0 && (
                                   <ul className="mt-2 grid gap-1 border-l-2 border-borde pl-3">
                                     {s.subsecciones.map((sub) => (

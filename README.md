@@ -56,9 +56,9 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0. Cubre por completo los diez casos de uso del proyecto y los mockups revisados del
-documento de avance. Tiene 354 pruebas unitarias —política de contraseñas, separación de funciones
+documento de avance. Tiene 359 pruebas unitarias —política de contraseñas, separación de funciones
 por rol, visibilidad entre cursos, reglas del simulador, importación de los PDF, avance ponderado,
-competencias y subpoblaciones— y 23 pruebas de extremo a extremo que recorren cada funcionalidad en
+competencias y subpoblaciones— y 24 pruebas de extremo a extremo que recorren cada funcionalidad en
 un navegador real (`npm run humo:*`, sección 7).
 
 ---
@@ -266,6 +266,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:anotaciones` | Anotaciones en hilo: cita, respuesta y «me sirve» entre compañeros; el docente filtra por curso, destaca y responde; otro curso no ve el hilo |
 | `npm run humo:simulador` | Simulador por lotes: arrastrar, elegir y tocar, o asignar desde el lote; tope de 40 ha, subsidios, equidad y riesgo; guarda los lotes y reinicia |
 | `npm run humo:cartillas` | El administrador vincula las cartillas al módulo; la sesión las abre en su apartado (el estudiante, solo la suya; el docente, también la guía para maestros) y avisa cuando la cartilla no desarrolla la sesión |
+| `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 36 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
 | `npm run humo:ruta` | El mapa como ruta en orden (cómo funciona, por dónde seguir, ejes que se despliegan en su sitio) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
@@ -384,8 +385,14 @@ asociado a la sesión en la que se produjo.
 indicar sus coordenadas para ubicarlo en el mapa de Colombia.
 
 **Accesibilidad**: control de tamaño de texto (A / A+ / A++), transcripción obligatoria de los audios
-(WCAG 1.2.1) y subtítulos sincronizados de los videos (WCAG 1.2.2), etiquetas y roles ARIA en formularios y controles, foco de teclado visible, y
-diseño responsivo que conmuta a navegación inferior por debajo de 960 px.
+(WCAG 1.2.1) y subtítulos sincronizados de los videos (WCAG 1.2.2), etiquetas y roles ARIA en formularios
+y controles, foco de teclado visible, enlace «Saltar al contenido» en cada página (2.4.1), zonas
+desplazables operables con el teclado, y animaciones que se apagan con la preferencia del sistema de
+reducir el movimiento (2.3.3). Todo el texto llega al contraste 4.5:1 (1.4.3): el naranja de la marca
+(`primario`, #D95D39) queda para fondos, bordes e íconos, y el texto usa `primario-texto` (#AE4A2D);
+los colores propios de cada eje se oscurecen lo justo cuando llevan texto blanco encima
+(`src/lib/contraste.ts`). El diseño es responsivo y conmuta a navegación inferior por debajo de 960 px;
+`npm run humo:accesibilidad` lo comprueba todo en tres tamaños de pantalla.
 
 ---
 

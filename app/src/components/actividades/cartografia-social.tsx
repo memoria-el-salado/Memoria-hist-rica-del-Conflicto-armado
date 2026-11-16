@@ -318,7 +318,7 @@ export function CartografiaSocial({
                   style={
                     activo
                       ? { background: "#1B8A8A", borderColor: "#1B8A8A", color: "#fff" }
-                      : { background: "#fff", borderColor: "#E4DDD6", color: "#7C736C" }
+                      : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
                   }
                 >
                   {s}

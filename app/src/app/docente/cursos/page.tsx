@@ -23,7 +23,7 @@ export default async function CursosPage() {
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">ORGANIZACIÓN · CURSOS Y GRUPOS</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">ORGANIZACIÓN · CURSOS Y GRUPOS</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Mis cursos</h1>
       <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
         Organiza a tus estudiantes por curso y, dentro de cada curso, en grupos de trabajo para las

@@ -74,7 +74,7 @@ export function FotoLugar({
           </button>
         </div>
       ) : (
-        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-borde-campo px-4 py-2.5 text-[12.5px] font-bold text-apagado hover:border-primario hover:text-primario">
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-borde-campo px-4 py-2.5 text-[12.5px] font-bold text-apagado hover:border-primario hover:text-primario-texto">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
           </svg>

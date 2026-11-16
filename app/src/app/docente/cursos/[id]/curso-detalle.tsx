@@ -38,7 +38,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <Link href="/docente/cursos" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario">
+      <Link href="/docente/cursos" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Mis cursos
       </Link>
       <h1 className="mb-1 mt-2 text-[26px] font-extrabold tracking-[-.02em]">{curso.nombre}</h1>

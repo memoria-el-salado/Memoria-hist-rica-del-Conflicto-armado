@@ -179,7 +179,7 @@ export function MapaRespaldo({
         {meridianos.map((l) => (
           <g key={`m${l}`}>
             <line x1={aX(l)} y1={0} x2={aX(l)} y2={alto} stroke="rgba(120,100,80,.22)" strokeWidth="1" />
-            <text x={aX(l) + 4} y={alto - 6} fontSize="11" fill="#8C8279">
+            <text x={aX(l) + 4} y={alto - 6} fontSize="11" fill="#6F6760">
               {l.toFixed(paso < 0.1 ? 3 : paso < 1 ? 2 : 0)}°
             </text>
           </g>
@@ -187,7 +187,7 @@ export function MapaRespaldo({
         {paralelos.map((l) => (
           <g key={`p${l}`}>
             <line x1={0} y1={aY(l)} x2={ANCHO} y2={aY(l)} stroke="rgba(120,100,80,.22)" strokeWidth="1" />
-            <text x={6} y={aY(l) - 5} fontSize="11" fill="#8C8279">
+            <text x={6} y={aY(l) - 5} fontSize="11" fill="#6F6760">
               {l.toFixed(paso < 0.1 ? 3 : paso < 1 ? 2 : 0)}°
             </text>
           </g>

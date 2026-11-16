@@ -53,7 +53,7 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
   if (ejes.length === 0) {
     return (
       <div className="rounded-xl border border-borde bg-superficie p-5">
-        <div className="text-[11px] font-bold tracking-[.12em] text-primario">PESO DE CADA EJE</div>
+        <div className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</div>
         <p className="mt-2.5 text-[12.5px] leading-[1.6] text-tenue">
           No hay ningún módulo activo todavía. Cuando la administración importe uno, aquí podrás
           repartir el peso de sus ejes.
@@ -65,10 +65,10 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
   return (
     <div className="rounded-xl border border-borde bg-superficie p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-[11px] font-bold tracking-[.12em] text-primario">PESO DE CADA EJE</span>
+        <span className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</span>
         <button
           onClick={equitativo}
-          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario"
+          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
         >
           Repartir por igual
         </button>
@@ -87,7 +87,7 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
                 title={eje.nombre}
                 className="block truncate text-[12.5px] font-semibold text-tinta-media"
               >
-                <span className="text-primario">Eje {eje.numero}</span> · {eje.nombre}
+                <span className="text-primario-texto">Eje {eje.numero}</span> · {eje.nombre}
               </span>
               <span className="text-[10.5px] text-suave">
                 {eje.publicadas === 0

@@ -95,7 +95,7 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
         <span>ALERTA DE CUIDADO</span>
       </div>
       <h1 id="titulo-puerta-cuidado" className="mb-3 mt-3 text-[21px] font-extrabold leading-[1.25] tracking-[-.02em]">
-        Antes de empezar <span className="text-primario">{codigo}</span> {titulo}
+        Antes de empezar <span className="text-primario-texto">{codigo}</span> {titulo}
       </h1>
       <p className="whitespace-pre-line text-[14px] leading-[1.75] text-tinta-media">{texto}</p>
 
@@ -108,7 +108,7 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
         </button>
         <Link
           href="/estudiante/mapa"
-          className="rounded-lg border border-borde-campo bg-superficie px-[17px] py-[11px] text-[13px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario"
+          className="rounded-lg border border-borde-campo bg-superficie px-[17px] py-[11px] text-[13px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto"
         >
           Dejarlo para después
         </Link>

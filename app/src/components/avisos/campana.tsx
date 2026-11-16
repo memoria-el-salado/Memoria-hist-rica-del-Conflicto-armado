@@ -50,7 +50,7 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
         aria-expanded={abierta}
         aria-haspopup="true"
         aria-label={nuevos ? `Avisos: ${nuevos} ${nuevos === 1 ? "nuevo" : "nuevos"}` : "Avisos"}
-        className="relative flex cursor-pointer items-center rounded-lg border border-borde-campo bg-superficie px-2.5 py-[7px] text-apagado hover:border-primario hover:text-primario"
+        className="relative flex cursor-pointer items-center rounded-lg border border-borde-campo bg-superficie px-2.5 py-[7px] text-apagado hover:border-primario hover:text-primario-texto"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
@@ -80,7 +80,7 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
                     onClick={() => setAbierta(false)}
                     className={`flex gap-3 px-4 py-3 text-tinta no-underline hover:bg-superficie-suave ${a.nuevo ? "bg-primario-tinte/60" : ""}`}
                   >
-                    <svg className="mt-0.5 flex-none text-primario" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="mt-0.5 flex-none text-primario-texto" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d={ICONO[a.tipo]} />
                     </svg>
                     <span className="min-w-0 flex-1">

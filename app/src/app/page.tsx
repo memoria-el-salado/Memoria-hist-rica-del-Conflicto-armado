@@ -79,13 +79,14 @@ function Paisaje() {
 export default function Portada() {
   return (
     <div className="min-h-screen bg-fondo text-tinta">
+      <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
       <header className="sticky top-0 z-20 border-b border-borde bg-fondo/95 backdrop-blur-[8px]">
         <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-4 py-3 md:px-6">
           <span className="text-[15px] font-extrabold tracking-[.02em] text-primario-fuerte">Memoria El Salado</span>
           <nav aria-label="Secciones de la portada" className="hidden gap-6 text-[12px] font-bold tracking-[.06em] text-apagado sm:flex">
-            <a href="#descubre" className="no-underline hover:text-primario">EL PROYECTO</a>
-            <a href="#experiencias" className="no-underline hover:text-primario">ACTIVIDADES</a>
-            <a href="#privacidad" className="no-underline hover:text-primario">PRIVACIDAD</a>
+            <a href="#descubre" className="no-underline hover:text-primario-texto">EL PROYECTO</a>
+            <a href="#experiencias" className="no-underline hover:text-primario-texto">ACTIVIDADES</a>
+            <a href="#privacidad" className="no-underline hover:text-primario-texto">PRIVACIDAD</a>
           </nav>
           <Link href="/login" className="rounded-lg bg-primario-fuerte px-4 py-2 text-[12.5px] font-bold text-white no-underline hover:bg-primario-hover">
             Entrar
@@ -93,7 +94,7 @@ export default function Portada() {
         </div>
       </header>
 
-      <main>
+      <main id="contenido" tabIndex={-1} className="outline-none">
         <section className="mx-auto grid max-w-[1120px] items-center gap-10 px-4 pb-14 pt-12 md:grid-cols-[1.05fr_1fr] md:px-6 md:pt-16">
           <div>
             <span className="inline-block rounded-full bg-primario-tinte px-3 py-1 text-[10.5px] font-extrabold tracking-[.12em] text-primario-fuerte">
@@ -200,7 +201,7 @@ export default function Portada() {
           <span>
             <strong className="text-primario-fuerte">Memoria El Salado</strong> · Preservando la memoria para un futuro mejor.
           </span>
-          <a href="https://centrodememoriahistorica.gov.co" target="_blank" rel="noreferrer" className="font-semibold text-apagado hover:text-primario">
+          <a href="https://centrodememoriahistorica.gov.co" target="_blank" rel="noreferrer" className="font-semibold text-apagado hover:text-primario-texto">
             Centro Nacional de Memoria Histórica
           </a>
         </div>

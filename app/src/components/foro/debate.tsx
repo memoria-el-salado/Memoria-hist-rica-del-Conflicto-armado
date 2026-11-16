@@ -35,11 +35,11 @@ export function DebateForo({
 
   return (
     <div className="animar-aparecer max-w-[920px]">
-      <Link href={volver} className="text-[11.5px] font-bold text-tenue hover:text-primario">
+      <Link href={volver} className="text-[11.5px] font-bold text-tenue hover:text-primario-texto">
         ← Todos los debates
       </Link>
 
-      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario">
+      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
         CU08 · DEBATE{foro.sesion ? ` · SESIÓN ${foro.sesion.toUpperCase()}` : ""}
         {foro.curso ? ` · CURSO ${foro.curso.toUpperCase()}` : ""}
       </div>
@@ -217,7 +217,7 @@ function Hilo({
           ) : (
             <button
               onClick={() => setRespondiendo(true)}
-              className="cursor-pointer text-[11.5px] font-bold text-primario hover:text-primario-fuerte"
+              className="cursor-pointer text-[11.5px] font-bold text-primario-texto hover:text-primario-fuerte"
             >
               Responder
             </button>

@@ -82,7 +82,7 @@ export function LoginForm() {
               className={`flex cursor-pointer flex-col items-center gap-1.5 rounded-[9px] border px-1.5 py-3 transition-colors ${
                 activo
                   ? "border-primario bg-primario-tinte text-primario-fuerte"
-                  : "border-borde-campo bg-superficie text-[#7C736C] hover:border-primario/40"
+                  : "border-borde-campo bg-superficie text-apagado hover:border-primario/40"
               }`}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -140,7 +140,7 @@ export function LoginForm() {
           onClick={() => setVerClave((v) => !v)}
           aria-label={verClave ? "Ocultar la contraseña" : "Mostrar la contraseña"}
           aria-pressed={verClave}
-          className="absolute right-1.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-suave hover:text-primario"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-suave hover:text-primario-texto"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             {verClave ? (

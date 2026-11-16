@@ -41,7 +41,7 @@ export function MediacionForos({
 
   return (
     <div className="animar-aparecer max-w-[1000px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU08 · SESIÓN 1.3</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU08 · SESIÓN 1.3</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
         Mediación de Debates y Foros
       </h1>
@@ -177,7 +177,7 @@ export function MediacionForos({
                 style={
                   f.abierto
                     ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
-                    : { borderColor: "#E4DDD6", background: "#fff", color: "#A79E96" }
+                    : { borderColor: "#E4DDD6", background: "#fff", color: "#6D6762" }
                 }
               >
                 {f.abierto ? "FORO ABIERTO" : "FORO CERRADO"}

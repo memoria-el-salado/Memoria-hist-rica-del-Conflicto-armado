@@ -5,7 +5,8 @@ import { LoginForm } from "./login-form";
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-fondo">
-      <div className="flex flex-1 items-center justify-center px-5 py-8">
+      <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
+      <main id="contenido" tabIndex={-1} className="flex flex-1 items-center justify-center px-5 py-8 outline-none">
         <div className="grid w-full max-w-[1000px] overflow-hidden rounded-[14px] border border-borde bg-superficie shadow-[0_18px_50px_rgba(70,45,30,.07)] md:grid-cols-[1fr_1.05fr]">
           <div className="relative hidden min-h-[520px] flex-col overflow-hidden p-10 md:flex">
             <div className="absolute inset-0 bg-[linear-gradient(160deg,#D95D39_0%,#B8482A_60%,#8E3520_100%)]" />
@@ -23,7 +24,7 @@ export default function LoginPage() {
           </div>
 
           <div className="px-8 py-10 sm:px-11 sm:pb-9 sm:pt-11">
-            <div className="flex items-center gap-[7px] text-[10.5px] font-bold tracking-[.14em] text-primario">
+            <div className="flex items-center gap-[7px] text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
@@ -40,17 +41,17 @@ export default function LoginPage() {
               ¿Eres nuevo aquí? <strong className="text-primario-fuerte">Pide a tu docente</strong> que cree tu cuenta.
             </p>
             <p className="mt-2 text-center text-[11.5px]">
-              <Link href="/" className="font-semibold text-apagado hover:text-primario">
+              <Link href="/" className="font-semibold text-apagado hover:text-primario-texto">
                 ← Volver al inicio
               </Link>
             </p>
           </div>
         </div>
-      </div>
+      </main>
 
-      <div className="flex flex-wrap justify-between gap-3.5 border-t border-borde px-7 py-4 text-[11px] text-[#9A918A]">
+      <div className="flex flex-wrap justify-between gap-3.5 border-t border-borde px-7 py-4 text-[11px] text-tenue">
         <span>
-          <strong className="font-bold text-primario">Memoria El Salado</strong> · Plataforma educativa LMS /
+          <strong className="font-bold text-primario-texto">Memoria El Salado</strong> · Plataforma educativa LMS /
           LCMS · 2026
         </span>
         <span className="flex gap-[18px]">

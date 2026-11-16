@@ -54,7 +54,7 @@ const rotulo = "mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue";
 export function GestionContenido({ recursos, ejes, documentos }: Props) {
   return (
     <div className="animar-aparecer">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">CU06 · LCMS</div>
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU06 · LCMS</div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
         Gestión de Contenido Multimedia
       </h1>
@@ -98,7 +98,7 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
                   href={`/api/documentos/${d.id}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario hover:no-underline"
+                  className="rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
                 >
                   Abrir PDF
                 </a>
@@ -159,7 +159,7 @@ function EditorTranscripcion({ r, alTerminar }: { r: Recurso; alTerminar: () => 
         className="mt-2 w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 font-mono text-[12px]"
       />
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <label className="cursor-pointer text-[11.5px] font-bold text-primario">
+        <label className="cursor-pointer text-[11.5px] font-bold text-primario-texto">
           Cargar archivo…
           <input
             type="file"
@@ -226,7 +226,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                 {r.sesion ? ` · Sesión ${r.sesion}` : " · Todo el eje"}
               </div>
             </div>
-            <span className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-bold tracking-[.05em] text-[#7C736C]">
+            <span className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-bold tracking-[.05em] text-apagado">
               {definicionDe(r.tipo).etiqueta}
             </span>
           </div>
@@ -237,7 +237,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
             <button
               onClick={() => setAbierto((a) => (a === r.id ? null : r.id))}
               aria-expanded={abierto === r.id}
-              className="cursor-pointer text-primario hover:text-primario-fuerte"
+              className="cursor-pointer text-primario-texto hover:text-primario-fuerte"
             >
               {abierto === r.id ? "Ocultar" : "Ver"}
             </button>
@@ -245,7 +245,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
               <button
                 onClick={() => setEditando((a) => (a === r.id ? null : r.id))}
                 aria-expanded={editando === r.id}
-                className="cursor-pointer text-primario hover:text-primario-fuerte"
+                className="cursor-pointer text-primario-texto hover:text-primario-fuerte"
               >
                 Transcripción
               </button>
@@ -260,8 +260,8 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                   className="cursor-pointer rounded-full border px-2.5 py-[3px] text-[9.5px] font-extrabold tracking-[.06em] disabled:opacity-60"
                   style={
                     r.alerta
-                      ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B8482A" }
-                      : { borderColor: "#E4DDD6", background: "#fff", color: "#A79E96" }
+                      ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
+                      : { borderColor: "#E4DDD6", background: "#fff", color: "#6D6762" }
                   }
                 >
                   ALERTA {r.alerta ? "ACTIVA" : "INACTIVA"}
@@ -506,8 +506,8 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
         className="mt-3.5 w-full cursor-pointer rounded-lg border px-4 py-2.5 text-[12px] font-bold"
         style={
           alerta
-            ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B8482A" }
-            : { borderColor: "#E4DDD6", background: "#fff", color: "#8C8279" }
+            ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
+            : { borderColor: "#E4DDD6", background: "#fff", color: "#6F6760" }
         }
       >
         Alerta de cuidado: {alerta ? "ACTIVADA" : "desactivada"}

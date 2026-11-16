@@ -106,7 +106,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
               style={
                 activo
                   ? { background: "#B8482A", borderColor: "#B8482A", color: "#fff" }
-                  : { background: "#fff", borderColor: "#E4DDD6", color: "#7C736C" }
+                  : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
               }
             >
               {f.label}
@@ -164,7 +164,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
                   )}
                 </span>
                 <span className="mt-2.5 text-[12.5px] font-bold">{f.nombre}</span>
-                <span className="mt-[3px] max-w-[190px] text-[11px] leading-[1.5] text-[#7C736C]">{f.legado}</span>
+                <span className="mt-[3px] max-w-[190px] text-[11px] leading-[1.5] text-apagado">{f.legado}</span>
                 <span className="mt-1.5 text-[9.5px] font-bold tracking-[.08em] text-suave">{etiquetaEpoca(f.epoca).toUpperCase()}</span>
               </button>
             </li>
@@ -190,14 +190,14 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
         </h2>
         <div className="mt-[18px] grid gap-[22px] sm:grid-cols-2">
           <div>
-            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario">1. EL ACTO DE RECORDAR</div>
+            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario-texto">1. EL ACTO DE RECORDAR</div>
             <p className="mt-1.5 text-[12.5px] leading-[1.7] text-apagado">
               Haz clic en una flor para leer la carta o el poema que la acompaña, o para ver el dibujo que
               alguien hizo en memoria de esa persona.
             </p>
           </div>
           <div>
-            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario">2. SEMBRAR LEGADO</div>
+            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario-texto">2. SEMBRAR LEGADO</div>
             <p className="mt-1.5 text-[12.5px] leading-[1.7] text-apagado">
               Siembra una flor en memoria de alguien de El Salado y, si quieres, acompáñala con una carta, un
               poema o un dibujo. La memoria se cuida entre todas y todos.
@@ -301,7 +301,7 @@ function FormularioFlor({
   const rotulo = "text-[10px] font-bold tracking-[.12em] text-tenue";
   const chip = (activo: boolean) =>
     `cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold ${
-      activo ? "border-secundario bg-secundario text-white" : "border-borde-campo bg-superficie text-[#7C736C]"
+      activo ? "border-secundario bg-secundario text-white" : "border-borde-campo bg-superficie text-apagado"
     }`;
 
   return (
@@ -451,7 +451,7 @@ function DetalleFlor({
     >
       {flor && (
         <div className="max-h-[85vh] overflow-y-auto px-6 py-6">
-          <div className="text-[10.5px] font-bold tracking-[.12em] text-primario">
+          <div className="text-[10.5px] font-bold tracking-[.12em] text-primario-texto">
             {etiquetaEpoca(flor.epoca).toUpperCase()}
             {flor.creacion !== "NINGUNA" && ` · ${ETIQUETA_CREACION[flor.creacion].toUpperCase()}`}
           </div>
@@ -490,7 +490,7 @@ function DetalleFlor({
             <button
               autoFocus
               onClick={onCerrar}
-              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-4 py-2 text-[12.5px] font-semibold text-apagado hover:border-primario hover:text-primario"
+              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-4 py-2 text-[12.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
             >
               Cerrar
             </button>

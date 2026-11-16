@@ -244,7 +244,7 @@ export function ImportadorDocumento({
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario">
+      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
         CU09 · CREACIÓN DE MÓDULOS
       </div>
       <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
@@ -316,7 +316,7 @@ export function ImportadorDocumento({
             </button>
           </div>
 
-          <div className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2.5 text-[11.5px] leading-[1.6] text-[#7C736C]">
+          <div className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2.5 text-[11.5px] leading-[1.6] text-apagado">
             La detección es automática y el PDF suele traer títulos partidos en columnas. Corrige aquí lo
             que haga falta y elimina lo que no corresponda: nada se guarda hasta que confirmes.
           </div>
@@ -393,7 +393,7 @@ export function ImportadorDocumento({
 
                         <button
                           onClick={() => alternarTexto(sesion.codigo)}
-                          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario"
+                          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
                         >
                           {textoAbierto === sesion.codigo ? "Ocultar texto" : "Texto de la sesión"}
                         </button>
@@ -604,7 +604,7 @@ export function ImportadorDocumento({
                     ? "Ahora solo lo abren los docentes. Púlsalo para abrirlo también a los estudiantes."
                     : "Los estudiantes pueden abrirlo. Púlsalo para reservarlo al docente."
                 }
-                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario disabled:opacity-60"
+                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-60"
               >
                 {d.soloDocentes ? "Abrir a estudiantes" : "Reservar al docente"}
               </button>
@@ -620,7 +620,7 @@ export function ImportadorDocumento({
                 href={`/api/documentos/${d.id}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario hover:no-underline"
+                className="rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
               >
                 Ver PDF
               </a>

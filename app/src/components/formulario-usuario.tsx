@@ -126,14 +126,14 @@ export function FormularioUsuario({
           <button
             type="button"
             onClick={() => setContrasena(generarContrasenaTemporal())}
-            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario"
+            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
           >
             Generar otra
           </button>
           <button
             type="button"
             onClick={() => setVisible((v) => !v)}
-            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario"
+            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
           >
             {visible ? "Ocultar" : "Mostrar"}
           </button>

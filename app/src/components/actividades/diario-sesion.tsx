@@ -9,7 +9,7 @@ const EMOCIONES = [
   { label: "TRISTEZA", color: "#1B8A8A", tinte: "#E5F1F0" },
   { label: "RABIA", color: "#C0392B", tinte: "#FBE7E4" },
   { label: "ESPERANZA", color: "#177575", tinte: "#E5F1F0" },
-  { label: "CONFUSIÓN", color: "#8C8279", tinte: "#F3F0EC" },
+  { label: "CONFUSIÓN", color: "#6F6760", tinte: "#F3F0EC" },
 ];
 
 type Entrada = {
@@ -78,7 +78,7 @@ export function DiarioSesion({
                 style={
                   activo
                     ? { background: e.color, borderColor: e.color, color: "#fff" }
-                    : { background: "#fff", borderColor: "#E4DDD6", color: "#7C736C" }
+                    : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
                 }
               >
                 {e.label}
@@ -107,7 +107,7 @@ export function DiarioSesion({
             style={
               compartir
                 ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
-                : { borderColor: "#E4DDD6", background: "#fff", color: "#8C8279" }
+                : { borderColor: "#E4DDD6", background: "#fff", color: "#6F6760" }
             }
           >
             Compartir con el docente: {compartir ? "SÍ" : "NO"}
@@ -137,7 +137,7 @@ export function DiarioSesion({
       <div className="grid gap-3">
         {entradas.map((d) => {
           const emo = EMOCIONES.find((e) => e.label === d.emocion);
-          const color = emo?.color ?? "#8C8279";
+          const color = emo?.color ?? "#6F6760";
           return (
             <div
               key={d.id}
@@ -158,7 +158,7 @@ export function DiarioSesion({
                   className="rounded-full px-[9px] py-[3px] text-[9.5px] font-extrabold tracking-[.07em]"
                   style={{
                     background: d.privada ? "#F3F0EC" : "#E5F1F0",
-                    color: d.privada ? "#A79E96" : "#177575",
+                    color: d.privada ? "#6D6762" : "#177575",
                   }}
                 >
                   {d.privada ? "PRIVADA" : "COMPARTIDA CON DOCENTE"}

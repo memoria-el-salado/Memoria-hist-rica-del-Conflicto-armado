@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 @theme {
+  /* El naranja de la marca, para fondos, bordes e íconos. Como texto pequeño
+     sobre los fondos claros no llega al contraste 4.5:1 de las WCAG (AA), así
+     que el texto usa el tono más oscuro de `primario-texto`. */
   --color-primario: #d95d39;
-  --color-primario-fuerte: #b8482a;
+  --color-primario-texto: #ae4a2d;
+  --color-primario-fuerte: #b24528;
   --color-primario-hover: #9e3c22;
   --color-primario-tinte: #fdf4f0;
   --color-primario-borde: #f2d9cf;
 
-  --color-secundario: #1b8a8a;
+  --color-secundario: #177d7d;
   --color-secundario-fuerte: #177575;
   --color-secundario-tinte: #f1f7f6;
   --color-secundario-borde: #cfe6e4;
 
   --color-terciario: #ebb035;
-  --color-terciario-fuerte: #a8791c;
+  --color-terciario-fuerte: #886216;
   --color-terciario-tinte: #fdf8ef;
   --color-terciario-borde: #e7dcc6;
 
@@ -23,8 +27,9 @@
   --color-tinta: #33302c;
   --color-tinta-media: #4a423c;
   --color-apagado: #6e655e;
-  --color-tenue: #8c8279;
-  --color-suave: #a79e96;
+  /* Los grises de apoyo, ajustados para llegar a 4.5:1 sobre todos los fondos claros. */
+  --color-tenue: #6f6760;
+  --color-suave: #6d6762;
   --color-borde: #ede7e1;
   --color-borde-campo: #e4ddd6;
   --color-peligro: #c0392b;
@@ -40,7 +45,7 @@
   }
 
   a {
-    color: var(--color-primario);
+    color: var(--color-primario-texto);
     text-decoration: none;
   }
 
@@ -96,6 +101,36 @@
 
 .animar-mecer {
   animation: mecer 6s ease-in-out infinite;
+}
+
+/* Quien pidió al sistema menos movimiento no ve animaciones ni desplazamientos suaves (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* El primer enlace de cada página: invisible hasta que llega el foco del teclado (WCAG 2.4.1). */
+.saltar-contenido {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  border-radius: 8px;
+  background: var(--color-tinta);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.saltar-contenido:focus {
+  top: 12px;
+  color: #fff;
 }
 
 /* Escala de texto accesible (A / A+ / A++) aplicada al contenido principal. */

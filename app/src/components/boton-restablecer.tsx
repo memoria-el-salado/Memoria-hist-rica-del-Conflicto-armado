@@ -29,7 +29,7 @@ export function BotonRestablecer({
         onClick={() =>
           iniciarTransicion(async () => setResultado(await accion(id)))
         }
-        className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11px] font-semibold text-apagado hover:border-primario hover:text-primario disabled:opacity-50"
+        className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11px] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-50"
       >
         {pendiente ? "Restableciendo..." : "Restablecer contraseña"}
       </button>
