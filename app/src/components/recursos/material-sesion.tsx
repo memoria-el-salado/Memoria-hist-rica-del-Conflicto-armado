@@ -7,7 +7,7 @@ export function MaterialSesion({ recursos, className = "mx-auto mt-6 max-w-[920p
   if (!recursos.length) return null;
 
   return (
-    <section id="material-sesion" aria-labelledby="titulo-material-sesion" className={className}>
+    <section aria-labelledby="titulo-material-sesion" className={className}>
       <h2 id="titulo-material-sesion" className="mb-3 text-[12.5px] font-extrabold tracking-[.08em] text-tinta-media">
         MATERIAL DE LA SESIÓN
       </h2>

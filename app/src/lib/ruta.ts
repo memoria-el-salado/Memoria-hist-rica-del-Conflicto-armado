@@ -46,13 +46,15 @@ export function pasosDeSesion(datos: {
   hecha: boolean;
   comentarios: number;
 }): PasoDeSesion[] {
+  // La cartilla acompaña siempre que la haya: también cuando hay material del docente.
+  const yCartilla = datos.tieneDocumento ? " y la cartilla" : "";
   const explora =
     datos.material > 0
-      ? `${datos.material} ${datos.material === 1 ? "recurso" : "recursos"} para leer, ver o escuchar`
+      ? `${datos.material} ${datos.material === 1 ? "recurso" : "recursos"} para leer, ver o escuchar${yCartilla}`
       : datos.tieneTexto
-        ? "El texto de la guía del CNMH"
+        ? `El texto de la guía del CNMH${yCartilla}`
         : datos.tieneDocumento
-          ? "El apartado de la guía en PDF"
+          ? "La cartilla, abierta en su apartado"
           : "Lo que tu docente presente en clase";
   return [
     { id: "explora", titulo: "Explora", detalle: explora, estado: "INFORMATIVO", ancla: "#material-sesion" },

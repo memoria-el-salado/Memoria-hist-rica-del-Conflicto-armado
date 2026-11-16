@@ -15,6 +15,7 @@ import {
 } from "@/lib/almacen";
 import { prisma } from "@/lib/prisma";
 import { ACTIVIDADES, armarArbol, detectarEstructura, type EjeArmado } from "@/lib/importador-pdf";
+import { ubicarCodigos } from "@/lib/cartillas";
 import {
   esIdentificadorDeSubida,
   MAXIMO_DIRECTO,
@@ -63,7 +64,10 @@ async function analizar(bytes: Uint8Array) {
     };
   }
 
-  return { titulo: estructura.titulo, arbol, paginas: totalPages };
+  // Dónde empieza cada apartado, para abrir la cartilla en la sesión justo ahí.
+  const { text: porPagina } = await extractText(pdf, { mergePages: false });
+
+  return { titulo: estructura.titulo, arbol, paginas: totalPages, ubicaciones: ubicarCodigos(porPagina) };
 }
 
 type Analisis = Awaited<ReturnType<typeof analizar>>;
@@ -81,6 +85,7 @@ async function registrar(
       nombreArchivo,
       rutaArchivo: rutaDe(id),
       paginas: analisis.paginas!,
+      ubicaciones: analisis.ubicaciones,
     },
   });
 

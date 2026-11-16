@@ -14,6 +14,8 @@ import type { Reparto } from "@/lib/simulador-lotes";
 import { componerLectura } from "@/lib/lectura-sesion";
 import { pasosDeSesion, sesionPosterior } from "@/lib/ruta";
 import { sesionHecha } from "@/lib/avance";
+import { cartillasDeSesion } from "@/lib/cartillas";
+import { cartillasDelCaso } from "@/lib/cartillas-datos";
 import { vistaDeRecurso } from "@/lib/material";
 import { puedeVerRecurso } from "@/lib/recursos";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
@@ -54,17 +56,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
   const sesion = await prisma.sesion.findUnique({
     where: { id },
     include: {
-      eje: {
-        include: {
-          caso: {
-            include: {
-              // El estudiante solo ve las guías pensadas para él; las de
-              // maestros traen las respuestas y quedan fuera de su alcance.
-              documentos: { where: { soloDocentes: false }, take: 1 },
-            },
-          },
-        },
-      },
+      eje: { include: { caso: true } },
       subsecciones: { orderBy: { orden: "asc" } },
     },
   });
@@ -101,7 +93,10 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     }
   }
 
-  const documento = sesion.eje.caso.documentos[0] ?? null;
+  // Las cartillas del módulo, abiertas en el apartado de esta sesión. El
+  // estudiante solo ve la suya: la guía para maestros trae las respuestas.
+  const cartillas = cartillasDeSesion(await cartillasDelCaso(sesion.eje.casoId), sesion.codigo, "ESTUDIANTE");
+  const documento = cartillas[0] ?? null;
 
   // Lo que el estudiante encuentra en la sesión, antes de armar la actividad:
   // el material, si ya la hizo, lo que su docente le comentó y la sesión que
@@ -153,7 +148,8 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       titulo: s.titulo,
       contenido: s.contenido,
     })),
-    documento: documento ? { id: documento.id, titulo: documento.titulo } : null,
+    documento: documento ? { id: documento.id, titulo: documento.titulo, enlace: documento.enlace } : null,
+    cartillas,
     ruta: {
       material: visibles,
       pasos: pasosDeSesion({

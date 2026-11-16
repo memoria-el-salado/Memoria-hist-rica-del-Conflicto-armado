@@ -8,6 +8,9 @@ import { ACTIVIDADES } from "@/lib/importador-pdf";
 import { prisma } from "@/lib/prisma";
 import { Conversacion } from "@/components/anotaciones/conversacion";
 import { FiltroCurso } from "@/components/filtro-curso";
+import { CartillasSesion } from "@/components/cartillas/cartillas-sesion";
+import { cartillasDeSesion } from "@/lib/cartillas";
+import { cartillasDelCaso } from "@/lib/cartillas-datos";
 import { FormularioPlanteamiento } from "./formulario-planteamiento";
 
 /**
@@ -35,7 +38,7 @@ export default async function SesionDocentePage({
       pantalla: true,
       publicada: true,
       preguntaOrientadora: true,
-      eje: { select: { numero: true, nombre: true } },
+      eje: { select: { numero: true, nombre: true, casoId: true } },
     },
   });
   if (!sesion) notFound();
@@ -51,6 +54,9 @@ export default async function SesionDocentePage({
     select: { id: true, nombre: true, anio: true },
   });
   const elegido = cursoElegido((await searchParams).curso, cursos);
+  // Las dos cartillas, cada una en su apartado: la del estudiante para leer en
+  // clase y la guía para maestros con las orientaciones de la sesión.
+  const cartillas = cartillasDeSesion(await cartillasDelCaso(sesion.eje.casoId), sesion.codigo, "DOCENTE");
 
   return (
     <div className="animar-aparecer max-w-[860px]">
@@ -64,6 +70,8 @@ export default async function SesionDocentePage({
       <h1 className="mb-1.5 mt-1.5 text-[24px] font-extrabold leading-tight tracking-[-.02em]">
         <span className="text-primario">{sesion.codigo}</span> {sesion.titulo}
       </h1>
+
+      <CartillasSesion cartillas={cartillas} codigo={sesion.codigo} className="mb-6 mt-3" />
 
       {sePlantea && <Planteamiento sesion={sesion} docenteId={docenteId} />}
 

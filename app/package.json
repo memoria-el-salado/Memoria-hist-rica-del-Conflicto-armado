@@ -40,6 +40,7 @@
     "humo:anotaciones": "node scripts/pruebas/anotaciones.mjs",
     "humo:simulador": "node scripts/pruebas/simulador.mjs",
     "humo:ruta": "node scripts/pruebas/ruta.mjs",
+    "humo:cartillas": "node scripts/pruebas/cartillas.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

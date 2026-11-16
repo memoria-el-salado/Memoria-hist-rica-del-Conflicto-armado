@@ -56,9 +56,9 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0. Cubre por completo los diez casos de uso del proyecto y los mockups revisados del
-documento de avance. Tiene 337 pruebas unitarias —política de contraseñas, separación de funciones
+documento de avance. Tiene 354 pruebas unitarias —política de contraseñas, separación de funciones
 por rol, visibilidad entre cursos, reglas del simulador, importación de los PDF, avance ponderado,
-competencias y subpoblaciones— y 22 pruebas de extremo a extremo que recorren cada funcionalidad en
+competencias y subpoblaciones— y 23 pruebas de extremo a extremo que recorren cada funcionalidad en
 un navegador real (`npm run humo:*`, sección 7).
 
 ---
@@ -265,6 +265,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:login` | El login deja ver la contraseña y dice quién la restablece; en su primera entrada el estudiante elige a su explorador |
 | `npm run humo:anotaciones` | Anotaciones en hilo: cita, respuesta y «me sirve» entre compañeros; el docente filtra por curso, destaca y responde; otro curso no ve el hilo |
 | `npm run humo:simulador` | Simulador por lotes: arrastrar, elegir y tocar, o asignar desde el lote; tope de 40 ha, subsidios, equidad y riesgo; guarda los lotes y reinicia |
+| `npm run humo:cartillas` | El administrador vincula las cartillas al módulo; la sesión las abre en su apartado (el estudiante, solo la suya; el docente, también la guía para maestros) y avisa cuando la cartilla no desarrolla la sesión |
 | `npm run humo:ruta` | El mapa como ruta en orden (cómo funciona, por dónde seguir, ejes que se despliegan en su sitio) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
 
@@ -347,6 +348,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU04 | Jardín de la Memoria con cartas, poemas, dibujos y fotos de obras, visibles al sembrar | Sesión con actividad `jardin`, `/api/jardin/[id]/imagen` |
 | CU05 | Diario privado con control de compartir | `/estudiante/diario` |
 | CU06 | Lectura anotada en hilo: responder, «me sirve», destacadas del docente y pestañas Recientes y Destacados | Sesión con actividad `zona`, `/docente/sesiones/[id]` |
+| Tutora | Las cartillas de El Salado en cada sesión, abiertas en el apartado que la desarrolla, para leerlas ahí mismo o en otra pestaña | `/estudiante/sesion/[id]`, `/docente/sesiones/[id]`, `/admin/casos/[id]` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
 | CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |
 | Seguimiento | Revisión con comentarios del docente y campana de avisos (comentarios, sesiones publicadas, entregas y pedidos de acompañamiento) | `/docente/revision`, cabecera |
@@ -361,6 +363,14 @@ la que se importa para construir el módulo, y la guía para maestros, que trae 
 que se espera que los estudiantes descubran. La segunda se marca como **solo docentes** desde
 `/admin/importar`: la restricción se aplica en `/api/documentos/[id]`, de modo que un estudiante que
 escriba la dirección recibe un 403, y las pantallas de actividad solo enlazan documentos abiertos.
+
+**Las cartillas en cada sesión.** Un módulo nace de un solo PDF, pero sus sesiones ofrecen las dos
+cartillas: la de su fuente y las que el administrador le vincula en `/admin/casos/[id]`. Al importar un
+PDF, `src/lib/cartillas.ts` anota en qué página empieza cada apartado (1.2, 1.3.4…) y dónde está el
+mapa del viaje; los documentos subidos antes se ubican la primera vez que una sesión los pide. La
+sesión abre cada cartilla en su página (`#page=N`): en pantallas anchas se puede leer ahí mismo y en el
+celular se abre en otra pestaña, porque los navegadores móviles no muestran un PDF dentro de la página.
+Si la cartilla recortada no desarrolla la sesión, se abre en el mapa del viaje y se dice.
 
 **Las actividades del estudiante no son rutas fijas.** Todas viven en `/estudiante/sesion/{id}`: la
 pantalla que se muestra la decide la actividad que el administrador asignó a esa sesión al importar

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sugerirActividad } from "@/lib/importador-pdf";
 import { prisma } from "@/lib/prisma";
+import { CartillasModulo } from "./cartillas-modulo";
 import { EditorActividades } from "./editor-actividades";
 
 export default async function ActividadesDelModuloPage({ params }: { params: Promise<{ id: string }> }) {
@@ -9,6 +10,8 @@ export default async function ActividadesDelModuloPage({ params }: { params: Pro
   const caso = await prisma.caso.findUnique({
     where: { id },
     include: {
+      documentos: { select: { id: true, titulo: true, soloDocentes: true } },
+      cartillas: { include: { documento: { select: { id: true, titulo: true, soloDocentes: true } } } },
       ejes: {
         orderBy: { orden: "asc" },
         include: {
@@ -22,6 +25,12 @@ export default async function ActividadesDelModuloPage({ params }: { params: Pro
   });
   if (!caso) notFound();
 
+  const vinculadas = caso.cartillas.map((c) => c.documento);
+  const yaEstan = new Set([...caso.documentos, ...vinculadas].map((d) => d.id));
+  const disponibles = (
+    await prisma.documentoFuente.findMany({ orderBy: { subidoEn: "asc" }, select: { id: true, titulo: true, soloDocentes: true } })
+  ).filter((d) => !yaEstan.has(d.id));
+
   return (
     <div className="animar-aparecer max-w-[1000px]">
       <Link href="/admin/casos" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario">
@@ -34,6 +43,7 @@ export default async function ActividadesDelModuloPage({ params }: { params: Pro
         conserva; el avance pasa a medirse con el criterio de la nueva actividad. La columna «Sugerida» es lo que
         el importador propone hoy a partir de los títulos.
       </p>
+      <CartillasModulo casoId={caso.id} fuente={caso.documentos} vinculadas={vinculadas} disponibles={disponibles} />
       <EditorActividades
         casoId={caso.id}
         ejes={caso.ejes.map((e) => ({

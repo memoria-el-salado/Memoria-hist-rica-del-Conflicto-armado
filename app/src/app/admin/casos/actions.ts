@@ -164,3 +164,38 @@ export async function aplicarSugeridas(casoId: string) {
   revalidatePath("/docente/panel");
   return { ok: cambios.length === 1 ? "1 sesión cambió de actividad." : `${cambios.length} sesiones cambiaron de actividad.` };
 }
+
+/**
+ * Pone una cartilla a la mano de las sesiones de un módulo, aunque el módulo
+ * se haya importado de otro PDF. Así el módulo creado desde la guía para
+ * maestros ofrece también la cartilla del estudiante, y al revés.
+ */
+export async function vincularCartilla(casoId: string, documentoId: string) {
+  const sesion = await auth();
+  if (!sesion?.user || sesion.user.rol !== "ADMIN") return { error: "No autorizado." };
+
+  const [caso, documento] = await Promise.all([
+    prisma.caso.findUnique({ where: { id: casoId }, select: { id: true } }),
+    prisma.documentoFuente.findUnique({ where: { id: documentoId }, select: { id: true, casoId: true } }),
+  ]);
+  if (!caso || !documento) return { error: "El módulo o el documento ya no existen." };
+  if (documento.casoId === casoId) return { error: "Ese documento ya es la fuente de este módulo." };
+
+  await prisma.documentoVinculado.upsert({
+    where: { casoId_documentoId: { casoId, documentoId } },
+    create: { casoId, documentoId },
+    update: {},
+  });
+  revalidatePath(`/admin/casos/${casoId}`);
+  return { ok: true };
+}
+
+/** Quita una cartilla vinculada. El documento sigue en el repositorio. */
+export async function desvincularCartilla(casoId: string, documentoId: string) {
+  const sesion = await auth();
+  if (!sesion?.user || sesion.user.rol !== "ADMIN") return { error: "No autorizado." };
+
+  await prisma.documentoVinculado.deleteMany({ where: { casoId, documentoId } });
+  revalidatePath(`/admin/casos/${casoId}`);
+  return { ok: true };
+}

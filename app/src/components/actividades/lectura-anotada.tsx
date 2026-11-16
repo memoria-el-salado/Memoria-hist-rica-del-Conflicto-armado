@@ -35,7 +35,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
             </span>
             {sesion.documento && (
               <a
-                href={`/api/documentos/${sesion.documento.id}`}
+                href={sesion.documento.enlace}
                 target="_blank"
                 rel="noreferrer"
                 className="text-[11.5px] font-semibold text-secundario-fuerte"

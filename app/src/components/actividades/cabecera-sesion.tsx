@@ -3,6 +3,8 @@ import { componerLectura, subseccionesSinTexto } from "@/lib/lectura-sesion";
 import type { RecursoVista } from "@/lib/material";
 import type { PasoDeSesion } from "@/lib/ruta";
 import { MaterialSesion } from "@/components/recursos/material-sesion";
+import { CartillasSesion } from "@/components/cartillas/cartillas-sesion";
+import type { CartillaDeSesion } from "@/lib/cartillas";
 import { RutaSesion } from "./ruta-sesion";
 
 /**
@@ -24,7 +26,10 @@ export type DatosSesion = {
   alertaCuidado: boolean;
   eje: { numero: number; nombre: string; tono: string };
   subsecciones: { id: string; codigo: string; titulo: string; contenido: string | null }[];
-  documento: { id: string; titulo: string } | null;
+  /** La cartilla del estudiante, abierta en el apartado de la sesión. */
+  documento: { id: string; titulo: string; enlace: string } | null;
+  /** Las cartillas del CNMH que acompañan la sesión, cada una en su página. */
+  cartillas?: CartillaDeSesion[];
   /**
    * La ruta de la sesión y el material para explorarla. Va en la cabecera para
    * que la información llegue antes que la actividad, como pidieron los
@@ -96,37 +101,25 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
  * nada y la guía no trae texto para ella, dónde encontrar la información.
  */
 function Explora({ sesion, material }: { sesion: DatosSesion; material: RecursoVista[] }) {
-  if (material.length) return <MaterialSesion recursos={material} className="mt-4 scroll-mt-24" />;
-
+  const cartillas = sesion.cartillas ?? [];
   // Las sesiones de lectura muestran el texto de la guía en la actividad misma.
   const tieneTexto = componerLectura(sesion.contenido, sesion.subsecciones).length > 0;
-  if (tieneTexto) return <span id="material-sesion" className="block scroll-mt-24" />;
 
   return (
-    <section id="material-sesion" aria-labelledby="titulo-explora" className="mt-4 scroll-mt-24 rounded-xl border border-dashed border-borde bg-superficie px-5 py-4">
-      <h2 id="titulo-explora" className="text-[11px] font-extrabold tracking-[.1em] text-tinta-media">
-        PARA EXPLORAR
-      </h2>
-      {sesion.documento ? (
-        <p className="mt-1.5 text-[13px] leading-relaxed text-apagado">
-          Tu docente todavía no ha añadido material para esta sesión. Mientras tanto, lee el apartado{" "}
-          <strong className="text-tinta-media">{sesion.codigo}</strong> en la guía del CNMH:{" "}
-          <a
-            href={`/api/documentos/${sesion.documento.id}`}
-            target="_blank"
-            rel="noreferrer"
-            className="font-bold text-secundario-fuerte"
-          >
-            abrir {sesion.documento.titulo} (PDF)
-          </a>
-          .
-        </p>
-      ) : (
-        <p className="mt-1.5 text-[13px] leading-relaxed text-apagado">
-          Tu docente todavía no ha añadido material para esta sesión: lo presentará en clase.
-        </p>
+    <div id="material-sesion" className="scroll-mt-24">
+      {material.length > 0 && <MaterialSesion recursos={material} className="mt-4" />}
+      <CartillasSesion cartillas={cartillas} codigo={sesion.codigo} />
+      {!material.length && !cartillas.length && !tieneTexto && (
+        <section aria-labelledby="titulo-explora" className="mt-4 rounded-xl border border-dashed border-borde bg-superficie px-5 py-4">
+          <h2 id="titulo-explora" className="text-[11px] font-extrabold tracking-[.1em] text-tinta-media">
+            PARA EXPLORAR
+          </h2>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-apagado">
+            Tu docente todavía no ha añadido material para esta sesión: lo presentará en clase.
+          </p>
+        </section>
       )}
-    </section>
+    </div>
   );
 }
 
@@ -149,7 +142,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
             DOCUMENTO FUENTE
           </span>
           <a
-            href={`/api/documentos/${sesion.documento.id}`}
+            href={sesion.documento.enlace}
             target="_blank"
             rel="noreferrer"
             className="text-[11.5px] font-semibold text-secundario-fuerte"

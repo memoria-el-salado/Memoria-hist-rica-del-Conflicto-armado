@@ -221,6 +221,8 @@ model Caso {
 
   ejes       Eje[]
   documentos DocumentoFuente[]
+  /// Cartillas de otros módulos que acompañan también a este.
+  cartillas  DocumentoVinculado[]
 }
 
 model Eje {
@@ -330,8 +332,29 @@ model DocumentoFuente {
   /// arruinaría la actividad, así que se pueden reservar al docente.
   soloDocentes Boolean @default(false)
 
+  /// En qué página empieza cada apartado (1.2, 1.3.4…) y dónde está el índice,
+  /// para abrir la cartilla en la sesión justo donde se desarrolla. Lo calcula
+  /// `src/lib/cartillas.ts` a partir del texto de cada página.
+  ubicaciones Json?
+
   casoId String?
   caso   Caso?   @relation(fields: [casoId], references: [id], onDelete: SetNull)
+
+  /// Otros módulos en los que esta cartilla está a la mano de las sesiones.
+  vinculos DocumentoVinculado[]
+}
+
+/// Una cartilla que acompaña las sesiones de un módulo distinto del que se
+/// importó de ella: la guía para maestros y la del estudiante son dos PDF, y
+/// cada módulo nace de uno solo.
+model DocumentoVinculado {
+  casoId      String
+  caso        Caso            @relation(fields: [casoId], references: [id], onDelete: Cascade)
+  documentoId String
+  documento   DocumentoFuente @relation(fields: [documentoId], references: [id], onDelete: Cascade)
+  creadoEn    DateTime        @default(now())
+
+  @@id([casoId, documentoId])
 }
 
 model Recurso {

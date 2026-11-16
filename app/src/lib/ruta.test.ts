@@ -47,7 +47,9 @@ describe("pasosDeSesion", () => {
   it("dice qué hay para explorar, en orden de preferencia", () => {
     expect(pasosDeSesion({ ...base, material: 2, tieneTexto: true }).at(0)?.detalle).toBe("2 recursos para leer, ver o escuchar");
     expect(pasosDeSesion({ ...base, tieneTexto: true }).at(0)?.detalle).toBe("El texto de la guía del CNMH");
-    expect(pasosDeSesion({ ...base, tieneDocumento: true }).at(0)?.detalle).toBe("El apartado de la guía en PDF");
+    expect(pasosDeSesion({ ...base, tieneDocumento: true }).at(0)?.detalle).toBe("La cartilla, abierta en su apartado");
+    expect(pasosDeSesion({ ...base, material: 1, tieneDocumento: true }).at(0)?.detalle).toBe("1 recurso para leer, ver o escuchar y la cartilla");
+    expect(pasosDeSesion({ ...base, tieneTexto: true, tieneDocumento: true }).at(0)?.detalle).toBe("El texto de la guía del CNMH y la cartilla");
     expect(pasosDeSesion(base).at(0)?.detalle).toBe("Lo que tu docente presente en clase");
   });
 
