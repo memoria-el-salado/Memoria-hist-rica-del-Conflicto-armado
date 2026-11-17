@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { quienesCuentan } from "@/lib/cartografia";
 import { leerDatosCopla } from "@/lib/copla";
@@ -175,13 +176,15 @@ export async function avanceDeEstudiantes(
   return resultado;
 }
 
-/** Avance de un solo estudiante. */
-export async function avanceDeEstudiante(userId: string): Promise<AvanceEstudiante> {
+/**
+ * Avance de un solo estudiante. Lo piden en la misma visita la cabecera, la
+ * página y el recorrido del mapa: con `cache` se calcula una vez por petición
+ * y no tres (son siete consultas cada vez).
+ */
+export const avanceDeEstudiante = cache(async (userId: string): Promise<AvanceEstudiante> => {
   const todos = await avanceDeEstudiantes([userId]);
-  return (
-    todos.get(userId) ?? { userId, total: 0, ejes: [], completadas: new Set<string>() }
-  );
-}
+  return todos.get(userId) ?? { userId, total: 0, ejes: [], completadas: new Set<string>() };
+});
 
 /** Promedio del grupo, para el panel del docente. */
 export function promedioDelGrupo(avances: AvanceEstudiante[]): number {

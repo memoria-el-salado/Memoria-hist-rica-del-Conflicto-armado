@@ -44,6 +44,7 @@
     "humo:cartillas": "node scripts/pruebas/cartillas.mjs",
     "humo:actividades-cartilla": "node scripts/pruebas/actividades-cartilla.mjs",
     "humo:accesibilidad": "node scripts/pruebas/accesibilidad.mjs",
+    "rendimiento": "node scripts/pruebas/rendimiento.mjs",
     "humo:limpiar": "node scripts/pruebas/limpiar.mjs",
     "demo:cargar": "tsx scripts/datos-demostracion.ts",
     "manual:capturar": "node scripts/capturar-manual.mjs",

@@ -66,9 +66,12 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
 
   // El avance sale del trabajo que los estudiantes han producido, no de un
   // número guardado que habría que mantener al día.
-  const [avances, trabajos] = await Promise.all([
+  const [avances, trabajos, resumen] = await Promise.all([
     avanceDeEstudiantes(estudiantes.map((e) => e.id)),
     trabajosDeDocente(docenteId, { cursoId: elegido }),
+    // La misma agregación protegida que los reportes: solo lo autorizado y sin
+    // grupos de menos de cinco. Va en paralelo: no depende de lo anterior.
+    resumenDeSubpoblaciones(docenteId, elegido),
   ]);
   const lista = [...avances.values()];
 
@@ -85,9 +88,6 @@ export default async function PanelPage({ searchParams }: { searchParams: Promis
     };
   });
 
-  // La misma agregación protegida que los reportes: solo lo autorizado y sin
-  // grupos de menos de cinco.
-  const resumen = await resumenDeSubpoblaciones(docenteId, elegido);
   const colores = ["#D95D39", "#1B8A8A", "#EBB035", "#177575", "#A79E96"];
   const subpoblaciones = resumen.total
     ? resumen.filas.map((f, i) => ({

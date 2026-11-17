@@ -12,15 +12,16 @@ export default async function EstudianteLayout({ children }: { children: React.R
 
   // El indicador de la cabecera es el avance ponderado del curso, con el peso
   // que el docente le dio a cada eje.
-  const [avance, yo] = await Promise.all([
+  const [avance, yo, avisos] = await Promise.all([
     avanceDeEstudiante(sesion.user.id),
     prisma.user.findUnique({ where: { id: sesion.user.id }, select: { explorador: true } }),
+    avisosPara(sesion.user.id, "ESTUDIANTE"),
   ]);
 
   return (
     <AppShell
       rol="ESTUDIANTE"
-      avisos={await avisosPara(sesion.user.id, "ESTUDIANTE")}
+      avisos={avisos}
       nombre={sesion.user.name ?? ""}
       iniciales={sesion.user.iniciales}
       explorador={esExplorador(yo?.explorador) ? yo.explorador : null}

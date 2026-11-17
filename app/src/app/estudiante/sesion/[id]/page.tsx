@@ -13,7 +13,7 @@ import { DiarioSesion } from "@/components/actividades/diario-sesion";
 import type { Reparto } from "@/lib/simulador-lotes";
 import { componerLectura } from "@/lib/lectura-sesion";
 import { pasosDeSesion, sesionPosterior } from "@/lib/ruta";
-import { sesionHecha } from "@/lib/avance";
+import { avanceDeEstudiante, sesionHecha } from "@/lib/avance";
 import { cartillasDeSesion, enlaceDeCartilla, paginaDeSesion, type Cartilla } from "@/lib/cartillas";
 import { actividadesDeSesion, leerDatosCartilla, vistaDeActividad } from "@/lib/actividades-cartilla";
 import { ActividadesCartilla, type ActividadCartillaEnSesion } from "@/components/actividades/actividades-cartilla";
@@ -80,8 +80,12 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
   // En un curso que recorre el mapa en orden, un eje cerrado no se abre por su
   // dirección: el candado del mapa no es solo visual.
-  if (sesion.eje.caso.activo) {
-    const recorrido = await recorridoDe(userId);
+  // Las cartillas del módulo se cargan a la vez: no dependen del recorrido.
+  const [recorrido, cartillasModulo] = await Promise.all([
+    sesion.eje.caso.activo ? recorridoDe(userId) : null,
+    cartillasDelCaso(sesion.eje.casoId),
+  ]);
+  if (recorrido) {
     if (recorrido.ejes.get(sesion.ejeId)?.abierto === false) {
       return (
         <div className="animar-aparecer mx-auto max-w-[560px] py-16 text-center">
@@ -97,7 +101,6 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
   // Las cartillas del módulo, abiertas en el apartado de esta sesión. El
   // estudiante solo ve la suya: la guía para maestros trae las respuestas.
-  const cartillasModulo = await cartillasDelCaso(sesion.eje.casoId);
   const cartillas = cartillasDeSesion(cartillasModulo, sesion.codigo, "ESTUDIANTE");
   const documento = cartillas[0] ?? null;
 
@@ -116,7 +119,11 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       orderBy: { creadoEn: "asc" },
       include: { docente: { select: { nombre: true } } },
     }),
-    sesionHecha(userId, { id: sesion.id, pantalla: sesion.pantalla }),
+    // En el módulo activo, el avance que ya calculó la cabecera dice si la hizo;
+    // en otro (uno de prueba) se mira el trabajo de esta sesión.
+    sesion.eje.caso.activo
+      ? avanceDeEstudiante(userId).then((a) => a.completadas.has(sesion.id))
+      : sesionHecha(userId, { id: sesion.id, pantalla: sesion.pantalla }),
     prisma.sesion.findMany({
       where: { publicada: true, eje: { casoId: sesion.eje.casoId } },
       orderBy: [{ eje: { orden: "asc" } }, { orden: "asc" }],

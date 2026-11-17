@@ -17,6 +17,9 @@ next-env.d.ts
 # Documentos que sube el administrador desde la aplicación
 app/almacen/
 
+# Resultados de las pruebas de rendimiento (van al informe de pruebas)
+app/reportes/
+
 # Instrucciones para asistentes de IA, no forman parte de la aplicación
 AGENTS.md
 CLAUDE.md
