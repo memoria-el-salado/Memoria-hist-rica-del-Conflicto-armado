@@ -116,7 +116,11 @@ await ejecutar("3.3 · Competencias y desbloqueo del mapa", async ({ abrir }) =>
   for (const s of publicadas) await hacer(estA.id, s);
   await a.reload({ waitUntil: "networkidle0" });
   const segundoCerrado = await a.evaluate(
-    (nombre) => [...document.querySelectorAll('section[aria-labelledby="titulo-ruta"] li')].some((li) => li.innerText.includes(nombre) && /\bCERRADO\b/.test(li.innerText)),
+    // Cada estación del mapa lleva su nombre completo en la etiqueta accesible y su estado a la vista.
+    (nombre) =>
+      [...document.querySelectorAll('[role="tablist"][aria-label="Estaciones del viaje"] [role="tab"]')].some(
+        (t) => t.offsetParent !== null && (t.getAttribute("aria-label") ?? "").includes(nombre) && /\bCERRADO\b/.test(t.innerText)
+      ),
     segundo.nombre
   );
   comprobar("al pasar el umbral en el primer eje, se abre el siguiente", !segundoCerrado && (await cerrados(a)) < siguientes, `${publicadas.length} sesiones hechas`);

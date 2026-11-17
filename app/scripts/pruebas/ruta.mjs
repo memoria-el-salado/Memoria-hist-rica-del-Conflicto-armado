@@ -1,8 +1,10 @@
 /**
  * Ajustes por la retroalimentación de docentes de ciencias sociales.
  *
- * El mapa dice cómo funciona el viaje y por dónde seguir, abre los ejes en su
- * sitio y lleva la vista hasta ellos. La sesión va de la información a la
+ * El mapa dice cómo funciona el viaje y por dónde seguir, y es un camino
+ * ilustrado: cada eje es una estación que se toca (o se recorre con las flechas)
+ * para ver sus sesiones al lado; en el celular el camino baja en zigzag y la
+ * vista baja hasta las sesiones. La sesión va de la información a la
  * reflexión, la actividad y la retroalimentación: la ruta de cuatro pasos, el
  * material antes de la actividad (o dónde encontrarlo), el espacio de la
  * retroalimentación y la siguiente sesión. La marca del menú lleva al inicio.
@@ -57,32 +59,69 @@ await ejecutar("Ruta del viaje y de la sesión", async ({ abrir }) => {
   comprobar("ya no muestra un mapa de casos vacío", !(await hay(p, "Todavía no hay casos de estudio ubicados")));
   comprobar("cada sesión dice cuánto material trae", await hay(p, "Material: "));
 
-  const botones = await p.$$('section[aria-labelledby="titulo-ruta"] button[aria-expanded]');
-  comprobar("los ejes son una ruta en orden", botones.length > 0, `${botones.length} ejes`);
+  // El mapa ilustrado: los ejes son estaciones de un camino, y cada una es una
+  // pestaña que muestra sus sesiones en el panel. Hay dos dibujos (de lado y en
+  // zigzag) y solo se ve el que cabe: se cuentan las estaciones visibles.
+  const visibles = () =>
+    p.$$eval('[role="tablist"][aria-label="Estaciones del viaje"] [role="tab"]', (ts) => ts.filter((t) => t.offsetParent !== null).map((t) => t.id));
+  const panelDice = (texto) => p.$eval("#panel-estacion", (el, t) => el.innerText.includes(t), texto);
+  const enPantalla = () =>
+    p.evaluate(() => {
+      const r = document.getElementById("panel-estacion")?.getBoundingClientRect();
+      return Boolean(r && r.top < innerHeight && r.bottom > 0);
+    });
+  const ejeDe = (idEstacion) =>
+    prisma.eje.findUnique({ where: { id: idEstacion.replace(/^estacion-(horizontal|vertical)-/, "") }, select: { nombre: true } });
+
+  const ids = await visibles();
+  const ejesActivos = await prisma.eje.count({ where: { caso: { activo: true } } });
+  comprobar("los ejes son estaciones de un camino, una por eje", ids.length === ejesActivos, `${ids.length} estaciones, ${ejesActivos} ejes`);
+  comprobar("el mapa dice cómo interactuar con él", await hay(p, "Toca una estación para ver sus sesiones"));
+  comprobar("el explorador del estudiante va en el camino", (await p.$('section[aria-labelledby="titulo-ruta"] .animar-mecer')) !== null);
   if (await hay(p, "CONTINÚA TU VIAJE")) {
-    comprobar("el eje por donde sigue el viaje llega abierto, con la sesión marcada", (await p.$('button[aria-expanded="true"]')) !== null && (await hay(p, "Continúa aquí")));
+    const elegida = await p.$$eval('[role="tab"][aria-selected="true"]', (ts) => ts.some((t) => t.offsetParent !== null));
+    comprobar("llega elegida la estación por donde sigue el viaje, con la sesión marcada", elegida && (await hay(p, "Continúa aquí")));
   }
 
-  // Abre el último eje: sus sesiones aparecen debajo de él y la vista baja hasta allí.
-  const ultimo = botones.at(-1);
-  if ((await ultimo.evaluate((b) => b.getAttribute("aria-expanded"))) === "true") await ultimo.click();
-  await p.evaluate(() => window.scrollTo(0, 0));
-  await ultimo.click();
-  await p.waitForFunction((b) => b.getAttribute("aria-expanded") === "true", { timeout: 10_000 }, ultimo);
-  await p.waitForFunction(
-    (b) => {
-      const top = b.getBoundingClientRect().top;
-      return top >= 0 && top < innerHeight * 0.5;
-    },
-    { timeout: 10_000 },
-    ultimo
-  );
-  const panel = await ultimo.evaluate((b) => document.getElementById(b.getAttribute("aria-controls"))?.innerText ?? "");
-  comprobar("al abrir un eje, sus sesiones aparecen debajo de él y la vista baja hasta allí", panel.length > 0);
+  // En el computador el panel está al lado del mapa: al tocar una estación
+  // cambia ahí mismo, sin que haya que buscarlo abajo.
+  const ultima = await p.$(`#${ids.at(-1)}`);
+  await ultima.click();
+  await p.waitForFunction((b) => b.getAttribute("aria-selected") === "true", { timeout: 10_000 }, ultima);
+  comprobar("al tocar una estación, el panel muestra sus sesiones", await panelDice((await ejeDe(ids.at(-1))).nombre));
+  comprobar("y el panel está a la vista", await enPantalla());
   await capturar(p, "ruta-mapa");
-  await ultimo.click();
-  await p.waitForFunction((b) => b.getAttribute("aria-expanded") === "false", { timeout: 10_000 }, ultimo);
-  comprobar("y se vuelve a cerrar", true);
+
+  // Con el teclado, la flecha a la derecha pasa a la estación siguiente y, desde la última, vuelve a la primera.
+  await ultima.focus();
+  await p.keyboard.press("ArrowRight");
+  await p.waitForFunction(
+    (id) => document.activeElement?.id === id && document.getElementById(id)?.getAttribute("aria-selected") === "true",
+    { timeout: 10_000 },
+    ids[0]
+  );
+  comprobar("las flechas del teclado recorren las estaciones", true);
+
+  // En el celular el camino baja en zigzag y el panel va debajo: al tocar una
+  // estación, la vista baja hasta sus sesiones.
+  await p.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+  await p.reload({ waitUntil: "networkidle0" });
+  const enCelular = await visibles();
+  comprobar("en el celular el camino baja en zigzag", enCelular.every((id) => id.startsWith("estacion-vertical-")) && enCelular.length === ejesActivos);
+  await p.evaluate(() => window.scrollTo(0, 0));
+  await p.tap(`#${enCelular.at(-1)}`);
+  await p.waitForFunction(
+    () => {
+      const r = document.getElementById("panel-estacion")?.getBoundingClientRect();
+      return Boolean(r && r.top > -10 && r.top < innerHeight * 0.5);
+    },
+    { timeout: 10_000 }
+  );
+  comprobar("al tocar una estación en el celular, la vista baja hasta sus sesiones", true);
+  comprobar("y nada se desborda a lo ancho", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  await capturar(p, "ruta-mapa-celular");
+  await p.setViewport({ width: 1280, height: 900 });
+  await p.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
 
   await p.click('a[aria-label="Ruta Pedagógica: ir al inicio"]');
   await p.waitForFunction(() => location.pathname === "/estudiante/mapa", { timeout: 20_000 });

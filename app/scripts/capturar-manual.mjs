@@ -262,14 +262,14 @@ await ejecutar("Capturas del manual de usuario", async ({ abrir }) => {
   const est = await nueva();
   await entrar(est, `${PREFIJO}manual.maria`, "ESTUDIANTE");
   await capturar(est, "estudiante-mapa", 1200);
-  // El eje 1 se despliega en su sitio y la página baja hasta él; si ya llega
-  // abierto (es por donde sigue el viaje), se lleva a la vista.
+  // En el mapa ilustrado se elige la estación del eje 1: sus sesiones aparecen
+  // en el panel de al lado. Se lleva el recorrido a la vista para la captura.
   await est.evaluate(() => {
-    const eje = [...document.querySelectorAll("button[aria-expanded]")].find((b) => /Identidad/i.test(b.textContent));
-    if (eje?.getAttribute("aria-expanded") === "false") eje.click();
-    else eje?.closest("li")?.scrollIntoView({ block: "start" });
+    const estacion = [...document.querySelectorAll('[role="tab"]')].find((t) => t.offsetParent !== null && /Identidad/i.test(t.getAttribute("aria-label") ?? ""));
+    estacion?.click();
+    document.getElementById("titulo-ruta")?.scrollIntoView({ block: "start" });
   });
-  await est.waitForSelector('button[aria-expanded="true"]');
+  await est.waitForFunction(() => /Identidad/i.test(document.getElementById("panel-estacion")?.innerText ?? ""));
   await capturar(est, "estudiante-mapa-eje", 1200);
 
   await ir(est, url("cartografia"), 2500);

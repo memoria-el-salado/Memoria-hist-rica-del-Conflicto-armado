@@ -9,6 +9,7 @@ import { ACTIVIDADES } from "@/lib/importador-pdf";
 import { puedeVerRecurso } from "@/lib/recursos";
 import { siguienteDelViaje } from "@/lib/ruta";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
+import { esExplorador } from "@/lib/exploradores";
 
 import { MapaViaje } from "./mapa-viaje";
 
@@ -150,6 +151,7 @@ export default async function MapaPage() {
       estaciones={estaciones}
       casosSinUbicar={casos.length - estaciones.length}
       pertenencia={pertenencia}
+      explorador={esExplorador(yo?.explorador) ? yo.explorador : null}
       siguiente={siguiente ? { ejeId: siguiente.ejeId, id: siguiente.sesion.id, codigo: siguiente.sesion.codigo, titulo: siguiente.sesion.titulo } : null}
       competencias={competencias.map((c) => ({ id: c.id, nombre: c.nombre, descripcion: c.descripcion, hechas: c.hechas, total: c.total, porcentaje: c.porcentaje }))}
       indicadores={indicadores}
