@@ -3,7 +3,7 @@
  *
  * Un docente activa la alerta de una sesión publicada con su propio texto; su
  * estudiante lo lee antes del contenido, lo deja para después, pide
- * acompañamiento desde la sesión y desde el botón general, y continúa. El
+ * acompañamiento desde la sesión y continúa; el menú ya no tiene botón general. El
  * docente recibe los pedidos, sin duplicados, y los marca como atendidos. Otro
  * docente no ve nada de eso, y el administrador no tiene el botón.
  *
@@ -132,25 +132,17 @@ await ejecutar(
     await esperarTexto(alumno, "Volver al mapa del viaje");
     comprobar("el navegador recuerda que ya decidió continuar", !(await hay(alumno, "Antes de empezar")));
 
-    // --- El botón general, sin mensaje --------------------------------------
+    // --- Sin botón general en el menú -----------------------------------------
+    // El botón «Alerta de cuidado» del menú se retiró: el pedido se hace desde
+    // la alerta de la sesión sensible, que es donde la guía lo plantea.
     await alumno.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
-    await alumno.click("::-p-xpath(//nav//button[.//span[normalize-space()='ALERTA DE CUIDADO']])");
-    await esperarTexto(alumno, "¿Necesitas una pausa o hablar con alguien?");
-    await alumno.click("::-p-text(Enviar a mi docente)");
-    await avisoDe(alumno, "status");
-    const general = await prisma.solicitudAcompanamiento.findFirst({ where: { estudianteId: est.id, sesionId: null } });
-    comprobar("el botón general envía un pedido real, sin exigir mensaje", general && general.mensaje === null);
-    await capturar(alumno, "cuidado-boton-general");
-
-    // En el móvil la barra lateral no está: el botón va en la cabecera.
+    comprobar("el menú del estudiante ya no tiene el botón de alerta", (await alumno.$$("::-p-xpath(//nav//*[contains(., 'ALERTA DE CUIDADO')])")).length === 0);
     await alumno.setViewport({ width: 390, height: 800 });
     await alumno.reload({ waitUntil: "networkidle0" });
-    await alumno.click('[aria-label="Alerta de cuidado: pedir acompañamiento"]');
-    await esperarTexto(alumno, "¿Necesitas una pausa o hablar con alguien?");
-    await alumno.keyboard.press("Escape");
-    await alumno.waitForFunction(() => !document.querySelector('[role="dialog"]'), { timeout: 10_000 });
-    comprobar("en el móvil también se abre, y se cierra con Escape", true);
+    comprobar("ni la cabecera en el móvil", !(await alumno.$('[aria-label="Alerta de cuidado: pedir acompañamiento"]')));
     await alumno.setViewport({ width: 1280, height: 900 });
+    // Un pedido general hecho antes del cambio le sigue llegando al docente como siempre.
+    await prisma.solicitudAcompanamiento.create({ data: { estudianteId: est.id, docenteId: docente.id } });
 
     // --- El docente recibe y atiende ----------------------------------------
     // Sin el ancla: ir a la misma página con otro ancla no la vuelve a cargar.
