@@ -147,7 +147,14 @@ describe("sugerirActividad", () => {
     expect(sugerirActividad("Dilemas y consecuencias frente a las opciones por las que personas y grupos han optado")).toBe("dilema");
     expect(sugerirActividad("Los testimonios de los salaeros y las salaeras", ["¿Cómo fue el abandono en El Salado?"])).toBe("testimonios");
     expect(sugerirActividad("Y tú ¿a qué te comprometes? Las solidaridades con otros")).toBe("compromiso");
-    expect(sugerirActividad("Resistencias de la sociedad civil", ["A investigar: acciones contestatarias transformadoras"])).toBe("investigar");
+    expect(sugerirActividad("A investigar: la tierra en Colombia hoy en día")).toBe("investigar");
+    expect(sugerirActividad("Me cuido y nos cuidamos: construyendo acuerdos para el viaje por la memoria histórica")).toBe("acuerdos");
+    expect(sugerirActividad("Me ubico: ¿qué se siente al regresar a un lugar significativo y encontrarlo desecho?")).toBe("meubico");
+  });
+
+  it("un «A investigar» de una subsección no cambia la actividad de la sesión", () => {
+    expect(sugerirActividad("Resistencias de la sociedad civil", ["A investigar: acciones contestatarias transformadoras"])).toBe("zona");
+    expect(sugerirActividad("Los dos modelos del campo enfrentados", ["A investigar: la tierra en Colombia hoy en día"])).toBe("zona");
   });
 
   it("el título de la sesión manda sobre un apartado que se repite", () => {

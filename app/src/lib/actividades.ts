@@ -1,7 +1,7 @@
 /**
  * Los formatos que la guía del CNMH repite a lo largo de los ejes y que no
- * tenían pantalla propia: Me ubico, Dilema, A investigar, Testimonios y
- * Compromiso. Todos se responden con un texto del estudiante; algunos piden
+ * tenían pantalla propia: los acuerdos de cuidado del Preámbulo, Me ubico,
+ * Dilema, A investigar, Testimonios y Compromiso. Todos se responden con un texto del estudiante; algunos piden
  * además algo más (una opción, unas fuentes) que va en `datos`.
  *
  * Dos de ellos los plantea cada docente para sus estudiantes: las opciones del
@@ -10,13 +10,14 @@
  * las acciones no violentas, y eso lo decide quien conoce al grupo.
  */
 
-export const GUIADAS = ["meubico", "dilema", "investigar", "testimonios", "compromiso"] as const;
+export const GUIADAS = ["acuerdos", "meubico", "dilema", "investigar", "testimonios", "compromiso"] as const;
 export type Guiada = (typeof GUIADAS)[number];
 
 export const esGuiada = (pantalla: string): pantalla is Guiada => (GUIADAS as readonly string[]).includes(pantalla);
 
 /** Lo que el docente puede plantear en cada formato. */
 export const SE_PLANTEA: Record<Guiada, boolean> = {
+  acuerdos: false,
   meubico: false,
   dilema: true,
   investigar: true,
@@ -38,6 +39,7 @@ export const LIMITES_GUIADA = {
 
 /** Extensión mínima de la respuesta, según lo que pide cada formato. */
 export const MINIMO_RESPUESTA: Record<Guiada, number> = {
+  acuerdos: 40,
   meubico: 40,
   dilema: 60,
   investigar: 120,
@@ -111,6 +113,7 @@ export function validarRespuestaGuiada(
   const minimo = MINIMO_RESPUESTA[tipo];
   if (texto.length < minimo) {
     const que: Record<Guiada, string> = {
+      acuerdos: "Escribe tus acuerdos",
       meubico: "Escribe tu reflexión",
       dilema: "Justifica tu elección",
       investigar: "Cuenta lo que encontraste",
@@ -131,6 +134,7 @@ export function validarRespuestaGuiada(
       if (fuentes.some((f) => f.length > LIMITES_GUIADA.fuenteMaxima)) return { error: "Alguna fuente es demasiado larga." };
       return { datos: { fuentes } };
     }
+    case "acuerdos":
     case "compromiso":
       return { datos: { compartido: d.compartido === true } };
     default:

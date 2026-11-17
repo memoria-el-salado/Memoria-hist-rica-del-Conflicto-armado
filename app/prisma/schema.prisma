@@ -80,16 +80,17 @@ model User {
   creadoPor   User?   @relation("UsuariosCreados", fields: [creadoPorId], references: [id], onDelete: SetNull)
   creados     User[]  @relation("UsuariosCreados")
 
-  anotaciones     Anotacion[]
-  marcas          MarcaCartografia[]
-  simulaciones    Simulacion[]
-  floresJardin    FlorJardin[]
-  entradasDiario  EntradaDiario[]
-  respuestas      RespuestaActividad[]
-  recursosSubidos Recurso[]
-  forosCreados    Foro[]
-  mensajesForo    MensajeForo[]
-  posturasForo    ParticipanteForo[]
+  anotaciones        Anotacion[]
+  marcas             MarcaCartografia[]
+  simulaciones       Simulacion[]
+  floresJardin       FlorJardin[]
+  entradasDiario     EntradaDiario[]
+  respuestas         RespuestaActividad[]
+  respuestasCartilla RespuestaCartilla[]
+  recursosSubidos    Recurso[]
+  forosCreados       Foro[]
+  mensajesForo       MensajeForo[]
+  posturasForo       ParticipanteForo[]
 
   /// Acompañamiento: lo que pidió como estudiante y lo que recibió como docente.
   solicitudesHechas    SolicitudAcompanamiento[] @relation("SolicitudDeEstudiante")
@@ -278,12 +279,14 @@ model Sesion {
   subsecciones Subseccion[]
 
   /// Trabajo que los estudiantes producen dentro de esta sesión.
-  anotaciones    Anotacion[]
-  marcas         MarcaCartografia[]
-  flores         FlorJardin[]
-  entradasDiario EntradaDiario[]
-  respuestas     RespuestaActividad[]
-  simulaciones   Simulacion[]
+  anotaciones        Anotacion[]
+  marcas             MarcaCartografia[]
+  flores             FlorJardin[]
+  entradasDiario     EntradaDiario[]
+  respuestas         RespuestaActividad[]
+  /// Lo que se responde en las actividades de la cartilla de cada subsección.
+  respuestasCartilla RespuestaCartilla[]
+  simulaciones       Simulacion[]
 
   /// Debates que el docente asoció a esta sesión, como el de la 1.3.
   foros Foro[]
@@ -666,6 +669,30 @@ model RespuestaActividad {
   comentarios Comentario[]
 
   @@unique([userId, sesionId])
+}
+
+/// Una actividad de la cartilla (src/lib/actividades-cartilla.ts) hecha por un
+/// estudiante. Una sesión puede traer varias, una por apartado de la cartilla
+/// (1.2.2, 1.3.3…), además de su actividad principal.
+model RespuestaCartilla {
+  id            String   @id @default(cuid())
+  /// Identificador de la actividad en el catálogo.
+  actividad     String
+  /// Resumen legible de lo que respondió, para el docente.
+  texto         String   @db.Text
+  /// Las respuestas tal como las pide la actividad: campos, clasificación, orden.
+  datos         Json?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sesionId String
+  sesion   Sesion @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sesionId, actividad])
+  @@index([sesionId, actividad])
 }
 
 model ReporteDiferenciado {

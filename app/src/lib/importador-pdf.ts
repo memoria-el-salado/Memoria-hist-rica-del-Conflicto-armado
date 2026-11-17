@@ -577,6 +577,7 @@ export const ACTIVIDADES = [
   { valor: "investigar", etiqueta: "A investigar" },
   { valor: "testimonios", etiqueta: "Testimonios" },
   { valor: "compromiso", etiqueta: "Compromiso" },
+  { valor: "acuerdos", etiqueta: "Acuerdos de cuidado (Preámbulo)" },
 ] as const;
 
 export type Actividad = (typeof ACTIVIDADES)[number]["valor"];
@@ -589,20 +590,25 @@ export type Actividad = (typeof ACTIVIDADES)[number]["valor"];
 export function sugerirActividad(titulo: string, subtitulos: string[] = []): Actividad {
   const texto = [titulo, ...subtitulos].join(" ").toLowerCase();
 
+  // El Preámbulo «Me cuido y nos cuidamos»: los acuerdos de cuidado del curso.
+  if (/me cuido y nos cuidamos|acuerdos para el viaje/.test(texto)) return "acuerdos";
   if (/repartir las tierras|repartici[óo]n de tierras/.test(texto)) return "simulador";
   // La copla «Tierra de abundancia» tiene su propia actividad: ubicar en el
   // mapa de los Montes de María lo que produce cada lugar. Otra copla, de otro
   // módulo, se responde por escrito.
   if (/tierra de abundancia/.test(texto)) return "despensa";
   if (/copla|tradici[óo]n oral/.test(texto)) return "copla";
-  if (/espacios y lugares|cartograf[íi]a|lugares? significativos?/.test(texto)) return "cartografia";
+  // «Espacios y lugares» es la 1.1; un «Me ubico» sobre un lugar (como la 6.1) sigue siendo Me ubico.
+  if (/espacios y lugares|cartograf[íi]a/.test(texto)) return "cartografia";
   // Los formatos que la guía repite en varios ejes. El orden importa: una
   // sesión de testimonios o de dilema puede traer además un «A investigar».
   if (/testimonios?/.test(texto)) return "testimonios";
   if (/dilemas?/.test(texto)) return "dilema";
   if (/a qu[ée] te comprometes|compromiso/.test(texto)) return "compromiso";
   if (/iniciativas? de memoria|monumento|museo|jard[íi]n/.test(texto)) return "jardin";
-  if (/a investigar/.test(texto)) return "investigar";
+  // «A investigar» solo cuando es la sesión entera; en una subsección (1.3.4,
+  // 2.2.4…) es una actividad de esa subsección y la sesión sigue siendo de lectura.
+  if (/a investigar/.test(titulo.toLowerCase())) return "investigar";
   if (/diario/.test(texto)) return "diario";
   if (/me ubico/.test(texto)) return "meubico";
 

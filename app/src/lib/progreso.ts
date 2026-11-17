@@ -26,6 +26,7 @@ export type Actividad =
   | "simulador"
   | "jardin"
   | "diario"
+  | "acuerdos"
   | "meubico"
   | "dilema"
   | "investigar"
@@ -81,6 +82,7 @@ export function sesionCompletada(actividad: string, trabajo: TrabajoEnSesion): b
       return trabajo.flores > 0;
     case "diario":
       return trabajo.entradasDiario > 0;
+    case "acuerdos":
     case "meubico":
     case "testimonios":
     case "compromiso":

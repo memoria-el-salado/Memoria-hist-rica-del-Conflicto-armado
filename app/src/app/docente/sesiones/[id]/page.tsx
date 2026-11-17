@@ -11,6 +11,8 @@ import { FiltroCurso } from "@/components/filtro-curso";
 import { CartillasSesion } from "@/components/cartillas/cartillas-sesion";
 import { cartillasDeSesion } from "@/lib/cartillas";
 import { cartillasDelCaso } from "@/lib/cartillas-datos";
+import { actividadesDeSesion } from "@/lib/actividades-cartilla";
+import { fechaYHora } from "@/lib/fechas";
 import { FormularioPlanteamiento } from "./formulario-planteamiento";
 
 /**
@@ -38,6 +40,7 @@ export default async function SesionDocentePage({
       pantalla: true,
       publicada: true,
       preguntaOrientadora: true,
+      subsecciones: { orderBy: { orden: "asc" }, select: { codigo: true, titulo: true } },
       eje: { select: { numero: true, nombre: true, casoId: true } },
     },
   });
@@ -91,6 +94,8 @@ export default async function SesionDocentePage({
         </>
       )}
 
+      <RespuestasCartilla sesion={sesion} docenteId={docenteId} cursoId={elegido} />
+
       {!sePlantea && !conAnotaciones && (
         <p className="rounded-xl border border-borde bg-superficie p-5 text-[13.5px] leading-[1.65] text-apagado">
           Lo que tus estudiantes entregan en esta sesión lo ves y lo comentas en{" "}
@@ -101,6 +106,70 @@ export default async function SesionDocentePage({
         </p>
       )}
     </div>
+  );
+}
+
+/**
+ * Las actividades de la cartilla de esta sesión y lo que respondió cada uno de
+ * los estudiantes del docente (del curso elegido, si eligió uno).
+ */
+async function RespuestasCartilla({
+  sesion,
+  docenteId,
+  cursoId,
+}: {
+  sesion: { id: string; codigo: string; titulo: string; subsecciones: { codigo: string; titulo: string }[] };
+  docenteId: string;
+  cursoId: string | null;
+}) {
+  const actividades = actividadesDeSesion(sesion, sesion.subsecciones);
+  if (!actividades.length) return null;
+  const respuestas = await prisma.respuestaCartilla.findMany({
+    where: { sesionId: sesion.id, user: { creadoPorId: docenteId, ...(cursoId ? { cursoId } : {}) } },
+    orderBy: { actualizadoEn: "desc" },
+    select: { id: true, actividad: true, texto: true, actualizadoEn: true, user: { select: { nombre: true } } },
+  });
+
+  return (
+    <section aria-labelledby="titulo-respuestas-cartilla" className="mb-6 rounded-xl border border-borde bg-superficie p-5">
+      <h2 id="titulo-respuestas-cartilla" className="text-[12px] font-extrabold tracking-[.08em] text-tinta-media">
+        ACTIVIDADES DE LA CARTILLA
+      </h2>
+      <p className="mt-1 text-[12.5px] leading-relaxed text-apagado">
+        Los ejercicios que la cartilla propone en los apartados de esta sesión. Tus estudiantes los encuentran después de la
+        actividad principal; aquí ves lo que respondió cada uno.
+      </p>
+      <ul className="mt-3 grid gap-2.5">
+        {actividades.map(({ actividad, apartado }) => {
+          const deEsta = respuestas.filter((r) => r.actividad === actividad.id);
+          return (
+            <li key={actividad.id} className="rounded-lg border border-borde bg-superficie-suave p-3.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-primario-tinte px-2 py-0.5 text-[11px] font-extrabold text-primario-fuerte">{apartado.codigo}</span>
+                <span className="text-[13.5px] font-bold">{actividad.titulo}</span>
+                <span className="ml-auto text-[11.5px] font-bold text-apagado">
+                  {deEsta.length === 1 ? "1 respuesta" : `${deEsta.length} respuestas`}
+                </span>
+              </div>
+              {deEsta.length > 0 && (
+                <ul className="mt-2 grid gap-1.5">
+                  {deEsta.map((r) => (
+                    <li key={r.id}>
+                      <details className="rounded-lg border border-borde bg-white px-3 py-2">
+                        <summary className="cursor-pointer text-[12.5px] font-bold text-tinta-media">
+                          {r.user.nombre} <span className="font-normal text-apagado">· {fechaYHora(r.actualizadoEn)}</span>
+                        </summary>
+                        <p className="mt-2 whitespace-pre-line text-[12.5px] leading-relaxed text-tinta-media">{r.texto}</p>
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 

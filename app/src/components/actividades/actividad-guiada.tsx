@@ -6,6 +6,14 @@ import { LIMITES_GUIADA, MINIMO_RESPUESTA, type DatosGuiada, type Guiada, type P
 import { CabeceraSesion, TextoSesion, type DatosSesion } from "./cabecera-sesion";
 
 const CONSIGNA: Record<Guiada, { rotulo: string; campo: string; ayuda: string }> = {
+  // Preámbulo de la guía para maestros, paso 4: cada estudiante escribe tres
+  // acuerdos concretos para el viaje, y el curso los tiene a la vista.
+  acuerdos: {
+    rotulo: "ME CUIDO Y NOS CUIDAMOS · MIS ACUERDOS",
+    campo: "Escribe tres acuerdos que quieras poner en práctica durante el viaje, uno por línea",
+    ayuda:
+      "Piensa en qué necesitas para sentirte cómodo, para resolver los conflictos, para expresar lo que sientes, para cuidarte y cuidar al grupo, y para acercarte con respeto a los relatos de la guerra. Que sean acciones concretas: no basta con decir «respeto», di cómo se nota.",
+  },
   meubico: {
     rotulo: "ME UBICO",
     campo: "Tu reflexión",
@@ -60,7 +68,7 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
 
   function guardar(e: React.FormEvent) {
     e.preventDefault();
-    const datos = tipo === "dilema" ? { opcion } : tipo === "investigar" ? { fuentes } : tipo === "compromiso" ? { compartido } : {};
+    const datos = tipo === "dilema" ? { opcion } : tipo === "investigar" ? { fuentes } : tipo === "compromiso" || tipo === "acuerdos" ? { compartido } : {};
     iniciar(async () => setEstado(await guardarGuiada({ sesionId: sesion.id, texto, datos })));
   }
 
@@ -167,10 +175,10 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
                 </fieldset>
               )}
 
-              {tipo === "compromiso" && (
+              {(tipo === "compromiso" || tipo === "acuerdos") && (
                 <label className="mt-2 flex cursor-pointer items-start gap-2 text-[12.5px] text-apagado">
                   <input type="checkbox" checked={compartido} onChange={(e) => setCompartido(e.target.checked)} className="mt-1" />
-                  Compartirlo con mi curso. Se verá con mi nombre.
+                  {tipo === "acuerdos" ? "Sumarlos a los acuerdos de mi curso. Se verán con mi nombre." : "Compartirlo con mi curso. Se verá con mi nombre."}
                 </label>
               )}
               {tipo === "meubico" && <p className="mt-2 text-[11px] text-suave">Solo tu docente lee lo que escribes aquí.</p>}
@@ -198,7 +206,7 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
       </div>
 
       {reparto && <RepartoDelCurso reparto={reparto} miOpcion={previa?.datos.opcion} />}
-      {muro && <MuroDeCompromisos muro={muro} />}
+      {muro && <MuroDeCompromisos muro={muro} acuerdos={tipo === "acuerdos"} />}
     </div>
   );
 }
@@ -239,14 +247,19 @@ function RepartoDelCurso({ reparto, miOpcion }: { reparto: { opcion: string; cua
   );
 }
 
-function MuroDeCompromisos({ muro }: { muro: { autor: string; texto: string; propio: boolean }[] }) {
+function MuroDeCompromisos({ muro, acuerdos }: { muro: { autor: string; texto: string; propio: boolean }[]; acuerdos: boolean }) {
   return (
     <section aria-labelledby="titulo-muro" className="mt-[18px] rounded-xl border border-terciario-borde bg-terciario-tinte p-5">
       <h2 id="titulo-muro" className="text-[12px] font-extrabold tracking-[.06em] text-terciario-fuerte">
-        COMPROMISOS DE TU CURSO
+        {acuerdos ? "LOS ACUERDOS DE TU CURSO" : "COMPROMISOS DE TU CURSO"}
       </h2>
+      {acuerdos && (
+        <p className="mt-1 text-[12px] leading-relaxed text-apagado">
+          Tenlos presentes en cada sesión. Si alguien no los cumple, el grupo los recuerda, los revisa y, si hace falta, los cambia.
+        </p>
+      )}
       {muro.length === 0 ? (
-        <p className="mt-1.5 text-[12px] text-apagado">Nadie ha compartido todavía su compromiso.</p>
+        <p className="mt-1.5 text-[12px] text-apagado">{acuerdos ? "Nadie ha sumado todavía sus acuerdos." : "Nadie ha compartido todavía su compromiso."}</p>
       ) : (
         <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
           {muro.map((m, i) => (

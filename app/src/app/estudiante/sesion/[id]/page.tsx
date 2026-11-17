@@ -14,7 +14,9 @@ import type { Reparto } from "@/lib/simulador-lotes";
 import { componerLectura } from "@/lib/lectura-sesion";
 import { pasosDeSesion, sesionPosterior } from "@/lib/ruta";
 import { sesionHecha } from "@/lib/avance";
-import { cartillasDeSesion } from "@/lib/cartillas";
+import { cartillasDeSesion, enlaceDeCartilla, paginaDeSesion, type Cartilla } from "@/lib/cartillas";
+import { actividadesDeSesion, leerDatosCartilla, vistaDeActividad } from "@/lib/actividades-cartilla";
+import { ActividadesCartilla, type ActividadCartillaEnSesion } from "@/components/actividades/actividades-cartilla";
 import { cartillasDelCaso } from "@/lib/cartillas-datos";
 import { vistaDeRecurso } from "@/lib/material";
 import { puedeVerRecurso } from "@/lib/recursos";
@@ -95,7 +97,8 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
 
   // Las cartillas del módulo, abiertas en el apartado de esta sesión. El
   // estudiante solo ve la suya: la guía para maestros trae las respuestas.
-  const cartillas = cartillasDeSesion(await cartillasDelCaso(sesion.eje.casoId), sesion.codigo, "ESTUDIANTE");
+  const cartillasModulo = await cartillasDelCaso(sesion.eje.casoId);
+  const cartillas = cartillasDeSesion(cartillasModulo, sesion.codigo, "ESTUDIANTE");
   const documento = cartillas[0] ?? null;
 
   // Lo que el estudiante encuentra en la sesión, antes de armar la actividad:
@@ -163,14 +166,17 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     },
   };
 
-  const [actividad, debates] = await Promise.all([
+  const [actividad, debates, delaCartilla] = await Promise.all([
     pantallaDeActividad(sesion.pantalla, sesion.id, datos, userId),
     debatesDeLaSesion(sesion.id, userId),
+    actividadesDeLaCartilla(sesion, cartillasModulo, userId),
   ]);
 
   const contenido = (
     <>
       {actividad}
+      {/* Los demás ejercicios que la cartilla propone en los apartados de esta sesión. */}
+      <ActividadesCartilla sesionId={sesion.id} actividades={delaCartilla} />
       {/* Cuarto paso de la ruta: lo que el docente responde al trabajo. */}
       <div id="retroalimentacion" className="scroll-mt-24">
         {comentarios.length ? (
@@ -215,6 +221,35 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
       {contenido}
     </PuertaCuidado>
   );
+}
+
+/**
+ * Las actividades de la cartilla que traen los apartados de la sesión, con lo
+ * que el estudiante ya respondió y la página de su cartilla donde está cada
+ * apartado.
+ */
+async function actividadesDeLaCartilla(
+  sesion: { id: string; codigo: string; titulo: string; subsecciones: { codigo: string; titulo: string }[] },
+  cartillas: Cartilla[],
+  userId: string
+): Promise<ActividadCartillaEnSesion[]> {
+  const enSesion = actividadesDeSesion(sesion, sesion.subsecciones);
+  if (!enSesion.length) return [];
+  const respuestas = await prisma.respuestaCartilla.findMany({ where: { userId, sesionId: sesion.id }, select: { actividad: true, datos: true } });
+  const previa = new Map(respuestas.map((r) => [r.actividad, leerDatosCartilla(r.datos)]));
+  const delEstudiante = cartillas.find((c) => !c.soloDocentes) ?? null;
+  return enSesion.map(({ actividad, apartado }) => {
+    const ubicacion = delEstudiante ? paginaDeSesion(delEstudiante.ubicaciones, apartado.codigo) : null;
+    return {
+      actividad: vistaDeActividad(actividad),
+      apartado: { codigo: apartado.codigo, titulo: apartado.titulo },
+      cartilla:
+        delEstudiante && ubicacion?.desarrollada && ubicacion.pagina
+          ? { enlace: enlaceDeCartilla(delEstudiante.id, ubicacion.pagina), pagina: ubicacion.pagina }
+          : null,
+      previa: previa.get(actividad.id) ?? null,
+    };
+  });
 }
 
 /** Al terminar, por dónde sigue el viaje. */
@@ -282,7 +317,7 @@ async function actividadGuiada(tipo: Guiada, sesionId: string, datos: DatosSesio
   }
 
   let muro: { autor: string; texto: string; propio: boolean }[] | null = null;
-  if (tipo === "compromiso" && companeros) {
+  if ((tipo === "compromiso" || tipo === "acuerdos") && companeros) {
     const delCurso = await prisma.respuestaActividad.findMany({
       where: { sesionId, user: companeros },
       orderBy: { actualizadoEn: "desc" },

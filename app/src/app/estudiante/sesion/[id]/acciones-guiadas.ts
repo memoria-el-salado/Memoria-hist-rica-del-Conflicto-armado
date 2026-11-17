@@ -13,6 +13,7 @@ const guiadaSchema = z.object({
 });
 
 const EXITO: Record<string, string> = {
+  acuerdos: "Tus acuerdos quedaron guardados.",
   meubico: "Tu reflexión quedó guardada. Solo tu docente la lee.",
   dilema: "Tu elección quedó guardada. Abajo puedes ver cómo eligió tu curso.",
   investigar: "Tu investigación quedó guardada.",

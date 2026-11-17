@@ -14,6 +14,7 @@ export const LIMITES_COMENTARIO = { minimo: 2, maximo: 2000 };
 const ETIQUETA_PANTALLA: Record<string, string> = {
   copla: "Respuesta a la copla",
   despensa: "Mapa de la despensa",
+  acuerdos: "Acuerdos de cuidado",
   meubico: "Me ubico",
   dilema: "Dilema",
   investigar: "Investigación",
@@ -52,7 +53,7 @@ export function detalleDeTrabajo(trabajo: {
     const d = leerDatosGuiada(trabajo.datos);
     if (pantalla === "dilema" && d.opcion) detalle.push(`Eligió: ${d.opcion}`);
     if (pantalla === "investigar" && d.fuentes?.length) detalle.push(`Fuentes: ${d.fuentes.join(" · ")}`);
-    if (pantalla === "compromiso") detalle.push(d.compartido ? "Lo compartió con su curso" : "No lo compartió con su curso");
+    if (pantalla === "compromiso" || pantalla === "acuerdos") detalle.push(d.compartido ? "Lo compartió con su curso" : "No lo compartió con su curso");
   }
   return { etiqueta, detalle };
 }

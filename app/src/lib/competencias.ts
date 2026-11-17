@@ -23,6 +23,8 @@ export const APORTES: Record<string, Competencia[]> = {
   simulador: ["CRITICO", "EMPATIA"],
   jardin: ["EMPATIA"],
   diario: ["ASERTIVIDAD", "EMPATIA"],
+  // Los acuerdos del Preámbulo: cuidarse, cuidar al grupo y escuchar con respeto.
+  acuerdos: ["EMPATIA", "ESCUCHA"],
   meubico: ["EMPATIA", "ASERTIVIDAD"],
   dilema: ["CRITICO", "ASERTIVIDAD"],
   investigar: ["CRITICO"],
