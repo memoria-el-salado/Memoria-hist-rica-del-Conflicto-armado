@@ -1,3 +1,4 @@
+import { IconoMemoria } from "@/components/icono-memoria";
 import { Suspense } from "react";
 import Link from "next/link";
 import { LoginForm } from "./login-form";
@@ -12,6 +13,7 @@ export default function LoginPage() {
             <div className="absolute inset-0 bg-[linear-gradient(160deg,#D95D39_0%,#B8482A_60%,#8E3520_100%)]" />
             <div className="absolute inset-0 opacity-[.16] bg-[repeating-linear-gradient(115deg,transparent_0_18px,#fff_18px_19px)]" />
             <div className="relative mt-auto">
+              <IconoMemoria tamano={44} className="mb-5 text-white" />
               <div className="text-[38px] font-extrabold leading-[1.02] tracking-[-.02em] text-white">
                 Memoria
                 <br />

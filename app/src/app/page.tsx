@@ -1,3 +1,4 @@
+import { IconoMemoria } from "@/components/icono-memoria";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -82,7 +83,12 @@ export default function Portada() {
       <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
       <header className="sticky top-0 z-20 border-b border-borde bg-fondo/95 backdrop-blur-[8px]">
         <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <span className="text-[15px] font-extrabold tracking-[.02em] text-primario-fuerte">Memoria El Salado</span>
+          <span className="flex items-center gap-2.5 text-[15px] font-extrabold tracking-[.02em] text-primario-fuerte">
+            <span className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-lg bg-primario-fuerte text-white">
+              <IconoMemoria tamano={20} />
+            </span>
+            Memoria El Salado
+          </span>
           <nav aria-label="Secciones de la portada" className="hidden gap-6 text-[12px] font-bold tracking-[.06em] text-apagado sm:flex">
             <a href="#descubre" className="no-underline hover:text-primario-texto">EL PROYECTO</a>
             <a href="#experiencias" className="no-underline hover:text-primario-texto">ACTIVIDADES</a>

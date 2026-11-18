@@ -1,5 +1,6 @@
 "use client";
 
+import { IconoMemoria } from "@/components/icono-memoria";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -62,10 +63,8 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
           aria-label="Ruta Pedagógica: ir al inicio"
           className="hidden items-center gap-2.5 border-b border-[#F1EBE5] px-1 pb-4 text-inherit no-underline hover:no-underline md:flex"
         >
-          <div className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-lg bg-primario">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 9.5 12 3l9 6.5V21H3zM9 21v-7h6v7" />
-            </svg>
+          <div className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-lg bg-primario-fuerte text-white">
+            <IconoMemoria tamano={22} />
           </div>
           <div>
             <div className="text-[12px] font-extrabold tracking-[.06em] text-primario-fuerte">RUTA PEDAGÓGICA</div>
