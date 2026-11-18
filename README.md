@@ -23,9 +23,17 @@ Me ubico, Dilema, A investigar, Testimonios y Compromiso, los formatos que la gu
 cada eje; y el diario personal. Es lo que permite que la plataforma sirva para otro caso de la memoria
 histórica colombiana sin reescribir código.
 
+Tres de esas actividades son **actividades especiales**, material propio del proyecto que dialoga con
+la cartilla sin ser parte de ella: la cartografía social, la copla con el mapa de la despensa y el
+simulador de tierras. Además, cada sesión del Eje 1 trae los **ejercicios de la cartilla** de sus
+apartados (ordenar, clasificar, responder), con el número del apartado y el enlace a su página, y las
+cartillas recortadas de El Salado se pueden leer dentro de cada sesión. El estudiante recorre la ruta
+en un **mapa ilustrado** en el que los ejes son estaciones de un camino por los Montes de María.
+
 El docente organiza a sus estudiantes en cursos y grupos, decide si los ejes se recorren libres o en
-orden, comenta el trabajo desde Revisión y recibe los pedidos de acompañamiento que llegan desde las
-alertas de cuidado. Lo que un estudiante comparte lo ven solo su curso y su docente.
+orden, comenta el trabajo desde Revisión y lee en **Mensajes** lo que le escriben los estudiantes que
+no se sienten bien para continuar una sesión. Lo que un estudiante comparte lo ven solo su curso y su
+docente.
 
 ## Cadena de responsabilidad
 
@@ -33,7 +41,12 @@ Nadie se registra por su cuenta:
 
 ```
 Administrador  ──crea──▶  Docente  ──crea──▶  Estudiantes
+      └──────── asigna aulas y estudiantes a cada docente ────────┘
 ```
+
+Como en un aula de Canvas, cada estudiante trabaja con un docente a cargo. El administrador puede
+cambiarlo de aula, pasarle un aula entera a otro docente o darlo de alta directamente en un aula. Un
+estudiante sin docente puede entrar, pero no ve los contenidos hasta que se le asigne.
 
 Las cuentas nacen con una contraseña provisional que la persona debe cambiar en su primer ingreso.
 
@@ -55,11 +68,14 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 
 ## Estado
 
-Versión 2.0. Cubre por completo los diez casos de uso del proyecto y los mockups revisados del
-documento de avance. Tiene 359 pruebas unitarias —política de contraseñas, separación de funciones
-por rol, visibilidad entre cursos, reglas del simulador, importación de los PDF, avance ponderado,
-competencias y subpoblaciones— y 24 pruebas de extremo a extremo que recorren cada funcionalidad en
-un navegador real (`npm run humo:*`, sección 7).
+Versión 2.0 final. Cubre por completo los diez casos de uso del proyecto, los mockups revisados del
+documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 405 pruebas
+unitarias —política de contraseñas, separación de funciones por rol, visibilidad entre cursos, aulas,
+reglas del simulador, importación de los PDF, ubicación de las cartillas, actividades de la cartilla,
+avance ponderado, competencias y subpoblaciones— y 26 pruebas de extremo a extremo que recorren cada
+funcionalidad en un navegador real (`npm run humo:*`, sección 7). La auditoría automática de
+accesibilidad (WCAG 2.1 AA) no encuentra fallos en ninguna pantalla, y `npm run rendimiento` mide las
+Core Web Vitals de cada pantalla y la carga con usuarios simultáneos.
 
 ---
 
@@ -157,14 +173,18 @@ cuentas se dan de alta en cadena.
 | Quién | Crea a | Dónde |
 | --- | --- | --- |
 | Administrador | Docentes | `Docentes` |
+| Administrador | Aulas y estudiantes, asignados a un docente | `Aulas y Estudiantes` |
 | Docente | Sus estudiantes | `Mis Estudiantes` |
 
 ```
 Administrador  →  Docente  →  Estudiantes
 ```
 
-Cada usuario queda vinculado a quien lo creó, de modo que un docente solo ve, administra y reporta
-sobre los estudiantes que él mismo dio de alta.
+Cada estudiante queda vinculado a su **docente a cargo**: el que lo dio de alta o al que el
+administrador lo asignó en `Aulas y Estudiantes`. Un docente solo ve, administra y reporta sobre sus
+estudiantes. La vinculación usa el campo `User.creadoPorId` y, si lo hay, el curso (`User.cursoId`);
+asignar no cambia el esquema. Un estudiante sin docente entra, pero el área del estudiante le muestra
+«Todavía no estás en un aula» y `/api/documentos` y `/api/recursos` le responden 403.
 
 **Credenciales iniciales del administrador** (las imprime `npm run db:seed` al terminar):
 
@@ -266,9 +286,13 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:anotaciones` | Anotaciones en hilo: cita, respuesta y «me sirve» entre compañeros; el docente filtra por curso, destaca y responde; otro curso no ve el hilo |
 | `npm run humo:simulador` | Simulador por lotes: arrastrar, elegir y tocar, o asignar desde el lote; tope de 40 ha, subsidios, equidad y riesgo; guarda los lotes y reinicia |
 | `npm run humo:cartillas` | El administrador vincula las cartillas al módulo; la sesión las abre en su apartado (el estudiante, solo la suya; el docente, también la guía para maestros) y avisa cuando la cartilla no desarrolla la sesión |
-| `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 36 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
-| `npm run humo:ruta` | El mapa como ruta en orden (cómo funciona, por dónde seguir, ejes que se despliegan en su sitio) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
-| `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión, pide acompañamiento y el pedido le llega solo a su docente |
+| `npm run humo:actividades-cartilla` | Los ejercicios de la cartilla en cada sesión: ordenar, clasificar y responder con el número del apartado; se corrigen al guardar y el docente ve las respuestas |
+| `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 38 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
+| `npm run humo:ruta` | El mapa ilustrado (cómo funciona, por dónde seguir, estaciones que se tocan o se recorren con las flechas, panel a la vista y camino en zigzag en el celular) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
+| `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión y le escribe a su docente; el mensaje queda como un caso en el registro del docente, que lo marca como atendido |
+| `npm run humo:aulas` | Sin docente, el estudiante no ve contenidos ni abre la cartilla; el administrador lo asigna a un aula, pasa un aula a otro docente con sus estudiantes, crea aulas y da de alta estudiantes en ellas |
+| `npm run rendimiento` | Core Web Vitals (TTFB, FCP, LCP, CLS) de 13 pantallas en computador y en un celular simulado, y carga con 1, 5, 10 y 20 usuarios simultáneos; deja el resultado en `reportes/rendimiento.json` |
+| `npm run db:cuadrar-el-salado` | Cuadra el módulo de El Salado con la numeración y las actividades de la cartilla (con `-- --aplicar` lo escribe; es idempotente) |
 
 Las pruebas `humo:*`, salvo `humo:almacen`, necesitan la aplicación en marcha (`npm run dev`).
 Con `DEPURAR=1` imprimen la traza completa si algo falla. Crean cuentas `prueba.*` y las borran al terminar, con lo que hayan subido al depósito. Si una
@@ -288,14 +312,19 @@ de humo no corren ahí, porque necesitan el Supabase real.
 src/
 ├── app/
 │   ├── login/              Autenticación con selección de rol (CU01)
-│   ├── estudiante/         7 pantallas de la ruta pedagógica
-│   ├── docente/            4 pantallas LMS / LCMS
-│   ├── admin/              3 pantallas de sistema (incluye el importador de PDF)
-│   └── api/                Endpoints de autenticación y de documentos fuente
-├── components/             Armazón de la interfaz y los mapas
+│   ├── estudiante/         Mapa ilustrado, sesiones, debates y diario
+│   ├── docente/            Panel, mensajes, contenidos, revisión, debates, cursos y estudiantes (LMS / LCMS)
+│   ├── admin/              Docentes, aulas, módulos, importador de PDF y accesibilidad
+│   └── api/                Autenticación, documentos, recursos y archivos de las actividades
+├── components/             Armazón de la interfaz, ícono, actividades y mapas
 ├── lib/
 │   ├── simulador.ts        Reglas del reparto de tierras (lógica pura y probada)
-│   ├── importador-pdf.ts   Detección de la estructura curricular en un PDF
+│   ├── importador-pdf.ts   Detección de la estructura curricular en un PDF y actividades especiales
+│   ├── cartillas.ts        Página de la cartilla en que empieza cada apartado
+│   ├── actividades-cartilla.ts  Ejercicios de la cartilla por apartado y su corrección
+│   ├── recorrido-ilustrado.ts   Geometría del mapa ilustrado del viaje
+│   ├── aulas.ts            Asignación de estudiantes y aulas a cada docente
+│   ├── cuidado.ts          Alertas de cuidado y registro de mensajes del docente
 │   ├── datos-geograficos.ts Contorno real de Colombia para el mapa sin conexión
 │   ├── politica-contrasena.ts  Reglas de contraseñas seguras
 │   ├── usuarios.ts         Validación común del alta de usuarios
@@ -340,10 +369,13 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Elección del explorador en la primera entrada, que acompaña al estudiante en la cabecera | `/estudiante/explorador` |
 | CU01 | Cursos con año lectivo y grupos de trabajo; el panel, los reportes y los debates se filtran por curso | `/docente/cursos` |
 | CU01 | Las cuatro competencias ciudadanas de la guía en el mapa, y recorrido libre o en orden por curso | `/estudiante/mapa`, `/docente/cursos/[id]` |
-| CU01 | El mapa como ruta en orden, con «Continúa tu viaje», y cada sesión en cuatro pasos: explorar, reflexionar, hacer la actividad y leer la retroalimentación | `/estudiante/mapa`, `/estudiante/sesion/[id]` |
-| CU02 | Cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
-| CU03 | Simulador de repartición de tierras sobre el plano de la finca «La Esperanza»: 20 lotes que se arrastran o se tocan, subsidios por familia, equidad y riesgo | Sesión con actividad `simulador` |
-| Guía 1.2.1 | Copla «Tierra de abundancia»: mapa de productos de los Montes de María y resumen del curso para la plenaria | Sesión con actividad `despensa` |
+| CU01 | El administrador asigna estudiantes y aulas a cada docente; sin docente, el estudiante no ve contenidos | `/admin/aulas` |
+| CU01 | El mapa ilustrado del viaje: los ejes como estaciones de un camino por los Montes de María, con el explorador del estudiante, «Continúa tu viaje», y cada sesión en cuatro pasos: explorar, reflexionar, hacer la actividad y leer la retroalimentación | `/estudiante/mapa`, `/estudiante/sesion/[id]` |
+| CU02 | Actividad especial: cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
+| CU03 | Actividad especial: simulador de repartición de tierras sobre el plano de la finca «La Esperanza»: 20 lotes que se arrastran o se tocan, subsidios por familia, equidad y riesgo | Sesión con actividad `simulador` |
+| Guía 1.2.1 | Actividad especial: copla «Tierra de abundancia», con el mapa de productos de los Montes de María y el resumen del curso para la plenaria | Sesión con actividad `despensa` |
+| Cartilla | Los ejercicios de cada apartado del Eje 1 (1.1 a 1.4.2) y una investigación para cada «A investigar» de los demás ejes, corregidos al guardar y visibles para el docente | `/estudiante/sesion/[id]`, `/docente/sesiones/[id]` |
+| Cartilla | Preámbulo «Me cuido y nos cuidamos»: acuerdos de cuidado del curso | Sesión `P` con actividad `acuerdos` |
 | Guía | Me ubico, Dilema (planteado por cada docente, con el reparto del curso), A investigar (con fuentes), Testimonios (con alerta de cuidado) y Compromiso (con muro del curso) | Sesiones con esas actividades, `/docente/sesiones/[id]` |
 | CU09 | Cambiar la actividad de las sesiones ya importadas, con la que sugiere el importador | `/admin/casos/[id]` |
 | CU04 | Jardín de la Memoria con cartas, poemas, dibujos y fotos de obras, visibles al sembrar | Sesión con actividad `jardin`, `/api/jardin/[id]/imagen` |
@@ -351,7 +383,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU06 | Lectura anotada en hilo: responder, «me sirve», destacadas del docente y pestañas Recientes y Destacados | Sesión con actividad `zona`, `/docente/sesiones/[id]` |
 | Tutora | Las cartillas de El Salado en cada sesión, abiertas en el apartado que la desarrolla, para leerlas ahí mismo o en otra pestaña | `/estudiante/sesion/[id]`, `/docente/sesiones/[id]`, `/admin/casos/[id]` |
 | CU06 | Audio, video, imagen y PDF en el depósito, o video de YouTube y Vimeo; el estudiante los ve en la sesión | `/docente/contenidos`, `/api/recursos/[id]` |
-| CU06 | Alertas de cuidado con texto del docente y pedidos de acompañamiento que le llegan a él | `/docente/panel`, botón «Alerta de cuidado» |
+| CU06 | Alertas de cuidado con texto del docente, y mensajes de acompañamiento que le llegan como casos para leer y marcar atendidos, sin chat | `/docente/panel`, `/docente/mensajes` |
 | Seguimiento | Revisión con comentarios del docente y campana de avisos (comentarios, sesiones publicadas, entregas y pedidos de acompañamiento) | `/docente/revision`, cabecera |
 | CU07 | Reportes por subpoblaciones, con consentimiento del acudiente y sin grupos de menos de cinco | `/docente/subpoblaciones`, `/docente/estudiantes` |
 | CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
@@ -383,6 +415,34 @@ asociado a la sesión en la que se produjo.
 **Mapas**: la cartografía social y el mapa de casos de estudio usan coordenadas geográficas reales
 (latitud y longitud), no posiciones aproximadas sobre una imagen. Al importar un módulo se pueden
 indicar sus coordenadas para ubicarlo en el mapa de Colombia.
+
+**El mapa del viaje** (`src/app/estudiante/mapa/recorrido-ilustrado.tsx`) dibuja los ejes como
+estaciones de un camino entre las colinas de los Montes de María, como el «Mapa de viaje» de la
+cartilla. El camino se llena hasta donde va el estudiante y su explorador espera en la estación por
+donde sigue. Cada estación es una pestaña: se toca, o se recorre con las flechas del teclado, y sus
+sesiones aparecen en el panel de al lado (debajo en pantallas angostas, y la vista baja hasta él). El
+camino va de lado cuando el mapa tiene ancho para sus etiquetas y baja en zigzag cuando no; la
+geometría es lógica pura en `src/lib/recorrido-ilustrado.ts`.
+
+**Numeración de la cartilla y actividades especiales.** Las sesiones llevan la numeración y los títulos
+de la cartilla del CNMH; `npm run db:cuadrar-el-salado` corrige lo que la importación del PDF dejó
+partido y asigna a cada sesión su actividad. Las actividades especiales (`cartografia`, `despensa`,
+`simulador`, en `ESPECIALES` de `src/lib/importador-pdf.ts`) se anuncian con el rótulo «Actividad
+especial» en la sesión, el mapa y las vistas del docente, y van en un grupo aparte en el selector del
+administrador. Los ejercicios de la cartilla de cada apartado viven en `src/lib/actividades-cartilla.ts`
+y se guardan en `RespuestaCartilla`. Los PDF recortados traen solo el Eje 1; los demás ejes ya reciben
+una investigación por cada «A investigar», de modo que cargar las cartillas completas no exige cambiar
+la estructura.
+
+**Ícono.** Un libro abierto del que brota una hoja, en el terracota de la plataforma:
+`src/app/icon.svg` (pestaña del navegador), `favicon.ico` y `apple-icon.png` (pantalla de inicio del
+celular), y el mismo dibujo en `src/components/icono-memoria.tsx` para la marca de la portada, el login
+y la esquina superior izquierda de la interfaz.
+
+**Rendimiento.** Cada página comparte en una misma petición el avance del estudiante (`cache()` de
+React) y hace en paralelo las consultas que no dependen entre sí. El tiempo lo domina la distancia
+a la base de Supabase (us-west-2): conviene que las funciones de Vercel corran en la región más
+cercana a ella. `npm run rendimiento` mide cada pantalla contra la aplicación en marcha.
 
 **Accesibilidad**: control de tamaño de texto (A / A+ / A++), transcripción obligatoria de los audios
 (WCAG 1.2.1) y subtítulos sincronizados de los videos (WCAG 1.2.2), etiquetas y roles ARIA en formularios
@@ -441,7 +501,9 @@ El PDF queda guardado fuera de la carpeta pública y solo se sirve a usuarios au
 de datos y cubierta por pruebas automatizadas.
 
 **Limitación conocida:** el importador extrae la *estructura*, no el contenido de cada actividad. Los
-objetivos de sesión y el material didáctico no están en el índice del PDF, así que no se importan.
+objetivos de sesión y el material didáctico no están en el índice del PDF, así que no se importan; en
+El Salado, los objetivos del Eje 1 se copiaron de la guía para maestros con
+`npm run db:cuadrar-el-salado`.
 
 ---
 
