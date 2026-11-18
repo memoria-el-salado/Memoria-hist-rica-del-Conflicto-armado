@@ -1,8 +1,4 @@
-"use client";
-
-import { useTransition } from "react";
 import type { Requisito } from "@/lib/transcripcion";
-import { ejecutarAuditoria } from "./actions";
 
 type Fila = {
   id: string;
@@ -31,8 +27,6 @@ function Estado({ ok, si, no }: { ok: boolean | null; si: string; no: string }) 
 }
 
 export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
-  const [pendiente, iniciarTransicion] = useTransition();
-
   const accesibles = filas.filter((f) => f.alternativa && f.descripcion).length;
   const porcentaje = filas.length ? Math.round((accesibles / filas.length) * 100) : 100;
   const ocultos = filas.filter((f) => !f.visible).length;
@@ -42,12 +36,17 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
     <div className="animar-aparecer max-w-[1020px]">
       <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU10 · CALIDAD</div>
       <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
-        Validación de Accesibilidad Universal
+        Accesibilidad del material de clase
       </h1>
-      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
-        Cada recurso se valida con sus propios datos. Un audio necesita transcripción (WCAG 1.2.1) y un video
-        subido, subtítulos sincronizados (WCAG 1.2.2); mientras falten, los estudiantes no lo ven. Lo corrige
-        el docente que lo cargó.
+      <p className="mb-2 max-w-[700px] text-[0.84375rem] leading-[1.65] text-apagado">
+        Aquí se revisa el material multimedia que suben los docentes, no la plataforma. Un audio necesita
+        transcripción (WCAG 1.2.1), un video subido, subtítulos sincronizados (WCAG 1.2.2) y una imagen, una
+        descripción. Mientras falten, los estudiantes no ven ese recurso; lo corrige el docente que lo cargó.
+      </p>
+      <p className="mb-5 max-w-[700px] text-[0.78125rem] leading-[1.6] text-suave">
+        Es lo que un estudiante con discapacidad auditiva o visual no podría reportar, porque simplemente no
+        accede al contenido. La interfaz de la plataforma se audita aparte, con axe-core (WCAG 2.1 AA), en las
+        pruebas del proyecto (<code>npm run humo:accesibilidad</code>).
       </p>
 
       <div className="mb-[18px] flex flex-wrap gap-3.5">
@@ -69,15 +68,13 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
           </div>
         </div>
 
-        <div className="flex min-w-[180px] flex-1 flex-col justify-center rounded-xl border border-borde bg-superficie p-[18px]">
-          <button
-            onClick={() => iniciarTransicion(async () => { await ejecutarAuditoria(); })}
-            disabled={pendiente}
-            className="cursor-pointer rounded-lg bg-secundario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-secundario disabled:opacity-60"
-          >
-            {pendiente ? "Validando..." : "Ejecutar validación"}
-          </button>
-          <div className="mt-2 text-center text-[0.6875rem] text-suave">Última validación: {ultimaRevision}</div>
+        <div className="min-w-[180px] flex-1 rounded-xl border border-borde bg-superficie p-[18px]">
+          <div className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">EN VIVO</div>
+          <p className="mt-1.5 text-[0.75rem] leading-[1.55] text-apagado">
+            El estado se calcula cada vez que abres esta página, a partir de lo que tiene cada recurso. No hay que
+            ejecutar nada.
+          </p>
+          <div className="mt-1.5 text-[0.6875rem] text-suave">Último cambio registrado: {ultimaRevision}</div>
         </div>
       </div>
 

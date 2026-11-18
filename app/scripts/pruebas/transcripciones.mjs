@@ -219,14 +219,10 @@ await ejecutar("1.3 · Transcripciones sincronizadas", async ({ abrir }) => {
   await adm.goto(`${BASE}/admin/accesibilidad`, { waitUntil: "networkidle0" });
   const despues = await filaAdmin(TITULO_VIDEO);
   comprobar("la auditoría ya los da por accesibles", despues.includes("LO VEN") && !despues.includes("NO LO VEN") && despues.includes("SINCRONIZADA"));
-  const antesDeValidar = await prisma.auditoriaAccesibilidad.findUnique({ where: { recursoId: recursoVideo.id } });
-  await adm.click("::-p-text(Ejecutar validación)");
-  await adm.waitForFunction(() => !document.body.innerText.includes("Validando..."), { timeout: 60_000 });
-  const tras = await prisma.auditoriaAccesibilidad.findUnique({ where: { recursoId: recursoVideo.id } });
-  comprobar(
-    "ejecutar la validación recalcula y guarda el resultado",
-    tras.transcripcion === true && tras.revisadaEn > antesDeValidar.revisadaEn
-  );
+  // No hay que ejecutar nada: guardar la transcripción ya actualizó el registro.
+  const registro = await prisma.auditoriaAccesibilidad.findUnique({ where: { recursoId: recursoVideo.id } });
+  comprobar("el registro de la auditoría se actualizó solo al guardar los subtítulos", registro?.transcripcion === true);
+  comprobar("y la pantalla dice que se calcula en vivo, sin botón de ejecutar", (await adm.evaluate(() => document.body.innerText.includes("EN VIVO"))) && !(await adm.evaluate(() => document.body.innerText.includes("Ejecutar validación"))));
   await capturar(adm, "auditoria");
 }, async () => {
   if (!archivosAntes) return;

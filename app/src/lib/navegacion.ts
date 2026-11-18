@@ -31,7 +31,7 @@ export const NAV_POR_ROL: Record<Rol, ItemNav[]> = {
     { href: "/admin/aulas", label: "Aulas y Estudiantes", icon: "M3 7l9-4 9 4-9 4-9-4zM3 12l9 4 9-4M3 17l9 4 9-4", titulo: "Gestión de cuentas · Aulas y estudiantes" },
     { href: "/admin/casos", label: "Módulos Geográficos", icon: "M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11z", titulo: "Sistema · Arquitectura modular" },
     { href: "/admin/importar", label: "Importar Módulo", icon: "M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2", titulo: "Sistema · Importación desde documentos" },
-    { href: "/admin/accesibilidad", label: "Accesibilidad", icon: "M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4M4 8h16M12 8v6m0 0-3 8m3-8 3 8", titulo: "Sistema · Auditoría WCAG" },
+    { href: "/admin/accesibilidad", label: "Accesibilidad del Material", icon: "M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4M4 8h16M12 8v6m0 0-3 8m3-8 3 8", titulo: "Calidad · Accesibilidad del material de clase" },
   ],
 };
 
