@@ -3,7 +3,7 @@
  *
  * Un docente activa la alerta de una sesión publicada con su propio texto; su
  * estudiante lo lee antes del contenido, lo deja para después, pide
- * acompañamiento desde la sesión y continúa; el menú ya no tiene botón general. El
+ * acompañamiento desde la sesión y continúa; también puede escribirle desde el botón «Acompañamiento» del menú. El
  * docente recibe los pedidos, sin duplicados, y los marca como atendidos. Otro
  * docente no ve nada de eso, y el administrador no tiene el botón.
  *
@@ -20,6 +20,7 @@ const TEXTO_PRUEBA =
   "Prueba de alerta: esta sesión trae testimonios del desplazamiento. Puedes parar cuando quieras y hablar con tu docente.";
 const MENSAJE_1 = "Me quedé pensando en lo de mi abuela.";
 const MENSAJE_2 = "Prefiero hablar en el descanso.";
+const MENSAJE_3 = "Hoy no me siento bien para seguir.";
 
 async function vaciar(pagina, selector) {
   await pagina.$eval(selector, (el) => el.select());
@@ -132,17 +133,19 @@ await ejecutar(
     await esperarTexto(alumno, "Volver al mapa del viaje");
     comprobar("el navegador recuerda que ya decidió continuar", !(await hay(alumno, "Antes de empezar")));
 
-    // --- Sin botón general en el menú -----------------------------------------
-    // El botón «Alerta de cuidado» del menú se retiró: el pedido se hace desde
-    // la alerta de la sesión sensible, que es donde la guía lo plantea.
+    // --- El botón «Acompañamiento» del menú, desde cualquier pantalla --------
     await alumno.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
-    comprobar("el menú del estudiante ya no tiene el botón de alerta", (await alumno.$$("::-p-xpath(//nav//*[contains(., 'ALERTA DE CUIDADO')])")).length === 0);
+    await alumno.click("::-p-xpath(//nav//button[contains(., 'ACOMPAÑAMIENTO')])");
+    await alumno.waitForSelector('[role="dialog"] textarea', { timeout: 10_000 });
+    comprobar("el menú del estudiante abre la ventana para escribirle a su docente", await hay(alumno, "¿Necesitas una pausa o hablar con alguien?"));
+    await alumno.type('[role="dialog"] textarea', MENSAJE_3);
+    await alumno.click('::-p-xpath(//*[@role="dialog"]//button[@type="submit"])');
+    await alumno.waitForSelector('[role="dialog"] [role="status"]', { timeout: 20_000 });
+    comprobar("y el mensaje se envía", (await prisma.solicitudAcompanamiento.count({ where: { estudianteId: est.id, sesionId: null, mensaje: MENSAJE_3 } })) === 1);
     await alumno.setViewport({ width: 390, height: 800 });
     await alumno.reload({ waitUntil: "networkidle0" });
-    comprobar("ni la cabecera en el móvil", !(await alumno.$('[aria-label="Alerta de cuidado: pedir acompañamiento"]')));
+    comprobar("en el móvil el botón está en la cabecera", Boolean(await alumno.$('[aria-label="Acompañamiento: escribirle a tu docente"]')));
     await alumno.setViewport({ width: 1280, height: 900 });
-    // Un pedido general hecho antes del cambio le sigue llegando al docente como siempre.
-    await prisma.solicitudAcompanamiento.create({ data: { estudianteId: est.id, docenteId: docente.id } });
 
     // --- El docente recibe y atiende ----------------------------------------
     // Sin el ancla: ir a la misma página con otro ancla no la vuelve a cargar.
@@ -150,12 +153,10 @@ await ejecutar(
     comprobar("el docente ve los dos pedidos esperando", await hay(doc, "2 esperan"));
     comprobar(
       "con el mensaje y el origen de cada uno",
-      (await hay(doc, MENSAJE_2)) && (await hay(doc, `Desde la sesión ${sesion.codigo}`)) && (await hay(doc, "Desde el botón general"))
+      (await hay(doc, MENSAJE_2)) && (await hay(doc, `Desde la sesión ${sesion.codigo}`)) && (await hay(doc, MENSAJE_3)) && (await hay(doc, "Desde el botón «Acompañamiento»"))
     );
-    comprobar(
-      "el botón de la barra lateral muestra cuántos esperan",
-      Boolean(await doc.$('[aria-label="2 pedidos pendientes"]'))
-    );
+    comprobar("«Mensajes» en el menú muestra cuántos esperan", Boolean(await doc.$('nav a[href="/docente/mensajes"] [aria-label="2 mensajes por atender"]')));
+    comprobar("y el docente ya no tiene el botón «Acompañamiento»", (await doc.$$("::-p-xpath(//nav//*[contains(., 'ACOMPAÑAMIENTO')])")).length === 0);
     await capturar(doc, "cuidado-panel-pedidos");
 
     await doc.click("::-p-text(Marcar como atendida)");

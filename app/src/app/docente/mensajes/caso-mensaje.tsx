@@ -54,7 +54,7 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
                 la sesión {caso.sesion.nombre}
               </Link>
             ) : (
-              "el botón general de ayuda"
+              "el botón «Acompañamiento»"
             )}
           </dd>
           {caso.atendido && (

@@ -54,7 +54,7 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
                 <span className="text-[0.8125rem] font-extrabold">{s.estudiante}</span>
                 <span className="text-[0.65625rem] text-suave">{s.cuando}</span>
               </div>
-              <div className="text-[0.6875rem] text-tenue">{s.sesion ? `Desde la sesión ${s.sesion}` : "Desde el botón general"}</div>
+              <div className="text-[0.6875rem] text-tenue">{s.sesion ? `Desde la sesión ${s.sesion}` : "Desde el botón «Acompañamiento»"}</div>
               <p className={`mt-1.5 whitespace-pre-line text-[0.78125rem] leading-relaxed ${s.mensaje ? "text-tinta-media" : "italic text-suave"}`}>
                 {s.mensaje ?? "Sin mensaje: no tiene que explicarse para pedir ayuda."}
               </p>

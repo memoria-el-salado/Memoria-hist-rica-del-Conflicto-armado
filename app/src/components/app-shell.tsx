@@ -9,6 +9,8 @@ import { signOut } from "next-auth/react";
 import type { Rol } from "@prisma/client";
 import { ETIQUETA_ROL, INICIO_POR_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
 import { Campana } from "@/components/avisos/campana";
+import { sesionDeRuta } from "@/lib/cuidado";
+import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
 import type { AvisoVista } from "@/lib/avisos-datos";
 import { AvatarExplorador } from "@/components/explorador";
 import type { Explorador } from "@/lib/exploradores";
@@ -31,7 +33,8 @@ type Props = {
 /** Secciones que se ven en la barra inferior del móvil antes de «Más». */
 const VISIBLES_MOVIL = 4;
 
-const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
+/** Un corazón: pedir que te acompañen, no dar una alarma. */
+const ICONO_ACOMPANAMIENTO = "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z";
 
 /** Si el navegador no deja guardar (algunos modos privados), vale mientras dure la página. */
 let escalaEnMemoria: Escala = "1";
@@ -81,6 +84,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
   const conMas = items.length > VISIBLES_MOVIL + 1;
   const ocultas = conMas ? items.slice(VISIBLES_MOVIL) : [];
   const [masAbierto, setMasAbierto] = useState(false);
+  const [ayudaAbierta, setAyudaAbierta] = useState(false);
   const titulo = tituloDeRuta(rol, pathname);
 
   function ciclarEscala() {
@@ -122,7 +126,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : activo ? "location" : undefined}
-                  className={`flex w-full flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 text-center md:flex-row md:justify-start md:gap-[11px] md:px-[13px] md:py-2.5 md:text-left ${
+                  className={`relative flex w-full flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 text-center md:flex-row md:justify-start md:gap-[11px] md:px-[13px] md:py-2.5 md:text-left ${
                     activo
                       ? "bg-primario-tinte font-bold text-primario-fuerte"
                       : "font-medium text-apagado hover:bg-[#F7F2ED]"
@@ -134,6 +138,15 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                   <span className="text-[0.5625rem] font-bold leading-[1.1] md:text-[0.78125rem] md:font-inherit md:leading-[1.3]">
                     {item.label}
                   </span>
+                  {/* Los mensajes por atender se cuentan junto a «Mensajes». */}
+                  {item.href === "/docente/mensajes" && solicitudesPendientes > 0 && (
+                    <span
+                      aria-label={`${solicitudesPendientes} ${solicitudesPendientes === 1 ? "mensaje por atender" : "mensajes por atender"}`}
+                      className="absolute right-1.5 top-1 rounded-full bg-primario-fuerte px-1.5 py-px text-[0.625rem] font-bold text-white md:static md:ml-auto"
+                    >
+                      {solicitudesPendientes}
+                    </span>
+                  )}
                 </Link>
               </li>
             );
@@ -177,25 +190,17 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         </ul>
 
         <div className="mt-auto hidden flex-col gap-3 md:flex">
-          {/* El docente va al registro de mensajes de sus estudiantes. */}
-          {rol === "DOCENTE" && (
-            <Link
-              href="/docente/mensajes"
-              className="flex items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[0.65625rem] font-extrabold tracking-[.07em] text-white no-underline hover:bg-primario-hover"
+          {/* El estudiante le escribe a su docente cuando lo necesita; le llega a «Mensajes». */}
+          {rol === "ESTUDIANTE" && (
+            <button
+              onClick={() => setAyudaAbierta(true)}
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[0.65625rem] font-extrabold tracking-[.07em] text-white hover:bg-primario-hover"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d={ICONO_ALERTA} />
+                <path d={ICONO_ACOMPANAMIENTO} />
               </svg>
               <span>ACOMPAÑAMIENTO</span>
-              {solicitudesPendientes > 0 && (
-                <span
-                  aria-label={`${solicitudesPendientes} ${solicitudesPendientes === 1 ? "pedido pendiente" : "pedidos pendientes"}`}
-                  className="rounded-full bg-white px-1.5 py-px text-[0.625rem] text-primario-fuerte"
-                >
-                  {solicitudesPendientes}
-                </span>
-              )}
-            </Link>
+            </button>
           )}
           {rol === "ESTUDIANTE" && (
             <Link href="/estudiante/explorador" className="px-1 text-[0.6875rem] font-semibold text-suave hover:text-primario-texto">
@@ -228,6 +233,17 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             <span className="truncate text-[0.75rem] text-suave">{titulo}</span>
           </div>
           <div className="flex items-center gap-2.5">
+            {rol === "ESTUDIANTE" && (
+              <button
+                onClick={() => setAyudaAbierta(true)}
+                aria-label="Acompañamiento: escribirle a tu docente"
+                className="flex cursor-pointer items-center rounded-lg bg-primario-fuerte px-2.5 py-[7px] text-white md:hidden"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d={ICONO_ACOMPANAMIENTO} />
+                </svg>
+              </button>
+            )}
             <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-fuerte md:block">
               {indicador}
             </div>
@@ -273,6 +289,43 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         </main>
       </div>
 
+      {ayudaAbierta && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="titulo-acompanamiento-estudiante"
+          onClick={() => setAyudaAbierta(false)}
+          onKeyDown={(e) => e.key === "Escape" && setAyudaAbierta(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(45,30,22,.42)] p-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[480px] rounded-[14px] bg-superficie px-7 py-[26px] shadow-[0_24px_60px_rgba(0,0,0,.22)]"
+          >
+            <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-fuerte">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={ICONO_ACOMPANAMIENTO} />
+              </svg>
+              <span>ACOMPAÑAMIENTO</span>
+            </div>
+            <h2 id="titulo-acompanamiento-estudiante" className="mb-2 mt-3 text-[1.25rem] font-extrabold tracking-[-.02em]">
+              ¿Necesitas una pausa o hablar con alguien?
+            </h2>
+            <p className="mb-4 text-[0.84375rem] leading-[1.7] text-apagado">
+              Puedes detenerte cuando quieras: nadie está obligado a continuar. Escríbele a tu docente lo que quieras
+              contarle; le llegará a sus mensajes y te buscará. No tienes que explicar nada si no quieres.
+            </p>
+            <FormularioAcompanamiento sesionId={sesionDeRuta(pathname)} />
+            <button
+              autoFocus
+              onClick={() => setAyudaAbierta(false)}
+              className="mt-3 cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[17px] py-2.5 text-[0.8125rem] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

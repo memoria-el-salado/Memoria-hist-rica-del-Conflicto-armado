@@ -32,10 +32,10 @@ export async function pedirAcompanamiento(entrada: unknown): Promise<ResultadoSo
 
   const estudiante = await prisma.user.findUnique({
     where: { id: sesion.user.id },
-    select: { id: true, creadoPor: { select: { id: true, nombre: true } } },
+    select: { id: true, creadoPor: { select: { id: true, nombre: true, rol: true } } },
   });
   const docente = estudiante?.creadoPor;
-  if (!estudiante || !docente) {
+  if (!estudiante || !docente || docente.rol !== "DOCENTE") {
     return { error: "Tu cuenta no tiene un docente asignado. Busca a un adulto de confianza en el colegio." };
   }
 
