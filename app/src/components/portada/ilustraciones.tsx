@@ -300,3 +300,63 @@ export function IlustracionInvitacion({ className, angosta = false }: Props & { 
     </svg>
   );
 }
+
+/**
+ * La entrada: el pueblo en las colinas al atardecer y, bajo un árbol, una
+ * abuela que le lee a un joven explorador el libro de la memoria.
+ */
+export function IlustracionEntrada({ className }: Props) {
+  return (
+    <svg viewBox="0 0 480 640" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false" className={className}>
+      <defs>
+        <linearGradient id="cielo-entrada" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#D9683F" />
+          <stop offset=".55" stopColor="#F2C48D" />
+          <stop offset="1" stopColor="#F7E3C8" />
+        </linearGradient>
+      </defs>
+      <rect width="480" height="640" fill="url(#cielo-entrada)" />
+      <circle cx="340" cy="190" r="62" fill="#F6D9A6" />
+      {/* Pájaros */}
+      <path d="M90 110 q8 -8 16 0 q8 -8 16 0 M150 80 q6 -6 12 0 q6 -6 12 0 M260 120 q6 -6 12 0 q6 -6 12 0" stroke="#7A3A22" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M0 300 Q120 220 250 280 T480 260 V640 H0Z" fill={COLINA_CLARA} />
+      {/* El pueblo en la loma */}
+      {[[300, 262], [338, 254], [376, 262], [414, 256]].map(([x, y]) => (
+        <g key={x}>
+          <rect x={x} y={y} width="26" height="18" fill={PARED} />
+          <path d={`M${x - 4} ${y} L${x + 13} ${y - 12} L${x + 30} ${y}Z`} fill={TECHO} />
+          <rect x={x + 10} y={y + 7} width="6" height="11" fill="#6E4A33" />
+        </g>
+      ))}
+      <path d="M0 360 Q140 290 280 350 T480 330 V640 H0Z" fill={COLINA_MEDIA} />
+      {/* El camino que llega al pueblo */}
+      <path d="M250 640 C250 560 300 500 330 440 S350 330 360 284" stroke="#E8CFA6" strokeWidth="22" fill="none" strokeLinecap="round" />
+      <path d="M0 430 Q160 380 300 420 T480 410 V640 H0Z" fill={COLINA_OSCURA} opacity=".55" />
+      {/* El árbol y, a su sombra, la abuela que lee y el explorador que escucha */}
+      <g transform="translate(120 336)">
+        <path d="M-6 0 Q-4 -60 -2 -110 M2 -110 Q4 -60 8 0" stroke="#5A3627" strokeWidth="12" fill="none" />
+        <path d="M-2 -100 Q-30 -120 -50 -118 M2 -104 Q30 -126 52 -120" stroke="#5A3627" strokeWidth="6" fill="none" strokeLinecap="round" />
+        <ellipse cx="-36" cy="-140" rx="58" ry="36" fill="#4F7A3E" />
+        <ellipse cx="34" cy="-150" rx="62" ry="40" fill="#5E8A48" />
+        <ellipse cx="0" cy="-176" rx="54" ry="34" fill="#6E9A54" />
+      </g>
+      <g transform="translate(78 340)">
+        <path d="M-20 0 Q-18 -34 0 -38 Q18 -34 20 0Z" fill="#9C3D24" />
+        <circle cx="0" cy="-48" r="11" fill={PIEL} />
+        <path d="M-11 -51 Q-10 -63 0 -63 Q10 -63 11 -51 Q6 -57 0 -57 Q-6 -57 -11 -51Z" fill="#E9E1D6" />
+        <g transform="translate(18 -26) rotate(-10)">
+          <path d="M-14 6 L0 2 L14 6 V-8 L0 -12 L-14 -8Z" fill="#FFFDF8" />
+          <path d="M0 -12 V2" stroke="#C9B79C" strokeWidth="1.2" />
+        </g>
+      </g>
+      <g transform="translate(150 346)">
+        <rect x="-20" y="-46" width="16" height="24" rx="4" fill="#177D7D" />
+        <path d="M-5 -18 L-7 0 M5 -18 L7 0" stroke={PANTALON} strokeWidth="6" strokeLinecap="round" />
+        <path d="M-10 -46 Q0 -51 10 -46 L8 -16 H-8Z" fill="#F2B544" />
+        <path d="M-8 -40 L-16 -26 M8 -40 L14 -24" stroke={PIEL} strokeWidth="4.5" strokeLinecap="round" />
+        <circle cx="0" cy="-57" r="8" fill={PIEL} />
+        <Sombrero x={0} y={-61} escala={0.6} />
+      </g>
+    </svg>
+  );
+}

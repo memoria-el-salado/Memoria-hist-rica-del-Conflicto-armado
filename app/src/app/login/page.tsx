@@ -1,5 +1,6 @@
 import { IconoMemoria } from "@/components/icono-memoria";
 import { Suspense } from "react";
+import { IlustracionEntrada } from "@/components/portada/ilustraciones";
 import Link from "next/link";
 import { LoginForm } from "./login-form";
 
@@ -10,8 +11,12 @@ export default function LoginPage() {
       <main id="contenido" tabIndex={-1} className="flex flex-1 items-center justify-center px-5 py-8 outline-none">
         <div className="grid w-full max-w-[1000px] overflow-hidden rounded-[14px] border border-borde bg-superficie shadow-[0_18px_50px_rgba(70,45,30,.07)] md:grid-cols-[1fr_1.05fr]">
           <div className="relative hidden min-h-[520px] flex-col overflow-hidden p-10 md:flex">
-            <div className="absolute inset-0 bg-[linear-gradient(160deg,#D95D39_0%,#B8482A_60%,#8E3520_100%)]" />
-            <div className="absolute inset-0 opacity-[.16] bg-[repeating-linear-gradient(115deg,transparent_0_18px,#fff_18px_19px)]" />
+            {/* El pueblo al atardecer y la abuela que le lee al explorador; el velo deja legible el nombre. */}
+            <IlustracionEntrada className="absolute inset-0 h-full w-full" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 [background-image:linear-gradient(to_top,rgba(122,46,27,.96)_0%,rgba(122,46,27,.9)_30%,rgba(122,46,27,.35)_46%,rgba(122,46,27,0)_58%)]"
+            />
             <div className="relative mt-auto">
               <IconoMemoria tamano={44} className="mb-5 text-white" />
               <div className="text-[2.375rem] font-extrabold leading-[1.02] tracking-[-.02em] text-white">
