@@ -1,6 +1,13 @@
 import { IconoMemoria } from "@/components/icono-memoria";
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  IlustracionArchivo,
+  IlustracionInvitacion,
+  IlustracionJardin,
+  IlustracionMapa,
+  IlustracionSimulacion,
+} from "@/components/portada/ilustraciones";
 
 export const metadata: Metadata = {
   title: "Memoria El Salado · Descubre el legado de un pueblo valiente",
@@ -35,15 +42,56 @@ const DESCUBRE = [
   },
 ];
 
+/** El degradado que hace legible el texto sobre la escena; `alto` es la parte de la tarjeta que cubre. */
+function velo(tono: string, alto = 0.72) {
+  const p = (f: number) => `${Math.round(f * alto * 100)}%`;
+  return `linear-gradient(to top, rgba(${tono}, .96) 0%, rgba(${tono}, .9) ${p(0.58)}, rgba(${tono}, .35) ${p(1)}, rgba(${tono}, 0) ${p(1.39)})`;
+}
+
+/** En una tarjeta ancha, el texto va a la izquierda y la escena se ve a la derecha. */
+const veloLateral = (tono: string) =>
+  `linear-gradient(to right, rgba(${tono}, .96) 0%, rgba(${tono}, .9) 36%, rgba(${tono}, .3) 58%, rgba(${tono}, 0) 72%)`;
+
+/**
+ * Cada actividad lleva de fondo una escena de lo que se hace en ella. El texto
+ * va abajo, sobre un degradado del tono de la tarjeta que se vuelve sólido
+ * detrás de las letras: la escena se ve arriba y el texto se lee siempre.
+ */
 const EXPERIENCIAS = [
   {
     titulo: "Archivo y testimonios",
     texto: "Documentos, voces y anotaciones compartidas para leer la historia con otros.",
-    clase: "sm:row-span-2 bg-[#4A2A1E] text-white",
+    clase: "sm:row-span-2 min-h-[400px]! sm:min-h-0!",
+    tono: "59, 34, 24",
+    // La tarjeta es alta: el velo empieza más abajo para dejar ver a la abuela que cuenta.
+    velo: velo("59, 34, 24", 0.46),
+    Ilustracion: IlustracionArchivo,
   },
-  { titulo: "Simulación histórica", texto: "Reparte la tierra como en la Reforma Agraria y mide la equidad de tus decisiones.", clase: "lg:col-span-2 bg-[#BFEAE6] text-[#0F5555]" },
-  { titulo: "Jardín de la memoria", texto: "Siembra una flor con una carta, un poema o un dibujo.", clase: "bg-[#F8DDA8] text-[#5E4108]" },
-  { titulo: "Mapa interactivo", texto: "Marca los lugares que te importan, con tu voz y tus fotos.", clase: "bg-[#F6CFC3] text-[#7A2E1B]" },
+  {
+    titulo: "Simulación histórica",
+    texto: "Reparte la tierra como en la Reforma Agraria y mide la equidad de tus decisiones.",
+    clase: "lg:col-span-2",
+    tono: "14, 70, 70",
+    lateral: true,
+    velo: velo("14, 70, 70", 0.6),
+    Ilustracion: IlustracionSimulacion,
+  },
+  {
+    titulo: "Jardín de la memoria",
+    texto: "Siembra una flor con una carta, un poema o un dibujo.",
+    clase: "",
+    tono: "84, 58, 8",
+    velo: velo("84, 58, 8"),
+    Ilustracion: IlustracionJardin,
+  },
+  {
+    titulo: "Mapa interactivo",
+    texto: "Marca los lugares que te importan, con tu voz y tus fotos.",
+    clase: "",
+    tono: "114, 42, 24",
+    velo: velo("114, 42, 24"),
+    Ilustracion: IlustracionMapa,
+  },
 ];
 
 /** Los Montes de María al atardecer, dibujados con la paleta de la plataforma. */
@@ -120,12 +168,6 @@ export default function Portada() {
               >
                 Comenzar viaje <span aria-hidden="true">→</span>
               </Link>
-              <a
-                href="#descubre"
-                className="rounded-lg border border-secundario px-5 py-3 text-[0.875rem] font-bold text-secundario-fuerte no-underline hover:bg-secundario-tinte"
-              >
-                Saber más
-              </a>
             </div>
           </div>
           <figure className="relative mx-auto w-full max-w-[480px] rotate-[1.5deg]">
@@ -170,16 +212,38 @@ export default function Portada() {
           </p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-3">
             {EXPERIENCIAS.map((e) => (
-              <li key={e.titulo} className={`flex min-h-[150px] flex-col justify-end rounded-xl p-5 ${e.clase}`}>
-                <h3 className="text-[1rem] font-extrabold">{e.titulo}</h3>
-                <p className="mt-1 text-[0.8125rem] leading-[1.6] opacity-90">{e.texto}</p>
+              <li
+                key={e.titulo}
+                className={`relative isolate flex min-h-[290px] sm:min-h-[230px] flex-col justify-end overflow-hidden rounded-xl p-5 text-white ${e.clase}`}
+                style={{ backgroundColor: `rgb(${e.tono})` }}
+              >
+                <e.Ilustracion className="absolute inset-0 -z-20 h-full w-full" />
+                <div
+                  aria-hidden="true"
+                  className={`absolute inset-0 -z-10 ${e.lateral ? "lg:hidden" : ""}`}
+                  style={{ backgroundImage: e.velo }}
+                />
+                {e.lateral && (
+                  <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block" style={{ backgroundImage: veloLateral(e.tono) }} />
+                )}
+                <div className={e.lateral ? "lg:max-w-[44%]" : undefined}>
+                  <h3 className="text-[1.0625rem] font-extrabold [text-shadow:0_1px_2px_rgba(0,0,0,.35)]">{e.titulo}</h3>
+                  <p className="mt-1 text-[0.8125rem] leading-[1.6] text-white/95">{e.texto}</p>
+                </div>
               </li>
             ))}
           </ul>
         </section>
 
         <section className="mx-auto max-w-[1120px] px-4 pb-14 md:px-6">
-          <div className="rounded-2xl bg-primario-fuerte px-6 py-12 text-center text-white">
+          <div className="relative isolate overflow-hidden rounded-2xl bg-primario-fuerte px-6 pb-[200px] pt-12 text-center text-white md:py-20">
+            {/* El explorador invita a tomar el camino; el velo deja sólido el lugar del texto. */}
+            <IlustracionInvitacion className="absolute inset-0 -z-20 hidden h-full w-full md:block" />
+            <IlustracionInvitacion angosta className="absolute inset-0 -z-20 h-full w-full md:hidden" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 [background-image:linear-gradient(to_bottom,rgba(178,69,40,.94)_0%,rgba(178,69,40,.9)_58%,rgba(178,69,40,.2)_78%,rgba(178,69,40,0)_100%)] md:[background-image:radial-gradient(ellipse_48%_70%_at_50%_45%,rgba(178,69,40,.94)_0%,rgba(178,69,40,.88)_55%,rgba(178,69,40,.25)_85%,rgba(178,69,40,0)_100%)]"
+            />
             <h2 className="text-[1.625rem] font-extrabold tracking-[-.02em] md:text-[2rem]">¿Listo para ser parte de la historia?</h2>
             <p className="mx-auto mt-3 max-w-[560px] text-[0.90625rem] leading-[1.7] text-white/90">
               Tu participación ayuda a mantener viva la llama de la memoria. Explora, aprende y comparte la historia de El
