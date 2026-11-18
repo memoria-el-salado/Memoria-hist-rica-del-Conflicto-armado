@@ -50,10 +50,10 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D95D39" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
-        <h2 id="titulo-conversacion" className="flex-1 text-[12px] font-extrabold tracking-[.04em]">
+        <h2 id="titulo-conversacion" className="flex-1 text-[0.75rem] font-extrabold tracking-[.04em]">
           COMENTARIOS Y ANOTACIONES ({total})
         </h2>
-        <div role="group" aria-label="Orden" className="flex gap-2 text-[10.5px] font-extrabold tracking-[.06em]">
+        <div role="group" aria-label="Orden" className="flex gap-2 text-[0.65625rem] font-extrabold tracking-[.06em]">
           {(["RECIENTES", "DESTACADOS"] as const).map((m) => (
             <button
               key={m}
@@ -70,7 +70,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
 
       <div role="region" aria-label="Anotaciones de la conversación" tabIndex={0} className="flex max-h-[460px] flex-col gap-3 overflow-auto bg-[#FBF8F5] px-3.5 py-3.5">
         {ordenados.length === 0 ? (
-          <p className="py-6 text-center text-[12.5px] leading-[1.6] text-tenue">
+          <p className="py-6 text-center text-[0.78125rem] leading-[1.6] text-tenue">
             {modo === "DESTACADOS" ? "El docente todavía no ha destacado ninguna anotación." : "Todavía no hay anotaciones. La tuya sería la primera."}
           </p>
         ) : (
@@ -81,8 +81,8 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
       <form onSubmit={publicar} className="border-t border-[#F1EBE5] px-[18px] py-3.5">
         {cita && (
           <div className="mb-2 flex items-start gap-2 border-l-2 border-terciario bg-terciario-tinte px-[11px] py-2">
-            <span className="flex-1 text-[11.5px] italic text-apagado">{cita.length > 160 ? `${cita.slice(0, 160)}…` : cita}</span>
-            <button type="button" onClick={onQuitarCita} aria-label="Quitar la cita" className="cursor-pointer text-[11px] font-bold text-tenue">
+            <span className="flex-1 text-[0.71875rem] italic text-apagado">{cita.length > 160 ? `${cita.slice(0, 160)}…` : cita}</span>
+            <button type="button" onClick={onQuitarCita} aria-label="Quitar la cita" className="cursor-pointer text-[0.6875rem] font-bold text-tenue">
               ✕
             </button>
           </div>
@@ -96,10 +96,10 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
           onChange={(e) => setTexto(e.target.value)}
           maxLength={LIMITES_ANOTACION.maximo}
           placeholder="Escribe tu reflexión o anota sobre el documento…"
-          className="h-[70px] w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2.5 text-[13px]"
+          className="h-[70px] w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2.5 text-[0.8125rem]"
         />
         {error && (
-          <p role="alert" className="mt-1.5 text-[11.5px] font-semibold text-peligro">
+          <p role="alert" className="mt-1.5 text-[0.71875rem] font-semibold text-peligro">
             {error}
           </p>
         )}
@@ -107,7 +107,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
           <button
             type="submit"
             disabled={pendiente || !texto.trim()}
-            className="cursor-pointer rounded-lg bg-primario-fuerte px-[15px] py-2.5 text-[11.5px] font-bold tracking-[.06em] text-white hover:bg-primario-hover disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-primario-fuerte px-[15px] py-2.5 text-[0.71875rem] font-bold tracking-[.06em] text-white hover:bg-primario-hover disabled:opacity-50"
           >
             {pendiente ? "PUBLICANDO..." : "PUBLICAR ANOTACIÓN"}
           </button>
@@ -130,13 +130,13 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
       className={`rounded-xl border bg-superficie px-3.5 py-3 ${hilo.destacada ? "border-terciario" : "border-borde"}`}
     >
       <Cabecera a={hilo} />
-      {hilo.destacada && <div className="mt-1.5 text-[9.5px] font-extrabold tracking-[.1em] text-terciario-fuerte">DESTACADA POR EL DOCENTE</div>}
+      {hilo.destacada && <div className="mt-1.5 text-[0.59375rem] font-extrabold tracking-[.1em] text-terciario-fuerte">DESTACADA POR EL DOCENTE</div>}
       {hilo.cita && (
-        <blockquote className="mt-2 border-l-2 border-primario bg-primario-tinte px-[11px] py-2 text-[11.5px] italic text-apagado">
+        <blockquote className="mt-2 border-l-2 border-primario bg-primario-tinte px-[11px] py-2 text-[0.71875rem] italic text-apagado">
           {hilo.cita.length > 220 ? `${hilo.cita.slice(0, 220)}…` : hilo.cita}
         </blockquote>
       )}
-      <p className="mt-2 whitespace-pre-line text-[13px] leading-[1.6] text-tinta-media">{hilo.texto}</p>
+      <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-[1.6] text-tinta-media">{hilo.texto}</p>
       <Acciones a={hilo} puedeDestacar={puedeDestacar} onResponder={() => setRespondiendo((r) => !r)} respondiendo={respondiendo} />
 
       {hilo.respuestas.length > 0 && (
@@ -144,7 +144,7 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
           {hilo.respuestas.map((r) => (
             <li key={r.id} className="pl-3">
               <Cabecera a={r} pequena />
-              <p className="mt-1 whitespace-pre-line text-[12.5px] leading-[1.55] text-tinta-media">{r.texto}</p>
+              <p className="mt-1 whitespace-pre-line text-[0.78125rem] leading-[1.55] text-tinta-media">{r.texto}</p>
               <Acciones a={r} puedeDestacar={false} />
             </li>
           ))}
@@ -174,17 +174,17 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
             onChange={(e) => setTexto(e.target.value)}
             maxLength={LIMITES_ANOTACION.maximo}
             rows={2}
-            className="w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2 text-[12.5px]"
+            className="w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2 text-[0.78125rem]"
           />
           <button
             type="submit"
             disabled={pendiente || !texto.trim()}
-            className="justify-self-end cursor-pointer rounded-md bg-secundario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+            className="justify-self-end cursor-pointer rounded-md bg-secundario-fuerte px-3 py-1.5 text-[0.71875rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
           >
             Responder
           </button>
           {error && (
-            <p role="alert" className="text-[11.5px] font-semibold text-peligro">
+            <p role="alert" className="text-[0.71875rem] font-semibold text-peligro">
               {error}
             </p>
           )}
@@ -198,16 +198,16 @@ function Cabecera({ a, pequena = false }: { a: AnotacionVista; pequena?: boolean
   return (
     <div className="flex items-center gap-2">
       <div
-        className={`flex flex-none items-center justify-center rounded-full font-bold text-white ${pequena ? "h-5 w-5 text-[9px]" : "h-6 w-6 text-[10px]"}`}
+        className={`flex flex-none items-center justify-center rounded-full font-bold text-white ${pequena ? "h-5 w-5 text-[0.5625rem]" : "h-6 w-6 text-[0.625rem]"}`}
         style={{ background: COLOR_ROL[a.rol] }}
       >
         {a.iniciales}
       </div>
       <div className="min-w-0 flex-1">
-        <span className={`${pequena ? "text-[12px]" : "text-[12.5px]"} font-bold`}>{a.autor}</span>
-        {a.rol === "DOCENTE" && <span className="ml-1.5 whitespace-nowrap text-[9.5px] font-extrabold tracking-[.08em] text-secundario-fuerte">DOCENTE</span>}
+        <span className={`${pequena ? "text-[0.75rem]" : "text-[0.78125rem]"} font-bold`}>{a.autor}</span>
+        {a.rol === "DOCENTE" && <span className="ml-1.5 whitespace-nowrap text-[0.59375rem] font-extrabold tracking-[.08em] text-secundario-fuerte">DOCENTE</span>}
       </div>
-      <span className="text-[10.5px] text-[#B3AAA2]">{a.hora}</span>
+      <span className="text-[0.65625rem] text-[#B3AAA2]">{a.hora}</span>
     </div>
   );
 }
@@ -225,7 +225,7 @@ function Acciones({
 }) {
   const [pendiente, iniciar] = useTransition();
   return (
-    <div className="mt-1.5 flex flex-wrap items-center gap-3 text-[11px] font-bold text-apagado">
+    <div className="mt-1.5 flex flex-wrap items-center gap-3 text-[0.6875rem] font-bold text-apagado">
       <button
         type="button"
         disabled={pendiente || a.propia}

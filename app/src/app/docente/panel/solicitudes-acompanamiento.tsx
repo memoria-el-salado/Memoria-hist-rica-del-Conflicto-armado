@@ -26,18 +26,18 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
   return (
     <section id="acompanamiento" aria-labelledby="titulo-acompanamiento" className="scroll-mt-20 rounded-xl border border-borde bg-superficie p-5">
       <div className="flex items-center justify-between gap-2">
-        <h2 id="titulo-acompanamiento" className="text-[11px] font-bold tracking-[.12em] text-tenue">
+        <h2 id="titulo-acompanamiento" className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">
           PEDIDOS DE ACOMPAÑAMIENTO
         </h2>
         {esperando > 0 && (
-          <span className="rounded-full bg-primario-fuerte px-2.5 py-1 text-[10.5px] font-bold text-white">
+          <span className="rounded-full bg-primario-fuerte px-2.5 py-1 text-[0.65625rem] font-bold text-white">
             {esperando} {esperando === 1 ? "espera" : "esperan"}
           </span>
         )}
       </div>
 
       {solicitudes.length === 0 ? (
-        <p className="mt-3 text-[12px] leading-[1.6] text-tenue">
+        <p className="mt-3 text-[0.75rem] leading-[1.6] text-tenue">
           Ningún estudiante ha pedido acompañamiento. Si alguno lo hace desde una sesión, aparecerá aquí y en
           tus mensajes.
         </p>
@@ -51,20 +51,20 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
               }`}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-                <span className="text-[13px] font-extrabold">{s.estudiante}</span>
-                <span className="text-[10.5px] text-suave">{s.cuando}</span>
+                <span className="text-[0.8125rem] font-extrabold">{s.estudiante}</span>
+                <span className="text-[0.65625rem] text-suave">{s.cuando}</span>
               </div>
-              <div className="text-[11px] text-tenue">{s.sesion ? `Desde la sesión ${s.sesion}` : "Desde el botón general"}</div>
-              <p className={`mt-1.5 whitespace-pre-line text-[12.5px] leading-relaxed ${s.mensaje ? "text-tinta-media" : "italic text-suave"}`}>
+              <div className="text-[0.6875rem] text-tenue">{s.sesion ? `Desde la sesión ${s.sesion}` : "Desde el botón general"}</div>
+              <p className={`mt-1.5 whitespace-pre-line text-[0.78125rem] leading-relaxed ${s.mensaje ? "text-tinta-media" : "italic text-suave"}`}>
                 {s.mensaje ?? "Sin mensaje: no tiene que explicarse para pedir ayuda."}
               </p>
               {s.atendida ? (
-                <div className="mt-1.5 text-[11px] font-semibold text-secundario-fuerte">Atendida · {s.atendida}</div>
+                <div className="mt-1.5 text-[0.6875rem] font-semibold text-secundario-fuerte">Atendida · {s.atendida}</div>
               ) : (
                 <button
                   disabled={pendiente}
                   onClick={() => iniciar(async () => { await marcarAtendida(s.id); })}
-                  className="mt-2 cursor-pointer rounded-md bg-secundario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white hover:bg-secundario disabled:opacity-60"
+                  className="mt-2 cursor-pointer rounded-md bg-secundario-fuerte px-3 py-1.5 text-[0.71875rem] font-bold text-white hover:bg-secundario disabled:opacity-60"
                 >
                   Marcar como atendida
                 </button>
@@ -73,7 +73,7 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
           ))}
         </ul>
       )}
-      <Link href="/docente/mensajes" className="mt-3 inline-block text-[12px] font-bold text-secundario-fuerte">
+      <Link href="/docente/mensajes" className="mt-3 inline-block text-[0.75rem] font-bold text-secundario-fuerte">
         Ver todos los mensajes →
       </Link>
     </section>

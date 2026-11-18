@@ -41,11 +41,11 @@ export function MediacionForos({
 
   return (
     <div className="animar-aparecer max-w-[1000px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU08 · SESIÓN 1.3</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU08 · SESIÓN 1.3</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
         Mediación de Debates y Foros
       </h1>
-      <p className="mb-5 max-w-[640px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[640px] text-[0.84375rem] leading-[1.65] text-apagado">
         Habilita espacios de contraste de fuentes donde los estudiantes asumen roles y construyen argumentos
         apoyados en documentos históricos.
       </p>
@@ -57,67 +57,67 @@ export function MediacionForos({
       >
         <div className="grid items-end gap-3 lg:grid-cols-[2fr_1fr_1fr_auto]">
           <div>
-            <label htmlFor="pregunta" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="pregunta" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               PREGUNTA DEL DEBATE
             </label>
             <input
               id="pregunta"
               name="pregunta"
               placeholder="ej. ¿La Reforma Agraria resolvió el problema de la tierra?"
-              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
             />
           </div>
           <div>
-            <label htmlFor="rolA" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="rolA" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               ROL A
             </label>
             <input
               id="rolA"
               name="rolA"
               defaultValue="Defensores de la Reforma Agraria"
-              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
             />
           </div>
           <div>
-            <label htmlFor="rolB" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="rolB" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               ROL B
             </label>
             <input
               id="rolB"
               name="rolB"
               defaultValue="Modelo productivista"
-              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
             />
           </div>
           <button
             type="submit"
             disabled={pendiente}
-            className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-[11px] text-[12.5px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+            className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-[11px] text-[0.78125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
             {pendiente ? "Abriendo..." : "Abrir foro"}
           </button>
         </div>
         <div className={`mt-3 grid gap-3 ${cursos.length ? "lg:grid-cols-[2fr_1fr_1fr]" : "lg:grid-cols-[2fr_1fr]"}`}>
           <div>
-            <label htmlFor="fuentes" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="fuentes" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               FUENTES OBLIGATORIAS
             </label>
             <input
               id="fuentes"
               name="fuentes"
               placeholder="ej. Ley 135 de 1961 · Guía del CNMH, sesiones 1.3.1 y 1.3.2"
-              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
             />
           </div>
           <div>
-            <label htmlFor="sesionId" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="sesionId" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               SESIÓN (OPCIONAL)
             </label>
             <select
               id="sesionId"
               name="sesionId"
               defaultValue=""
-              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
             >
               <option value="">Sin sesión</option>
               {sesiones.map((c) => (
@@ -133,14 +133,14 @@ export function MediacionForos({
           </div>
           {cursos.length > 0 && (
             <div>
-              <label htmlFor="cursoId" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="cursoId" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 PARA
               </label>
               <select
                 id="cursoId"
                 name="cursoId"
                 defaultValue=""
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
               >
                 <option value="">Todos mis estudiantes</option>
                 {cursos.map((c) => (
@@ -153,14 +153,14 @@ export function MediacionForos({
           )}
         </div>
         {estado?.error && (
-          <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+          <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
             {estado.error}
           </div>
         )}
       </form>
 
       {foros.length === 0 && (
-        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[13px] text-apagado">
+        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[0.8125rem] text-apagado">
           Todavía no has abierto ningún debate.
         </p>
       )}
@@ -169,11 +169,11 @@ export function MediacionForos({
         {foros.map((f) => (
           <div key={f.id} className="rounded-xl border border-borde bg-superficie p-[18px]">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="max-w-[640px] text-[15px] font-bold">{f.pregunta}</div>
+              <div className="max-w-[640px] text-[0.9375rem] font-bold">{f.pregunta}</div>
               <button
                 aria-pressed={f.abierto}
                 onClick={() => iniciarTransicion(async () => { await alternarForo(f.id); })}
-                className="cursor-pointer rounded-full border px-3 py-1.5 text-[10px] font-extrabold tracking-[.07em]"
+                className="cursor-pointer rounded-full border px-3 py-1.5 text-[0.625rem] font-extrabold tracking-[.07em]"
                 style={
                   f.abierto
                     ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
@@ -185,20 +185,20 @@ export function MediacionForos({
             </div>
             <div className="mt-3 flex flex-wrap gap-2.5">
               <div className="min-w-[220px] flex-1 rounded-[9px] border border-secundario-borde bg-secundario-tinte px-3.5 py-3">
-                <div className="text-[10px] font-bold tracking-[.1em] text-secundario-fuerte">
+                <div className="text-[0.625rem] font-bold tracking-[.1em] text-secundario-fuerte">
                   ROL A
                 </div>
-                <div className="mt-1 text-[13px] font-semibold text-[#3F6E6C]">{f.rolA}</div>
+                <div className="mt-1 text-[0.8125rem] font-semibold text-[#3F6E6C]">{f.rolA}</div>
               </div>
               <div className="min-w-[220px] flex-1 rounded-[9px] border border-terciario-borde bg-terciario-tinte px-3.5 py-3">
-                <div className="text-[10px] font-bold tracking-[.1em] text-terciario-fuerte">
+                <div className="text-[0.625rem] font-bold tracking-[.1em] text-terciario-fuerte">
                   ROL B
                 </div>
-                <div className="mt-1 text-[13px] font-semibold text-[#8A6516]">{f.rolB}</div>
+                <div className="mt-1 text-[0.8125rem] font-semibold text-[#8A6516]">{f.rolB}</div>
               </div>
             </div>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <div className="text-[11.5px] text-suave">
+              <div className="text-[0.71875rem] text-suave">
                 Fuentes obligatorias: {f.fuentes}
                 {f.sesion && <> · Sesión {f.sesion}</>}
                 {" · "}
@@ -206,7 +206,7 @@ export function MediacionForos({
               </div>
               <Link
                 href={`/docente/foros/${f.id}`}
-                className="rounded-lg border border-primario-borde bg-primario-tinte px-3 py-1.5 text-[11.5px] font-bold text-primario-fuerte hover:bg-primario-borde"
+                className="rounded-lg border border-primario-borde bg-primario-tinte px-3 py-1.5 text-[0.71875rem] font-bold text-primario-fuerte hover:bg-primario-borde"
               >
                 Abrir debate · {f.mensajes} {f.mensajes === 1 ? "mensaje" : "mensajes"} · {f.participantes} con rol
               </Link>

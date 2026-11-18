@@ -35,21 +35,21 @@ export function DebateForo({
 
   return (
     <div className="animar-aparecer max-w-[920px]">
-      <Link href={volver} className="text-[11.5px] font-bold text-tenue hover:text-primario-texto">
+      <Link href={volver} className="text-[0.71875rem] font-bold text-tenue hover:text-primario-texto">
         ← Todos los debates
       </Link>
 
-      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+      <div className="mt-2 text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
         CU08 · DEBATE{foro.sesion ? ` · SESIÓN ${foro.sesion.toUpperCase()}` : ""}
         {foro.curso ? ` · CURSO ${foro.curso.toUpperCase()}` : ""}
       </div>
-      <h1 className="mb-1.5 mt-2 max-w-[760px] text-[24px] font-extrabold leading-tight tracking-[-.02em]">
+      <h1 className="mb-1.5 mt-2 max-w-[760px] text-[1.5rem] font-extrabold leading-tight tracking-[-.02em]">
         {foro.pregunta}
       </h1>
-      <p className="mb-4 text-[12.5px] text-apagado">
+      <p className="mb-4 text-[0.78125rem] text-apagado">
         Fuentes obligatorias: <span className="font-semibold text-tinta-media">{foro.fuentes}</span>
         {!foro.abierto && (
-          <span className="ml-2 rounded-full border border-borde-campo px-2 py-0.5 text-[10px] font-extrabold tracking-[.07em] text-suave">
+          <span className="ml-2 rounded-full border border-borde-campo px-2 py-0.5 text-[0.625rem] font-extrabold tracking-[.07em] text-suave">
             FORO CERRADO
           </span>
         )}
@@ -64,14 +64,14 @@ export function DebateForo({
               key={p}
               className={`rounded-[9px] border px-3.5 py-3 ${estilo.fondo} ${mio ? "border-current " + estilo.texto : "border-borde"}`}
             >
-              <div className={`flex items-center justify-between text-[10px] font-bold tracking-[.1em] ${estilo.texto}`}>
+              <div className={`flex items-center justify-between text-[0.625rem] font-bold tracking-[.1em] ${estilo.texto}`}>
                 <span>{estilo.etiqueta}</span>
                 <span>
                   {conteo[p]} {conteo[p] === 1 ? "estudiante" : "estudiantes"}
                 </span>
               </div>
-              <div className="mt-1 text-[13.5px] font-semibold text-tinta">{p === "A" ? foro.rolA : foro.rolB}</div>
-              {mio && <div className={`mt-1.5 text-[11px] font-bold ${estilo.texto}`}>Tu rol en este debate</div>}
+              <div className="mt-1 text-[0.84375rem] font-semibold text-tinta">{p === "A" ? foro.rolA : foro.rolB}</div>
+              {mio && <div className={`mt-1.5 text-[0.6875rem] font-bold ${estilo.texto}`}>Tu rol en este debate</div>}
             </div>
           );
         })}
@@ -80,16 +80,16 @@ export function DebateForo({
       {debate.puedeEscribir ? (
         <Redactor foroId={foro.id} esDocente={esDocente} miPostura={miPostura} />
       ) : (
-        <div className="mb-5 rounded-xl border border-borde bg-superficie-suave p-4 text-[12.5px] text-apagado">
+        <div className="mb-5 rounded-xl border border-borde bg-superficie-suave p-4 text-[0.78125rem] text-apagado">
           El docente cerró este debate. Puedes leer los argumentos, pero ya no admite mensajes nuevos.
         </div>
       )}
 
-      <h2 className="mb-3 mt-6 text-[13px] font-extrabold tracking-[.05em] text-tinta-media">
+      <h2 className="mb-3 mt-6 text-[0.8125rem] font-extrabold tracking-[.05em] text-tinta-media">
         ARGUMENTOS ({hilos.length})
       </h2>
       {hilos.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[13px] text-apagado">
+        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[0.8125rem] text-apagado">
           Todavía no hay argumentos. {debate.puedeEscribir ? "Abre el debate con el primero." : ""}
         </p>
       ) : (
@@ -128,11 +128,11 @@ function Redactor({
     });
   }
 
-  const campo = "w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]";
+  const campo = "w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]";
 
   return (
     <form onSubmit={enviar} className="rounded-xl border border-borde bg-superficie p-4">
-      <label htmlFor="argumento" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="argumento" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         {esDocente
           ? "INTERVENCIÓN DE LA MEDIACIÓN"
           : `TU ARGUMENTO · ${miPostura ? ESTILO_BANDO[miPostura].etiqueta : ""}`}
@@ -152,7 +152,7 @@ function Redactor({
       />
       {!esDocente && (
         <>
-          <label htmlFor="fuente" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="fuente" className="mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             FUENTE EN QUE TE APOYAS
           </label>
           <input
@@ -168,18 +168,18 @@ function Redactor({
         <button
           type="submit"
           disabled={pendiente}
-          className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[12.5px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+          className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[0.78125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
         >
           {pendiente ? "Publicando..." : esDocente ? "Publicar intervención" : "Publicar argumento"}
         </button>
         {!esDocente && (
-          <span className="text-[11px] text-suave">
+          <span className="text-[0.6875rem] text-suave">
             Al menos {LIMITES.argumentoMinimo} caracteres y la fuente que lo respalda.
           </span>
         )}
       </div>
       {error && (
-        <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
           {error}
         </div>
       )}
@@ -217,7 +217,7 @@ function Hilo({
           ) : (
             <button
               onClick={() => setRespondiendo(true)}
-              className="cursor-pointer text-[11.5px] font-bold text-primario-texto hover:text-primario-fuerte"
+              className="cursor-pointer text-[0.71875rem] font-bold text-primario-texto hover:text-primario-fuerte"
             >
               Responder
             </button>
@@ -245,26 +245,26 @@ function Mensaje({
       className={`border-l-[3px] ${estilo.borde} ${esArgumento ? "rounded-xl px-4 py-3.5" : "rounded-md bg-superficie-suave px-3 py-2.5"}`}
       aria-label={`Mensaje de ${mensaje.autor}`}
     >
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6875rem]">
         <span className="font-bold text-tinta">{mensaje.propio ? "Tú" : mensaje.autor}</span>
         <span className={`font-bold tracking-[.06em] ${estilo.texto}`}>{estilo.etiqueta}</span>
         <span className="text-suave">{mensaje.fecha}</span>
         {mensaje.destacado && (
-          <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[10px] font-extrabold tracking-[.05em] text-terciario-fuerte">
+          <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.625rem] font-extrabold tracking-[.05em] text-terciario-fuerte">
             ★ DESTACADO POR EL DOCENTE
           </span>
         )}
       </div>
-      <p className={`mt-1.5 whitespace-pre-line leading-relaxed text-tinta ${esArgumento ? "text-[13.5px]" : "text-[13px]"}`}>
+      <p className={`mt-1.5 whitespace-pre-line leading-relaxed text-tinta ${esArgumento ? "text-[0.84375rem]" : "text-[0.8125rem]"}`}>
         {mensaje.texto}
       </p>
       {mensaje.fuente && (
-        <p className="mt-1.5 text-[11.5px] text-apagado">
+        <p className="mt-1.5 text-[0.71875rem] text-apagado">
           <span className="font-bold">Fuente:</span> {mensaje.fuente}
         </p>
       )}
       {mediacion && (
-        <div className="mt-2 flex gap-3 text-[11px] font-bold">
+        <div className="mt-2 flex gap-3 text-[0.6875rem] font-bold">
           <button
             disabled={pendiente}
             onClick={() => iniciar(async () => void (await mediacion.destacar(mensaje.id)))}
@@ -325,21 +325,21 @@ function Respuesta({
         autoFocus
         maxLength={LIMITES.maximo}
         placeholder="Responde a este argumento…"
-        className="w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[13px]"
+        className="w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[0.8125rem]"
       />
       <div className="mt-2 flex items-center gap-3">
         <button
           type="submit"
           disabled={pendiente}
-          className="cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white disabled:opacity-60"
+          className="cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[0.71875rem] font-bold text-white disabled:opacity-60"
         >
           {pendiente ? "Enviando..." : "Responder"}
         </button>
-        <button type="button" onClick={alTerminar} className="cursor-pointer text-[11.5px] font-bold text-tenue">
+        <button type="button" onClick={alTerminar} className="cursor-pointer text-[0.71875rem] font-bold text-tenue">
           Cancelar
         </button>
         {error && (
-          <span role="alert" className="text-[11.5px] font-semibold text-peligro">
+          <span role="alert" className="text-[0.71875rem] font-semibold text-peligro">
             {error}
           </span>
         )}

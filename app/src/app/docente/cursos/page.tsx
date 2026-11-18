@@ -23,9 +23,9 @@ export default async function CursosPage() {
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">ORGANIZACIÓN · CURSOS Y GRUPOS</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Mis cursos</h1>
-      <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">ORGANIZACIÓN · CURSOS Y GRUPOS</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Mis cursos</h1>
+      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Organiza a tus estudiantes por curso y, dentro de cada curso, en grupos de trabajo para las
         actividades colectivas. El panel, los reportes y los debates se pueden mirar curso por curso.
       </p>
@@ -33,11 +33,11 @@ export default async function CursosPage() {
       <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
-            <span className="text-[13px] font-extrabold">Cursos</span>
-            <span className="text-[11px] font-bold text-suave">{cursos.length}</span>
+            <span className="text-[0.8125rem] font-extrabold">Cursos</span>
+            <span className="text-[0.6875rem] font-bold text-suave">{cursos.length}</span>
           </div>
           {cursos.length === 0 ? (
-            <p className="px-5 py-10 text-center text-[12.5px] leading-[1.6] text-tenue">
+            <p className="px-5 py-10 text-center text-[0.78125rem] leading-[1.6] text-tenue">
               Todavía no tienes cursos.
               <br />
               Crea el primero con el formulario «Nuevo curso».
@@ -51,10 +51,10 @@ export default async function CursosPage() {
                     className="flex items-center gap-3 px-[18px] py-3.5 text-tinta no-underline hover:bg-superficie-suave"
                   >
                     <div className="min-w-0 flex-1">
-                      <div className="text-[14px] font-bold">{c.nombre}</div>
-                      <div className="text-[11px] text-suave">Año lectivo {c.anio}</div>
+                      <div className="text-[0.875rem] font-bold">{c.nombre}</div>
+                      <div className="text-[0.6875rem] text-suave">Año lectivo {c.anio}</div>
                     </div>
-                    <span className="text-[11.5px] font-semibold text-apagado">
+                    <span className="text-[0.71875rem] font-semibold text-apagado">
                       {c._count.estudiantes} {c._count.estudiantes === 1 ? "estudiante" : "estudiantes"} ·{" "}
                       {c._count.grupos} {c._count.grupos === 1 ? "grupo" : "grupos"}
                     </span>
@@ -65,7 +65,7 @@ export default async function CursosPage() {
             </ul>
           )}
           {sinCurso > 0 && (
-            <p className="border-t border-[#F1EBE5] bg-terciario-tinte px-[18px] py-3 text-[12px] text-terciario-fuerte">
+            <p className="border-t border-[#F1EBE5] bg-terciario-tinte px-[18px] py-3 text-[0.75rem] text-terciario-fuerte">
               {sinCurso === 1 ? "1 estudiante tuyo no tiene" : `${sinCurso} estudiantes tuyos no tienen`} curso. Puedes
               sumarlos desde cada curso o desde <Link href="/docente/estudiantes">Mis estudiantes</Link>.
             </p>

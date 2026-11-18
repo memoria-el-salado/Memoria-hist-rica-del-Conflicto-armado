@@ -56,7 +56,7 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
           <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
         </svg>
         {nuevos > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-primario-fuerte px-1 text-center text-[10px] font-extrabold leading-[18px] text-white">
+          <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-primario-fuerte px-1 text-center text-[0.625rem] font-extrabold leading-[18px] text-white">
             {nuevos > 9 ? "9+" : nuevos}
           </span>
         )}
@@ -68,9 +68,9 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
           aria-label="Avisos"
           className="absolute right-0 top-[calc(100%+8px)] z-40 w-[min(360px,calc(100vw-32px))] overflow-hidden rounded-xl border border-borde bg-superficie shadow-[0_16px_40px_rgba(0,0,0,.14)]"
         >
-          <div className="border-b border-[#F1EBE5] px-4 py-3 text-[11px] font-bold tracking-[.12em] text-tenue">AVISOS</div>
+          <div className="border-b border-[#F1EBE5] px-4 py-3 text-[0.6875rem] font-bold tracking-[.12em] text-tenue">AVISOS</div>
           {vista.length === 0 ? (
-            <p className="px-4 py-6 text-center text-[12.5px] text-tenue">No hay nada nuevo por ahora.</p>
+            <p className="px-4 py-6 text-center text-[0.78125rem] text-tenue">No hay nada nuevo por ahora.</p>
           ) : (
             <ul className="max-h-[60vh] overflow-y-auto">
               {vista.map((a) => (
@@ -84,8 +84,8 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
                       <path d={ICONO[a.tipo]} />
                     </svg>
                     <span className="min-w-0 flex-1">
-                      <span className={`block text-[12.5px] leading-snug ${a.nuevo ? "font-bold" : ""}`}>{a.texto}</span>
-                      <span className="mt-0.5 block text-[10.5px] text-suave">
+                      <span className={`block text-[0.78125rem] leading-snug ${a.nuevo ? "font-bold" : ""}`}>{a.texto}</span>
+                      <span className="mt-0.5 block text-[0.65625rem] text-suave">
                         {a.cuando}
                         {a.nuevo && " · nuevo"}
                       </span>

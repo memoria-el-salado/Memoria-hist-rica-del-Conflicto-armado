@@ -69,7 +69,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={enviar}>
-      <div className="mb-[7px] text-[10px] font-bold tracking-[.12em] text-tenue">SELECCIONA TU ROL</div>
+      <div className="mb-[7px] text-[0.625rem] font-bold tracking-[.12em] text-tenue">SELECCIONA TU ROL</div>
       <div className="mb-[18px] grid grid-cols-3 gap-2">
         {ROLES.map((r) => {
           const activo = rol === r.valor;
@@ -88,19 +88,19 @@ export function LoginForm() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                 <path d={r.icon} />
               </svg>
-              <span className="text-[11.5px] font-bold">{r.label}</span>
+              <span className="text-[0.71875rem] font-bold">{r.label}</span>
             </button>
           );
         })}
       </div>
 
       {rol && (
-        <p className="mb-3 rounded-lg border border-secundario-borde bg-secundario-tinte px-3 py-2 text-[11.5px] leading-[1.5] text-[#3F6E6C]">
+        <p className="mb-3 rounded-lg border border-secundario-borde bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.5] text-[#3F6E6C]">
           {ROLES.find((r) => r.valor === rol)!.ayuda}
         </p>
       )}
 
-      <label htmlFor="usuario" className="mb-[7px] block text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="usuario" className="mb-[7px] block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         USUARIO O CORREO ELECTRÓNICO
       </label>
       <input
@@ -109,18 +109,18 @@ export function LoginForm() {
         onChange={(e) => setUsuario(e.target.value)}
         placeholder="tu usuario"
         autoComplete="username"
-        className="mb-3.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-[13px] py-[11px] text-[14px]"
+        className="mb-3.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-[13px] py-[11px] text-[0.875rem]"
       />
 
       <div className="mb-1.5 flex items-baseline justify-between gap-2">
-        <label htmlFor="password" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+        <label htmlFor="password" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
           CONTRASEÑA
         </label>
         <button
           type="button"
           onClick={() => setOlvido((o) => !o)}
           aria-expanded={olvido}
-          className="cursor-pointer text-[10.5px] font-bold tracking-[.04em] text-secundario-fuerte hover:underline"
+          className="cursor-pointer text-[0.65625rem] font-bold tracking-[.04em] text-secundario-fuerte hover:underline"
         >
           ¿Olvidaste tu contraseña?
         </button>
@@ -133,7 +133,7 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
           autoComplete="current-password"
-          className="w-full rounded-lg border border-borde-campo bg-superficie-suave py-[11px] pl-[13px] pr-11 text-[14px]"
+          className="w-full rounded-lg border border-borde-campo bg-superficie-suave py-[11px] pl-[13px] pr-11 text-[0.875rem]"
         />
         <button
           type="button"
@@ -152,18 +152,18 @@ export function LoginForm() {
         </button>
       </div>
       {olvido ? (
-        <p role="status" className="mb-2 rounded-lg bg-secundario-tinte px-3 py-2 text-[11.5px] leading-[1.55] text-[#3F6E6C]">
+        <p role="status" className="mb-2 rounded-lg bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.55] text-[#3F6E6C]">
           {rol ? ROLES.find((r) => r.valor === rol)!.olvido : "Elige arriba si eres estudiante, docente o administrador y te decimos quién la restablece."}
         </p>
       ) : (
-        <p className="mb-2 text-[11px] leading-[1.5] text-suave">
+        <p className="mb-2 text-[0.6875rem] leading-[1.5] text-suave">
           Si es tu primera entrada, usa la contraseña provisional que te entregaron: la plataforma te pedirá cambiarla
           enseguida.
         </p>
       )}
 
       {error && (
-        <div role="alert" className="text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="text-[0.71875rem] font-semibold text-peligro">
           {error}
         </div>
       )}
@@ -171,7 +171,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={cargando}
-        className="mt-3 flex w-full cursor-pointer items-center justify-center gap-[9px] rounded-lg bg-primario-fuerte px-4 py-[13px] text-[14px] font-bold text-white transition-colors hover:bg-primario-hover disabled:opacity-60"
+        className="mt-3 flex w-full cursor-pointer items-center justify-center gap-[9px] rounded-lg bg-primario-fuerte px-4 py-[13px] text-[0.875rem] font-bold text-white transition-colors hover:bg-primario-hover disabled:opacity-60"
       >
         <span>{cargando ? "Entrando..." : "Entrar a la Plataforma"}</span>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

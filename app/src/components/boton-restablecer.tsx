@@ -29,7 +29,7 @@ export function BotonRestablecer({
         onClick={() =>
           iniciarTransicion(async () => setResultado(await accion(id)))
         }
-        className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11px] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-50"
+        className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[0.6875rem] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-50"
       >
         {pendiente ? "Restableciendo..." : "Restablecer contraseña"}
       </button>
@@ -37,14 +37,14 @@ export function BotonRestablecer({
       {resultado?.contrasena && (
         <div
           role="status"
-          className="mt-1.5 rounded-lg border border-secundario-borde bg-secundario-tinte px-2.5 py-1.5 text-[11px] leading-[1.5] text-[#3F6E6C]"
+          className="mt-1.5 rounded-lg border border-secundario-borde bg-secundario-tinte px-2.5 py-1.5 text-[0.6875rem] leading-[1.5] text-[#3F6E6C]"
         >
           Nueva contraseña de {nombre.split(" ")[0]}:{" "}
           <strong className="font-mono">{resultado.contrasena}</strong>
         </div>
       )}
       {resultado?.error && (
-        <div role="alert" className="mt-1.5 text-[11px] font-semibold text-peligro">
+        <div role="alert" className="mt-1.5 text-[0.6875rem] font-semibold text-peligro">
           {resultado.error}
         </div>
       )}

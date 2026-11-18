@@ -9,7 +9,7 @@ export function DebatesDeSesion({ debates }: { debates: { id: string; pregunta: 
   if (!debates.length) return null;
   return (
     <section aria-labelledby="titulo-debates-sesion" className="mt-[22px] rounded-xl border border-borde bg-superficie p-5">
-      <h2 id="titulo-debates-sesion" className="text-[12px] font-extrabold tracking-[.06em] text-primario-fuerte">
+      <h2 id="titulo-debates-sesion" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">
         DEBATE DE ESTA SESIÓN
       </h2>
       <ul className="mt-2.5 grid gap-2">
@@ -19,8 +19,8 @@ export function DebatesDeSesion({ debates }: { debates: { id: string; pregunta: 
               href={`/estudiante/foros/${d.id}`}
               className="flex items-center justify-between gap-3 rounded-lg border border-borde px-3.5 py-2.5 text-tinta no-underline hover:border-primario"
             >
-              <span className="text-[13.5px] font-semibold">{d.pregunta}</span>
-              <span className={`flex-none text-[10px] font-extrabold tracking-[.07em] ${d.abierto ? "text-secundario-fuerte" : "text-suave"}`}>
+              <span className="text-[0.84375rem] font-semibold">{d.pregunta}</span>
+              <span className={`flex-none text-[0.625rem] font-extrabold tracking-[.07em] ${d.abierto ? "text-secundario-fuerte" : "text-suave"}`}>
                 {d.abierto ? "ABIERTO · ENTRAR" : "CERRADO · LEER"}
               </span>
             </Link>

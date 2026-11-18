@@ -22,7 +22,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-3 rounded-xl border border-borde bg-superficie px-[18px] py-3.5">
-        <span className="text-[12.5px] text-apagado">
+        <span className="text-[0.78125rem] text-apagado">
           {distintas === 0
             ? "Todas las sesiones tienen la actividad que sugiere el importador."
             : `${distintas} ${distintas === 1 ? "sesión tiene" : "sesiones tienen"} una actividad distinta de la sugerida.`}
@@ -35,7 +35,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
                 iniciar(async () => setAviso(await aplicarSugeridas(casoId)));
               }
             }}
-            className="ml-auto cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[12px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+            className="ml-auto cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[0.75rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
           >
             Aplicar todas las sugeridas
           </button>
@@ -43,22 +43,22 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
       </div>
 
       <div aria-live="polite">
-        {aviso?.ok && <div role="status" className="text-[12px] font-semibold text-secundario-fuerte">{aviso.ok}</div>}
-        {aviso?.error && <div role="alert" className="text-[12px] font-semibold text-peligro">{aviso.error}</div>}
+        {aviso?.ok && <div role="status" className="text-[0.75rem] font-semibold text-secundario-fuerte">{aviso.ok}</div>}
+        {aviso?.error && <div role="alert" className="text-[0.75rem] font-semibold text-peligro">{aviso.error}</div>}
       </div>
 
       {ejes.map((e) => (
         <section key={e.id} aria-labelledby={`eje-${e.id}`} className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <h2 id={`eje-${e.id}`} className="border-b border-[#F1EBE5] px-[18px] py-3 text-[12.5px] font-extrabold">
+          <h2 id={`eje-${e.id}`} className="border-b border-[#F1EBE5] px-[18px] py-3 text-[0.78125rem] font-extrabold">
             Eje {e.numero} · {e.nombre}
           </h2>
           <ul>
             {e.sesiones.map((s) => (
               <li key={s.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
-                <span className="w-[34px] text-[13px] font-extrabold text-tenue">{s.codigo}</span>
+                <span className="w-[34px] text-[0.8125rem] font-extrabold text-tenue">{s.codigo}</span>
                 <div className="min-w-[220px] flex-1">
-                  <div className="text-[13px] font-bold">{s.titulo}</div>
-                  <div className="text-[10.5px] text-suave">
+                  <div className="text-[0.8125rem] font-bold">{s.titulo}</div>
+                  <div className="text-[0.65625rem] text-suave">
                     {s.publicada ? "PUBLICADA" : "BORRADOR"}
                     {s.pantalla !== s.sugerida && <> · Sugerida: {etiqueta(s.sugerida)}</>}
                   </div>
@@ -68,7 +68,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
                     disabled={pendiente}
                     onClick={() => cambiar(s, s.sugerida)}
                     aria-label={`Usar la sugerida en la sesión ${s.codigo}`}
-                    className="cursor-pointer text-[11.5px] font-bold text-secundario-fuerte hover:underline disabled:opacity-50"
+                    className="cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline disabled:opacity-50"
                   >
                     Usar la sugerida
                   </button>
@@ -78,7 +78,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
                   value={s.pantalla}
                   disabled={pendiente}
                   onChange={(ev) => cambiar(s, ev.target.value)}
-                  className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[12.5px] disabled:opacity-60"
+                  className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[0.78125rem] disabled:opacity-60"
                 >
                   {GRUPOS_DE_ACTIVIDADES.map((g) => (
                     <optgroup key={g.etiqueta} label={g.etiqueta}>

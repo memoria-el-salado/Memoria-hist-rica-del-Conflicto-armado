@@ -110,10 +110,10 @@ export function RecorridoIlustrado({ ejes, explorador, siguiente, seleccionado, 
   return (
     <section aria-labelledby="titulo-ruta" className="scroll-mt-24">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="titulo-ruta" className="text-[10px] font-extrabold tracking-[.12em] text-tenue">
+        <h2 id="titulo-ruta" className="text-[0.625rem] font-extrabold tracking-[.12em] text-tenue">
           TU RUTA POR LOS MONTES DE MARÍA
         </h2>
-        <p className="flex items-center gap-1.5 text-[12px] font-semibold text-tinta-media">
+        <p className="flex items-center gap-1.5 text-[0.75rem] font-semibold text-tinta-media">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M9 11V5a2 2 0 0 1 4 0v6M13 10V8a2 2 0 0 1 4 0v5a7 7 0 0 1-7 7h-.5A6.5 6.5 0 0 1 3 13.5V12a2 2 0 0 1 4 0v1" />
           </svg>
@@ -127,11 +127,11 @@ export function RecorridoIlustrado({ ejes, explorador, siguiente, seleccionado, 
         <div className="@container overflow-hidden rounded-[14px] border border-borde bg-[#FBF6EF]">
           <Escenario orientacion="horizontal" className="hidden @[580px]:block" {...{ ejes, explorador, siguiente, actual, onSeleccionar }} />
           <Escenario orientacion="vertical" className="mx-auto max-w-[420px] @[580px]:hidden" {...{ ejes, explorador, siguiente, actual, onSeleccionar }} />
-          <p className="border-t border-borde bg-superficie px-4 py-2 text-[11px] text-apagado">
+          <p className="border-t border-borde bg-superficie px-4 py-2 text-[0.6875rem] text-apagado">
             El camino se llena hasta donde vas; tu explorador marca la estación por donde sigue tu viaje.
           </p>
           {proximaCerrada && (
-            <p className="flex items-start gap-1.5 border-t border-terciario-borde bg-terciario-tinte px-4 py-2 text-[11.5px] font-semibold text-terciario-fuerte">
+            <p className="flex items-start gap-1.5 border-t border-terciario-borde bg-terciario-tinte px-4 py-2 text-[0.71875rem] font-semibold text-terciario-fuerte">
               <svg className="mt-0.5 flex-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
               </svg>
@@ -234,7 +234,7 @@ function Escenario({
               >
                 <span
                   aria-hidden="true"
-                  className={`relative flex h-[52px] w-[52px] items-center justify-center rounded-full border-[3px] border-white text-[18px] font-extrabold text-white shadow-[0_6px_14px_rgba(80,50,30,.22)] transition-transform group-hover:scale-110 ${
+                  className={`relative flex h-[52px] w-[52px] items-center justify-center rounded-full border-[3px] border-white text-[1.125rem] font-extrabold text-white shadow-[0_6px_14px_rgba(80,50,30,.22)] transition-transform group-hover:scale-110 ${
                     elegida ? "scale-110 ring-4 ring-primario ring-offset-2 ring-offset-[#FBF6EF]" : ""
                   }`}
                   style={{ background: cerrada ? "#6F6760" : fondoParaTextoBlanco(e.tono) }}
@@ -254,12 +254,12 @@ function Escenario({
                     </span>
                   )}
                 </span>
-                <span aria-hidden="true" className="rounded-md bg-white/90 px-1.5 py-0.5 text-[11px] font-bold leading-tight text-tinta shadow-[0_1px_2px_rgba(0,0,0,.06)]">
+                <span aria-hidden="true" className="rounded-md bg-white/90 px-1.5 py-0.5 text-[0.6875rem] font-bold leading-tight text-tinta shadow-[0_1px_2px_rgba(0,0,0,.06)]">
                   {corto}
                 </span>
                 <span
                   aria-hidden="true"
-                  className="rounded-full px-2 py-0.5 text-[9.5px] font-extrabold tracking-[.08em]"
+                  className="rounded-full px-2 py-0.5 text-[0.59375rem] font-extrabold tracking-[.08em]"
                   style={{ background: ESTILO_ESTADO[estado].fondo, color: ESTILO_ESTADO[estado].texto }}
                 >
                   {estado}
@@ -383,24 +383,24 @@ function PanelEstacion({
     >
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className="flex h-[30px] min-w-[30px] items-center justify-center rounded-[8px] px-2 text-[13px] font-extrabold text-white"
+          className="flex h-[30px] min-w-[30px] items-center justify-center rounded-[8px] px-2 text-[0.8125rem] font-extrabold text-white"
           style={{ background: estado === "CERRADO" ? "#6F6760" : fondoParaTextoBlanco(eje.tono) }}
         >
           {numeroDe(eje)}
         </span>
-        <span className="text-[10.5px] font-bold tracking-[.1em] text-tenue">
+        <span className="text-[0.65625rem] font-bold tracking-[.1em] text-tenue">
           ESTACIÓN {indice + 1} DE {total}
         </span>
         <span
-          className="rounded-full px-2.5 py-0.5 text-[10.5px] font-bold"
+          className="rounded-full px-2.5 py-0.5 text-[0.65625rem] font-bold"
           style={{ background: ESTILO_ESTADO[estado].fondo, color: ESTILO_ESTADO[estado].texto }}
         >
           {ESTADO_EN_PANEL[estado]}
         </span>
       </div>
-      <h3 className="mt-2 text-[17px] font-extrabold leading-snug tracking-[-.01em]">{eje.nombre}</h3>
+      <h3 className="mt-2 text-[1.0625rem] font-extrabold leading-snug tracking-[-.01em]">{eje.nombre}</h3>
       {eje.descripcion && eje.descripcion !== eje.nombre && (
-        <p className="mt-1 text-[12.5px] leading-[1.6] text-apagado">{eje.descripcion}</p>
+        <p className="mt-1 text-[0.78125rem] leading-[1.6] text-apagado">{eje.descripcion}</p>
       )}
 
       <div className="mt-2.5 flex items-center gap-2.5">
@@ -414,13 +414,13 @@ function PanelEstacion({
         >
           <span className="block h-full" style={{ width: `${eje.progreso}%`, background: eje.tono }} />
         </span>
-        <span className="text-[11px] font-bold text-tenue">
+        <span className="text-[0.6875rem] font-bold text-tenue">
           {eje.completadas} de {publicadas} hechas · {eje.progreso}%
         </span>
       </div>
 
       {eje.bloqueo && (
-        <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-terciario-tinte px-3 py-2 text-[12px] font-semibold text-terciario-fuerte">
+        <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-terciario-tinte px-3 py-2 text-[0.75rem] font-semibold text-terciario-fuerte">
           <svg className="mt-0.5 flex-none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
           </svg>
@@ -428,13 +428,13 @@ function PanelEstacion({
         </p>
       )}
       {eje.objetivoGeneral && (
-        <p className="mt-3 text-[12.5px] leading-[1.65] text-apagado">
+        <p className="mt-3 text-[0.78125rem] leading-[1.65] text-apagado">
           <span className="font-bold text-tenue">Objetivo general · </span>
           {eje.objetivoGeneral}
         </p>
       )}
       {eje.material > 0 && (
-        <p className="mt-2 text-[12px] font-semibold text-secundario-fuerte">
+        <p className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">
           Este eje trae {recursos(eje.material)} de tu docente: los encuentras dentro de cada sesión.
         </p>
       )}
@@ -449,13 +449,13 @@ function PanelEstacion({
                 esSiguiente ? "border-primario bg-primario-tinte" : "border-borde bg-superficie-suave"
               }`}
             >
-              <div className="w-[34px] flex-none pt-0.5 text-[12px] font-extrabold text-primario-fuerte">{s.codigo}</div>
+              <div className="w-[34px] flex-none pt-0.5 text-[0.75rem] font-extrabold text-primario-fuerte">{s.codigo}</div>
               <div className="min-w-0 flex-1 basis-[180px]">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[13.5px] font-bold">{s.titulo}</span>
-                  {esSiguiente && <span className="rounded-full bg-primario-fuerte px-2 py-0.5 text-[10px] font-bold text-white">Continúa aquí</span>}
+                  <span className="text-[0.84375rem] font-bold">{s.titulo}</span>
+                  {esSiguiente && <span className="rounded-full bg-primario-fuerte px-2 py-0.5 text-[0.625rem] font-bold text-white">Continúa aquí</span>}
                   {s.publicada && s.completada && (
-                    <span className="flex items-center gap-1 rounded-full bg-secundario-tinte px-2 py-0.5 text-[10px] font-bold text-secundario-fuerte">
+                    <span className="flex items-center gap-1 rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-fuerte">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
@@ -463,7 +463,7 @@ function PanelEstacion({
                     </span>
                   )}
                 </div>
-                <div className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tracking-[.04em] text-suave">
+                <div className="mt-0.5 flex flex-wrap gap-x-3 text-[0.6875rem] tracking-[.04em] text-suave">
                   {s.especial ? (
                     <span className="font-bold text-terciario-fuerte">Actividad especial: {s.tipo}</span>
                   ) : (
@@ -471,11 +471,11 @@ function PanelEstacion({
                   )}
                   {s.material > 0 && <span className="font-semibold text-secundario-fuerte">Material: {recursos(s.material)}</span>}
                 </div>
-                {s.objetivo && <p className="mt-1.5 text-[11.5px] leading-[1.6] text-apagado">{s.objetivo}</p>}
+                {s.objetivo && <p className="mt-1.5 text-[0.71875rem] leading-[1.6] text-apagado">{s.objetivo}</p>}
                 {s.subsecciones.length > 0 && (
                   <ul className="mt-2 grid gap-1 border-l-2 border-borde pl-3">
                     {s.subsecciones.map((sub) => (
-                      <li key={sub.codigo} className="text-[11.5px] leading-[1.5] text-apagado">
+                      <li key={sub.codigo} className="text-[0.71875rem] leading-[1.5] text-apagado">
                         <span className="font-bold text-suave">{sub.codigo}</span> {sub.titulo}
                       </li>
                     ))}
@@ -483,14 +483,14 @@ function PanelEstacion({
                 )}
               </div>
               {s.publicada && eje.bloqueo ? (
-                <span title={eje.bloqueo} className="flex-none rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2 text-[12px] font-bold text-terciario-fuerte">
+                <span title={eje.bloqueo} className="flex-none rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2 text-[0.75rem] font-bold text-terciario-fuerte">
                   Cerrada
                 </span>
               ) : s.publicada ? (
                 <Link
                   href={`/estudiante/sesion/${s.id}`}
                   aria-label={`Abrir la sesión ${s.codigo}`}
-                  className={`flex min-h-10 flex-none items-center rounded-lg border px-3.5 text-[12px] font-bold no-underline hover:no-underline ${
+                  className={`flex min-h-10 flex-none items-center rounded-lg border px-3.5 text-[0.75rem] font-bold no-underline hover:no-underline ${
                     esSiguiente
                       ? "border-primario-fuerte bg-primario-fuerte text-white hover:bg-primario-hover"
                       : "border-primario text-primario-fuerte hover:bg-primario-tinte"
@@ -499,7 +499,7 @@ function PanelEstacion({
                   Abrir
                 </Link>
               ) : (
-                <span title="El docente aún no ha publicado esta sesión" className="flex-none rounded-lg border border-borde px-3.5 py-2 text-[12px] font-bold text-suave">
+                <span title="El docente aún no ha publicado esta sesión" className="flex-none rounded-lg border border-borde px-3.5 py-2 text-[0.75rem] font-bold text-suave">
                   No publicada
                 </span>
               )}
@@ -510,14 +510,14 @@ function PanelEstacion({
 
       <nav aria-label="Otras estaciones" className="mt-4 flex flex-wrap justify-between gap-2 border-t border-borde pt-3">
         {anterior ? (
-          <button type="button" onClick={() => onSeleccionar(anterior.id)} className="min-h-10 cursor-pointer rounded-lg px-2 text-[12px] font-bold text-apagado hover:text-primario-texto">
+          <button type="button" onClick={() => onSeleccionar(anterior.id)} className="min-h-10 cursor-pointer rounded-lg px-2 text-[0.75rem] font-bold text-apagado hover:text-primario-texto">
             ← Estación {numeroDe(anterior)}
           </button>
         ) : (
           <span />
         )}
         {posterior && (
-          <button type="button" onClick={() => onSeleccionar(posterior.id)} className="min-h-10 cursor-pointer rounded-lg px-2 text-[12px] font-bold text-primario-texto hover:text-primario-hover">
+          <button type="button" onClick={() => onSeleccionar(posterior.id)} className="min-h-10 cursor-pointer rounded-lg px-2 text-[0.75rem] font-bold text-primario-texto hover:text-primario-hover">
             Estación {numeroDe(posterior)} →
           </button>
         )}

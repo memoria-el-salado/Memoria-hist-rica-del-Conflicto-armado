@@ -75,8 +75,8 @@ export function PanelDocente({
 
   return (
     <div className="animar-aparecer">
-      <h1 className="mb-1 text-[24px] font-extrabold tracking-[-.02em]">Panel del Docente</h1>
-      <p className="mb-5 text-[13.5px] text-tenue">
+      <h1 className="mb-1 text-[1.5rem] font-extrabold tracking-[-.02em]">Panel del Docente</h1>
+      <p className="mb-5 text-[0.84375rem] text-tenue">
         Seguimiento de la Ruta Pedagógica y bienestar emocional del grupo.
       </p>
       {filtro}
@@ -87,15 +87,15 @@ export function PanelDocente({
         <div className="grid min-w-0 grid-cols-1 gap-[18px]">
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PROGRESO COLECTIVO</span>
-              <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[10.5px] font-bold text-primario-hover">
+              <span className="text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">PROGRESO COLECTIVO</span>
+              <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[0.65625rem] font-bold text-primario-hover">
                 Ciclo {ciclo}
               </span>
             </div>
-            <div className="mb-1 mt-2.5 text-[34px] font-extrabold tracking-[-.03em]">
+            <div className="mb-1 mt-2.5 text-[2.125rem] font-extrabold tracking-[-.03em]">
               {promedioGlobal}% Completado
             </div>
-            <div className="mb-[18px] text-[11.5px] text-suave">
+            <div className="mb-[18px] text-[0.71875rem] text-suave">
               {totalEstudiantes === 0
                 ? `Sin estudiantes ${ambito} todavía`
                 : `${totalEstudiantes} ${totalEstudiantes === 1 ? "estudiante" : "estudiantes"} ${ambito}`}
@@ -114,20 +114,20 @@ export function PanelDocente({
                     }}
                     title={`${b.label}: ${b.valor}%`}
                   />
-                  <div className="text-center text-[9.5px] font-bold text-suave">{b.label}</div>
+                  <div className="text-center text-[0.59375rem] font-bold text-suave">{b.label}</div>
                 </div>
               ))}
             </div>
           </div>
 
           <section aria-labelledby="titulo-competencias-grupo" className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 id="titulo-competencias-grupo" className="text-[11px] font-bold tracking-[.12em] text-secundario-fuerte">
+            <h2 id="titulo-competencias-grupo" className="text-[0.6875rem] font-bold tracking-[.12em] text-secundario-fuerte">
               COMPETENCIAS DEL GRUPO
             </h2>
             <ul className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2">
               {competencias.map((c) => (
                 <li key={c.id}>
-                  <div className="flex justify-between text-[12.5px]">
+                  <div className="flex justify-between text-[0.78125rem]">
                     <span className="font-semibold text-tinta-media">{c.nombre}</span>
                     <span className="font-extrabold">{c.porcentaje}%</span>
                   </div>
@@ -137,15 +137,15 @@ export function PanelDocente({
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-[11px] leading-snug text-suave">
+            <p className="mt-3 text-[0.6875rem] leading-snug text-suave">
               Promedio de las actividades publicadas que trabajan cada competencia, según la guía.
             </p>
           </section>
 
           <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
             <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
-              <span className="text-[13px] font-extrabold">Gestión de Sesiones</span>
-              <span className="text-[11px] font-bold text-suave">
+              <span className="text-[0.8125rem] font-extrabold">Gestión de Sesiones</span>
+              <span className="text-[0.6875rem] font-bold text-suave">
                 {sesiones.filter((s) => s.publicada).length} de {sesiones.length} publicadas
               </span>
             </div>
@@ -155,10 +155,10 @@ export function PanelDocente({
                   key={s.id}
                   className="flex items-center gap-3.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
                 >
-                  <div className="w-[34px] text-[13px] font-extrabold text-tenue">{s.codigo}</div>
+                  <div className="w-[34px] text-[0.8125rem] font-extrabold text-tenue">{s.codigo}</div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13.5px] font-bold">{s.titulo}</div>
-                    <div className="text-[10.5px] tracking-[.06em] text-suave">
+                    <div className="text-[0.84375rem] font-bold">{s.titulo}</div>
+                    <div className="text-[0.65625rem] tracking-[.06em] text-suave">
                       {s.eje}
                       {" · "}
                       {esEspecial(s.pantalla) && "ACTIVIDAD ESPECIAL: "}
@@ -168,14 +168,14 @@ export function PanelDocente({
                     <Link
                       href={`/docente/sesiones/${s.id}`}
                       aria-label={`${textoEnlace(s)}: sesión ${s.codigo}`}
-                      className={`mt-1 inline-block text-[11.5px] font-bold no-underline hover:underline ${
+                      className={`mt-1 inline-block text-[0.71875rem] font-bold no-underline hover:underline ${
                         esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && !s.planteada ? "text-primario-fuerte" : "text-secundario-fuerte"
                       }`}
                     >
                       {textoEnlace(s)}
                     </Link>
                   </div>
-                  <span className="text-[10.5px] font-bold text-suave">
+                  <span className="text-[0.65625rem] font-bold text-suave">
                     {s.publicada ? "PUBLICADA" : "BORRADOR"}
                   </span>
                   <button
@@ -205,8 +205,8 @@ export function PanelDocente({
             className="flex items-center justify-between gap-3 rounded-xl border border-borde bg-superficie px-5 py-4 text-tinta no-underline hover:border-primario"
           >
             <span>
-              <span className="block text-[11px] font-bold tracking-[.12em] text-tenue">REVISIÓN</span>
-              <span className="mt-1 block text-[13px] font-semibold">
+              <span className="block text-[0.6875rem] font-bold tracking-[.12em] text-tenue">REVISIÓN</span>
+              <span className="mt-1 block text-[0.8125rem] font-semibold">
                 {porRevisar === 0
                   ? "No hay trabajos esperando tu comentario."
                   : `${porRevisar} ${porRevisar === 1 ? "trabajo espera" : "trabajos esperan"} tu comentario`}
@@ -216,9 +216,9 @@ export function PanelDocente({
           </Link>
 
           <div className="rounded-xl border border-borde bg-superficie p-5">
-            <div className="text-[11px] font-bold tracking-[.12em] text-tenue">SUB-POBLACIONES</div>
+            <div className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">SUB-POBLACIONES</div>
             {totalEstudiantes === 0 && (
-              <p className="mt-3 text-[12px] leading-[1.6] text-tenue">
+              <p className="mt-3 text-[0.75rem] leading-[1.6] text-tenue">
                 Todavía no has creado estudiantes. Hazlo desde <strong>Mis Estudiantes</strong> y aquí
                 verás cómo se distribuye tu grupo.
               </p>
@@ -226,7 +226,7 @@ export function PanelDocente({
             <div className="mt-3.5 grid gap-3.5">
               {subpoblaciones.map((s) => (
                 <div key={s.nombre}>
-                  <div className="flex justify-between text-[12.5px]">
+                  <div className="flex justify-between text-[0.78125rem]">
                     <span className="font-semibold text-tinta-media">{s.nombre}</span>
                     <span className="font-extrabold">{s.porcentaje}%</span>
                   </div>
@@ -237,7 +237,7 @@ export function PanelDocente({
               ))}
             </div>
             {subpoblacionesOcultas > 0 && (
-              <p className="mt-3 text-[11px] leading-snug text-suave">
+              <p className="mt-3 text-[0.6875rem] leading-snug text-suave">
                 {subpoblacionesOcultas} en grupos de menos de cinco: no se muestran, para proteger su identidad.
               </p>
             )}
@@ -248,10 +248,10 @@ export function PanelDocente({
           <RepartoPesos ejes={ejes} />
 
           <div className="rounded-xl border border-borde bg-superficie p-5">
-            <div className="text-[11px] font-bold tracking-[.12em] text-tenue">
+            <div className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">
               RECOMENDACIÓN DE CUIDADO
             </div>
-            <p className="mt-2.5 text-[12.5px] leading-[1.7] text-apagado">
+            <p className="mt-2.5 text-[0.78125rem] leading-[1.7] text-apagado">
               Antes de abrir una sesión marcada con alerta de cuidado, conviene anunciarla, acordar
               una señal para pausar y recordar al grupo que nadie está obligado a continuar. Al
               cerrar, deja un momento para hablar de cómo quedaron.

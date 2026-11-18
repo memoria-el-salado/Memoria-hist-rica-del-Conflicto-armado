@@ -49,7 +49,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
     <header className="mb-5">
       <Link
         href="/estudiante/mapa"
-        className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto"
+        className="inline-flex items-center gap-1.5 text-[0.71875rem] font-semibold text-apagado no-underline hover:text-primario-texto"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M11 18l-6-6 6-6" />
@@ -59,25 +59,25 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
 
       <div className="mt-2.5 flex flex-wrap items-center gap-2">
         <span
-          className="rounded-full px-2.5 py-1 text-[10.5px] font-bold text-white"
+          className="rounded-full px-2.5 py-1 text-[0.65625rem] font-bold text-white"
           style={{ background: fondoParaTextoBlanco(sesion.eje.tono) }}
         >
           EJE {sesion.eje.numero}
         </span>
-        <span className="text-[11.5px] font-semibold text-suave">{sesion.eje.nombre}</span>
+        <span className="text-[0.71875rem] font-semibold text-suave">{sesion.eje.nombre}</span>
         {sesion.alertaCuidado && (
-          <span className="rounded-full bg-[#FBF1DC] px-2.5 py-1 text-[10.5px] font-bold text-[#8A6410]">
+          <span className="rounded-full bg-[#FBF1DC] px-2.5 py-1 text-[0.65625rem] font-bold text-[#8A6410]">
             Contenido sensible
           </span>
         )}
       </div>
 
-      <h1 className="mt-2 text-[24px] font-extrabold leading-[1.2] tracking-[-.02em]">
+      <h1 className="mt-2 text-[1.5rem] font-extrabold leading-[1.2] tracking-[-.02em]">
         <span className="text-primario-texto">{sesion.codigo}</span> {sesion.titulo}
       </h1>
 
       {sesion.objetivo && (
-        <p className="mt-1.5 max-w-[820px] text-[13.5px] leading-[1.65] text-apagado">
+        <p className="mt-1.5 max-w-[820px] text-[0.84375rem] leading-[1.65] text-apagado">
           {sesion.objetivo}
         </p>
       )}
@@ -88,10 +88,10 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
 
       {sesion.preguntaOrientadora && (
         <div id="pregunta-orientadora" className="mt-3.5 scroll-mt-24 rounded-xl border border-primario-borde bg-primario-tinte px-5 py-4">
-          <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+          <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
             PREGUNTA ORIENTADORA
           </div>
-          <p className="mt-1.5 text-[15.5px] font-semibold leading-[1.45] text-[#5B524B]">
+          <p className="mt-1.5 text-[0.96875rem] font-semibold leading-[1.45] text-[#5B524B]">
             {sesion.preguntaOrientadora}
           </p>
         </div>
@@ -110,11 +110,11 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
 export function RotuloEspecial({ nombre }: { nombre: string }) {
   return (
     <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-terciario-borde bg-terciario-tinte px-5 py-3.5">
-      <span className="rounded-full bg-terciario-fuerte px-2.5 py-1 text-[10.5px] font-bold tracking-[.08em] text-white">
+      <span className="rounded-full bg-terciario-fuerte px-2.5 py-1 text-[0.65625rem] font-bold tracking-[.08em] text-white">
         ACTIVIDAD ESPECIAL
       </span>
-      <span className="text-[15px] font-extrabold text-tinta-media">{nombre}</span>
-      <p className="basis-full text-[12px] leading-[1.55] text-apagado">
+      <span className="text-[0.9375rem] font-extrabold text-tinta-media">{nombre}</span>
+      <p className="basis-full text-[0.75rem] leading-[1.55] text-apagado">
         Material propio del proyecto que complementa el contenido de la cartilla.
       </p>
     </div>
@@ -136,10 +136,10 @@ function Explora({ sesion, material }: { sesion: DatosSesion; material: RecursoV
       <CartillasSesion cartillas={cartillas} codigo={sesion.codigo} />
       {!material.length && !cartillas.length && !tieneTexto && (
         <section aria-labelledby="titulo-explora" className="mt-4 rounded-xl border border-dashed border-borde bg-superficie px-5 py-4">
-          <h2 id="titulo-explora" className="text-[11px] font-extrabold tracking-[.1em] text-tinta-media">
+          <h2 id="titulo-explora" className="text-[0.6875rem] font-extrabold tracking-[.1em] text-tinta-media">
             PARA EXPLORAR
           </h2>
-          <p className="mt-1.5 text-[13px] leading-relaxed text-apagado">
+          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-apagado">
             Tu docente todavía no ha añadido material para esta sesión: lo presentará en clase.
           </p>
         </section>
@@ -163,14 +163,14 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
     <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
       {sesion.documento && (
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] pb-3">
-          <span className="text-[10.5px] font-bold tracking-[.1em] text-suave">
+          <span className="text-[0.65625rem] font-bold tracking-[.1em] text-suave">
             DOCUMENTO FUENTE
           </span>
           <a
             href={sesion.documento.enlace}
             target="_blank"
             rel="noreferrer"
-            className="text-[11.5px] font-semibold text-secundario-fuerte"
+            className="text-[0.71875rem] font-semibold text-secundario-fuerte"
           >
             {sesion.documento.titulo} · abrir PDF
           </a>
@@ -182,7 +182,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
           bloque.tipo === "subtitulo" ? (
             <h3
               key={bloque.id}
-              className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
+              className="mb-1.5 mt-4 flex gap-2 text-[0.84375rem] font-extrabold text-tinta first:mt-0"
             >
               <span className="text-primario-texto">{bloque.codigo}</span>
               <span>{bloque.texto}</span>
@@ -190,14 +190,14 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
           ) : (
             <p
               key={bloque.id}
-              className="mb-3.5 text-justify text-[13.5px] leading-[1.85] text-tinta-media last:mb-0"
+              className="mb-3.5 text-justify text-[0.84375rem] leading-[1.85] text-tinta-media last:mb-0"
             >
               {bloque.texto}
             </p>
           )
         )
       ) : (
-        <p className="text-[13px] leading-[1.7] text-tenue">
+        <p className="text-[0.8125rem] leading-[1.7] text-tenue">
           El documento importado no traía texto para esta sesión: su desarrollo está en el trabajo
           de clase. Puedes abrir el PDF original desde el enlace de arriba.
         </p>
@@ -205,12 +205,12 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
 
       {sinTexto.length > 0 && (
         <div className="mt-5 border-t border-[#F1EBE5] pt-4">
-          <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
+          <div className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
             TAMBIÉN EN ESTA SESIÓN
           </div>
           <ol className="mt-2.5 grid gap-1.5">
             {sinTexto.map((sub) => (
-              <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
+              <li key={sub.id} className="flex gap-2 text-[0.78125rem] text-tinta-media">
                 <span className="font-bold text-primario-texto">{sub.codigo}</span>
                 <span>{sub.titulo}</span>
               </li>

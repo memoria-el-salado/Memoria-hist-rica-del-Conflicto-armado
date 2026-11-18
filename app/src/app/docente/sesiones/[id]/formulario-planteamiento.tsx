@@ -23,7 +23,7 @@ export function FormularioPlanteamiento({
   const [pendiente, iniciar] = useTransition();
   const esDilema = tipo === "dilema";
 
-  const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]";
+  const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]";
 
   return (
     <form
@@ -33,7 +33,7 @@ export function FormularioPlanteamiento({
       }}
       className="rounded-xl border border-borde bg-superficie p-5"
     >
-      <label htmlFor="pregunta-planteamiento" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="pregunta-planteamiento" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         {esDilema ? "EL DILEMA" : "LA PREGUNTA DE INVESTIGACIÓN"}
       </label>
       <textarea
@@ -46,7 +46,7 @@ export function FormularioPlanteamiento({
 
       {esDilema && (
         <fieldset className="mt-3">
-          <legend className="text-[10px] font-bold tracking-[.12em] text-tenue">OPCIONES</legend>
+          <legend className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">OPCIONES</legend>
           <div className="mt-1.5 grid gap-1.5">
             {opciones.map((o, i) => (
               <div key={i} className="flex gap-1.5">
@@ -66,7 +66,7 @@ export function FormularioPlanteamiento({
                     type="button"
                     onClick={() => setOpciones((todas) => todas.filter((_, j) => j !== i))}
                     aria-label={`Quitar la opción ${i + 1}`}
-                    className="cursor-pointer px-2 text-[14px] text-apagado hover:text-peligro"
+                    className="cursor-pointer px-2 text-[0.875rem] text-apagado hover:text-peligro"
                   >
                     ×
                   </button>
@@ -78,13 +78,13 @@ export function FormularioPlanteamiento({
             <button
               type="button"
               onClick={() => setOpciones((todas) => [...todas, ""])}
-              className="mt-1.5 cursor-pointer text-[11.5px] font-bold text-secundario-fuerte hover:underline"
+              className="mt-1.5 cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline"
             >
               + Otra opción
             </button>
           )}
           {yaPlanteada && (
-            <p className="mt-2 text-[11px] text-suave">
+            <p className="mt-2 text-[0.6875rem] text-suave">
               Si cambias una opción, quien ya la eligió conserva su respuesta, pero esa opción deja de contarse en el reparto.
             </p>
           )}
@@ -94,17 +94,17 @@ export function FormularioPlanteamiento({
       <button
         type="submit"
         disabled={pendiente}
-        className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-50"
+        className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-50"
       >
         {pendiente ? "Guardando..." : yaPlanteada ? "Actualizar el planteamiento" : esDilema ? "Plantear el dilema" : "Plantear la pregunta"}
       </button>
       {estado?.ok && (
-        <div role="status" className="mt-2 text-[11.5px] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
           {estado.ok}
         </div>
       )}
       {estado?.error && (
-        <div role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">
           {estado.error}
         </div>
       )}

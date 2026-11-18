@@ -30,9 +30,9 @@ export default async function MensajesPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="animar-aparecer max-w-[860px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU06 · ACOMPAÑAMIENTO</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Mensajes de tus estudiantes</h1>
-      <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU06 · ACOMPAÑAMIENTO</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Mensajes de tus estudiantes</h1>
+      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Cuando un estudiante no se siente bien para continuar una sesión, puede escribirte desde ella. Aquí queda el
         registro de esos mensajes. No es un chat: cada uno es un caso para que busques al estudiante y lo acompañes en
         lo que necesite. Cuando lo hayas hecho, márcalo como atendido.
@@ -44,7 +44,7 @@ export default async function MensajesPage({ searchParams }: { searchParams: Pro
             key={e}
             href={e === "pendientes" ? "/docente/mensajes" : `/docente/mensajes?estado=${e}`}
             aria-current={e === estado ? "page" : undefined}
-            className={`rounded-full border px-3.5 py-1.5 text-[12px] font-bold no-underline ${
+            className={`rounded-full border px-3.5 py-1.5 text-[0.75rem] font-bold no-underline ${
               e === estado
                 ? "border-primario-fuerte bg-primario-fuerte text-white"
                 : "border-borde bg-superficie text-apagado hover:border-primario hover:text-primario-texto"
@@ -56,7 +56,7 @@ export default async function MensajesPage({ searchParams }: { searchParams: Pro
       </nav>
 
       {casos.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde bg-superficie px-5 py-8 text-center text-[13px] leading-[1.6] text-tenue">
+        <p className="rounded-xl border border-dashed border-borde bg-superficie px-5 py-8 text-center text-[0.8125rem] leading-[1.6] text-tenue">
           {estado === "pendientes"
             ? "No tienes mensajes por atender."
             : estado === "atendidos"

@@ -25,7 +25,7 @@ export function DeclaracionSubpoblacion({
       : "Sin declarar";
 
   return (
-    <div className="basis-full pl-11 text-[11.5px]">
+    <div className="basis-full pl-11 text-[0.71875rem]">
       <span className="text-suave">Subpoblación: </span>
       <span className="font-semibold text-apagado">{actual}</span>
       <button
@@ -56,7 +56,7 @@ export function DeclaracionSubpoblacion({
             id={`subpoblacion-${estudiante.id}`}
             value={categoria}
             onChange={(e) => setCategoria(e.target.value)}
-            className="rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[12.5px]"
+            className="rounded-lg border border-borde-campo bg-superficie px-2.5 py-1.5 text-[0.78125rem]"
           >
             <option value="">Sin declarar</option>
             {CATEGORIAS.map((c) => (
@@ -66,7 +66,7 @@ export function DeclaracionSubpoblacion({
             ))}
           </select>
           {categoria && (
-            <label className="flex cursor-pointer items-start gap-2 text-[11.5px] leading-snug text-apagado">
+            <label className="flex cursor-pointer items-start gap-2 text-[0.71875rem] leading-snug text-apagado">
               <input
                 id={`consentimiento-${estudiante.id}`}
                 type="checkbox"
@@ -81,7 +81,7 @@ export function DeclaracionSubpoblacion({
           <button
             type="submit"
             disabled={pendiente}
-            className="justify-self-start cursor-pointer rounded-lg bg-secundario-fuerte px-3 py-1.5 text-[12px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+            className="justify-self-start cursor-pointer rounded-lg bg-secundario-fuerte px-3 py-1.5 text-[0.75rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
           >
             Guardar
           </button>

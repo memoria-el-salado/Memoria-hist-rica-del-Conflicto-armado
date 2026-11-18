@@ -23,10 +23,10 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
 
   return (
     <section aria-labelledby="titulo-recorrido" className="rounded-xl border border-borde bg-superficie p-5">
-      <h2 id="titulo-recorrido" className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+      <h2 id="titulo-recorrido" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
         RECORRIDO DEL MAPA
       </h2>
-      <p className="mt-1.5 text-[11.5px] leading-relaxed text-tenue">
+      <p className="mt-1.5 text-[0.71875rem] leading-relaxed text-tenue">
         En orden, cada eje se abre cuando el estudiante llega al avance que elijas en el anterior. Puedes abrir un eje
         para todo el curso cuando quieras.
       </p>
@@ -37,7 +37,7 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
         }}
         className="mt-3 grid gap-2"
       >
-        <fieldset className="grid gap-1.5 text-[12.5px]">
+        <fieldset className="grid gap-1.5 text-[0.78125rem]">
           <legend className="sr-only">Recorrido</legend>
           <label className="flex cursor-pointer items-center gap-2">
             <input type="radio" name="recorrido" checked={modo === "LIBRE"} onChange={() => setModo("LIBRE")} />
@@ -49,13 +49,13 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
           </label>
         </fieldset>
         {modo === "EN_ORDEN" && (
-          <label className="flex items-center gap-2 text-[12px] text-apagado">
+          <label className="flex items-center gap-2 text-[0.75rem] text-apagado">
             Abrir el siguiente al llegar al
             <select
               id="umbral-recorrido"
               value={umbral}
               onChange={(e) => setUmbral(Number(e.target.value))}
-              className="rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1 text-[12.5px]"
+              className="rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1 text-[0.78125rem]"
             >
               {UMBRALES.map((u) => (
                 <option key={u} value={u}>
@@ -69,7 +69,7 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
         <button
           type="submit"
           disabled={pendiente}
-          className="justify-self-start cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[12px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+          className="justify-self-start cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[0.75rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
         >
           Guardar recorrido
         </button>
@@ -82,19 +82,19 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
             .map((e, i) => {
               const abierto = recorrido.abiertos.includes(e.id);
               return (
-                <li key={e.id} className="flex items-center gap-2 text-[12px]">
+                <li key={e.id} className="flex items-center gap-2 text-[0.75rem]">
                   <span className="min-w-0 flex-1 truncate">
                     <strong>Eje {e.numero}</strong> {e.nombre}
                   </span>
                   {i === 0 ? (
-                    <span className="text-[11px] text-suave">siempre abierto</span>
+                    <span className="text-[0.6875rem] text-suave">siempre abierto</span>
                   ) : (
                     <button
                       disabled={pendiente}
                       onClick={() => iniciar(async () => setAviso(await alternarEjeAbierto(cursoId, e.id)))}
                       aria-pressed={abierto}
                       aria-label={`${abierto ? "Dejar de abrir a mano" : "Abrir ya"} el eje ${e.numero}`}
-                      className={`cursor-pointer rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${
+                      className={`cursor-pointer rounded-full border px-2.5 py-0.5 text-[0.6875rem] font-bold ${
                         abierto ? "border-secundario bg-secundario text-white" : "border-borde-campo text-apagado"
                       }`}
                     >
@@ -106,8 +106,8 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
             })}
         </ul>
       )}
-      {aviso?.ok && <p role="status" className="mt-2 text-[11.5px] font-semibold text-secundario-fuerte">{aviso.ok}</p>}
-      {aviso?.error && <p role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">{aviso.error}</p>}
+      {aviso?.ok && <p role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">{aviso.ok}</p>}
+      {aviso?.error && <p role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">{aviso.error}</p>}
     </section>
   );
 }

@@ -71,11 +71,11 @@ export function FormularioUsuario({
       }}
       className="rounded-xl border border-borde bg-superficie p-5"
     >
-      <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
         {titulo}
       </div>
 
-      <label htmlFor="nombre" className="mt-3.5 block text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="nombre" className="mt-3.5 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         NOMBRE COMPLETO
       </label>
       <input
@@ -84,10 +84,10 @@ export function FormularioUsuario({
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
         placeholder="ej. Liliana Ramírez"
-        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
       />
 
-      <label htmlFor="usuario" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="usuario" className="mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         USUARIO
       </label>
       <input
@@ -97,20 +97,20 @@ export function FormularioUsuario({
         onChange={(e) => setUsuario(e.target.value)}
         placeholder="ej. liliana.ramirez"
         autoComplete="off"
-        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
       />
 
       {extra}
       {cursos && (
         <>
-          <label htmlFor="cursoId" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="cursoId" className="mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             CURSO
           </label>
           <select
             id="cursoId"
             name="cursoId"
             defaultValue={cursos[0]?.id ?? ""}
-            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
           >
             <option value="">Sin curso por ahora</option>
             {cursos.map((c) => (
@@ -123,21 +123,21 @@ export function FormularioUsuario({
       )}
 
       <div className="mt-3 flex items-baseline justify-between gap-2">
-        <label htmlFor="contrasena" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+        <label htmlFor="contrasena" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
           CONTRASEÑA PROVISIONAL
         </label>
         <div className="flex gap-3">
           <button
             type="button"
             onClick={() => setContrasena(generarContrasenaTemporal())}
-            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
+            className="cursor-pointer text-[0.6875rem] font-semibold text-apagado hover:text-primario-texto"
           >
             Generar otra
           </button>
           <button
             type="button"
             onClick={() => setVisible((v) => !v)}
-            className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
+            className="cursor-pointer text-[0.6875rem] font-semibold text-apagado hover:text-primario-texto"
           >
             {visible ? "Ocultar" : "Mostrar"}
           </button>
@@ -151,7 +151,7 @@ export function FormularioUsuario({
         onChange={(e) => setContrasena(e.target.value)}
         autoComplete="off"
         spellCheck={false}
-        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 font-mono text-[13px]"
+        className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 font-mono text-[0.8125rem]"
       />
 
       {mostrarRevision ? (
@@ -169,7 +169,7 @@ export function FormularioUsuario({
               ))}
             </div>
             <span
-              className="text-[10.5px] font-bold"
+              className="text-[0.65625rem] font-bold"
               style={{ color: COLORES_FUERZA[revision.fuerza] }}
             >
               {ETIQUETAS_FUERZA[revision.fuerza]}
@@ -177,14 +177,14 @@ export function FormularioUsuario({
           </div>
           <ul className="mt-2 grid gap-1">
             {revision.errores.map((e) => (
-              <li key={e} className="text-[11px] leading-[1.4] text-peligro">
+              <li key={e} className="text-[0.6875rem] leading-[1.4] text-peligro">
                 · {e}
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p className="mt-2 text-[11px] leading-[1.5] text-suave">
+        <p className="mt-2 text-[0.6875rem] leading-[1.5] text-suave">
           Entrégasela a la persona junto con su usuario. La plataforma le pedirá cambiarla por una
           suya la primera vez que entre. Si prefieres escribir otra, debe tener al menos{" "}
           {LONGITUD_MINIMA} caracteres, con mayúscula, minúscula, número y símbolo.
@@ -194,7 +194,7 @@ export function FormularioUsuario({
       <button
         type="submit"
         disabled={pendiente || !revision.valida}
-        className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         {pendiente ? "Creando..." : textoBoton}
       </button>
@@ -202,12 +202,12 @@ export function FormularioUsuario({
       {mensaje?.entrega && <Credenciales entrega={mensaje.entrega} />}
 
       {mensaje?.ok && !mensaje.entrega && (
-        <div role="status" className="mt-2.5 text-[11.5px] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
           {mensaje.ok}
         </div>
       )}
       {mensaje?.error && (
-        <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
           {mensaje.error}
         </div>
       )}
@@ -235,24 +235,24 @@ function Credenciales({ entrega }: { entrega: Entrega }) {
       role="status"
       className="mt-3.5 rounded-[10px] border border-secundario-borde bg-secundario-tinte p-3.5"
     >
-      <div className="text-[10px] font-bold tracking-[.12em] text-secundario-fuerte">
+      <div className="text-[0.625rem] font-bold tracking-[.12em] text-secundario-fuerte">
         CREDENCIALES PARA ENTREGAR
       </div>
-      <div className="mt-2 text-[12.5px] font-bold text-[#2E5E5C]">{entrega.nombre}</div>
-      <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-1 text-[12px] text-[#3F6E6C]">
+      <div className="mt-2 text-[0.78125rem] font-bold text-[#2E5E5C]">{entrega.nombre}</div>
+      <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-1 text-[0.75rem] text-[#3F6E6C]">
         <dt className="font-semibold">Usuario</dt>
         <dd className="font-mono break-all">{entrega.usuario}</dd>
         <dt className="font-semibold">Contraseña</dt>
         <dd className="font-mono break-all">{entrega.contrasena}</dd>
       </dl>
-      <p className="mt-2 text-[11px] leading-[1.5] text-[#5A8280]">
+      <p className="mt-2 text-[0.6875rem] leading-[1.5] text-[#5A8280]">
         Anótala antes de cerrar esta pantalla: no vuelve a mostrarse. Al entrar, la plataforma le
         pedirá cambiarla por una que solo esa persona conozca.
       </p>
       <button
         type="button"
         onClick={copiar}
-        className="mt-2.5 cursor-pointer rounded-lg border border-secundario bg-superficie px-3 py-1.5 text-[11.5px] font-bold text-secundario-fuerte hover:bg-secundario-tinte"
+        className="mt-2.5 cursor-pointer rounded-lg border border-secundario bg-superficie px-3 py-1.5 text-[0.71875rem] font-bold text-secundario-fuerte hover:bg-secundario-tinte"
       >
         {copiado ? "Copiado" : "Copiar credenciales"}
       </button>

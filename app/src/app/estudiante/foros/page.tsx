@@ -21,15 +21,15 @@ export default async function ForosEstudiantePage() {
 
   return (
     <div className="animar-aparecer max-w-[860px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU08 · CONTRASTE DE FUENTES</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Debates</h1>
-      <p className="mb-5 max-w-[620px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU08 · CONTRASTE DE FUENTES</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Debates</h1>
+      <p className="mb-5 max-w-[620px] text-[0.84375rem] leading-[1.65] text-apagado">
         En cada debate asumes uno de dos roles y defiendes tu posición con argumentos apoyados en
         documentos históricos. Tu docente lo media.
       </p>
 
       {foros.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[13px] text-apagado">
+        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[0.8125rem] text-apagado">
           Tu docente todavía no ha abierto ningún debate.
         </p>
       ) : (
@@ -42,7 +42,7 @@ export default async function ForosEstudiantePage() {
                 href={`/estudiante/foros/${f.id}`}
                 className="block rounded-xl border border-borde bg-superficie p-[18px] transition-colors hover:border-primario/40"
               >
-                <div className="flex flex-wrap items-center gap-2 text-[10px] font-extrabold tracking-[.07em]">
+                <div className="flex flex-wrap items-center gap-2 text-[0.625rem] font-extrabold tracking-[.07em]">
                   <span className={f.abierto ? "text-secundario-fuerte" : "text-suave"}>
                     {f.abierto ? "ABIERTO" : "CERRADO"}
                   </span>
@@ -51,8 +51,8 @@ export default async function ForosEstudiantePage() {
                     {f._count.mensajes} {f._count.mensajes === 1 ? "MENSAJE" : "MENSAJES"}
                   </span>
                 </div>
-                <div className="mt-1.5 text-[15px] font-bold">{f.pregunta}</div>
-                <div className="mt-2 text-[12px] text-apagado">
+                <div className="mt-1.5 text-[0.9375rem] font-bold">{f.pregunta}</div>
+                <div className="mt-2 text-[0.75rem] text-apagado">
                   {postura
                     ? `Tu rol: ${postura === "A" ? f.rolA : f.rolB}`
                     : `${f.rolA} frente a ${f.rolB}`}

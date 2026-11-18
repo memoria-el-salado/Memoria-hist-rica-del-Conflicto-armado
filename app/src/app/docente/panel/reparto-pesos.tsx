@@ -53,8 +53,8 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
   if (ejes.length === 0) {
     return (
       <div className="rounded-xl border border-borde bg-superficie p-5">
-        <div className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</div>
-        <p className="mt-2.5 text-[12.5px] leading-[1.6] text-tenue">
+        <div className="text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</div>
+        <p className="mt-2.5 text-[0.78125rem] leading-[1.6] text-tenue">
           No hay ningún módulo activo todavía. Cuando la administración importe uno, aquí podrás
           repartir el peso de sus ejes.
         </p>
@@ -65,16 +65,16 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
   return (
     <div className="rounded-xl border border-borde bg-superficie p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-[11px] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</span>
+        <span className="text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">PESO DE CADA EJE</span>
         <button
           onClick={equitativo}
-          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
+          className="cursor-pointer text-[0.6875rem] font-semibold text-apagado hover:text-primario-texto"
         >
           Repartir por igual
         </button>
       </div>
 
-      <p className="mt-2 text-[12px] leading-[1.6] text-suave">
+      <p className="mt-2 text-[0.75rem] leading-[1.6] text-suave">
         Reparte 100 puntos entre los ejes según lo que pese cada uno en tu curso. Dentro de cada eje,
         sus sesiones publicadas valen lo mismo entre sí.
       </p>
@@ -85,11 +85,11 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
             <label htmlFor={`peso-${eje.id}`} className="min-w-0 flex-1">
               <span
                 title={eje.nombre}
-                className="block truncate text-[12.5px] font-semibold text-tinta-media"
+                className="block truncate text-[0.78125rem] font-semibold text-tinta-media"
               >
                 <span className="text-primario-texto">Eje {eje.numero}</span> · {eje.nombre}
               </span>
-              <span className="text-[10.5px] text-suave">
+              <span className="text-[0.65625rem] text-suave">
                 {eje.publicadas === 0
                   ? "sin sesiones publicadas"
                   : `${eje.publicadas} ${eje.publicadas === 1 ? "sesión publicada" : "sesiones publicadas"}`}
@@ -106,25 +106,25 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
                 max={100}
                 value={pesos[eje.id] ?? 0}
                 onChange={(e) => fijar(eje.id, e.target.value)}
-                className="w-[68px] rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-right text-[13px]"
+                className="w-[68px] rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-right text-[0.8125rem]"
               />
-              <span className="text-[12px] font-bold text-suave">%</span>
+              <span className="text-[0.75rem] font-bold text-suave">%</span>
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-3.5 flex items-center justify-between border-t border-[#F1EBE5] pt-3">
-        <span className="text-[12px] font-semibold text-tinta-media">Total repartido</span>
+        <span className="text-[0.75rem] font-semibold text-tinta-media">Total repartido</span>
         <span
-          className="text-[15px] font-extrabold"
+          className="text-[0.9375rem] font-extrabold"
           style={{ color: revision.valida ? "#177575" : "#C0392B" }}
         >
           {revision.suma}%
         </span>
       </div>
       <p
-        className="mt-1 text-[11.5px] font-semibold"
+        className="mt-1 text-[0.71875rem] font-semibold"
         style={{ color: revision.valida ? "#177575" : "#C0392B" }}
       >
         {revision.mensaje}
@@ -133,18 +133,18 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
       <button
         onClick={guardar}
         disabled={guardando || !revision.valida || sinCambios}
-        className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[12.5px] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[0.78125rem] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         {guardando ? "Guardando..." : "Guardar reparto"}
       </button>
 
       {mensaje?.ok && (
-        <div role="status" className="mt-2 text-[11.5px] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
           {mensaje.ok}
         </div>
       )}
       {mensaje?.error && (
-        <div role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">
           {mensaje.error}
         </div>
       )}

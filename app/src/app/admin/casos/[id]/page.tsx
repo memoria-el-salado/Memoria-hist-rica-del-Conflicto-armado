@@ -33,12 +33,12 @@ export default async function ActividadesDelModuloPage({ params }: { params: Pro
 
   return (
     <div className="animar-aparecer max-w-[1000px]">
-      <Link href="/admin/casos" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
+      <Link href="/admin/casos" className="text-[0.71875rem] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Módulos geográficos
       </Link>
-      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU09 · ACTIVIDADES DE LAS SESIONES</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">{caso.nombre}</h1>
-      <p className="mb-5 max-w-[720px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="mt-2 text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU09 · ACTIVIDADES DE LAS SESIONES</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">{caso.nombre}</h1>
+      <p className="mb-5 max-w-[720px] text-[0.84375rem] leading-[1.65] text-apagado">
         Cambia la actividad de una sesión sin volver a importar el módulo. Lo que los estudiantes ya hicieron se
         conserva; el avance pasa a medirse con el criterio de la nueva actividad. La columna «Sugerida» es lo que
         el importador propone hoy a partir de los títulos.

@@ -42,11 +42,11 @@ export function GestionEstudiantes({
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
         CU01 · GESTIÓN DE CUENTAS
       </div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Mis estudiantes</h1>
-      <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Mis estudiantes</h1>
+      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Da de alta a los estudiantes de tu grupo y entrégales sus credenciales. Solo verás aquí a los
         que tú hayas creado, y son los que aparecen en tu panel de seguimiento.
       </p>
@@ -54,13 +54,13 @@ export function GestionEstudiantes({
       <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
-            <span className="text-[13px] font-extrabold">Estudiantes del grupo</span>
-            <span className="text-[11px] font-bold text-suave">{estudiantes.length}</span>
+            <span className="text-[0.8125rem] font-extrabold">Estudiantes del grupo</span>
+            <span className="text-[0.6875rem] font-bold text-suave">{estudiantes.length}</span>
           </div>
           {avisoCurso && (
             <div
               role={avisoCurso.error ? "alert" : "status"}
-              className={`border-b border-[#F1EBE5] px-[18px] py-2 text-[11.5px] font-semibold ${
+              className={`border-b border-[#F1EBE5] px-[18px] py-2 text-[0.71875rem] font-semibold ${
                 avisoCurso.error ? "text-peligro" : "text-secundario-fuerte"
               }`}
             >
@@ -69,7 +69,7 @@ export function GestionEstudiantes({
           )}
 
           {estudiantes.length === 0 ? (
-            <p className="px-5 py-10 text-center text-[12.5px] leading-[1.6] text-tenue">
+            <p className="px-5 py-10 text-center text-[0.78125rem] leading-[1.6] text-tenue">
               Todavía no has creado estudiantes.
               <br />
               Usa el formulario de al lado para dar de alta al primero.
@@ -80,19 +80,19 @@ export function GestionEstudiantes({
                 key={e.id}
                 className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
               >
-                <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[11px] font-extrabold text-white">
+                <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[0.6875rem] font-extrabold text-white">
                   {e.iniciales}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[13.5px] font-bold">{e.nombre}</span>
+                    <span className="text-[0.84375rem] font-bold">{e.nombre}</span>
                     {e.provisional && (
-                      <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[10px] font-bold text-[#8A6410]">
+                      <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[0.625rem] font-bold text-[#8A6410]">
                         Contraseña provisional
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-suave">
+                  <div className="text-[0.6875rem] text-suave">
                     {e.usuario}
                     {" "}· alta el {e.creadoEn}
                   </div>
@@ -105,7 +105,7 @@ export function GestionEstudiantes({
                     onChange={(ev) =>
                       iniciar(async () => setAvisoCurso(await asignarCurso(e.id, ev.target.value || null)))
                     }
-                    className="max-w-[150px] rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[12px] disabled:opacity-60"
+                    className="max-w-[150px] rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[0.75rem] disabled:opacity-60"
                   >
                     <option value="">Sin curso</option>
                     {cursos.map((c) => (
@@ -116,7 +116,7 @@ export function GestionEstudiantes({
                   </select>
                 )}
                 <div className="w-24 flex-none">
-                  <div className="mb-1 text-right text-[10.5px] font-bold text-tenue">
+                  <div className="mb-1 text-right text-[0.65625rem] font-bold text-tenue">
                     {e.avance}%
                   </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-[#F0EAE4]">

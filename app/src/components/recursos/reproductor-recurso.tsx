@@ -22,14 +22,14 @@ export function ReproductorRecurso({ recurso, conAviso = true }: { recurso: Recu
   if (!aceptado) {
     return (
       <div role="note" className="rounded-lg border border-primario-borde bg-primario-tinte p-3.5">
-        <div className="text-[10.5px] font-extrabold tracking-[.1em] text-primario-fuerte">ALERTA DE CUIDADO</div>
-        <p className="mt-1 text-[12.5px] leading-relaxed text-tinta-media">
+        <div className="text-[0.65625rem] font-extrabold tracking-[.1em] text-primario-fuerte">ALERTA DE CUIDADO</div>
+        <p className="mt-1 text-[0.78125rem] leading-relaxed text-tinta-media">
           Este recurso trae contenido que puede ser difícil de ver o escuchar. Tómate tu tiempo: puedes
           detenerlo cuando quieras y hablarlo con tu docente.
         </p>
         <button
           onClick={() => setAceptado(true)}
-          className="mt-2.5 cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white hover:bg-primario-hover"
+          className="mt-2.5 cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[0.71875rem] font-bold text-white hover:bg-primario-hover"
         >
           Ver el recurso
         </button>
@@ -42,7 +42,7 @@ export function ReproductorRecurso({ recurso, conAviso = true }: { recurso: Recu
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-block rounded-md border border-borde-campo bg-superficie px-3 py-1.5 text-[12px] font-bold text-primario-fuerte hover:border-primario"
+      className="inline-block rounded-md border border-borde-campo bg-superficie px-3 py-1.5 text-[0.75rem] font-bold text-primario-fuerte hover:border-primario"
     >
       {texto}
     </a>
@@ -146,11 +146,11 @@ function TextoTranscripcion({
                 type="button"
                 onClick={() => alElegir(c.inicio)}
                 aria-current={actual || undefined}
-                className={`w-full cursor-pointer rounded-md px-2 py-1 text-left text-[12.5px] leading-relaxed ${
+                className={`w-full cursor-pointer rounded-md px-2 py-1 text-left text-[0.78125rem] leading-relaxed ${
                   actual ? "bg-terciario-tinte font-semibold text-tinta" : "text-apagado hover:bg-superficie-suave"
                 }`}
               >
-                <span className="mr-2 font-mono text-[10.5px] text-suave">
+                <span className="mr-2 font-mono text-[0.65625rem] text-suave">
                   {Math.floor(c.inicio / 60)}:{String(Math.floor(c.inicio % 60)).padStart(2, "0")}
                 </span>
                 {c.texto}
@@ -160,13 +160,13 @@ function TextoTranscripcion({
         })}
       </ol>
     ) : (
-      <p className="whitespace-pre-line text-[12.5px] leading-relaxed text-apagado">{transcripcion.texto}</p>
+      <p className="whitespace-pre-line text-[0.78125rem] leading-relaxed text-apagado">{transcripcion.texto}</p>
     );
 
   if (desplegable) {
     return (
       <details className="rounded-lg border border-borde bg-superficie-suave px-3 py-2">
-        <summary className="cursor-pointer text-[11.5px] font-bold text-tinta-media">Leer la transcripción</summary>
+        <summary className="cursor-pointer text-[0.71875rem] font-bold text-tinta-media">Leer la transcripción</summary>
         <div className="mt-2">{contenido}</div>
       </details>
     );
@@ -174,7 +174,7 @@ function TextoTranscripcion({
 
   return (
     <div className="max-h-[220px] overflow-y-auto rounded-lg border border-borde bg-superficie-suave p-2">
-      <div className="mb-1 px-2 text-[10px] font-bold tracking-[.1em] text-tenue">TRANSCRIPCIÓN</div>
+      <div className="mb-1 px-2 text-[0.625rem] font-bold tracking-[.1em] text-tenue">TRANSCRIPCIÓN</div>
       {contenido}
     </div>
   );

@@ -36,10 +36,10 @@ export function RespuestaEscrita({
         <TextoSesion sesion={sesion} />
 
         <form action={accion} className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
             TU RESPUESTA
           </div>
-          <p className="mt-1.5 text-[12px] leading-[1.6] text-suave">
+          <p className="mt-1.5 text-[0.75rem] leading-[1.6] text-suave">
             {sesion.preguntaOrientadora
               ? "Responde a la pregunta orientadora con tus propias palabras."
               : "Escribe lo que esta sesión te hace pensar: lo que reconoces, lo que te sorprende y lo que te queda por preguntar."}
@@ -56,33 +56,33 @@ export function RespuestaEscrita({
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             placeholder="Escribe aquí tu respuesta..."
-            className="mt-3 h-[220px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px] leading-[1.7]"
+            className="mt-3 h-[220px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem] leading-[1.7]"
           />
 
-          <div className="mt-1.5 text-right text-[11px] text-tenue">
+          <div className="mt-1.5 text-right text-[0.6875rem] text-tenue">
             {texto.trim().length} caracteres
           </div>
 
           <button
             type="submit"
             disabled={pendiente || !texto.trim() || sinCambios}
-            className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {pendiente ? "Guardando..." : respuestaPrevia ? "Actualizar respuesta" : "Guardar respuesta"}
           </button>
 
           {respuestaPrevia && sinCambios && (
-            <p className="mt-2 text-[11.5px] text-suave">
+            <p className="mt-2 text-[0.71875rem] text-suave">
               Tu respuesta está guardada. Edítala si quieres cambiarla.
             </p>
           )}
           {estado?.ok && (
-            <div role="status" className="mt-2 text-[11.5px] font-semibold text-secundario-fuerte">
+            <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
               {estado.ok}
             </div>
           )}
           {estado?.error && (
-            <div role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+            <div role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">
               {estado.error}
             </div>
           )}

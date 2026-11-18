@@ -61,14 +61,14 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
     return (
       <>
         <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-primario-borde bg-primario-tinte px-4 py-2.5">
-          <span className="text-[12px] text-tinta-media">
+          <span className="text-[0.75rem] text-tinta-media">
             <strong className="text-primario-fuerte">Sesión con alerta de cuidado.</strong> Puedes pausar cuando
             quieras.
           </span>
           <button
             onClick={() => setHablar((v) => !v)}
             aria-expanded={hablar}
-            className="cursor-pointer text-[12px] font-bold text-secundario-fuerte underline-offset-2 hover:underline"
+            className="cursor-pointer text-[0.75rem] font-bold text-secundario-fuerte underline-offset-2 hover:underline"
           >
             Hablar con mi docente
           </button>
@@ -88,34 +88,34 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
       aria-labelledby="titulo-puerta-cuidado"
       className="animar-aparecer mx-auto max-w-[620px] rounded-[14px] border border-primario-borde bg-superficie px-6 py-7 sm:px-8"
     >
-      <div className="flex items-center gap-[9px] text-[11px] font-bold tracking-[.12em] text-primario-fuerte">
+      <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-fuerte">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" />
         </svg>
         <span>ALERTA DE CUIDADO</span>
       </div>
-      <h1 id="titulo-puerta-cuidado" className="mb-3 mt-3 text-[21px] font-extrabold leading-[1.25] tracking-[-.02em]">
+      <h1 id="titulo-puerta-cuidado" className="mb-3 mt-3 text-[1.3125rem] font-extrabold leading-[1.25] tracking-[-.02em]">
         Antes de empezar <span className="text-primario-texto">{codigo}</span> {titulo}
       </h1>
-      <p className="whitespace-pre-line text-[14px] leading-[1.75] text-tinta-media">{texto}</p>
+      <p className="whitespace-pre-line text-[0.875rem] leading-[1.75] text-tinta-media">{texto}</p>
 
       <div className="mt-5 flex flex-wrap gap-2.5">
         <button
           onClick={continuar}
-          className="cursor-pointer rounded-lg bg-primario-fuerte px-[17px] py-[11px] text-[13px] font-bold text-white hover:bg-primario-hover"
+          className="cursor-pointer rounded-lg bg-primario-fuerte px-[17px] py-[11px] text-[0.8125rem] font-bold text-white hover:bg-primario-hover"
         >
           Entiendo, continuar
         </button>
         <Link
           href="/estudiante/mapa"
-          className="rounded-lg border border-borde-campo bg-superficie px-[17px] py-[11px] text-[13px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto"
+          className="rounded-lg border border-borde-campo bg-superficie px-[17px] py-[11px] text-[0.8125rem] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto"
         >
           Dejarlo para después
         </Link>
         <button
           onClick={() => setHablar(true)}
           aria-expanded={hablar}
-          className="cursor-pointer rounded-lg border border-secundario-borde bg-secundario-tinte px-[17px] py-[11px] text-[13px] font-semibold text-secundario-fuerte hover:border-secundario"
+          className="cursor-pointer rounded-lg border border-secundario-borde bg-secundario-tinte px-[17px] py-[11px] text-[0.8125rem] font-semibold text-secundario-fuerte hover:border-secundario"
         >
           Hablar con mi docente
         </button>

@@ -69,10 +69,10 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0 final. Cubre por completo los diez casos de uso del proyecto, los mockups revisados del
-documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 405 pruebas
+documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 408 pruebas
 unitarias —política de contraseñas, separación de funciones por rol, visibilidad entre cursos, aulas,
 reglas del simulador, importación de los PDF, ubicación de las cartillas, actividades de la cartilla,
-avance ponderado, competencias y subpoblaciones— y 26 pruebas de extremo a extremo que recorren cada
+avance ponderado, competencias y subpoblaciones— y 27 pruebas de extremo a extremo que recorren cada
 funcionalidad en un navegador real (`npm run humo:*`, sección 7). La auditoría automática de
 accesibilidad (WCAG 2.1 AA) no encuentra fallos en ninguna pantalla, y `npm run rendimiento` mide las
 Core Web Vitals de cada pantalla y la carga con usuarios simultáneos.
@@ -290,6 +290,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 38 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
 | `npm run humo:ruta` | El mapa ilustrado (cómo funciona, por dónde seguir, estaciones que se tocan o se recorren con las flechas, panel a la vista y camino en zigzag en el celular) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión y le escribe a su docente; el mensaje queda como un caso en el registro del docente, que lo marca como atendido |
+| `npm run humo:escala-texto` | Mide en el navegador que A+ y A++ agrandan un 12 % y un 25 % el título, el menú y la cabecera; la elección se recuerda al recargar y en el celular nada se desborda |
 | `npm run humo:aulas` | Sin docente, el estudiante no ve contenidos ni abre la cartilla; el administrador lo asigna a un aula, pasa un aula a otro docente con sus estudiantes, crea aulas y da de alta estudiantes en ellas |
 | `npm run rendimiento` | Core Web Vitals (TTFB, FCP, LCP, CLS) de 13 pantallas en computador y en un celular simulado, y carga con 1, 5, 10 y 20 usuarios simultáneos; deja el resultado en `reportes/rendimiento.json` |
 | `npm run db:cuadrar-el-salado` | Cuadra el módulo de El Salado con la numeración y las actividades de la cartilla (con `-- --aplicar` lo escribe; es idempotente) |
@@ -444,7 +445,9 @@ React) y hace en paralelo las consultas que no dependen entre sí. El tiempo lo 
 a la base de Supabase (us-west-2): conviene que las funciones de Vercel corran en la región más
 cercana a ella. `npm run rendimiento` mide cada pantalla contra la aplicación en marcha.
 
-**Accesibilidad**: control de tamaño de texto (A / A+ / A++), transcripción obligatoria de los audios
+**Accesibilidad**: control de tamaño de texto (A / A+ / A++, WCAG 1.4.4) que agranda toda la interfaz
+—contenido, menú y cabecera— porque todo el texto está en `rem` y el control cambia la raíz; la elección
+se recuerda en el navegador (`src/lib/escala-texto.ts`). Transcripción obligatoria de los audios
 (WCAG 1.2.1) y subtítulos sincronizados de los videos (WCAG 1.2.2), etiquetas y roles ARIA en formularios
 y controles, foco de teclado visible, enlace «Saltar al contenido» en cada página (2.4.1), zonas
 desplazables operables con el teclado, y animaciones que se apagan con la preferencia del sistema de

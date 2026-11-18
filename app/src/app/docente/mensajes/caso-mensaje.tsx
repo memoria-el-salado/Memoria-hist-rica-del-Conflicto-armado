@@ -27,18 +27,18 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
         className={`rounded-xl border px-5 py-4 ${caso.atendido ? "border-borde bg-superficie" : "border-primario-borde bg-primario-tinte"}`}
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 id={titulo} className="text-[14.5px] font-extrabold">
+          <h2 id={titulo} className="text-[0.90625rem] font-extrabold">
             <span className="text-suave">Caso {caso.numero} · </span>
             {caso.estudiante}
           </h2>
           {caso.atendido ? (
-            <span className="rounded-full bg-secundario-tinte px-2.5 py-1 text-[10.5px] font-bold text-secundario-fuerte">Atendido</span>
+            <span className="rounded-full bg-secundario-tinte px-2.5 py-1 text-[0.65625rem] font-bold text-secundario-fuerte">Atendido</span>
           ) : (
-            <span className="rounded-full bg-primario-fuerte px-2.5 py-1 text-[10.5px] font-bold text-white">Por atender</span>
+            <span className="rounded-full bg-primario-fuerte px-2.5 py-1 text-[0.65625rem] font-bold text-white">Por atender</span>
           )}
         </div>
 
-        <dl className="mt-1.5 grid gap-x-4 gap-y-0.5 text-[11.5px] text-apagado sm:grid-cols-[auto_1fr]">
+        <dl className="mt-1.5 grid gap-x-4 gap-y-0.5 text-[0.71875rem] text-apagado sm:grid-cols-[auto_1fr]">
           <dt className="font-bold text-tenue">Recibido</dt>
           <dd>{caso.recibido}</dd>
           {caso.aula && (
@@ -65,7 +65,7 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
           )}
         </dl>
 
-        <p className={`mt-2.5 whitespace-pre-line rounded-lg bg-superficie px-3.5 py-2.5 text-[13px] leading-relaxed ${caso.mensaje ? "text-tinta-media" : "italic text-suave"}`}>
+        <p className={`mt-2.5 whitespace-pre-line rounded-lg bg-superficie px-3.5 py-2.5 text-[0.8125rem] leading-relaxed ${caso.mensaje ? "text-tinta-media" : "italic text-suave"}`}>
           {caso.mensaje ?? "Sin mensaje: no tiene que explicarse para pedir ayuda."}
         </p>
 
@@ -73,7 +73,7 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
           <button
             disabled={pendiente}
             onClick={() => iniciar(async () => { await marcarAtendida(caso.id); })}
-            className="mt-3 cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[12px] font-bold text-white hover:bg-secundario disabled:opacity-60"
+            className="mt-3 cursor-pointer rounded-lg bg-secundario-fuerte px-3.5 py-2 text-[0.75rem] font-bold text-white hover:bg-secundario disabled:opacity-60"
           >
             {pendiente ? "Guardando…" : "Marcar como atendido"}
           </button>

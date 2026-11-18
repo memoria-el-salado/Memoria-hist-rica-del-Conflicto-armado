@@ -136,7 +136,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
       <CabeceraSesion sesion={sesion} />
 
       <div className="flex flex-wrap items-start justify-between gap-3.5">
-        <p className="max-w-[620px] text-[13.5px] leading-[1.65] text-apagado">
+        <p className="max-w-[620px] text-[0.84375rem] leading-[1.65] text-apagado">
           Imagina que eres facilitador de la Reforma Agraria. Tu misión es repartir los lotes de la finca «La Esperanza»
           ({HECTAREAS_TOTALES} ha) y {pesos(PRESUPUESTO_TOTAL)} en subsidios entre las {familias.length} familias
           retornadas, con equidad según lo que cada una necesita.
@@ -148,7 +148,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
       </div>
 
       {repartoAnterior && (
-        <p className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-4 py-2.5 text-[12.5px] leading-[1.6] text-tinta-media">
+        <p className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-4 py-2.5 text-[0.78125rem] leading-[1.6] text-tinta-media">
           Tu reparto anterior era por hectáreas sueltas. Ahora la tierra se reparte por lotes: vuelve a asignarlos y
           valida de nuevo.
         </p>
@@ -157,10 +157,10 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
       <div className="mt-5 grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)]">
         <section aria-labelledby="titulo-familias" className="min-w-0">
           <div className="mb-2 flex items-baseline justify-between gap-2">
-            <h2 id="titulo-familias" className="text-[12px] font-extrabold tracking-[.04em]">
+            <h2 id="titulo-familias" className="text-[0.75rem] font-extrabold tracking-[.04em]">
               Familias sin tierra ({familias.length - totales.atendidas})
             </h2>
-            <span className="text-[11px] italic text-suave">Arrastra para asignar</span>
+            <span className="text-[0.6875rem] italic text-suave">Arrastra para asignar</span>
           </div>
           <ul className="grid max-h-[720px] gap-2.5 overflow-auto pr-1">
             {familias.map((f) => {
@@ -183,17 +183,17 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-[13.5px] font-bold">{f.nombre}</h3>
-                    <span className={`flex-none rounded-full px-2 py-[3px] text-[9px] font-extrabold tracking-[.06em] ${PRIORIDAD[f.prioridad].clase}`}>
+                    <h3 className="text-[0.84375rem] font-bold">{f.nombre}</h3>
+                    <span className={`flex-none rounded-full px-2 py-[3px] text-[0.5625rem] font-extrabold tracking-[.06em] ${PRIORIDAD[f.prioridad].clase}`}>
                       {PRIORIDAD[f.prioridad].texto}
                     </span>
                   </div>
-                  <div className="mt-1 text-[11px] leading-[1.5] text-tenue">
+                  <div className="mt-1 text-[0.6875rem] leading-[1.5] text-tenue">
                     {f.personas} miembros · {f.menores} menores
                     {marcas.length > 0 && <> · {marcas.join(" · ")}</>}
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-2">
-                    <span className={`text-[11.5px] font-bold ${ha > 0 ? "text-secundario-fuerte" : "text-suave"}`}>
+                    <span className={`text-[0.71875rem] font-bold ${ha > 0 ? "text-secundario-fuerte" : "text-suave"}`}>
                       {ha > 0 ? `${ha} ha · lote ${lotes.map(numero).join(", ")}` : "Sin tierra"}
                     </span>
                     <button
@@ -203,7 +203,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                         setFamiliaElegida(esta ? null : f.id);
                         setLoteElegido(null);
                       }}
-                      className={`cursor-pointer rounded-md px-2.5 py-1 text-[11px] font-bold ${esta ? "bg-primario-fuerte text-white" : "border border-borde-campo text-apagado hover:border-primario"}`}
+                      className={`cursor-pointer rounded-md px-2.5 py-1 text-[0.6875rem] font-bold ${esta ? "bg-primario-fuerte text-white" : "border border-borde-campo text-apagado hover:border-primario"}`}
                     >
                       {esta ? "Elegida" : "Elegir"}
                     </button>
@@ -215,7 +215,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     id={`subsidio-${f.id}`}
                     value={r?.subsidio ?? "NINGUNO"}
                     onChange={(e) => elegirSubsidio(f.id, e.target.value as Subsidio)}
-                    className="mt-2 w-full rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[12px]"
+                    className="mt-2 w-full rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[0.75rem]"
                   >
                     {SUBSIDIOS.map((s) => (
                       <option key={s.valor} value={s.valor}>
@@ -233,10 +233,10 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
           <section aria-labelledby="titulo-plano" className="rounded-2xl border border-borde bg-[#EFEAE4] p-4 sm:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 id="titulo-plano" className="text-[15px] font-bold">
+                <h2 id="titulo-plano" className="text-[0.9375rem] font-bold">
                   Mapa de predios: Vereda El Salado
                 </h2>
-                <p className="text-[11.5px] text-apagado">Subdivisiones de la finca «La Esperanza»</p>
+                <p className="text-[0.71875rem] text-apagado">Subdivisiones de la finca «La Esperanza»</p>
               </div>
               <dl className="flex gap-2">
                 <Indicador titulo="EQUIDAD" valor={`${equidad}%`} color={equidad >= 70 ? "#177575" : "#8A6516"} fondo="#fff" />
@@ -244,13 +244,13 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
               </dl>
             </div>
 
-            <p className="mt-3 text-[11.5px] leading-[1.55] text-apagado">
+            <p className="mt-3 text-[0.71875rem] leading-[1.55] text-apagado">
               Arrastra una familia a un lote, o elígela y toca el lote. También puedes tocar un lote para elegir a quién
               dárselo. Una familia puede tener varios lotes, hasta {HECTAREAS_MAX_POR_FAMILIA} ha.
             </p>
 
             {error && (
-              <p role="alert" className="mt-2 rounded-lg bg-[#FDF0EE] px-3 py-2 text-[12px] font-semibold text-peligro">
+              <p role="alert" className="mt-2 rounded-lg bg-[#FDF0EE] px-3 py-2 text-[0.75rem] font-semibold text-peligro">
                 {error}
               </p>
             )}
@@ -277,7 +277,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     } ${familia ? (bien ? "border-[#2E9B5E] bg-superficie" : "border-peligro bg-superficie") : "border-[#D9CFC6] bg-[#F7F3EF] hover:border-primario"}`}
                   >
                     <span
-                      className={`absolute left-1/2 top-1 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-[2px] text-[9px] font-extrabold ${
+                      className={`absolute left-1/2 top-1 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-[2px] text-[0.5625rem] font-extrabold ${
                         familia ? (bien ? "bg-[#2E9B5E] text-white" : "bg-peligro text-white") : "bg-[#E9DDD3] text-tinta-media"
                       }`}
                     >
@@ -292,9 +292,9 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     </span>
                     {familia && estado ? (
                       <>
-                        <span className="w-full truncate text-[11.5px] font-bold">{familia.nombre.replace(/^Familia /, "")}</span>
+                        <span className="w-full truncate text-[0.71875rem] font-bold">{familia.nombre.replace(/^Familia /, "")}</span>
                         {/* En los lotes pequeños el estado no cabe a la vista: lo dice el borde, y el lector de pantalla lo lee. */}
-                        <span className={pequeno ? "sr-only" : "grid gap-px text-[9.5px] leading-tight"}>
+                        <span className={pequeno ? "sr-only" : "grid gap-px text-[0.59375rem] leading-tight"}>
                           <Estado bien={estado.tierra === "SUFICIENTE"} texto={estado.tierra === "SUFICIENTE" ? "Hectáreas OK" : `Pocas ha (${estado.minimo} sugeridas)`} />
                           {estado.subsidio !== "NINGUNO" && (
                             <Estado bien={estado.subsidio === "JUSTO"} texto={estado.subsidio === "JUSTO" ? "Subsidio justo" : "Subsidio insuficiente"} />
@@ -302,7 +302,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                         </span>
                       </>
                     ) : (
-                      <span className="text-[10px] font-bold tracking-[.06em] text-apagado">
+                      <span className="text-[0.625rem] font-bold tracking-[.06em] text-apagado">
                         {pequeno ? (
                           <>
                             <span aria-hidden="true">+</span>
@@ -320,14 +320,14 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
 
             {elegido && (
               <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg bg-superficie p-3">
-                <label htmlFor="familia-del-lote" className="text-[12.5px] font-bold">
+                <label htmlFor="familia-del-lote" className="text-[0.78125rem] font-bold">
                   Lote {numero(elegido.id)} ({elegido.hectareas} ha):
                 </label>
                 <select
                   id="familia-del-lote"
                   value={duenos.get(elegido.id) ?? ""}
                   onChange={(e) => dar(elegido.id, e.target.value || null)}
-                  className="min-w-0 flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[12.5px]"
+                  className="min-w-0 flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-2 py-1.5 text-[0.78125rem]"
                 >
                   <option value="">Libre</option>
                   {familias.map((f) => (
@@ -336,7 +336,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     </option>
                   ))}
                 </select>
-                <button type="button" onClick={() => setLoteElegido(null)} className="cursor-pointer rounded-md border border-borde-campo px-3 py-1.5 text-[12px] font-bold text-apagado">
+                <button type="button" onClick={() => setLoteElegido(null)} className="cursor-pointer rounded-md border border-borde-campo px-3 py-1.5 text-[0.75rem] font-bold text-apagado">
                   Listo
                 </button>
               </div>
@@ -345,7 +345,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
 
           <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_260px]">
             <section aria-labelledby="titulo-criterios" className="rounded-xl border border-borde bg-superficie p-[18px]">
-              <h2 id="titulo-criterios" className="text-[11px] font-extrabold tracking-[.12em]">
+              <h2 id="titulo-criterios" className="text-[0.6875rem] font-extrabold tracking-[.12em]">
                 CRITERIOS DE VALIDACIÓN
               </h2>
               <ul className="mt-3 grid gap-2.5" aria-live="polite">
@@ -356,10 +356,10 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                   <li key={c.titulo} className="flex items-start gap-2.5">
                     <span className="mt-[5px] h-[9px] w-[9px] flex-none rounded-full" style={{ background: c.color }} />
                     <div>
-                      <div className="text-[12.5px] font-bold" style={{ color: c.color }}>
+                      <div className="text-[0.78125rem] font-bold" style={{ color: c.color }}>
                         {c.titulo}
                       </div>
-                      <div className="text-[11.5px] leading-[1.55] text-apagado">{c.detalle}</div>
+                      <div className="text-[0.71875rem] leading-[1.55] text-apagado">{c.detalle}</div>
                     </div>
                   </li>
                 ))}
@@ -369,7 +369,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                   type="button"
                   onClick={validar}
                   disabled={pendiente}
-                  className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[12.5px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+                  className="cursor-pointer rounded-lg bg-primario-fuerte px-4 py-2.5 text-[0.78125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
                 >
                   {pendiente ? "Guardando..." : "Validar distribución"}
                 </button>
@@ -377,27 +377,27 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                   type="button"
                   onClick={reiniciar}
                   disabled={pendiente}
-                  className="cursor-pointer rounded-lg border border-borde-campo px-4 py-2.5 text-[12.5px] font-semibold text-apagado disabled:opacity-60"
+                  className="cursor-pointer rounded-lg border border-borde-campo px-4 py-2.5 text-[0.78125rem] font-semibold text-apagado disabled:opacity-60"
                 >
                   Reiniciar
                 </button>
               </div>
               {mensaje && (
-                <p role="status" className="mt-2 text-[12px] font-semibold text-secundario-fuerte">
+                <p role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">
                   {mensaje}
                 </p>
               )}
             </section>
 
             <aside className="rounded-xl border border-terciario-borde bg-terciario-tinte p-4">
-              <div className="flex items-center gap-[7px] text-[10.5px] font-bold tracking-[.1em] text-terciario-fuerte">
+              <div className="flex items-center gap-[7px] text-[0.65625rem] font-bold tracking-[.1em] text-terciario-fuerte">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 16v-4M12 8h.01" />
                 </svg>
                 <span>NOTA DEL ARCHIVO</span>
               </div>
-              <p className="mt-2 text-[12px] italic leading-[1.65] text-apagado">
+              <p className="mt-2 text-[0.75rem] italic leading-[1.65] text-apagado">
                 «La tierra no es solo un recurso productivo; es el cimiento de la dignidad del retorno. En El Salado, la
                 repartición fue un hito de autogestión comunitaria.»
               </p>
@@ -412,8 +412,8 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
 function Indicador({ titulo, valor, color, fondo }: { titulo: string; valor: string; color: string; fondo: string }) {
   return (
     <div className="min-w-[96px] rounded-[10px] border px-3.5 py-2" style={{ borderColor: color, background: fondo, color }}>
-      <dt className="text-[9px] font-bold tracking-[.1em]">{titulo}</dt>
-      <dd className="text-[19px] font-extrabold">{valor}</dd>
+      <dt className="text-[0.5625rem] font-bold tracking-[.1em]">{titulo}</dt>
+      <dd className="text-[1.1875rem] font-extrabold">{valor}</dd>
     </div>
   );
 }

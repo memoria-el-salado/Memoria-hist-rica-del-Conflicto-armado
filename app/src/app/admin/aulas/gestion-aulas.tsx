@@ -9,8 +9,8 @@ type Aula = { id: string; etiqueta: string; docenteId: string; estudiantes: numb
 type Estudiante = { id: string; nombre: string; usuario: string; destino: string; conectado: boolean };
 type Aviso = { ok?: string; error?: string } | null;
 
-const campo = "w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]";
-const rotulo = "mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue";
+const campo = "w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]";
+const rotulo = "mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue";
 
 /** Las opciones de aula de un estudiante: sin docente, con un docente o en una de sus aulas. */
 function OpcionesDestino({ docentes }: { docentes: Docente[] }) {
@@ -32,8 +32,8 @@ function OpcionesDestino({ docentes }: { docentes: Docente[] }) {
 }
 
 function Mensaje({ aviso }: { aviso: Aviso }) {
-  if (aviso?.ok) return <div role="status" className="mt-2 text-[12px] font-semibold text-secundario-fuerte">{aviso.ok}</div>;
-  if (aviso?.error) return <div role="alert" className="mt-2 text-[12px] font-semibold text-peligro">{aviso.error}</div>;
+  if (aviso?.ok) return <div role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">{aviso.ok}</div>;
+  if (aviso?.error) return <div role="alert" className="mt-2 text-[0.75rem] font-semibold text-peligro">{aviso.error}</div>;
   return null;
 }
 
@@ -69,9 +69,9 @@ export function GestionAulas({
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU01 · GESTIÓN DE CUENTAS</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Aulas y estudiantes</h1>
-      <p className="mb-5 max-w-[700px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU01 · GESTIÓN DE CUENTAS</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Aulas y estudiantes</h1>
+      <p className="mb-5 max-w-[700px] text-[0.84375rem] leading-[1.65] text-apagado">
         Cada estudiante trabaja en el aula de un docente: así queda conectado con él, que sigue su avance, revisa sus
         trabajos y recibe sus mensajes. Un estudiante que no está en el aula de ningún docente puede entrar a la
         plataforma, pero no ve los contenidos hasta que lo asignes.
@@ -81,11 +81,11 @@ export function GestionAulas({
         <div className="grid min-w-0 content-start gap-5">
           <section aria-labelledby="titulo-aulas" className="overflow-hidden rounded-xl border border-borde bg-superficie">
             <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
-              <h2 id="titulo-aulas" className="text-[13px] font-extrabold">Aulas</h2>
-              <span className="text-[11px] font-bold text-suave">{aulas.length}</span>
+              <h2 id="titulo-aulas" className="text-[0.8125rem] font-extrabold">Aulas</h2>
+              <span className="text-[0.6875rem] font-bold text-suave">{aulas.length}</span>
             </div>
             {aulas.length === 0 ? (
-              <p className="px-5 py-6 text-[12.5px] leading-[1.6] text-tenue">
+              <p className="px-5 py-6 text-[0.78125rem] leading-[1.6] text-tenue">
                 Todavía no hay aulas. Crea una con el formulario de al lado, o deja que cada docente cree las suyas en
                 «Cursos y Grupos».
               </p>
@@ -94,8 +94,8 @@ export function GestionAulas({
                 {aulas.map((a) => (
                   <li key={a.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
                     <div className="min-w-0 flex-1 basis-[180px]">
-                      <div className="text-[13.5px] font-bold">{a.etiqueta}</div>
-                      <div className="text-[11px] text-suave">
+                      <div className="text-[0.84375rem] font-bold">{a.etiqueta}</div>
+                      <div className="text-[0.6875rem] text-suave">
                         {a.estudiantes} {a.estudiantes === 1 ? "estudiante" : "estudiantes"} · con {nombreDocente(a.docenteId)}
                       </div>
                     </div>
@@ -104,7 +104,7 @@ export function GestionAulas({
                       value={a.docenteId}
                       disabled={pendiente}
                       onChange={(ev) => iniciar(async () => setAviso(await asignarAula(a.id, ev.target.value)))}
-                      className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[12.5px] disabled:opacity-60"
+                      className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[0.78125rem] disabled:opacity-60"
                     >
                       {docentes.map((d) => (
                         <option key={d.id} value={d.id}>
@@ -120,8 +120,8 @@ export function GestionAulas({
 
           <section aria-labelledby="titulo-estudiantes" className="overflow-hidden rounded-xl border border-borde bg-superficie">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] px-[18px] py-[15px]">
-              <h2 id="titulo-estudiantes" className="text-[13px] font-extrabold">Estudiantes</h2>
-              <span className="text-[11px] font-bold text-suave">
+              <h2 id="titulo-estudiantes" className="text-[0.8125rem] font-extrabold">Estudiantes</h2>
+              <span className="text-[0.6875rem] font-bold text-suave">
                 {estudiantes.length}
                 {sinAula > 0 && <span className="text-peligro"> · {sinAula} sin docente</span>}
               </span>
@@ -141,7 +141,7 @@ export function GestionAulas({
               <Mensaje aviso={aviso} />
             </div>
             {visibles.length === 0 ? (
-              <p className="px-5 py-6 text-[12.5px] text-tenue">
+              <p className="px-5 py-6 text-[0.78125rem] text-tenue">
                 {estudiantes.length ? "Ningún estudiante coincide con la búsqueda." : "Todavía no hay estudiantes."}
               </p>
             ) : (
@@ -150,19 +150,19 @@ export function GestionAulas({
                   <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
                     <div className="min-w-0 flex-1 basis-[160px]">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[13.5px] font-bold">{e.nombre}</span>
+                        <span className="text-[0.84375rem] font-bold">{e.nombre}</span>
                         {!e.conectado && (
-                          <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[10px] font-bold text-[#8A6410]">Sin docente</span>
+                          <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[0.625rem] font-bold text-[#8A6410]">Sin docente</span>
                         )}
                       </div>
-                      <div className="text-[11px] text-suave">{e.usuario}</div>
+                      <div className="text-[0.6875rem] text-suave">{e.usuario}</div>
                     </div>
                     <select
                       aria-label={`Aula de ${e.nombre}`}
                       value={e.destino}
                       disabled={pendiente}
                       onChange={(ev) => iniciar(async () => setAviso(await asignarEstudiante(e.id, ev.target.value)))}
-                      className="max-w-full rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[12.5px] disabled:opacity-60"
+                      className="max-w-full rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[0.78125rem] disabled:opacity-60"
                     >
                       <OpcionesDestino docentes={docentes} />
                     </select>
@@ -175,7 +175,7 @@ export function GestionAulas({
 
         <div className="grid min-w-0 content-start gap-5">
           <form action={accionAula} className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 className="text-[11px] font-extrabold tracking-[.12em] text-tinta-media">NUEVA AULA</h2>
+            <h2 className="text-[0.6875rem] font-extrabold tracking-[.12em] text-tinta-media">NUEVA AULA</h2>
             <label htmlFor="aula-nombre" className={rotulo}>NOMBRE</label>
             <input id="aula-nombre" name="nombre" required placeholder="Por ejemplo, 9A" className={`mt-1.5 ${campo}`} />
             <label htmlFor="aula-anio" className={rotulo}>AÑO LECTIVO</label>
@@ -194,7 +194,7 @@ export function GestionAulas({
             <button
               type="submit"
               disabled={creandoAula || docentes.length === 0}
-              className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+              className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
             >
               {creandoAula ? "Creando…" : "Crear aula"}
             </button>

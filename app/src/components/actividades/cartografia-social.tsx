@@ -20,7 +20,7 @@ import { GrabadorRelato, type Grabacion } from "./grabador-relato";
 const MapaReal = dynamic(() => import("@/components/mapa-real").then((m) => m.MapaReal), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[420px] w-full items-center justify-center rounded-xl border border-borde bg-[#F4EFE8] text-[13px] text-tenue">
+    <div className="flex h-[420px] w-full items-center justify-center rounded-xl border border-borde bg-[#F4EFE8] text-[0.8125rem] text-tenue">
       Cargando el mapa...
     </div>
   ),
@@ -168,7 +168,7 @@ export function CartografiaSocial({
     <div className="animar-aparecer">
       <CabeceraSesion sesion={sesion} />
 
-      <p className="mb-5 max-w-[720px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[720px] text-[0.84375rem] leading-[1.65] text-apagado">
         Marca en el mapa un lugar significativo y describe qué olores, sabores y recuerdos te evoca.
         Lo que sitúes aquí queda en la cartografía de esta sesión.
       </p>
@@ -191,7 +191,7 @@ export function CartografiaSocial({
           />
 
           {!pin && (
-            <p className="mt-2 text-center text-[11.5px] text-tenue">
+            <p className="mt-2 text-center text-[0.71875rem] text-tenue">
               Haz clic en el mapa para marcar tu lugar significativo.
             </p>
           )}
@@ -213,17 +213,17 @@ export function CartografiaSocial({
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-2.5">
-                      <div className="text-[14px] font-bold">{m.lugar}</div>
+                      <div className="text-[0.875rem] font-bold">{m.lugar}</div>
                       {m.grupo && (
-                        <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[10.5px] font-bold text-terciario-fuerte">
+                        <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.65625rem] font-bold text-terciario-fuerte">
                           Grupo {m.grupo}
                         </span>
                       )}
                     </div>
                     {m.relato ? (
-                      <p className="mt-1.5 whitespace-pre-line text-[12.5px] leading-[1.6] text-apagado">{m.relato}</p>
+                      <p className="mt-1.5 whitespace-pre-line text-[0.78125rem] leading-[1.6] text-apagado">{m.relato}</p>
                     ) : (
-                      <p className="mt-1.5 text-[12px] italic text-tenue">Relato solo en audio.</p>
+                      <p className="mt-1.5 text-[0.75rem] italic text-tenue">Relato solo en audio.</p>
                     )}
                   </div>
                 </div>
@@ -242,12 +242,12 @@ export function CartografiaSocial({
                   {m.tags.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full border border-secundario-borde bg-secundario-tinte px-2 py-[3px] text-[10.5px] font-bold tracking-[.04em] text-secundario-fuerte"
+                      className="rounded-full border border-secundario-borde bg-secundario-tinte px-2 py-[3px] text-[0.65625rem] font-bold tracking-[.04em] text-secundario-fuerte"
                     >
                       {t}
                     </span>
                   ))}
-                  <span className="ml-auto text-[10.5px] text-suave">
+                  <span className="ml-auto text-[0.65625rem] text-suave">
                     {m.grupo ? `sembrado por ${m.autor}` : m.autor}
                   </span>
                   {m.propia && (
@@ -255,7 +255,7 @@ export function CartografiaSocial({
                       onClick={() => retirar(m)}
                       disabled={pendiente}
                       aria-label={`Retirar ${m.lugar}`}
-                      className="cursor-pointer text-[10.5px] font-bold text-apagado hover:text-peligro"
+                      className="cursor-pointer text-[0.65625rem] font-bold text-apagado hover:text-peligro"
                     >
                       Retirar
                     </button>
@@ -267,20 +267,20 @@ export function CartografiaSocial({
         </div>
 
         <div className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[12.5px] font-extrabold tracking-[.06em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.06em] text-primario-fuerte">
             NUEVO LUGAR SIGNIFICATIVO
           </div>
 
-          <div className="mt-3.5 text-[10px] font-bold tracking-[.12em] text-tenue">
+          <div className="mt-3.5 text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             COORDENADA SELECCIONADA
           </div>
-          <div className="mt-1.5 rounded-lg border border-dashed border-borde-campo px-3 py-2.5 text-[12px] text-apagado">
+          <div className="mt-1.5 rounded-lg border border-dashed border-borde-campo px-3 py-2.5 text-[0.75rem] text-apagado">
             {pin
               ? `Lat ${pin.lat.toFixed(5)}  ·  Lon ${pin.lon.toFixed(5)}`
               : "Sin coordenada · haz clic en el mapa"}
           </div>
 
-          <label htmlFor="lugar" className="mt-3.5 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="lugar" className="mt-3.5 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             NOMBRE DEL LUGAR
           </label>
           <input
@@ -288,10 +288,10 @@ export function CartografiaSocial({
             value={lugar}
             onChange={(e) => setLugar(e.target.value)}
             placeholder="ej. El patio de mi abuela"
-            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
           />
 
-          <label htmlFor="relato" className="mt-3.5 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="relato" className="mt-3.5 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             ¿QUÉ OLORES, SABORES Y RECUERDOS TE EVOCA?
           </label>
           <textarea
@@ -299,10 +299,10 @@ export function CartografiaSocial({
             value={relato}
             onChange={(e) => setRelato(e.target.value)}
             placeholder="Escribe tu relato personal..."
-            className="mt-1.5 h-24 w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            className="mt-1.5 h-24 w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
           />
 
-          <div className="mt-3.5 text-[10px] font-bold tracking-[.12em] text-tenue">SENSACIONES</div>
+          <div className="mt-3.5 text-[0.625rem] font-bold tracking-[.12em] text-tenue">SENSACIONES</div>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {SENSACIONES.map((s) => {
               const activo = sensaciones.includes(s);
@@ -314,7 +314,7 @@ export function CartografiaSocial({
                   onClick={() =>
                     setSensaciones((prev) => (activo ? prev.filter((x) => x !== s) : [...prev, s]))
                   }
-                  className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold"
+                  className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[0.6875rem] font-bold"
                   style={
                     activo
                       ? { background: "#1B8A8A", borderColor: "#1B8A8A", color: "#fff" }
@@ -327,20 +327,20 @@ export function CartografiaSocial({
             })}
           </div>
 
-          <div className="mt-3.5 text-[10px] font-bold tracking-[.12em] text-tenue">TU RELATO EN VOZ (OPCIONAL)</div>
+          <div className="mt-3.5 text-[0.625rem] font-bold tracking-[.12em] text-tenue">TU RELATO EN VOZ (OPCIONAL)</div>
           <div className="mt-2">
             <GrabadorRelato grabacion={grabacion} onCambio={setGrabacion} />
           </div>
 
-          <div className="mt-3.5 text-[10px] font-bold tracking-[.12em] text-tenue">FOTO DEL LUGAR (OPCIONAL)</div>
+          <div className="mt-3.5 text-[0.625rem] font-bold tracking-[.12em] text-tenue">FOTO DEL LUGAR (OPCIONAL)</div>
           <div className="mt-2">
             <FotoLugar foto={foto} onCambio={setFoto} />
           </div>
 
           {miGrupo && (
             <fieldset className="mt-3.5">
-              <legend className="text-[10px] font-bold tracking-[.12em] text-tenue">¿DE QUIÉN ES ESTE LUGAR?</legend>
-              <div className="mt-2 grid gap-1.5 text-[12.5px]">
+              <legend className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">¿DE QUIÉN ES ESTE LUGAR?</legend>
+              <div className="mt-2 grid gap-1.5 text-[0.78125rem]">
                 <label className="flex cursor-pointer items-center gap-2">
                   <input type="radio" name="autoria" checked={!deGrupo} onChange={() => setDeGrupo(false)} />
                   Solo mío
@@ -350,27 +350,27 @@ export function CartografiaSocial({
                   De mi grupo · {miGrupo}
                 </label>
               </div>
-              <p className="mt-1 text-[11px] text-suave">Si lo eligieron juntos, siémbralo a nombre del grupo: contará para todos.</p>
+              <p className="mt-1 text-[0.6875rem] text-suave">Si lo eligieron juntos, siémbralo a nombre del grupo: contará para todos.</p>
             </fieldset>
           )}
 
           <button
             onClick={sembrar}
             disabled={pendiente}
-            className="mt-2.5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+            className="mt-2.5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
             {pendiente ? "Sembrando..." : "Sembrar en el mapa"}
           </button>
 
           {progreso && (
-            <div role="status" className="mt-2.5 text-[11.5px] font-semibold text-apagado">
+            <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-apagado">
               {progreso}
             </div>
           )}
           {mensaje && !progreso && (
             <div
               role={ok ? "status" : "alert"}
-              className={`mt-2.5 text-[11.5px] font-semibold ${ok ? "text-secundario-fuerte" : "text-peligro"}`}
+              className={`mt-2.5 text-[0.71875rem] font-semibold ${ok ? "text-secundario-fuerte" : "text-peligro"}`}
             >
               {mensaje}
             </div>

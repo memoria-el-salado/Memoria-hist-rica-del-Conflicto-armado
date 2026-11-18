@@ -32,9 +32,9 @@ export default async function RevisionPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="animar-aparecer max-w-[920px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">LMS · RETROALIMENTACIÓN</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">Revisión</h1>
-      <p className="mb-4 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">LMS · RETROALIMENTACIÓN</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">Revisión</h1>
+      <p className="mb-4 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Lo que entregan tus estudiantes: respuestas a las actividades, simulaciones validadas y las entradas del
         diario que decidieron compartirte. Tu comentario les llega en la sesión y en su campana de avisos.
       </p>
@@ -48,7 +48,7 @@ export default async function RevisionPage({ searchParams }: { searchParams: Pro
             key={o.href}
             href={o.href}
             aria-current={o.activo ? "page" : undefined}
-            className={`rounded-full border px-3 py-1.5 text-[11.5px] font-bold no-underline ${
+            className={`rounded-full border px-3 py-1.5 text-[0.71875rem] font-bold no-underline ${
               o.activo ? "border-primario-fuerte bg-primario-fuerte text-white" : "border-borde-campo bg-superficie text-apagado"
             }`}
           >

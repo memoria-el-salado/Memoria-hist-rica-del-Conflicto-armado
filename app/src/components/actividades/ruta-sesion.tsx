@@ -21,7 +21,7 @@ export function RutaSesion({ pasos }: { pasos: PasoDeSesion[] }) {
               >
                 <span
                   aria-hidden="true"
-                  className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-[11.5px] font-extrabold ${
+                  className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-[0.71875rem] font-extrabold ${
                     listo ? "bg-secundario text-white" : pendiente ? "border-2 border-primario text-primario-fuerte" : "bg-[#F0EAE4] text-apagado"
                   }`}
                 >
@@ -34,11 +34,11 @@ export function RutaSesion({ pasos }: { pasos: PasoDeSesion[] }) {
                   )}
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-[12.5px] font-extrabold">
+                  <span className="block text-[0.78125rem] font-extrabold">
                     <span className="sr-only">Paso {i + 1}: </span>
                     {p.titulo}
                   </span>
-                  <span className="mt-0.5 block text-[11.5px] leading-snug text-apagado">{p.detalle}</span>
+                  <span className="mt-0.5 block text-[0.71875rem] leading-snug text-apagado">{p.detalle}</span>
                 </span>
               </a>
             </li>

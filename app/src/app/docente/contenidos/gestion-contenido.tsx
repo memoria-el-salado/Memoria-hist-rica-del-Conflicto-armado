@@ -48,17 +48,17 @@ type Props = {
   documentos: Documento[];
 };
 
-const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]";
-const rotulo = "mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue";
+const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]";
+const rotulo = "mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue";
 
 export function GestionContenido({ recursos, ejes, documentos }: Props) {
   return (
     <div className="animar-aparecer">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU06 · LCMS</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU06 · LCMS</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
         Gestión de Contenido Multimedia
       </h1>
-      <p className="mb-5 max-w-[640px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[640px] text-[0.84375rem] leading-[1.65] text-apagado">
         Carga testimonios, coplas, imágenes y recortes de prensa en los módulos temáticos. El estudiante los
         encuentra dentro de la sesión. Todo recurso exige contexto histórico, y puedes activar una Alerta de
         Cuidado antes de contenidos emocionalmente retadores.
@@ -66,10 +66,10 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
 
       {documentos.length > 0 && (
         <div className="mb-5 rounded-xl border border-borde bg-superficie p-[18px]">
-          <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
+          <div className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
             GUÍAS DEL MÓDULO ACTIVO
           </div>
-          <p className="mt-1.5 text-[12px] leading-[1.6] text-suave">
+          <p className="mt-1.5 text-[0.75rem] leading-[1.6] text-suave">
             Los documentos de los que salió la ruta pedagógica. Los marcados como material del
             docente no aparecen en la pantalla del estudiante.
           </p>
@@ -81,24 +81,24 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[13px] font-bold">{d.titulo}</span>
+                    <span className="text-[0.8125rem] font-bold">{d.titulo}</span>
                     {d.soloDocentes ? (
-                      <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[10px] font-bold text-[#5B4B8A]">
+                      <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[0.625rem] font-bold text-[#5B4B8A]">
                         Solo docentes
                       </span>
                     ) : (
-                      <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[10px] font-bold text-secundario-fuerte">
+                      <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-fuerte">
                         Visible para estudiantes
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-suave">{d.paginas} páginas</div>
+                  <div className="text-[0.6875rem] text-suave">{d.paginas} páginas</div>
                 </div>
                 <a
                   href={`/api/documentos/${d.id}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
+                  className="rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[0.71875rem] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
                 >
                   Abrir PDF
                 </a>
@@ -120,14 +120,14 @@ function EstadoAccesible({ r }: { r: Recurso }) {
   if (r.requisito === "ninguno") return null;
   if (r.vista.pendiente) {
     return (
-      <div className="mt-2 rounded-md border border-primario-borde bg-primario-tinte px-2.5 py-1.5 text-[11px] text-primario-fuerte">
+      <div className="mt-2 rounded-md border border-primario-borde bg-primario-tinte px-2.5 py-1.5 text-[0.6875rem] text-primario-fuerte">
         <span className="font-extrabold tracking-[.05em]">NO LO VEN LOS ESTUDIANTES · </span>
         {r.vista.pendiente}
       </div>
     );
   }
   return (
-    <div className="mt-2 text-[10px] font-extrabold tracking-[.06em] text-secundario-fuerte">
+    <div className="mt-2 text-[0.625rem] font-extrabold tracking-[.06em] text-secundario-fuerte">
       {r.vista.transcripcion?.sincronizada ? "TRANSCRIPCIÓN SINCRONIZADA" : "TRANSCRIPCIÓN EN TEXTO"}
     </div>
   );
@@ -141,10 +141,10 @@ function EditorTranscripcion({ r, alTerminar }: { r: Recurso; alTerminar: () => 
 
   return (
     <div className="mt-3 rounded-lg border border-borde bg-superficie-suave p-3">
-      <label htmlFor={id} className="text-[10px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor={id} className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         TRANSCRIPCIÓN
       </label>
-      <p className="mt-1 text-[11px] leading-relaxed text-apagado">
+      <p className="mt-1 text-[0.6875rem] leading-relaxed text-apagado">
         {r.requisito === "sincronizada"
           ? "Se mostrará como subtítulos: escribe cada línea con el minuto en que se dice."
           : "Basta el texto. Si pones el minuto al principio de cada línea, el estudiante podrá seguirla mientras escucha."}
@@ -156,10 +156,10 @@ function EditorTranscripcion({ r, alTerminar }: { r: Recurso; alTerminar: () => 
         onChange={(e) => setTexto(e.target.value)}
         rows={6}
         placeholder={"0:00 Nosotros vivíamos de la tierra.\n0:07 El tabaco se secaba en los caneyes."}
-        className="mt-2 w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 font-mono text-[12px]"
+        className="mt-2 w-full resize-y rounded-lg border border-borde-campo bg-superficie px-3 py-2 font-mono text-[0.75rem]"
       />
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <label className="cursor-pointer text-[11.5px] font-bold text-primario-texto">
+        <label className="cursor-pointer text-[0.71875rem] font-bold text-primario-texto">
           Cargar archivo…
           <input
             type="file"
@@ -181,13 +181,13 @@ function EditorTranscripcion({ r, alTerminar }: { r: Recurso; alTerminar: () => 
               if (res.ok) alTerminar();
             })
           }
-          className="cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[11.5px] font-bold text-white disabled:opacity-60"
+          className="cursor-pointer rounded-md bg-primario-fuerte px-3 py-1.5 text-[0.71875rem] font-bold text-white disabled:opacity-60"
         >
           {pendiente ? "Guardando..." : "Guardar transcripción"}
         </button>
       </div>
       {estado?.error && (
-        <div role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">
           {estado.error}
         </div>
       )}
@@ -203,7 +203,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
 
   if (!recursos.length) {
     return (
-      <div className="rounded-xl border border-dashed border-borde-campo bg-superficie p-5 text-[13px] text-apagado">
+      <div className="rounded-xl border border-dashed border-borde-campo bg-superficie p-5 text-[0.8125rem] text-apagado">
         Todavía no hay recursos en el módulo activo. Carga el primero con el formulario.
       </div>
     );
@@ -212,7 +212,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
   return (
     <div className="grid content-start gap-2.5">
       {aviso && (
-        <p role="status" className="text-[11.5px] font-semibold text-apagado">
+        <p role="status" className="text-[0.71875rem] font-semibold text-apagado">
           {aviso}
         </p>
       )}
@@ -220,20 +220,20 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
         <article key={r.id} className="rounded-xl border border-borde bg-superficie p-4">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <div className="text-[13.5px] font-bold">{r.titulo}</div>
-              <div className="mt-0.5 text-[11px] text-suave">
+              <div className="text-[0.84375rem] font-bold">{r.titulo}</div>
+              <div className="mt-0.5 text-[0.6875rem] text-suave">
                 {r.eje}
                 {r.sesion ? ` · Sesión ${r.sesion}` : " · Todo el eje"}
               </div>
             </div>
-            <span className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-bold tracking-[.05em] text-apagado">
+            <span className="rounded-full border border-borde px-2.5 py-[3px] text-[0.65625rem] font-bold tracking-[.05em] text-apagado">
               {definicionDe(r.tipo).etiqueta}
             </span>
           </div>
-          <p className="mt-1.5 text-[12px] leading-relaxed text-apagado">{r.contexto}</p>
+          <p className="mt-1.5 text-[0.75rem] leading-relaxed text-apagado">{r.contexto}</p>
           <EstadoAccesible r={r} />
 
-          <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11.5px] font-bold">
+          <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[0.71875rem] font-bold">
             <button
               onClick={() => setAbierto((a) => (a === r.id ? null : r.id))}
               aria-expanded={abierto === r.id}
@@ -257,7 +257,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                   aria-label={`${r.alerta ? "Desactivar" : "Activar"} alerta de cuidado en ${r.titulo}`}
                   disabled={pendiente}
                   onClick={() => iniciar(async () => void (await alternarAlertaRecurso(r.id)))}
-                  className="cursor-pointer rounded-full border px-2.5 py-[3px] text-[9.5px] font-extrabold tracking-[.06em] disabled:opacity-60"
+                  className="cursor-pointer rounded-full border px-2.5 py-[3px] text-[0.59375rem] font-extrabold tracking-[.06em] disabled:opacity-60"
                   style={
                     r.alerta
                       ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
@@ -281,7 +281,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                 </button>
               </>
             ) : (
-              r.alerta && <span className="text-[10px] font-extrabold tracking-[.06em] text-primario-fuerte">ALERTA ACTIVA</span>
+              r.alerta && <span className="text-[0.625rem] font-extrabold tracking-[.06em] text-primario-fuerte">ALERTA ACTIVA</span>
             )}
           </div>
 
@@ -380,13 +380,13 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
   }
 
   const pestaña = (activa: boolean) =>
-    `flex-1 cursor-pointer rounded-md px-3 py-1.5 text-[11.5px] font-bold ${
+    `flex-1 cursor-pointer rounded-md px-3 py-1.5 text-[0.71875rem] font-bold ${
       activa ? "bg-superficie text-primario-fuerte shadow-sm" : "text-tenue"
     }`;
 
   return (
     <form key={formulario} onSubmit={enviar} className="h-fit rounded-xl border border-borde bg-superficie p-5">
-      <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">NUEVO RECURSO</div>
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">NUEVO RECURSO</div>
 
       <label htmlFor="titulo" className={rotulo}>
         TÍTULO
@@ -462,7 +462,7 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
             type="file"
             accept={[...def.mimes, ...def.extensiones.map((x) => `.${x}`)].join(",")}
             onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
-            className={`${campo} file:mr-3 file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1 file:text-[12px] file:font-bold file:text-primario-fuerte`}
+            className={`${campo} file:mr-3 file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1 file:text-[0.75rem] file:font-bold file:text-primario-fuerte`}
           />
         </>
       ) : (
@@ -478,10 +478,10 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
             className={campo}
           />
           {tipo === "VIDEO" && (
-            <p className="mt-1 text-[11px] text-suave">Los videos de YouTube y Vimeo se ven dentro de la sesión.</p>
+            <p className="mt-1 text-[0.6875rem] text-suave">Los videos de YouTube y Vimeo se ven dentro de la sesión.</p>
           )}
           {tipo === "SIMULADOR" && (
-            <p className="mt-1 text-[11px] text-suave">
+            <p className="mt-1 text-[0.6875rem] text-suave">
               Pega la dirección del OVA, el simulador o el sitio web. El estudiante lo abre en una pestaña nueva desde la sesión.
             </p>
           )}
@@ -503,7 +503,7 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
         type="button"
         aria-pressed={alerta}
         onClick={() => setAlerta((a) => !a)}
-        className="mt-3.5 w-full cursor-pointer rounded-lg border px-4 py-2.5 text-[12px] font-bold"
+        className="mt-3.5 w-full cursor-pointer rounded-lg border px-4 py-2.5 text-[0.75rem] font-bold"
         style={
           alerta
             ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
@@ -516,18 +516,18 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
       <button
         type="submit"
         disabled={pendiente}
-        className="mt-2.5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+        className="mt-2.5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
       >
         {porcentaje !== null ? `Subiendo ${porcentaje} %` : pendiente ? "Cargando..." : "Cargar al módulo"}
       </button>
 
       {estado?.ok && (
-        <div role="status" className="mt-2.5 text-[11.5px] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
           {estado.ok}
         </div>
       )}
       {estado?.error && (
-        <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
           {estado.error}
         </div>
       )}

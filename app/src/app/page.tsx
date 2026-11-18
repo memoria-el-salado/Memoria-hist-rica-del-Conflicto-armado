@@ -83,18 +83,18 @@ export default function Portada() {
       <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
       <header className="sticky top-0 z-20 border-b border-borde bg-fondo/95 backdrop-blur-[8px]">
         <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <span className="flex items-center gap-2.5 text-[15px] font-extrabold tracking-[.02em] text-primario-fuerte">
+          <span className="flex items-center gap-2.5 text-[0.9375rem] font-extrabold tracking-[.02em] text-primario-fuerte">
             <span className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-lg bg-primario-fuerte text-white">
               <IconoMemoria tamano={20} />
             </span>
             Memoria El Salado
           </span>
-          <nav aria-label="Secciones de la portada" className="hidden gap-6 text-[12px] font-bold tracking-[.06em] text-apagado sm:flex">
+          <nav aria-label="Secciones de la portada" className="hidden gap-6 text-[0.75rem] font-bold tracking-[.06em] text-apagado sm:flex">
             <a href="#descubre" className="no-underline hover:text-primario-texto">EL PROYECTO</a>
             <a href="#experiencias" className="no-underline hover:text-primario-texto">ACTIVIDADES</a>
             <a href="#privacidad" className="no-underline hover:text-primario-texto">PRIVACIDAD</a>
           </nav>
-          <Link href="/login" className="rounded-lg bg-primario-fuerte px-4 py-2 text-[12.5px] font-bold text-white no-underline hover:bg-primario-hover">
+          <Link href="/login" className="rounded-lg bg-primario-fuerte px-4 py-2 text-[0.78125rem] font-bold text-white no-underline hover:bg-primario-hover">
             Entrar
           </Link>
         </div>
@@ -103,26 +103,26 @@ export default function Portada() {
       <main id="contenido" tabIndex={-1} className="outline-none">
         <section className="mx-auto grid max-w-[1120px] items-center gap-10 px-4 pb-14 pt-12 md:grid-cols-[1.05fr_1fr] md:px-6 md:pt-16">
           <div>
-            <span className="inline-block rounded-full bg-primario-tinte px-3 py-1 text-[10.5px] font-extrabold tracking-[.12em] text-primario-fuerte">
+            <span className="inline-block rounded-full bg-primario-tinte px-3 py-1 text-[0.65625rem] font-extrabold tracking-[.12em] text-primario-fuerte">
               ARCHIVO VIVO DE LA MEMORIA
             </span>
-            <h1 className="mt-4 text-[36px] font-extrabold leading-[1.08] tracking-[-.025em] text-primario-fuerte md:text-[46px]">
+            <h1 className="mt-4 text-[2.25rem] font-extrabold leading-[1.08] tracking-[-.025em] text-primario-fuerte md:text-[2.875rem]">
               Descubre el legado de un pueblo valiente.
             </h1>
-            <p className="mt-4 max-w-[520px] text-[15px] leading-[1.75] text-apagado">
+            <p className="mt-4 max-w-[520px] text-[0.9375rem] leading-[1.75] text-apagado">
               Bienvenido a un espacio interactivo diseñado para jóvenes. Aquí la historia no está en libros viejos, sino
               en las memorias, el territorio y la increíble capacidad de El Salado para florecer de nuevo.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 rounded-lg bg-primario-fuerte px-5 py-3 text-[14px] font-bold text-white no-underline hover:bg-primario-hover"
+                className="inline-flex items-center gap-2 rounded-lg bg-primario-fuerte px-5 py-3 text-[0.875rem] font-bold text-white no-underline hover:bg-primario-hover"
               >
                 Comenzar viaje <span aria-hidden="true">→</span>
               </Link>
               <a
                 href="#descubre"
-                className="rounded-lg border border-secundario px-5 py-3 text-[14px] font-bold text-secundario-fuerte no-underline hover:bg-secundario-tinte"
+                className="rounded-lg border border-secundario px-5 py-3 text-[0.875rem] font-bold text-secundario-fuerte no-underline hover:bg-secundario-tinte"
               >
                 Saber más
               </a>
@@ -132,7 +132,7 @@ export default function Portada() {
             <div className="overflow-hidden rounded-2xl border-4 border-white shadow-[0_24px_60px_rgba(120,70,45,.22)]">
               <Paisaje />
             </div>
-            <figcaption className="absolute -bottom-5 left-4 -rotate-[2deg] rounded-md bg-terciario-tinte px-4 py-2.5 text-[13px] italic text-tinta-media shadow-[0_8px_20px_rgba(0,0,0,.12)]">
+            <figcaption className="absolute -bottom-5 left-4 -rotate-[2deg] rounded-md bg-terciario-tinte px-4 py-2.5 text-[0.8125rem] italic text-tinta-media shadow-[0_8px_20px_rgba(0,0,0,.12)]">
               «La memoria es la semilla del futuro.»
             </figcaption>
           </figure>
@@ -140,7 +140,7 @@ export default function Portada() {
 
         <section id="descubre" aria-labelledby="titulo-descubre" className="scroll-mt-20 bg-superficie py-14">
           <div className="mx-auto max-w-[1120px] px-4 md:px-6">
-            <h2 id="titulo-descubre" className="text-center text-[26px] font-extrabold tracking-[-.02em]">
+            <h2 id="titulo-descubre" className="text-center text-[1.625rem] font-extrabold tracking-[-.02em]">
               ¿Qué vas a descubrir?
             </h2>
             <div className="mx-auto mt-2 h-1 w-16 rounded-full bg-terciario" aria-hidden="true" />
@@ -152,8 +152,8 @@ export default function Portada() {
                       <path d={d.icono} />
                     </svg>
                   </span>
-                  <h3 className="mt-3 text-[16px] font-extrabold text-primario-fuerte">{d.titulo}</h3>
-                  <p className="mt-1.5 text-[13.5px] leading-[1.7] text-apagado">{d.texto}</p>
+                  <h3 className="mt-3 text-[1rem] font-extrabold text-primario-fuerte">{d.titulo}</h3>
+                  <p className="mt-1.5 text-[0.84375rem] leading-[1.7] text-apagado">{d.texto}</p>
                 </li>
               ))}
             </ul>
@@ -161,18 +161,18 @@ export default function Portada() {
         </section>
 
         <section id="experiencias" aria-labelledby="titulo-experiencias" className="mx-auto max-w-[1120px] scroll-mt-20 px-4 py-14 md:px-6">
-          <h2 id="titulo-experiencias" className="text-[22px] font-extrabold tracking-[-.02em]">
+          <h2 id="titulo-experiencias" className="text-[1.375rem] font-extrabold tracking-[-.02em]">
             Un viaje por la memoria, actividad por actividad
           </h2>
-          <p className="mt-1.5 max-w-[640px] text-[14px] leading-[1.7] text-apagado">
+          <p className="mt-1.5 max-w-[640px] text-[0.875rem] leading-[1.7] text-apagado">
             La ruta sigue la guía del Centro Nacional de Memoria Histórica sobre El Salado, en seis ejes, con alertas de
             cuidado antes de los contenidos más duros.
           </p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-3">
             {EXPERIENCIAS.map((e) => (
               <li key={e.titulo} className={`flex min-h-[150px] flex-col justify-end rounded-xl p-5 ${e.clase}`}>
-                <h3 className="text-[16px] font-extrabold">{e.titulo}</h3>
-                <p className="mt-1 text-[13px] leading-[1.6] opacity-90">{e.texto}</p>
+                <h3 className="text-[1rem] font-extrabold">{e.titulo}</h3>
+                <p className="mt-1 text-[0.8125rem] leading-[1.6] opacity-90">{e.texto}</p>
               </li>
             ))}
           </ul>
@@ -180,20 +180,20 @@ export default function Portada() {
 
         <section className="mx-auto max-w-[1120px] px-4 pb-14 md:px-6">
           <div className="rounded-2xl bg-primario-fuerte px-6 py-12 text-center text-white">
-            <h2 className="text-[26px] font-extrabold tracking-[-.02em] md:text-[32px]">¿Listo para ser parte de la historia?</h2>
-            <p className="mx-auto mt-3 max-w-[560px] text-[14.5px] leading-[1.7] text-white/90">
+            <h2 className="text-[1.625rem] font-extrabold tracking-[-.02em] md:text-[2rem]">¿Listo para ser parte de la historia?</h2>
+            <p className="mx-auto mt-3 max-w-[560px] text-[0.90625rem] leading-[1.7] text-white/90">
               Tu participación ayuda a mantener viva la llama de la memoria. Explora, aprende y comparte la historia de El
               Salado. Tu docente te entrega el usuario para entrar.
             </p>
-            <Link href="/login" className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-primario-fuerte no-underline hover:bg-primario-tinte">
+            <Link href="/login" className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-[0.875rem] font-bold text-primario-fuerte no-underline hover:bg-primario-tinte">
               Comenzar ahora
             </Link>
           </div>
         </section>
 
         <section id="privacidad" aria-labelledby="titulo-privacidad" className="mx-auto max-w-[1120px] scroll-mt-20 px-4 pb-14 md:px-6">
-          <h2 id="titulo-privacidad" className="text-[17px] font-extrabold">Privacidad y cuidado</h2>
-          <p className="mt-2 max-w-[760px] text-[13.5px] leading-[1.75] text-apagado">
+          <h2 id="titulo-privacidad" className="text-[1.0625rem] font-extrabold">Privacidad y cuidado</h2>
+          <p className="mt-2 max-w-[760px] text-[0.84375rem] leading-[1.75] text-apagado">
             Las cuentas las crea cada docente para sus estudiantes; la plataforma no pide correo ni datos de contacto. Lo
             que un estudiante escribe en su diario es privado salvo que decida compartirlo con su docente. Los datos
             sensibles, como la pertenencia a una población víctima, solo se registran con autorización del acudiente y
@@ -203,7 +203,7 @@ export default function Portada() {
       </main>
 
       <footer className="border-t border-borde bg-[#EFEAE4]">
-        <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-3 px-4 py-5 text-[12px] text-apagado md:px-6">
+        <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-3 px-4 py-5 text-[0.75rem] text-apagado md:px-6">
           <span>
             <strong className="text-primario-fuerte">Memoria El Salado</strong> · Preservando la memoria para un futuro mejor.
           </span>

@@ -27,10 +27,10 @@ export function CartillasModulo({
 
   return (
     <section aria-labelledby="titulo-cartillas-modulo" className="mb-6 rounded-xl border border-borde bg-superficie p-[18px]">
-      <h2 id="titulo-cartillas-modulo" className="text-[14px] font-extrabold">
+      <h2 id="titulo-cartillas-modulo" className="text-[0.875rem] font-extrabold">
         Cartillas en las sesiones
       </h2>
-      <p className="mt-1 max-w-[720px] text-[12.5px] leading-relaxed text-apagado">
+      <p className="mt-1 max-w-[720px] text-[0.78125rem] leading-relaxed text-apagado">
         Cada sesión del módulo ofrece estas cartillas abiertas en su apartado. El estudiante ve solo las que no están
         reservadas a los docentes.
       </p>
@@ -38,8 +38,8 @@ export function CartillasModulo({
         {[...fuente.map((d) => ({ ...d, vinculada: false })), ...vinculadas.map((d) => ({ ...d, vinculada: true }))].map((d) => (
           <li key={d.id} className="flex flex-wrap items-center gap-3 rounded-lg border border-borde px-3.5 py-2.5">
             <div className="min-w-0 flex-1">
-              <div className="text-[13px] font-bold">{d.titulo}</div>
-              <div className="text-[11px] text-apagado">
+              <div className="text-[0.8125rem] font-bold">{d.titulo}</div>
+              <div className="text-[0.6875rem] text-apagado">
                 {tipo(d)} · {d.vinculada ? "vinculada" : "fuente del módulo"}
               </div>
             </div>
@@ -48,7 +48,7 @@ export function CartillasModulo({
                 type="button"
                 disabled={pendiente}
                 onClick={() => iniciar(async () => setAviso(await desvincularCartilla(casoId, d.id)))}
-                className="min-h-11 cursor-pointer rounded-lg border border-borde px-3 text-[12px] font-bold text-apagado hover:border-primario hover:text-primario-fuerte disabled:opacity-50"
+                className="min-h-11 cursor-pointer rounded-lg border border-borde px-3 text-[0.75rem] font-bold text-apagado hover:border-primario hover:text-primario-fuerte disabled:opacity-50"
               >
                 Quitar<span className="sr-only"> {d.titulo}</span>
               </button>
@@ -56,7 +56,7 @@ export function CartillasModulo({
           </li>
         ))}
         {fuente.length + vinculadas.length === 0 && (
-          <li className="text-[12.5px] text-apagado">Este módulo todavía no tiene cartillas.</li>
+          <li className="text-[0.78125rem] text-apagado">Este módulo todavía no tiene cartillas.</li>
         )}
       </ul>
 
@@ -73,12 +73,12 @@ export function CartillasModulo({
             });
           }}
         >
-          <label className="grid min-w-0 flex-1 gap-1 text-[11.5px] font-bold text-tinta-media">
+          <label className="grid min-w-0 flex-1 gap-1 text-[0.71875rem] font-bold text-tinta-media">
             Vincular otra cartilla del repositorio
             <select
               value={elegido}
               onChange={(e) => setElegido(e.target.value)}
-              className="min-h-11 w-full min-w-0 rounded-lg border border-borde bg-white px-3 text-[13px] font-normal"
+              className="min-h-11 w-full min-w-0 rounded-lg border border-borde bg-white px-3 text-[0.8125rem] font-normal"
             >
               <option value="">Elige un documento…</option>
               {disponibles.map((d) => (
@@ -91,13 +91,13 @@ export function CartillasModulo({
           <button
             type="submit"
             disabled={pendiente || !elegido}
-            className="min-h-11 cursor-pointer rounded-lg bg-secundario-fuerte px-4 text-[12.5px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+            className="min-h-11 cursor-pointer rounded-lg bg-secundario-fuerte px-4 text-[0.78125rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
           >
             Vincular
           </button>
         </form>
       )}
-      <p role="status" className="mt-2 text-[12px] font-semibold">
+      <p role="status" className="mt-2 text-[0.75rem] font-semibold">
         {aviso?.error ? <span className="text-[#A1281F]">{aviso.error}</span> : aviso?.ok ? <span className="text-secundario-fuerte">Listo.</span> : null}
       </p>
     </section>

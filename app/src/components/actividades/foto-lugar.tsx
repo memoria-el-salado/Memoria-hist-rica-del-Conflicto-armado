@@ -66,15 +66,15 @@ export function FotoLugar({
         <div className="flex items-center gap-3 rounded-lg border border-borde bg-superficie-suave p-2">
           {/* eslint-disable-next-line @next/next/no-img-element -- vista previa local, sin optimizar */}
           <img src={foto.url} alt="Vista previa de la foto" className="h-16 w-20 flex-none rounded-md object-cover" />
-          <div className="min-w-0 flex-1 text-[11.5px] text-apagado">
+          <div className="min-w-0 flex-1 text-[0.71875rem] text-apagado">
             Foto lista · {Math.max(1, Math.round(foto.blob.size / 1024))} KB
           </div>
-          <button type="button" onClick={quitar} className="cursor-pointer text-[11.5px] font-bold text-apagado hover:text-peligro">
+          <button type="button" onClick={quitar} className="cursor-pointer text-[0.71875rem] font-bold text-apagado hover:text-peligro">
             Quitar foto
           </button>
         </div>
       ) : (
-        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-borde-campo px-4 py-2.5 text-[12.5px] font-bold text-apagado hover:border-primario hover:text-primario-texto">
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-borde-campo px-4 py-2.5 text-[0.78125rem] font-bold text-apagado hover:border-primario hover:text-primario-texto">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
           </svg>
@@ -92,7 +92,7 @@ export function FotoLugar({
         </label>
       )}
       {error && (
-        <p role="alert" className="text-[11.5px] font-semibold text-peligro">
+        <p role="alert" className="text-[0.71875rem] font-semibold text-peligro">
           {error}
         </p>
       )}

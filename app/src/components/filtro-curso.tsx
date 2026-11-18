@@ -14,14 +14,14 @@ export function FiltroCurso({ cursos, elegido }: { cursos: { id: string; etiquet
 
   return (
     <div className="mb-4 flex items-center gap-2">
-      <label htmlFor="filtro-curso" className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
+      <label htmlFor="filtro-curso" className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
         CURSO
       </label>
       <select
         id="filtro-curso"
         value={elegido ?? ""}
         onChange={(e) => router.push(e.target.value ? `${ruta}?curso=${e.target.value}` : ruta)}
-        className="rounded-lg border border-borde-campo bg-superficie px-3 py-1.5 text-[12.5px] font-semibold"
+        className="rounded-lg border border-borde-campo bg-superficie px-3 py-1.5 text-[0.78125rem] font-semibold"
       >
         <option value="">Todos mis estudiantes</option>
         {cursos.map((c) => (

@@ -38,23 +38,23 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <Link href="/docente/cursos" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
+      <Link href="/docente/cursos" className="text-[0.71875rem] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Mis cursos
       </Link>
-      <h1 className="mb-1 mt-2 text-[26px] font-extrabold tracking-[-.02em]">{curso.nombre}</h1>
-      <p className="mb-4 text-[13px] text-tenue">
+      <h1 className="mb-1 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">{curso.nombre}</h1>
+      <p className="mb-4 text-[0.8125rem] text-tenue">
         Año lectivo {curso.anio} · {estudiantes.length} {estudiantes.length === 1 ? "estudiante" : "estudiantes"} ·{" "}
         {grupos.length} {grupos.length === 1 ? "grupo" : "grupos"}
       </p>
 
       <div aria-live="polite" className="min-h-[1px]">
         {aviso?.ok && (
-          <div role="status" className="mb-3 rounded-lg bg-secundario-tinte px-3.5 py-2 text-[12px] font-semibold text-secundario-fuerte">
+          <div role="status" className="mb-3 rounded-lg bg-secundario-tinte px-3.5 py-2 text-[0.75rem] font-semibold text-secundario-fuerte">
             {aviso.ok}
           </div>
         )}
         {aviso?.error && (
-          <div role="alert" className="mb-3 rounded-lg bg-primario-tinte px-3.5 py-2 text-[12px] font-semibold text-peligro">
+          <div role="alert" className="mb-3 rounded-lg bg-primario-tinte px-3.5 py-2 text-[0.75rem] font-semibold text-peligro">
             {aviso.error}
           </div>
         )}
@@ -63,22 +63,22 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
       <div className="rejilla-panel">
         <section aria-labelledby="titulo-estudiantes" className="overflow-hidden rounded-xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
-            <h2 id="titulo-estudiantes" className="text-[13px] font-extrabold">Estudiantes del curso</h2>
-            <span className="text-[11px] font-bold text-suave">{estudiantes.length}</span>
+            <h2 id="titulo-estudiantes" className="text-[0.8125rem] font-extrabold">Estudiantes del curso</h2>
+            <span className="text-[0.6875rem] font-bold text-suave">{estudiantes.length}</span>
           </div>
 
           {estudiantes.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[12.5px] text-tenue">Suma estudiantes a este curso con el selector de abajo.</p>
+            <p className="px-5 py-8 text-center text-[0.78125rem] text-tenue">Suma estudiantes a este curso con el selector de abajo.</p>
           ) : (
             <ul>
               {estudiantes.map((e) => (
                 <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3">
-                  <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[11px] font-extrabold text-white">
+                  <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[0.6875rem] font-extrabold text-white">
                     {e.iniciales}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13.5px] font-bold">{e.nombre}</div>
-                    <div className="text-[11px] text-suave">{e.usuario}</div>
+                    <div className="text-[0.84375rem] font-bold">{e.nombre}</div>
+                    <div className="text-[0.6875rem] text-suave">{e.usuario}</div>
                   </div>
                   <select
                     id={`grupo-${e.id}`}
@@ -86,7 +86,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                     value={e.grupoId ?? ""}
                     disabled={pendiente || grupos.length === 0}
                     onChange={(ev) => hacer(() => asignarGrupo(e.id, ev.target.value || null))}
-                    className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[12.5px] disabled:opacity-60"
+                    className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[0.78125rem] disabled:opacity-60"
                   >
                     <option value="">{grupos.length ? "Sin grupo" : "Sin grupos aún"}</option>
                     {grupos.map((g) => (
@@ -99,7 +99,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                     disabled={pendiente}
                     onClick={() => hacer(() => asignarCurso(e.id, null))}
                     aria-label={`Quitar a ${e.nombre} del curso`}
-                    className="cursor-pointer text-[11px] font-bold text-apagado hover:text-peligro"
+                    className="cursor-pointer text-[0.6875rem] font-bold text-apagado hover:text-peligro"
                   >
                     Quitar
                   </button>
@@ -110,7 +110,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
           <div className="flex flex-wrap items-end gap-2 border-t border-[#F1EBE5] bg-superficie-suave px-[18px] py-3.5">
             <div className="min-w-[200px] flex-1">
-              <label htmlFor="sumar-estudiante" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="sumar-estudiante" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 SUMAR AL CURSO
               </label>
               <select
@@ -118,7 +118,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                 value={aSumar}
                 onChange={(e) => setASumar(e.target.value)}
                 disabled={sinCurso.length === 0}
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[13px] disabled:opacity-60"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[0.8125rem] disabled:opacity-60"
               >
                 <option value="">
                   {sinCurso.length ? "Estudiantes tuyos sin curso..." : "Todos tus estudiantes tienen curso"}
@@ -133,7 +133,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
             <button
               disabled={pendiente || !aSumar}
               onClick={() => hacer(() => asignarCurso(aSumar, curso.id), () => setASumar(""))}
-              className="cursor-pointer rounded-lg bg-secundario-fuerte px-4 py-2 text-[12.5px] font-bold text-white hover:bg-secundario disabled:opacity-50"
+              className="cursor-pointer rounded-lg bg-secundario-fuerte px-4 py-2 text-[0.78125rem] font-bold text-white hover:bg-secundario disabled:opacity-50"
             >
               Sumar
             </button>
@@ -142,10 +142,10 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
         <div className="grid content-start gap-[18px]">
           <section aria-labelledby="titulo-grupos" className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 id="titulo-grupos" className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+            <h2 id="titulo-grupos" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
               GRUPOS DE TRABAJO
             </h2>
-            <p className="mt-1.5 text-[11.5px] leading-relaxed text-tenue">
+            <p className="mt-1.5 text-[0.71875rem] leading-relaxed text-tenue">
               Para las actividades colectivas, como elegir juntos el lugar de la cartografía.
             </p>
 
@@ -165,12 +165,12 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                 onChange={(e) => setNombreGrupo(e.target.value)}
                 placeholder="ej. Los Robles"
                 maxLength={LIMITES_CURSO.nombreMaximo}
-                className="min-w-0 flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2 text-[13px]"
+                className="min-w-0 flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2 text-[0.8125rem]"
               />
               <button
                 type="submit"
                 disabled={pendiente}
-                className="cursor-pointer rounded-lg bg-primario-fuerte px-3.5 py-2 text-[12.5px] font-bold text-white hover:bg-primario-hover disabled:opacity-50"
+                className="cursor-pointer rounded-lg bg-primario-fuerte px-3.5 py-2 text-[0.78125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-50"
               >
                 Crear grupo
               </button>
@@ -183,18 +183,18 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                   return (
                     <li key={g.id} className="rounded-lg border border-borde px-3 py-2.5">
                       <div className="flex items-center gap-2">
-                        <span className="min-w-0 flex-1 truncate text-[13px] font-bold">{g.nombre}</span>
-                        <span className="text-[11px] text-suave">{miembros.length}</span>
+                        <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-bold">{g.nombre}</span>
+                        <span className="text-[0.6875rem] text-suave">{miembros.length}</span>
                         <button
                           disabled={pendiente}
                           onClick={() => hacer(() => eliminarGrupo(g.id))}
                           aria-label={`Eliminar el grupo ${g.nombre}`}
-                          className="cursor-pointer text-[11px] font-bold text-apagado hover:text-peligro"
+                          className="cursor-pointer text-[0.6875rem] font-bold text-apagado hover:text-peligro"
                         >
                           Eliminar
                         </button>
                       </div>
-                      <div className="mt-0.5 text-[11.5px] text-tenue">
+                      <div className="mt-0.5 text-[0.71875rem] text-tenue">
                         {miembros.length ? miembros.map((m) => m.nombre).join(", ") : "Sin miembros todavía"}
                       </div>
                     </li>
@@ -207,7 +207,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
               <button
                 disabled={pendiente}
                 onClick={() => hacer(() => repartirGrupos(curso.id))}
-                className="mt-3 w-full cursor-pointer rounded-lg border border-secundario bg-secundario-tinte px-3 py-2 text-[12px] font-bold text-secundario-fuerte hover:bg-superficie disabled:opacity-50"
+                className="mt-3 w-full cursor-pointer rounded-lg border border-secundario bg-secundario-tinte px-3 py-2 text-[0.75rem] font-bold text-secundario-fuerte hover:bg-superficie disabled:opacity-50"
               >
                 Repartir en los grupos a {sinGrupo === 1 ? "quien no tiene" : `los ${sinGrupo} que no tienen`}
               </button>
@@ -217,8 +217,8 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
           <RecorridoCurso cursoId={curso.id} recorrido={recorrido} ejes={ejes} />
 
           <section className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 className="text-[11px] font-bold tracking-[.12em] text-tenue">ELIMINAR EL CURSO</h2>
-            <p className="mt-1.5 text-[11.5px] leading-relaxed text-tenue">
+            <h2 className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">ELIMINAR EL CURSO</h2>
+            <p className="mt-1.5 text-[0.71875rem] leading-relaxed text-tenue">
               Se borran el curso y sus grupos. Los estudiantes no se borran: siguen siendo tuyos, sin curso.
             </p>
             <button
@@ -228,7 +228,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
                   hacer(() => eliminarCurso(curso.id));
                 }
               }}
-              className="mt-2.5 cursor-pointer rounded-lg border border-peligro px-3.5 py-2 text-[12px] font-bold text-peligro hover:bg-primario-tinte disabled:opacity-50"
+              className="mt-2.5 cursor-pointer rounded-lg border border-peligro px-3.5 py-2 text-[0.75rem] font-bold text-peligro hover:bg-primario-tinte disabled:opacity-50"
             >
               Eliminar curso
             </button>

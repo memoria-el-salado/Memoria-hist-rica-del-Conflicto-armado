@@ -1,7 +1,8 @@
 "use client";
 
 import { IconoMemoria } from "@/components/icono-memoria";
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { CLAVE_ESCALA, ETIQUETA_ESCALA, leerEscala, siguienteEscala, type Escala } from "@/lib/escala-texto";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -12,8 +13,6 @@ import type { AvisoVista } from "@/lib/avisos-datos";
 import { AvatarExplorador } from "@/components/explorador";
 import type { Explorador } from "@/lib/exploradores";
 
-const ESCALAS = [1, 1.12, 1.25] as const;
-const ETIQUETA_ESCALA: Record<string, string> = { "1": "A", "1.12": "A+", "1.25": "A++" };
 
 type Props = {
   rol: Rol;
@@ -34,9 +33,48 @@ const VISIBLES_MOVIL = 4;
 
 const ICONO_ALERTA = "M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01";
 
+/** Si el navegador no deja guardar (algunos modos privados), vale mientras dure la página. */
+let escalaEnMemoria: Escala = "1";
+
+/** La escala guardada en el navegador. */
+function escalaGuardada(): Escala {
+  try {
+    return leerEscala(localStorage.getItem(CLAVE_ESCALA) ?? escalaEnMemoria);
+  } catch {
+    return escalaEnMemoria;
+  }
+}
+
+const CAMBIO_ESCALA = "memoria:escala";
+
+function suscribirEscala(avisar: () => void) {
+  window.addEventListener("storage", avisar);
+  window.addEventListener(CAMBIO_ESCALA, avisar);
+  return () => {
+    window.removeEventListener("storage", avisar);
+    window.removeEventListener(CAMBIO_ESCALA, avisar);
+  };
+}
+
+function guardarEscala(escala: Escala) {
+  escalaEnMemoria = escala;
+  try {
+    localStorage.setItem(CLAVE_ESCALA, escala);
+  } catch {}
+  window.dispatchEvent(new Event(CAMBIO_ESCALA));
+}
+
 export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendientes = 0, explorador, avisos, children }: Props) {
   const pathname = usePathname();
-  const [escala, setEscala] = useState<(typeof ESCALAS)[number]>(1);
+  // La elección se recuerda en el navegador. Se aplica a la raíz para que
+  // crezca todo el texto, también el del menú y la cabecera.
+  const escala = useSyncExternalStore(suscribirEscala, escalaGuardada, () => "1" as Escala);
+  useEffect(() => {
+    document.documentElement.dataset.escala = escala;
+    return () => {
+      delete document.documentElement.dataset.escala;
+    };
+  }, [escala]);
 
   const items = NAV_POR_ROL[rol];
   // En el móvil caben cinco botones: si hay más secciones, las últimas van a «Más».
@@ -46,7 +84,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
   const titulo = tituloDeRuta(rol, pathname);
 
   function ciclarEscala() {
-    setEscala((actual) => ESCALAS[(ESCALAS.indexOf(actual) + 1) % ESCALAS.length]);
+    guardarEscala(siguienteEscala(escala));
   }
 
   return (
@@ -67,8 +105,8 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             <IconoMemoria tamano={22} />
           </div>
           <div>
-            <div className="text-[12px] font-extrabold tracking-[.06em] text-primario-fuerte">RUTA PEDAGÓGICA</div>
-            <div className="text-[9.5px] tracking-[.08em] text-suave">ARCHIVO VIVO DE EL SALADO</div>
+            <div className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">RUTA PEDAGÓGICA</div>
+            <div className="text-[0.59375rem] tracking-[.08em] text-suave">ARCHIVO VIVO DE EL SALADO</div>
           </div>
         </Link>
 
@@ -93,7 +131,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                   <svg className="flex-none" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <path d={item.icon} />
                   </svg>
-                  <span className="text-[9px] font-bold leading-[1.1] md:text-[12.5px] md:font-inherit md:leading-[1.3]">
+                  <span className="text-[0.5625rem] font-bold leading-[1.1] md:text-[0.78125rem] md:font-inherit md:leading-[1.3]">
                     {item.label}
                   </span>
                 </Link>
@@ -113,7 +151,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 12h.01M12 12h.01M19 12h.01" />
                 </svg>
-                <span className="text-[9px] font-bold leading-[1.1]">Más</span>
+                <span className="text-[0.5625rem] font-bold leading-[1.1]">Más</span>
               </button>
               {masAbierto && (
                 <ul className="absolute bottom-[calc(100%+8px)] right-0 z-30 w-[220px] overflow-hidden rounded-xl border border-borde bg-superficie py-1 shadow-[0_-8px_30px_rgba(0,0,0,.12)]">
@@ -123,7 +161,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                         href={item.href}
                         onClick={() => setMasAbierto(false)}
                         aria-current={pathname === item.href ? "page" : undefined}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] font-semibold text-tinta no-underline hover:bg-[#F7F2ED]"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-[0.8125rem] font-semibold text-tinta no-underline hover:bg-[#F7F2ED]"
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d={item.icon} />
@@ -143,7 +181,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
           {rol === "DOCENTE" && (
             <Link
               href="/docente/mensajes"
-              className="flex items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[10.5px] font-extrabold tracking-[.07em] text-white no-underline hover:bg-primario-hover"
+              className="flex items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[0.65625rem] font-extrabold tracking-[.07em] text-white no-underline hover:bg-primario-hover"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d={ICONO_ALERTA} />
@@ -152,7 +190,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
               {solicitudesPendientes > 0 && (
                 <span
                   aria-label={`${solicitudesPendientes} ${solicitudesPendientes === 1 ? "pedido pendiente" : "pedidos pendientes"}`}
-                  className="rounded-full bg-white px-1.5 py-px text-[10px] text-primario-fuerte"
+                  className="rounded-full bg-white px-1.5 py-px text-[0.625rem] text-primario-fuerte"
                 >
                   {solicitudesPendientes}
                 </span>
@@ -160,13 +198,13 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </Link>
           )}
           {rol === "ESTUDIANTE" && (
-            <Link href="/estudiante/explorador" className="px-1 text-[11px] font-semibold text-suave hover:text-primario-texto">
+            <Link href="/estudiante/explorador" className="px-1 text-[0.6875rem] font-semibold text-suave hover:text-primario-texto">
               Cambiar mi explorador
             </Link>
           )}
           <Link
             href="/cambiar-contrasena"
-            className="px-1 text-[11px] font-semibold text-suave hover:text-primario-texto"
+            className="px-1 text-[0.6875rem] font-semibold text-suave hover:text-primario-texto"
           >
             Cambiar mi contraseña
           </Link>
@@ -184,30 +222,30 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             >
               <IconoMemoria tamano={20} />
             </Link>
-            <span className="whitespace-nowrap text-[14px] font-extrabold tracking-[.1em] text-primario-fuerte">
+            <span className="whitespace-nowrap text-[0.875rem] font-extrabold tracking-[.1em] text-primario-fuerte">
               MEMORIA EL SALADO
             </span>
-            <span className="truncate text-[12px] text-suave">{titulo}</span>
+            <span className="truncate text-[0.75rem] text-suave">{titulo}</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[11px] font-bold text-secundario-fuerte md:block">
+            <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-fuerte md:block">
               {indicador}
             </div>
             {avisos && <Campana avisos={avisos.avisos} nuevos={avisos.nuevos} />}
             <button
               onClick={ciclarEscala}
               title="Tamaño de texto"
-              aria-label={`Tamaño de texto actual ${ETIQUETA_ESCALA[String(escala)]}. Pulsa para cambiar.`}
-              className={`cursor-pointer rounded-lg border px-[11px] py-1.5 text-[12px] font-extrabold ${
-                escala > 1
+              aria-label={`Tamaño de texto actual ${ETIQUETA_ESCALA[escala]}. Pulsa para cambiar.`}
+              className={`cursor-pointer rounded-lg border px-[11px] py-1.5 text-[0.75rem] font-extrabold ${
+                escala !== "1"
                   ? "border-secundario bg-secundario-tinte text-secundario-fuerte"
                   : "border-borde-campo bg-superficie text-apagado"
               }`}
             >
-              {ETIQUETA_ESCALA[String(escala)]}
+              {ETIQUETA_ESCALA[escala]}
             </button>
             <div className="flex items-center gap-2 rounded-full border border-borde py-[5px] pl-2.5 pr-1.5">
-              <span className="text-[11px] font-bold text-apagado">{ETIQUETA_ROL[rol]}</span>
+              <span className="text-[0.6875rem] font-bold text-apagado">{ETIQUETA_ROL[rol]}</span>
               {explorador ? (
                 <span title={nombre}>
                   <AvatarExplorador tipo={explorador} tamano={24} />
@@ -215,7 +253,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
               ) : (
                 <div
                   title={nombre}
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-secundario text-[11px] font-bold text-white"
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-secundario text-[0.6875rem] font-bold text-white"
                 >
                   {iniciales}
                 </div>
@@ -223,14 +261,14 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </div>
             <button
               onClick={() => signOut({ redirectTo: "/login" })}
-              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[11px] py-[7px] text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
+              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[11px] py-[7px] text-[0.71875rem] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
             >
               Salir
             </button>
           </div>
         </header>
 
-        <main id="contenido" tabIndex={-1} data-escala={escala} className="outline-none flex-1 px-4 pb-8 pt-5 md:px-[30px] md:pb-15 md:pt-7">
+        <main id="contenido" tabIndex={-1} className="outline-none flex-1 px-4 pb-8 pt-5 md:px-[30px] md:pb-15 md:pt-7">
           {children}
         </main>
       </div>

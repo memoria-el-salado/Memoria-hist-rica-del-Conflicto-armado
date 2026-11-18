@@ -22,9 +22,9 @@ type Props = {
 };
 
 function Estado({ ok, si, no }: { ok: boolean | null; si: string; no: string }) {
-  if (ok === null) return <span className="text-[10.5px] font-bold text-[#CFC7C0]">NO APLICA</span>;
+  if (ok === null) return <span className="text-[0.65625rem] font-bold text-[#CFC7C0]">NO APLICA</span>;
   return (
-    <span className={`text-[10.5px] font-extrabold tracking-[.05em] ${ok ? "text-secundario-fuerte" : "text-peligro"}`}>
+    <span className={`text-[0.65625rem] font-extrabold tracking-[.05em] ${ok ? "text-secundario-fuerte" : "text-peligro"}`}>
       {ok ? si : no}
     </span>
   );
@@ -40,11 +40,11 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU10 · CALIDAD</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU10 · CALIDAD</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
         Validación de Accesibilidad Universal
       </h1>
-      <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Cada recurso se valida con sus propios datos. Un audio necesita transcripción (WCAG 1.2.1) y un video
         subido, subtítulos sincronizados (WCAG 1.2.2); mientras falten, los estudiantes no lo ven. Lo corrige
         el docente que lo cargó.
@@ -52,8 +52,8 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
 
       <div className="mb-[18px] flex flex-wrap gap-3.5">
         <div className="min-w-[180px] flex-1 rounded-xl border border-borde bg-superficie p-[18px]">
-          <div className="text-[10px] font-bold tracking-[.12em] text-tenue">RECURSOS ACCESIBLES</div>
-          <div className="text-[30px] font-extrabold tracking-[-.03em]" style={{ color }}>
+          <div className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">RECURSOS ACCESIBLES</div>
+          <div className="text-[1.875rem] font-extrabold tracking-[-.03em]" style={{ color }}>
             {porcentaje}%
           </div>
           <div className="mt-2 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]">
@@ -62,9 +62,9 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
         </div>
 
         <div className="min-w-[180px] flex-1 rounded-xl border border-borde bg-superficie p-[18px]">
-          <div className="text-[10px] font-bold tracking-[.12em] text-tenue">RECURSOS VALIDADOS</div>
-          <div className="text-[30px] font-extrabold tracking-[-.03em]">{filas.length}</div>
-          <div className="mt-1.5 text-[11.5px] text-suave">
+          <div className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">RECURSOS VALIDADOS</div>
+          <div className="text-[1.875rem] font-extrabold tracking-[-.03em]">{filas.length}</div>
+          <div className="mt-1.5 text-[0.71875rem] text-suave">
             {ocultos ? `${ocultos} sin publicar hasta que se corrijan` : "Todos visibles para los estudiantes"}
           </div>
         </div>
@@ -73,22 +73,22 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
           <button
             onClick={() => iniciarTransicion(async () => { await ejecutarAuditoria(); })}
             disabled={pendiente}
-            className="cursor-pointer rounded-lg bg-secundario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-secundario disabled:opacity-60"
+            className="cursor-pointer rounded-lg bg-secundario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-secundario disabled:opacity-60"
           >
             {pendiente ? "Validando..." : "Ejecutar validación"}
           </button>
-          <div className="mt-2 text-center text-[11px] text-suave">Última validación: {ultimaRevision}</div>
+          <div className="mt-2 text-center text-[0.6875rem] text-suave">Última validación: {ultimaRevision}</div>
         </div>
       </div>
 
       {filas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[13px] text-apagado">
+        <p className="rounded-xl border border-dashed border-borde-campo p-5 text-[0.8125rem] text-apagado">
           Todavía no hay recursos multimedia cargados.
         </p>
       ) : (
         <div role="region" aria-label="Recursos auditados" tabIndex={0} className="overflow-x-auto rounded-xl border border-borde bg-superficie">
           <div className="min-w-[760px]">
-            <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[10px] font-bold tracking-[.1em] text-suave">
+            <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[0.625rem] font-bold tracking-[.1em] text-suave">
               <span>CONTENIDO</span>
               <span>ALTERNATIVA</span>
               <span>SINCRONÍA</span>
@@ -101,8 +101,8 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
                 className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
               >
                 <div>
-                  <div className="text-[13px] font-bold">{f.titulo}</div>
-                  <div className="text-[11px] text-suave">{f.detalle}</div>
+                  <div className="text-[0.8125rem] font-bold">{f.titulo}</div>
+                  <div className="text-[0.6875rem] text-suave">{f.detalle}</div>
                 </div>
                 <Estado
                   ok={f.requisito === "ninguno" ? f.descripcion : f.alternativa}
@@ -116,7 +116,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
                   no="FALTA"
                 />
                 <Estado ok={f.visible} si="LO VEN" no="NO LO VEN" />
-                <span className="text-[11.5px] text-apagado">{f.pendiente ?? "—"}</span>
+                <span className="text-[0.71875rem] text-apagado">{f.pendiente ?? "—"}</span>
               </div>
             ))}
           </div>

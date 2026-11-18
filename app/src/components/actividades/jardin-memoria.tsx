@@ -82,7 +82,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
     <div className="animar-aparecer">
       <CabeceraSesion sesion={sesion} />
 
-      <p className="max-w-[720px] text-[13.5px] leading-[1.7] text-apagado">
+      <p className="max-w-[720px] text-[0.84375rem] leading-[1.7] text-apagado">
         Cada pieza que siembres honra una vida y un legado, y puede llevar una carta, un poema o un dibujo
         tuyo. Lo que siembres lo verán tus compañeros de curso, con tu nombre, en cuanto lo siembres.
       </p>
@@ -91,7 +91,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
         <button
           onClick={() => setSembrando((s) => !s)}
           aria-expanded={sembrando}
-          className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-[11px] text-[13px] font-bold text-white hover:bg-primario-hover"
+          className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-[11px] text-[0.8125rem] font-bold text-white hover:bg-primario-hover"
         >
           {sembrando ? "Cerrar formulario" : "Sembrar una Memoria"}
         </button>
@@ -102,7 +102,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
               key={f.valor}
               aria-pressed={activo}
               onClick={() => setFiltro(f.valor)}
-              className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold"
+              className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[0.6875rem] font-bold"
               style={
                 activo
                   ? { background: "#B8482A", borderColor: "#B8482A", color: "#fff" }
@@ -118,7 +118,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
       {aviso && (
         <div
           role={aviso.error ? "alert" : "status"}
-          className={`mx-auto mb-4 max-w-[720px] text-center text-[12.5px] font-semibold ${aviso.error ? "text-peligro" : "text-secundario-fuerte"}`}
+          className={`mx-auto mb-4 max-w-[720px] text-center text-[0.78125rem] font-semibold ${aviso.error ? "text-peligro" : "text-secundario-fuerte"}`}
         >
           {aviso.error ?? aviso.ok}
         </div>
@@ -158,19 +158,19 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
                     <path d={ICONOS[f.pieza] ?? ICONOS.FLOR} />
                   </svg>
                   {MARCA_CREACION[f.creacion] && (
-                    <span className="absolute -right-3 -top-2 rounded-full border border-white bg-tinta px-1.5 py-px text-[8.5px] font-bold text-white">
+                    <span className="absolute -right-3 -top-2 rounded-full border border-white bg-tinta px-1.5 py-px text-[0.53125rem] font-bold text-white">
                       {MARCA_CREACION[f.creacion]}
                     </span>
                   )}
                 </span>
-                <span className="mt-2.5 text-[12.5px] font-bold">{f.nombre}</span>
-                <span className="mt-[3px] max-w-[190px] text-[11px] leading-[1.5] text-apagado">{f.legado}</span>
-                <span className="mt-1.5 text-[9.5px] font-bold tracking-[.08em] text-suave">{etiquetaEpoca(f.epoca).toUpperCase()}</span>
+                <span className="mt-2.5 text-[0.78125rem] font-bold">{f.nombre}</span>
+                <span className="mt-[3px] max-w-[190px] text-[0.6875rem] leading-[1.5] text-apagado">{f.legado}</span>
+                <span className="mt-1.5 text-[0.59375rem] font-bold tracking-[.08em] text-suave">{etiquetaEpoca(f.epoca).toUpperCase()}</span>
               </button>
             </li>
           ))}
           {visibles.length === 0 && (
-            <li className="col-span-full py-10 text-center text-[13px] text-tenue">No hay memorias sembradas en esta época todavía.</li>
+            <li className="col-span-full py-10 text-center text-[0.8125rem] text-tenue">No hay memorias sembradas en esta época todavía.</li>
           )}
         </ul>
       </div>
@@ -185,20 +185,20 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
       />
 
       <div className="mt-[22px] rounded-xl border border-borde bg-superficie p-6">
-        <h2 className="inline-block border-b-2 border-secundario pb-1 text-[18px] font-extrabold text-secundario-fuerte">
+        <h2 className="inline-block border-b-2 border-secundario pb-1 text-[1.125rem] font-extrabold text-secundario-fuerte">
           Instrucciones del Sembrado
         </h2>
         <div className="mt-[18px] grid gap-[22px] sm:grid-cols-2">
           <div>
-            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario-texto">1. EL ACTO DE RECORDAR</div>
-            <p className="mt-1.5 text-[12.5px] leading-[1.7] text-apagado">
+            <div className="text-[0.65625rem] font-bold tracking-[.1em] text-primario-texto">1. EL ACTO DE RECORDAR</div>
+            <p className="mt-1.5 text-[0.78125rem] leading-[1.7] text-apagado">
               Haz clic en una flor para leer la carta o el poema que la acompaña, o para ver el dibujo que
               alguien hizo en memoria de esa persona.
             </p>
           </div>
           <div>
-            <div className="text-[10.5px] font-bold tracking-[.1em] text-primario-texto">2. SEMBRAR LEGADO</div>
-            <p className="mt-1.5 text-[12.5px] leading-[1.7] text-apagado">
+            <div className="text-[0.65625rem] font-bold tracking-[.1em] text-primario-texto">2. SEMBRAR LEGADO</div>
+            <p className="mt-1.5 text-[0.78125rem] leading-[1.7] text-apagado">
               Siembra una flor en memoria de alguien de El Salado y, si quieres, acompáñala con una carta, un
               poema o un dibujo. La memoria se cuida entre todas y todos.
             </p>
@@ -206,10 +206,10 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
         </div>
       </div>
 
-      <p className="mt-6 text-center text-[15px] italic text-secundario-fuerte">
+      <p className="mt-6 text-center text-[0.9375rem] italic text-secundario-fuerte">
         &quot;La memoria es el único jardín del que no podemos ser expulsados.&quot;
       </p>
-      <div className="mt-2 text-center text-[10px] font-bold tracking-[.12em] text-suave">
+      <div className="mt-2 text-center text-[0.625rem] font-bold tracking-[.12em] text-suave">
         — ADAPTACIÓN LITERARIA DEL SALADO
       </div>
     </div>
@@ -297,16 +297,16 @@ function FormularioFlor({
     });
   }
 
-  const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]";
-  const rotulo = "text-[10px] font-bold tracking-[.12em] text-tenue";
+  const campo = "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]";
+  const rotulo = "text-[0.625rem] font-bold tracking-[.12em] text-tenue";
   const chip = (activo: boolean) =>
-    `cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold ${
+    `cursor-pointer rounded-full border px-[11px] py-1.5 text-[0.6875rem] font-bold ${
       activo ? "border-secundario bg-secundario text-white" : "border-borde-campo bg-superficie text-apagado"
     }`;
 
   return (
     <form onSubmit={sembrar} className="animar-aparecer mx-auto mb-[26px] max-w-[720px] rounded-xl border border-borde bg-superficie p-[22px]">
-      <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">SEMBRAR UNA MEMORIA</div>
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">SEMBRAR UNA MEMORIA</div>
       <div className="mt-3.5 grid gap-3.5 sm:grid-cols-2">
         <div>
           <label htmlFor="nombre" className={rotulo}>NOMBRE DE LA PERSONA</label>
@@ -394,15 +394,15 @@ function FormularioFlor({
         <button
           type="submit"
           disabled={pendiente}
-          className="cursor-pointer rounded-lg bg-secundario px-[18px] py-[11px] text-[13px] font-bold text-white hover:bg-secundario-fuerte disabled:opacity-60"
+          className="cursor-pointer rounded-lg bg-secundario px-[18px] py-[11px] text-[0.8125rem] font-bold text-white hover:bg-secundario-fuerte disabled:opacity-60"
         >
           {pendiente ? "Sembrando..." : "Sembrar en el jardín"}
         </button>
-        <button type="button" onClick={onCerrar} className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[18px] py-[11px] text-[13px] font-semibold text-apagado">
+        <button type="button" onClick={onCerrar} className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-[18px] py-[11px] text-[0.8125rem] font-semibold text-apagado">
           Cancelar
         </button>
-        {progreso && <span role="status" className="text-[11.5px] font-semibold text-apagado">{progreso}</span>}
-        {error && !progreso && <span role="alert" className="text-[11.5px] font-semibold text-peligro">{error}</span>}
+        {progreso && <span role="status" className="text-[0.71875rem] font-semibold text-apagado">{progreso}</span>}
+        {error && !progreso && <span role="alert" className="text-[0.71875rem] font-semibold text-peligro">{error}</span>}
       </div>
     </form>
   );
@@ -451,18 +451,18 @@ function DetalleFlor({
     >
       {flor && (
         <div className="max-h-[85vh] overflow-y-auto px-6 py-6">
-          <div className="text-[10.5px] font-bold tracking-[.12em] text-primario-texto">
+          <div className="text-[0.65625rem] font-bold tracking-[.12em] text-primario-texto">
             {etiquetaEpoca(flor.epoca).toUpperCase()}
             {flor.creacion !== "NINGUNA" && ` · ${ETIQUETA_CREACION[flor.creacion].toUpperCase()}`}
           </div>
-          <h2 id="titulo-flor" className="mt-1.5 text-[21px] font-extrabold tracking-[-.02em]">
+          <h2 id="titulo-flor" className="mt-1.5 text-[1.3125rem] font-extrabold tracking-[-.02em]">
             {flor.nombre}
           </h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-apagado">{flor.legado}</p>
+          <p className="mt-1 text-[0.8125rem] leading-relaxed text-apagado">{flor.legado}</p>
 
           {flor.texto && (
             <div
-              className={`mt-4 whitespace-pre-line rounded-lg border border-borde bg-superficie-suave px-4 py-3.5 text-[14px] leading-[1.8] text-tinta-media ${
+              className={`mt-4 whitespace-pre-line rounded-lg border border-borde bg-superficie-suave px-4 py-3.5 text-[0.875rem] leading-[1.8] text-tinta-media ${
                 flor.creacion === "POEMA" ? "font-serif italic" : ""
               }`}
             >
@@ -480,23 +480,23 @@ function DetalleFlor({
           )}
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <span className="text-[11.5px] text-suave">{flor.autor ? `Sembrada por ${flor.autor}` : "Curada por el archivo"}</span>
+            <span className="text-[0.71875rem] text-suave">{flor.autor ? `Sembrada por ${flor.autor}` : "Curada por el archivo"}</span>
             <span className="flex-1" />
             {flor.propia && (
-              <button onClick={retirar} disabled={pendiente} className="cursor-pointer text-[12px] font-bold text-apagado hover:text-peligro">
+              <button onClick={retirar} disabled={pendiente} className="cursor-pointer text-[0.75rem] font-bold text-apagado hover:text-peligro">
                 Retirar mi flor
               </button>
             )}
             <button
               autoFocus
               onClick={onCerrar}
-              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-4 py-2 text-[12.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
+              className="cursor-pointer rounded-lg border border-borde-campo bg-superficie px-4 py-2 text-[0.78125rem] font-semibold text-apagado hover:border-primario hover:text-primario-texto"
             >
               Cerrar
             </button>
           </div>
           {error && (
-            <p role="alert" className="mt-2 text-[11.5px] font-semibold text-peligro">
+            <p role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">
               {error}
             </p>
           )}

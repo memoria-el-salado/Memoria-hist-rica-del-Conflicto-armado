@@ -63,15 +63,15 @@ export default async function SesionDocentePage({
 
   return (
     <div className="animar-aparecer max-w-[860px]">
-      <Link href="/docente/panel" className="text-[11.5px] font-semibold text-apagado no-underline hover:text-primario-texto">
+      <Link href="/docente/panel" className="text-[0.71875rem] font-semibold text-apagado no-underline hover:text-primario-texto">
         ← Panel del docente
       </Link>
-      <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+      <div className="mt-2 text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
         EJE {sesion.eje.numero} · {esEspecial(sesion.pantalla) && "ACTIVIDAD ESPECIAL: "}
         {etiqueta.toUpperCase()}
         {!sesion.publicada && <span className="text-suave"> · BORRADOR</span>}
       </div>
-      <h1 className="mb-1.5 mt-1.5 text-[24px] font-extrabold leading-tight tracking-[-.02em]">
+      <h1 className="mb-1.5 mt-1.5 text-[1.5rem] font-extrabold leading-tight tracking-[-.02em]">
         <span className="text-primario-texto">{sesion.codigo}</span> {sesion.titulo}
       </h1>
 
@@ -81,7 +81,7 @@ export default async function SesionDocentePage({
 
       {conAnotaciones && (
         <>
-          <p className="mb-4 text-[13.5px] leading-[1.65] text-apagado">
+          <p className="mb-4 text-[0.84375rem] leading-[1.65] text-apagado">
             Tus estudiantes leen el texto de la sesión y lo anotan. Aquí ves sus anotaciones: puedes responderles,
             anotar tú también y destacar las que le sirven a todo el curso; las destacadas aparecen en su pestaña
             «Destacados».
@@ -98,7 +98,7 @@ export default async function SesionDocentePage({
       <RespuestasCartilla sesion={sesion} docenteId={docenteId} cursoId={elegido} />
 
       {!sePlantea && !conAnotaciones && (
-        <p className="rounded-xl border border-borde bg-superficie p-5 text-[13.5px] leading-[1.65] text-apagado">
+        <p className="rounded-xl border border-borde bg-superficie p-5 text-[0.84375rem] leading-[1.65] text-apagado">
           Lo que tus estudiantes entregan en esta sesión lo ves y lo comentas en{" "}
           <Link href="/docente/revision" className="font-bold text-primario-fuerte">
             Revisión
@@ -133,10 +133,10 @@ async function RespuestasCartilla({
 
   return (
     <section aria-labelledby="titulo-respuestas-cartilla" className="mb-6 rounded-xl border border-borde bg-superficie p-5">
-      <h2 id="titulo-respuestas-cartilla" className="text-[12px] font-extrabold tracking-[.08em] text-tinta-media">
+      <h2 id="titulo-respuestas-cartilla" className="text-[0.75rem] font-extrabold tracking-[.08em] text-tinta-media">
         ACTIVIDADES DE LA CARTILLA
       </h2>
-      <p className="mt-1 text-[12.5px] leading-relaxed text-apagado">
+      <p className="mt-1 text-[0.78125rem] leading-relaxed text-apagado">
         Los ejercicios que la cartilla propone en los apartados de esta sesión. Tus estudiantes los encuentran después de la
         actividad principal; aquí ves lo que respondió cada uno.
       </p>
@@ -146,9 +146,9 @@ async function RespuestasCartilla({
           return (
             <li key={actividad.id} className="rounded-lg border border-borde bg-superficie-suave p-3.5">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-primario-tinte px-2 py-0.5 text-[11px] font-extrabold text-primario-fuerte">{apartado.codigo}</span>
-                <span className="text-[13.5px] font-bold">{actividad.titulo}</span>
-                <span className="ml-auto text-[11.5px] font-bold text-apagado">
+                <span className="rounded-full bg-primario-tinte px-2 py-0.5 text-[0.6875rem] font-extrabold text-primario-fuerte">{apartado.codigo}</span>
+                <span className="text-[0.84375rem] font-bold">{actividad.titulo}</span>
+                <span className="ml-auto text-[0.71875rem] font-bold text-apagado">
                   {deEsta.length === 1 ? "1 respuesta" : `${deEsta.length} respuestas`}
                 </span>
               </div>
@@ -157,10 +157,10 @@ async function RespuestasCartilla({
                   {deEsta.map((r) => (
                     <li key={r.id}>
                       <details className="rounded-lg border border-borde bg-white px-3 py-2">
-                        <summary className="cursor-pointer text-[12.5px] font-bold text-tinta-media">
+                        <summary className="cursor-pointer text-[0.78125rem] font-bold text-tinta-media">
                           {r.user.nombre} <span className="font-normal text-apagado">· {fechaYHora(r.actualizadoEn)}</span>
                         </summary>
-                        <p className="mt-2 whitespace-pre-line text-[12.5px] leading-relaxed text-tinta-media">{r.texto}</p>
+                        <p className="mt-2 whitespace-pre-line text-[0.78125rem] leading-relaxed text-tinta-media">{r.texto}</p>
                       </details>
                     </li>
                   ))}
@@ -198,7 +198,7 @@ async function Planteamiento({
 
   return (
     <>
-      <p className="mb-5 text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 text-[0.84375rem] leading-[1.65] text-apagado">
         {sesion.pantalla === "dilema"
           ? "Plantea el dilema a tus estudiantes: la pregunta y entre dos y cuatro opciones. Cada quien elige y justifica, y después ve cómo eligió el curso. Adáptalo a tu contexto: la guía sugiere que, donde el territorio sigue en disputa, se exploren solo las acciones no violentas."
           : "Plantea la pregunta que tus estudiantes van a investigar. Entregan lo que encontraron con sus fuentes."}{" "}
@@ -215,8 +215,8 @@ async function Planteamiento({
 
       {reparto && respuestas.length > 0 && (
         <section className="mt-5 rounded-xl border border-borde bg-superficie p-5">
-          <h2 className="text-[11px] font-bold tracking-[.12em] text-tenue">CÓMO ELIGIERON TUS ESTUDIANTES</h2>
-          <ul className="mt-2 grid gap-1 text-[13px]">
+          <h2 className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">CÓMO ELIGIERON TUS ESTUDIANTES</h2>
+          <ul className="mt-2 grid gap-1 text-[0.8125rem]">
             {reparto.map((r) => (
               <li key={r.opcion} className="flex justify-between gap-3">
                 <span>{r.opcion}</span>

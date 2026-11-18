@@ -34,23 +34,23 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
   const listo = revision.valida && coincide;
 
   const clase =
-    "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-[13px] py-[11px] text-[14px]";
+    "mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-[13px] py-[11px] text-[0.875rem]";
 
   return (
     <main id="contenido" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-fondo px-5 py-10 outline-none">
       <a href="#formulario-contrasena" className="saltar-contenido">Saltar al contenido</a>
       <div id="formulario-contrasena" className="w-full max-w-[480px] rounded-[14px] border border-borde bg-superficie px-8 py-9 shadow-[0_18px_50px_rgba(70,45,30,.07)]">
-        <div className="flex items-center gap-[7px] text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+        <div className="flex items-center gap-[7px] text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
           </svg>
           <span>{primeraVez ? "PRIMER INGRESO" : "SEGURIDAD DE LA CUENTA"}</span>
         </div>
 
-        <h1 className="mb-1.5 mt-3 text-[24px] font-extrabold tracking-[-.02em]">
+        <h1 className="mb-1.5 mt-3 text-[1.5rem] font-extrabold tracking-[-.02em]">
           {primeraVez ? "Elige tu contraseña" : "Cambiar contraseña"}
         </h1>
-        <p className="mb-5 text-[13px] leading-[1.65] text-apagado">
+        <p className="mb-5 text-[0.8125rem] leading-[1.65] text-apagado">
           {primeraVez ? (
             <>
               Hola, {nombre.split(" ")[0]}. Entraste con la contraseña provisional que te
@@ -63,7 +63,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
         </p>
 
         <form action={accion}>
-          <label htmlFor="actual" className="block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="actual" className="block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             {primeraVez ? "CONTRASEÑA PROVISIONAL" : "CONTRASEÑA ACTUAL"}
           </label>
           <input
@@ -75,13 +75,13 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
           />
 
           <div className="mt-4 flex items-baseline justify-between">
-            <label htmlFor="nueva" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+            <label htmlFor="nueva" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
               NUEVA CONTRASEÑA
             </label>
             <button
               type="button"
               onClick={() => setVisible((v) => !v)}
-              className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
+              className="cursor-pointer text-[0.6875rem] font-semibold text-apagado hover:text-primario-texto"
             >
               {visible ? "Ocultar" : "Mostrar"}
             </button>
@@ -112,7 +112,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
                   ))}
                 </div>
                 <span
-                  className="text-[10.5px] font-bold"
+                  className="text-[0.65625rem] font-bold"
                   style={{ color: COLORES_FUERZA[revision.fuerza] }}
                 >
                   {ETIQUETAS_FUERZA[revision.fuerza]}
@@ -122,19 +122,19 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
               {revision.errores.length > 0 ? (
                 <ul className="mt-2 grid gap-1">
                   {revision.errores.map((e) => (
-                    <li key={e} className="text-[11px] leading-[1.4] text-peligro">
+                    <li key={e} className="text-[0.6875rem] leading-[1.4] text-peligro">
                       · {e}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="mt-2 text-[11px] font-semibold text-secundario-fuerte">
+                <p className="mt-2 text-[0.6875rem] font-semibold text-secundario-fuerte">
                   La contraseña cumple la política de seguridad.
                 </p>
               )}
             </div>
           ) : (
-            <p className="mt-2 text-[11px] leading-[1.5] text-suave">
+            <p className="mt-2 text-[0.6875rem] leading-[1.5] text-suave">
               Mínimo {LONGITUD_MINIMA} caracteres, con mayúscula, minúscula, número y símbolo. Sin
               secuencias, ni tu nombre o tu usuario.
             </p>
@@ -142,7 +142,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
 
           <label
             htmlFor="confirmacion"
-            className="mt-4 block text-[10px] font-bold tracking-[.12em] text-tenue"
+            className="mt-4 block text-[0.625rem] font-bold tracking-[.12em] text-tenue"
           >
             REPITE LA NUEVA CONTRASEÑA
           </label>
@@ -156,13 +156,13 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
             className={clase}
           />
           {confirmacion.length > 0 && !coincide && (
-            <p className="mt-1.5 text-[11px] font-semibold text-peligro">
+            <p className="mt-1.5 text-[0.6875rem] font-semibold text-peligro">
               Las dos contraseñas no coinciden.
             </p>
           )}
 
           {estado?.error && (
-            <div role="alert" className="mt-3 text-[11.5px] font-semibold text-peligro">
+            <div role="alert" className="mt-3 text-[0.71875rem] font-semibold text-peligro">
               {estado.error}
             </div>
           )}
@@ -170,13 +170,13 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
           <button
             type="submit"
             disabled={pendiente || !listo}
-            className="mt-5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-[13px] text-[14px] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-[13px] text-[0.875rem] font-bold text-white hover:bg-primario-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {pendiente ? "Guardando..." : "Guardar y continuar"}
           </button>
         </form>
 
-        <div className="mt-5 border-t border-[#F1EBE5] pt-4 text-center text-[11.5px] text-tenue">
+        <div className="mt-5 border-t border-[#F1EBE5] pt-4 text-center text-[0.71875rem] text-tenue">
           {primeraVez ? (
             <button
               onClick={() => signOut({ redirectTo: "/login" })}

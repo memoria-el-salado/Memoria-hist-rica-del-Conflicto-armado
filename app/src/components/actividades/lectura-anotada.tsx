@@ -30,7 +30,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
       <div className="rejilla-panel-ancha">
         <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] pb-3">
-            <span className="text-[10.5px] font-bold tracking-[.1em] text-suave">
+            <span className="text-[0.65625rem] font-bold tracking-[.1em] text-suave">
               TEXTO DE LA SESIÓN
             </span>
             {sesion.documento && (
@@ -38,7 +38,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                 href={sesion.documento.enlace}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[11.5px] font-semibold text-secundario-fuerte"
+                className="text-[0.71875rem] font-semibold text-secundario-fuerte"
               >
                 Abrir el PDF original
               </a>
@@ -51,7 +51,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                 bloque.tipo === "subtitulo" ? (
                   <h3
                     key={bloque.id}
-                    className="mb-1.5 mt-4 flex gap-2 text-[13.5px] font-extrabold text-tinta first:mt-0"
+                    className="mb-1.5 mt-4 flex gap-2 text-[0.84375rem] font-extrabold text-tinta first:mt-0"
                   >
                     <span className="text-primario-texto">{bloque.codigo}</span>
                     <span>{bloque.texto}</span>
@@ -61,7 +61,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                     key={bloque.id}
                     onClick={() => setCita(cita === bloque.texto ? "" : bloque.texto)}
                     aria-pressed={cita === bloque.texto}
-                    className="mb-2 block w-full cursor-pointer rounded-r-lg border-l-[3px] px-[15px] py-2.5 text-justify text-[13.5px] leading-[1.85] transition-colors"
+                    className="mb-2 block w-full cursor-pointer rounded-r-lg border-l-[3px] px-[15px] py-2.5 text-justify text-[0.84375rem] leading-[1.85] transition-colors"
                     style={{
                       borderLeftColor: cita === bloque.texto ? "#EBB035" : "transparent",
                       background: cita === bloque.texto ? "#FBEFD8" : "transparent",
@@ -72,12 +72,12 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                   </button>
                 )
               )}
-              <p className="mt-3 text-[11.5px] text-tenue">
+              <p className="mt-3 text-[0.71875rem] text-tenue">
                 Haz clic en un párrafo para citarlo en tu anotación.
               </p>
             </>
           ) : (
-            <p className="text-[13px] leading-[1.7] text-tenue">
+            <p className="text-[0.8125rem] leading-[1.7] text-tenue">
               El documento importado no traía texto para esta sesión. Puedes anotar igualmente a
               partir del trabajo en clase o del PDF original.
             </p>
@@ -85,12 +85,12 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
 
           {sinTexto.length > 0 && (
             <div className="mt-5 border-t border-[#F1EBE5] pt-4">
-              <div className="text-[10.5px] font-bold tracking-[.12em] text-tenue">
+              <div className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
                 TAMBIÉN EN ESTA SESIÓN
               </div>
               <ol className="mt-2.5 grid gap-1.5">
                 {sinTexto.map((sub) => (
-                  <li key={sub.id} className="flex gap-2 text-[12.5px] text-tinta-media">
+                  <li key={sub.id} className="flex gap-2 text-[0.78125rem] text-tinta-media">
                     <span className="font-bold text-primario-texto">{sub.codigo}</span>
                     <span>{sub.titulo}</span>
                   </li>

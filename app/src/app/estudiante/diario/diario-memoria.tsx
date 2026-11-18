@@ -43,9 +43,9 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
 
   return (
     <div className="animar-aparecer max-w-[900px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">SESIÓN 6.4 · CU05</div>
-      <h1 className="mb-1.5 mt-2 text-[28px] font-extrabold tracking-[-.02em]">Diario de la Memoria</h1>
-      <p className="mb-4 max-w-[620px] text-[14px] leading-[1.65] text-apagado">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">SESIÓN 6.4 · CU05</div>
+      <h1 className="mb-1.5 mt-2 text-[1.75rem] font-extrabold tracking-[-.02em]">Diario de la Memoria</h1>
+      <p className="mb-4 max-w-[620px] text-[0.875rem] leading-[1.65] text-apagado">
         Un espacio privado para consignar lo que sientes después de escuchar los testimonios. Tú decides qué se
         comparte.
       </p>
@@ -54,14 +54,14 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
         <svg className="mt-px flex-none" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#177575" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
         </svg>
-        <div className="text-[12.5px] leading-[1.6] text-[#3F6E6C]">
+        <div className="text-[0.78125rem] leading-[1.6] text-[#3F6E6C]">
           Tus entradas son <strong>privadas por defecto</strong>. El docente solo verá las que marques como
           compartidas, y podrá responderte en ellas.
         </div>
       </div>
 
       <form ref={formRef} action={accion} className="mb-5 rounded-xl border border-borde bg-superficie p-5">
-        <div className="text-[10px] font-bold tracking-[.12em] text-tenue">¿CÓMO TE SIENTES HOY?</div>
+        <div className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">¿CÓMO TE SIENTES HOY?</div>
         <input type="hidden" name="emocion" value={emocion} />
         <div className="mt-2 flex flex-wrap gap-2">
           {EMOCIONES.map((e) => {
@@ -72,7 +72,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
                 type="button"
                 aria-pressed={activo}
                 onClick={() => setEmocion(activo ? "" : e.label)}
-                className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold"
+                className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[0.6875rem] font-bold"
                 style={
                   activo
                     ? { background: e.color, borderColor: e.color, color: "#fff" }
@@ -92,7 +92,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
           id="texto"
           name="texto"
           placeholder="Escribe lo que quieras recordar de esta sesión..."
-          className="mt-3.5 h-[120px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3.5 py-3 text-[13.5px] leading-[1.6]"
+          className="mt-3.5 h-[120px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3.5 py-3 text-[0.84375rem] leading-[1.6]"
         />
 
         <input type="hidden" name="compartir" value={compartir ? "si" : "no"} />
@@ -101,7 +101,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
             type="button"
             aria-pressed={compartir}
             onClick={() => setCompartir((c) => !c)}
-            className="cursor-pointer rounded-lg border px-3.5 py-2.5 text-[12px] font-bold"
+            className="cursor-pointer rounded-lg border px-3.5 py-2.5 text-[0.75rem] font-bold"
             style={
               compartir
                 ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
@@ -112,19 +112,19 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
           </button>
           <div className="flex items-center gap-2.5">
             {estado?.ok && (
-              <span role="status" className="text-[11.5px] font-semibold text-secundario-fuerte">
+              <span role="status" className="text-[0.71875rem] font-semibold text-secundario-fuerte">
                 {estado.ok}
               </span>
             )}
             {estado?.error && (
-              <span role="alert" className="text-[11.5px] font-semibold text-peligro">
+              <span role="alert" className="text-[0.71875rem] font-semibold text-peligro">
                 {estado.error}
               </span>
             )}
             <button
               type="submit"
               disabled={pendiente}
-              className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-[11px] text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+              className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-[11px] text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
             >
               {pendiente ? "Guardando..." : "Guardar entrada"}
             </button>
@@ -145,15 +145,15 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
               <div className="flex items-center justify-between gap-2.5">
                 <div className="flex items-center gap-2">
                   <span
-                    className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold tracking-[.06em]"
+                    className="rounded-full px-[9px] py-[3px] text-[0.65625rem] font-bold tracking-[.06em]"
                     style={{ background: emo?.tinte ?? "#F3F0EC", color }}
                   >
                     {d.emocion}
                   </span>
-                  <span className="text-[11px] text-suave">{d.fecha}</span>
+                  <span className="text-[0.6875rem] text-suave">{d.fecha}</span>
                 </div>
                 <span
-                  className="rounded-full px-[9px] py-[3px] text-[9.5px] font-extrabold tracking-[.07em]"
+                  className="rounded-full px-[9px] py-[3px] text-[0.59375rem] font-extrabold tracking-[.07em]"
                   style={{
                     background: d.privada ? "#F3F0EC" : "#E5F1F0",
                     color: d.privada ? "#6D6762" : "#177575",
@@ -162,13 +162,13 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
                   {d.privada ? "PRIVADA" : "COMPARTIDA CON DOCENTE"}
                 </span>
               </div>
-              <p className="mt-2.5 text-[13.5px] leading-[1.7] text-tinta-media">{d.texto}</p>
+              <p className="mt-2.5 text-[0.84375rem] leading-[1.7] text-tinta-media">{d.texto}</p>
               <ComentariosDocente comentarios={d.comentarios} compacto />
             </div>
           );
         })}
         {entradas.length === 0 && (
-          <p className="py-8 text-center text-[13px] text-tenue">
+          <p className="py-8 text-center text-[0.8125rem] text-tenue">
             Todavía no has escrito ninguna entrada en tu diario.
           </p>
         )}

@@ -104,7 +104,7 @@ export function LienzoDibujo({ onCambio }: { onCambio: (dibujo: Blob | null) => 
   }
 
   const boton = (activo: boolean) =>
-    `cursor-pointer rounded-full border px-2.5 py-1 text-[11px] font-bold ${
+    `cursor-pointer rounded-full border px-2.5 py-1 text-[0.6875rem] font-bold ${
       activo ? "border-secundario bg-secundario text-white" : "border-borde-campo bg-superficie text-apagado"
     }`;
 
@@ -134,10 +134,10 @@ export function LienzoDibujo({ onCambio }: { onCambio: (dibujo: Blob | null) => 
           </button>
         ))}
         <span className="mx-1 h-4 w-px bg-borde" aria-hidden="true" />
-        <button type="button" onClick={deshacer} disabled={pasos === 0} className="cursor-pointer text-[11.5px] font-bold text-secundario-fuerte disabled:opacity-40">
+        <button type="button" onClick={deshacer} disabled={pasos === 0} className="cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte disabled:opacity-40">
           Deshacer
         </button>
-        <button type="button" onClick={borrarTodo} disabled={pasos === 0} className="cursor-pointer text-[11.5px] font-bold text-apagado hover:text-peligro disabled:opacity-40">
+        <button type="button" onClick={borrarTodo} disabled={pasos === 0} className="cursor-pointer text-[0.71875rem] font-bold text-apagado hover:text-peligro disabled:opacity-40">
           Borrar todo
         </button>
       </div>
@@ -153,7 +153,7 @@ export function LienzoDibujo({ onCambio }: { onCambio: (dibujo: Blob | null) => 
         onPointerCancel={terminar}
         className="aspect-[3/2] w-full cursor-crosshair touch-none rounded-lg border border-borde-campo bg-white"
       />
-      <p className="text-[11px] text-suave">¿Prefieres dibujar en papel? Elige «Foto de un dibujo o una obra» y súbela.</p>
+      <p className="text-[0.6875rem] text-suave">¿Prefieres dibujar en papel? Elige «Foto de un dibujo o una obra» y súbela.</p>
     </div>
   );
 }

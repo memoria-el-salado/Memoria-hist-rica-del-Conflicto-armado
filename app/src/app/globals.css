@@ -124,7 +124,7 @@
   border-radius: 8px;
   background: var(--color-tinta);
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: #fff;
 }
@@ -133,14 +133,12 @@
   color: #fff;
 }
 
-/* Escala de texto accesible (A / A+ / A++) aplicada al contenido principal. */
-[data-escala="1"] {
-  font-size: 100%;
-}
-[data-escala="1.12"] {
+/* Escala de texto accesible (A / A+ / A++): todo el texto está en rem, así que
+   cambiar la raíz agranda la interfaz entera (src/lib/escala-texto.ts). */
+html[data-escala="1.12"] {
   font-size: 112%;
 }
-[data-escala="1.25"] {
+html[data-escala="1.25"] {
   font-size: 125%;
 }
 

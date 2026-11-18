@@ -39,12 +39,12 @@ export default async function EstudianteLayout({ children }: { children: React.R
 function SinAula() {
   return (
     <section aria-labelledby="titulo-sin-aula" className="animar-aparecer max-w-[620px] rounded-xl border border-terciario-borde bg-terciario-tinte px-6 py-6">
-      <h1 id="titulo-sin-aula" className="text-[20px] font-extrabold text-tinta-media">Todavía no estás en un aula</h1>
-      <p className="mt-2 text-[13.5px] leading-[1.65] text-apagado">
+      <h1 id="titulo-sin-aula" className="text-[1.25rem] font-extrabold text-tinta-media">Todavía no estás en un aula</h1>
+      <p className="mt-2 text-[0.84375rem] leading-[1.65] text-apagado">
         Tu cuenta ya funciona, pero aún no está conectada con un docente. Cuando la administración te asigne a su aula,
         aquí verás el mapa del viaje, las sesiones y los debates de tu curso.
       </p>
-      <p className="mt-2 text-[13.5px] leading-[1.65] text-apagado">Si crees que es un error, avísale a tu docente.</p>
+      <p className="mt-2 text-[0.84375rem] leading-[1.65] text-apagado">Si crees que es un error, avísale a tu docente.</p>
     </section>
   );
 }

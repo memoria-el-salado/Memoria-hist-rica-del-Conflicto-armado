@@ -16,10 +16,10 @@ export function EleccionExplorador({ nombre, actual }: { nombre: string; actual:
 
   return (
     <div className="animar-aparecer mx-auto max-w-[640px] py-6">
-      <h1 className="text-center text-[26px] font-extrabold tracking-[-.02em] text-primario-fuerte">
+      <h1 className="text-center text-[1.625rem] font-extrabold tracking-[-.02em] text-primario-fuerte">
         {actual ? "Cambia tu explorador" : `¡Bienvenido a Memoria El Salado${nombre ? `, ${nombre}` : ""}!`}
       </h1>
-      <p className="mx-auto mt-2 max-w-[460px] text-center text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mx-auto mt-2 max-w-[460px] text-center text-[0.84375rem] leading-[1.65] text-apagado">
         Antes de empezar, elige el explorador que te acompañará en el viaje por la memoria.
       </p>
 
@@ -35,7 +35,7 @@ export function EleccionExplorador({ nombre, actual }: { nombre: string; actual:
         className="mt-6 rounded-2xl border border-borde bg-superficie p-6"
       >
         <fieldset>
-          <legend className="text-[14px] font-extrabold">Elige tu explorador</legend>
+          <legend className="text-[0.875rem] font-extrabold">Elige tu explorador</legend>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {EXPLORADORES.map((e) => (
               <label
@@ -46,21 +46,21 @@ export function EleccionExplorador({ nombre, actual }: { nombre: string; actual:
               >
                 <input type="radio" name="explorador" value={e.id} checked={elegido === e.id} onChange={() => setElegido(e.id)} className="sr-only" />
                 <AvatarExplorador tipo={e.id} tamano={84} />
-                <span className="text-[11px] font-extrabold tracking-[.1em]">{e.nombre.toUpperCase()}</span>
-                <span className="text-[11px] leading-snug text-tenue">{e.lema}</span>
+                <span className="text-[0.6875rem] font-extrabold tracking-[.1em]">{e.nombre.toUpperCase()}</span>
+                <span className="text-[0.6875rem] leading-snug text-tenue">{e.lema}</span>
               </label>
             ))}
           </div>
         </fieldset>
         {error && (
-          <p role="alert" className="mt-3 text-[12px] font-semibold text-peligro">
+          <p role="alert" className="mt-3 text-[0.75rem] font-semibold text-peligro">
             {error}
           </p>
         )}
         <button
           type="submit"
           disabled={pendiente}
-          className="mt-5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[14px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+          className="mt-5 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.875rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
         >
           {pendiente ? "Guardando..." : "Continuar al mapa →"}
         </button>

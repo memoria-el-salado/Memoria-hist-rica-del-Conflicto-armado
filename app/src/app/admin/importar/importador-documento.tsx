@@ -240,17 +240,17 @@ export function ImportadorDocumento({
     arbol?.reduce((s, e) => s + e.sesiones.reduce((t, x) => t + x.subsecciones.length, 0), 0) ?? 0;
 
   const claseCampo =
-    "w-full rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[13px]";
+    "w-full rounded-md border border-borde-campo bg-superficie px-2.5 py-1.5 text-[0.8125rem]";
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
         CU09 · CREACIÓN DE MÓDULOS
       </div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
         Importar módulo desde un documento
       </h1>
-      <p className="mb-5 max-w-[680px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[680px] text-[0.84375rem] leading-[1.65] text-apagado">
         Construye la ruta pedagógica a partir de una guía en PDF. Puedes analizar uno de los
         documentos ya cargados (abajo) o subir uno nuevo. El sistema detecta los ejes, las sesiones y
         las subsecciones por su numeración, y tú revisas la estructura y asignas la actividad de cada
@@ -258,7 +258,7 @@ export function ImportadorDocumento({
       </p>
 
       <form action={accionAnalizar} className="mb-[18px] rounded-xl border border-borde bg-superficie p-5">
-        <label htmlFor="archivo" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+        <label htmlFor="archivo" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
           SUBIR UN DOCUMENTO NUEVO
         </label>
         <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -268,12 +268,12 @@ export function ImportadorDocumento({
             type="file"
             accept="application/pdf,.pdf"
             required
-            className="flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1.5 file:text-[12px] file:font-bold file:text-primario-fuerte"
+            className="flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1.5 file:text-[0.75rem] file:font-bold file:text-primario-fuerte"
           />
           <button
             type="submit"
             disabled={analizando}
-            className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-2.5 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+            className="cursor-pointer rounded-lg bg-primario-fuerte px-[18px] py-2.5 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
             {!analizando
               ? "Analizar documento"
@@ -282,12 +282,12 @@ export function ImportadorDocumento({
                 : "Analizando..."}
           </button>
         </div>
-        <p className="mt-2 text-[11px] text-suave">
+        <p className="mt-2 text-[0.6875rem] text-suave">
           Admite las guías completas del CNMH, de hasta 50 MB. El PDF debe tener texto
           seleccionable: si está escaneado como imagen, primero necesita OCR.
         </p>
         {analisis?.error && (
-          <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+          <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
             {analisis.error}
           </div>
         )}
@@ -297,10 +297,10 @@ export function ImportadorDocumento({
         <div className="animar-aparecer rounded-xl border border-borde bg-superficie p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <div>
-              <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+              <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
                 REVISA LA ESTRUCTURA DETECTADA
               </div>
-              <div className="mt-1 text-[11.5px] text-suave">
+              <div className="mt-1 text-[0.71875rem] text-suave">
                 {vigente.tituloDocumento} · {vigente.paginas} páginas · {arbol.length} ejes,{" "}
                 {totalSesiones} sesiones, {totalSubsecciones} subsecciones
               </div>
@@ -310,13 +310,13 @@ export function ImportadorDocumento({
                 setArbol(null);
                 setAnalisisPrevio(null);
               }}
-              className="cursor-pointer rounded-lg border border-borde-campo px-3 py-1.5 text-[12px] font-semibold text-apagado"
+              className="cursor-pointer rounded-lg border border-borde-campo px-3 py-1.5 text-[0.75rem] font-semibold text-apagado"
             >
               Descartar
             </button>
           </div>
 
-          <div className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2.5 text-[11.5px] leading-[1.6] text-apagado">
+          <div className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2.5 text-[0.71875rem] leading-[1.6] text-apagado">
             La detección es automática y el PDF suele traer títulos partidos en columnas. Corrige aquí lo
             que haga falta y elimina lo que no corresponda: nada se guarda hasta que confirmes.
           </div>
@@ -325,7 +325,7 @@ export function ImportadorDocumento({
             {arbol.map((eje) => (
               <div key={eje.codigo} className="rounded-[10px] border border-borde bg-superficie-suave p-3.5">
                 <div className="flex items-center gap-2.5">
-                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-md bg-primario text-[12px] font-extrabold text-white">
+                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-md bg-primario text-[0.75rem] font-extrabold text-white">
                     {eje.codigo}
                   </span>
                   <label className="sr-only" htmlFor={`eje-${eje.codigo}`}>
@@ -340,7 +340,7 @@ export function ImportadorDocumento({
                   <button
                     onClick={() => quitarEje(eje.codigo)}
                     aria-label={`Quitar el eje ${eje.codigo}`}
-                    className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11px] font-bold text-tenue hover:border-peligro hover:text-peligro"
+                    className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[0.6875rem] font-bold text-tenue hover:border-peligro hover:text-peligro"
                   >
                     Quitar
                   </button>
@@ -350,7 +350,7 @@ export function ImportadorDocumento({
                   {eje.sesiones.map((sesion) => (
                     <div key={sesion.codigo} className="border-l-2 border-borde pl-3">
                       <div className="flex items-center gap-2">
-                        <span className="w-9 flex-none text-[11px] font-extrabold text-primario-fuerte">
+                        <span className="w-9 flex-none text-[0.6875rem] font-extrabold text-primario-fuerte">
                           {sesion.codigo}
                         </span>
                         <label className="sr-only" htmlFor={`ses-${sesion.codigo}`}>
@@ -365,7 +365,7 @@ export function ImportadorDocumento({
                         <button
                           onClick={() => quitarSesion(eje.codigo, sesion.codigo)}
                           aria-label={`Quitar la sesión ${sesion.codigo}`}
-                          className="cursor-pointer rounded-md border border-borde-campo px-2 py-1.5 text-[11px] text-tenue hover:border-peligro hover:text-peligro"
+                          className="cursor-pointer rounded-md border border-borde-campo px-2 py-1.5 text-[0.6875rem] text-tenue hover:border-peligro hover:text-peligro"
                         >
                           ✕
                         </button>
@@ -374,7 +374,7 @@ export function ImportadorDocumento({
                       <div className="mt-1.5 flex flex-wrap items-center gap-2 pl-9">
                         <label
                           htmlFor={`act-${sesion.codigo}`}
-                          className="text-[10px] font-bold tracking-[.1em] text-suave"
+                          className="text-[0.625rem] font-bold tracking-[.1em] text-suave"
                         >
                           ACTIVIDAD
                         </label>
@@ -382,7 +382,7 @@ export function ImportadorDocumento({
                           id={`act-${sesion.codigo}`}
                           value={sesion.actividad}
                           onChange={(e) => editarActividad(eje.codigo, sesion.codigo, e.target.value)}
-                          className="rounded-md border border-borde-campo bg-superficie px-2 py-1 text-[12px]"
+                          className="rounded-md border border-borde-campo bg-superficie px-2 py-1 text-[0.75rem]"
                         >
                           {GRUPOS_DE_ACTIVIDADES.map((g) => (
                             <optgroup key={g.etiqueta} label={g.etiqueta}>
@@ -397,12 +397,12 @@ export function ImportadorDocumento({
 
                         <button
                           onClick={() => alternarTexto(sesion.codigo)}
-                          className="cursor-pointer text-[11px] font-semibold text-apagado hover:text-primario-texto"
+                          className="cursor-pointer text-[0.6875rem] font-semibold text-apagado hover:text-primario-texto"
                         >
                           {textoAbierto === sesion.codigo ? "Ocultar texto" : "Texto de la sesión"}
                         </button>
                         <span
-                          className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                          className="rounded-full px-2 py-0.5 text-[0.625rem] font-bold"
                           style={
                             sesion.contenido.trim().length >= 200
                               ? { background: "#E5F1F0", color: "#177575" }
@@ -423,9 +423,9 @@ export function ImportadorDocumento({
                             value={sesion.contenido}
                             onChange={(e) => editarContenido(eje.codigo, sesion.codigo, e.target.value)}
                             placeholder="Pega aquí el texto que leerá el estudiante en esta sesión."
-                            className="h-[180px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[12.5px] leading-[1.6]"
+                            className="h-[180px] w-full resize-y rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.78125rem] leading-[1.6]"
                           />
-                          <p className="mt-1 text-[11px] leading-[1.5] text-suave">
+                          <p className="mt-1 text-[0.6875rem] leading-[1.5] text-suave">
                             Es lo que el estudiante lee al abrir la actividad. El importador lo saca
                             del PDF cuando el documento numera sus apartados; si quedó vacío o
                             incompleto, complétalo aquí antes de crear el módulo.
@@ -437,7 +437,7 @@ export function ImportadorDocumento({
                         <div className="mt-1.5 grid gap-1.5 pl-9">
                           {sesion.subsecciones.map((sub) => (
                             <div key={sub.codigo} className="flex items-center gap-2">
-                              <span className="w-11 flex-none text-[10.5px] font-bold text-suave">
+                              <span className="w-11 flex-none text-[0.65625rem] font-bold text-suave">
                                 {sub.codigo}
                               </span>
                               <label className="sr-only" htmlFor={`sub-${sub.codigo}`}>
@@ -449,7 +449,7 @@ export function ImportadorDocumento({
                                 onChange={(e) =>
                                   editarSubseccion(eje.codigo, sesion.codigo, sub.codigo, e.target.value)
                                 }
-                                className={`${claseCampo} text-[12px]`}
+                                className={`${claseCampo} text-[0.75rem]`}
                               />
                             </div>
                           ))}
@@ -464,7 +464,7 @@ export function ImportadorDocumento({
 
           <div className="mt-5 grid gap-3 border-t border-borde pt-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="nombre" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="nombre" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 NOMBRE DEL CASO DE ESTUDIO
               </label>
               <input
@@ -472,11 +472,11 @@ export function ImportadorDocumento({
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="ej. El Salado"
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
               />
             </div>
             <div>
-              <label htmlFor="depto" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="depto" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 DEPARTAMENTO O REGIÓN
               </label>
               <input
@@ -484,14 +484,14 @@ export function ImportadorDocumento({
                 value={depto}
                 onChange={(e) => setDepto(e.target.value)}
                 placeholder="ej. Bolívar · Montes de María"
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
               />
             </div>
           </div>
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="lat" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="lat" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 LATITUD (OPCIONAL)
               </label>
               <input
@@ -500,11 +500,11 @@ export function ImportadorDocumento({
                 value={lat}
                 onChange={(e) => setLat(e.target.value)}
                 placeholder="ej. 9.62"
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
               />
             </div>
             <div>
-              <label htmlFor="lon" className="text-[10px] font-bold tracking-[.12em] text-tenue">
+              <label htmlFor="lon" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 LONGITUD (OPCIONAL)
               </label>
               <input
@@ -513,11 +513,11 @@ export function ImportadorDocumento({
                 value={lon}
                 onChange={(e) => setLon(e.target.value)}
                 placeholder="ej. -75.13"
-                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+                className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
               />
             </div>
           </div>
-          <p className="mt-1.5 text-[11px] text-suave">
+          <p className="mt-1.5 text-[0.6875rem] text-suave">
             Si indicas las coordenadas, el caso aparece ubicado en el mapa de Colombia del estudiante.
           </p>
 
@@ -528,7 +528,7 @@ export function ImportadorDocumento({
               onChange={(e) => setActivo(e.target.checked)}
               className="mt-0.5"
             />
-            <span className="text-[12.5px] leading-[1.55] text-apagado">
+            <span className="text-[0.78125rem] leading-[1.55] text-apagado">
               <strong className="font-bold text-tinta">Activar este módulo</strong> como la ruta
               pedagógica que ven los estudiantes. Solo un módulo puede estar activo a la vez.
             </span>
@@ -537,7 +537,7 @@ export function ImportadorDocumento({
           <button
             onClick={confirmar}
             disabled={guardando}
-            className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+            className="mt-3 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
             {guardando ? "Creando módulo..." : "Crear módulo con esta estructura"}
           </button>
@@ -545,21 +545,21 @@ export function ImportadorDocumento({
       )}
 
       {mensaje?.ok && (
-        <div role="status" className="mt-4 rounded-lg border border-secundario-borde bg-secundario-tinte px-4 py-3 text-[12.5px] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-4 rounded-lg border border-secundario-borde bg-secundario-tinte px-4 py-3 text-[0.78125rem] font-semibold text-secundario-fuerte">
           {mensaje.ok}
         </div>
       )}
       {mensaje?.error && (
-        <div role="alert" className="mt-4 rounded-lg border border-primario-borde bg-primario-tinte px-4 py-3 text-[12.5px] font-semibold text-peligro">
+        <div role="alert" className="mt-4 rounded-lg border border-primario-borde bg-primario-tinte px-4 py-3 text-[0.78125rem] font-semibold text-peligro">
           {mensaje.error}
         </div>
       )}
 
       <div className="mt-6">
-        <div className="text-[11px] font-bold tracking-[.12em] text-tenue">DOCUMENTOS FUENTE</div>
+        <div className="text-[0.6875rem] font-bold tracking-[.12em] text-tenue">DOCUMENTOS FUENTE</div>
         <div className="mt-2.5 overflow-hidden rounded-xl border border-borde bg-superficie">
           {documentos.length === 0 && (
-            <p className="px-4 py-6 text-center text-[12.5px] text-tenue">
+            <p className="px-4 py-6 text-center text-[0.78125rem] text-tenue">
               Todavía no se ha importado ningún documento.
             </p>
           )}
@@ -570,14 +570,14 @@ export function ImportadorDocumento({
             >
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[13px] font-bold">{d.titulo}</span>
+                  <span className="text-[0.8125rem] font-bold">{d.titulo}</span>
                   {d.soloDocentes && (
-                    <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[10px] font-bold text-[#5B4B8A]">
+                    <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[0.625rem] font-bold text-[#5B4B8A]">
                       Solo docentes
                     </span>
                   )}
                 </div>
-                <div className="text-[11px] text-suave">
+                <div className="text-[0.6875rem] text-suave">
                   {d.nombreArchivo} · {d.paginas} páginas · {d.subidoEn}
                 </div>
               </div>
@@ -590,7 +590,7 @@ export function ImportadorDocumento({
                 value={d.casoId ?? ""}
                 onChange={(e) => vincular(d.id, e.target.value)}
                 disabled={borrando}
-                className="max-w-[180px] rounded-md border border-borde-campo bg-superficie px-2 py-1.5 text-[11.5px]"
+                className="max-w-[180px] rounded-md border border-borde-campo bg-superficie px-2 py-1.5 text-[0.71875rem]"
               >
                 <option value="">Sin módulo</option>
                 {casos.map((c) => (
@@ -608,7 +608,7 @@ export function ImportadorDocumento({
                     ? "Ahora solo lo abren los docentes. Púlsalo para abrirlo también a los estudiantes."
                     : "Los estudiantes pueden abrirlo. Púlsalo para reservarlo al docente."
                 }
-                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-60"
+                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[0.71875rem] font-semibold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-60"
               >
                 {d.soloDocentes ? "Abrir a estudiantes" : "Reservar al docente"}
               </button>
@@ -616,7 +616,7 @@ export function ImportadorDocumento({
               <button
                 onClick={() => analizarCargado(d.id)}
                 disabled={analizandoPrevio}
-                className="cursor-pointer rounded-md bg-primario-fuerte px-2.5 py-1.5 text-[11.5px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+                className="cursor-pointer rounded-md bg-primario-fuerte px-2.5 py-1.5 text-[0.71875rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
               >
                 {analizandoPrevio ? "Analizando..." : "Analizar"}
               </button>
@@ -624,7 +624,7 @@ export function ImportadorDocumento({
                 href={`/api/documentos/${d.id}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
+                className="rounded-md border border-borde-campo px-2.5 py-1.5 text-[0.71875rem] font-semibold text-apagado no-underline hover:border-primario hover:text-primario-texto hover:no-underline"
               >
                 Ver PDF
               </a>
@@ -636,7 +636,7 @@ export function ImportadorDocumento({
                     ? "Elimina antes el módulo que se creó con este documento"
                     : "Quitar del repositorio para volver a subirlo"
                 }
-                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
+                className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[0.71875rem] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
               >
                 {borrando ? "..." : "Eliminar"}
               </button>

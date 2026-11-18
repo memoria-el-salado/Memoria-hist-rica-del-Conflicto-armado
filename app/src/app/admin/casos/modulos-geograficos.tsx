@@ -60,11 +60,11 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
-      <div className="text-[10.5px] font-bold tracking-[.14em] text-primario-texto">CU09 · MANTENIBILIDAD</div>
-      <h1 className="mb-1.5 mt-2 text-[26px] font-extrabold tracking-[-.02em]">
+      <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">CU09 · MANTENIBILIDAD</div>
+      <h1 className="mb-1.5 mt-2 text-[1.625rem] font-extrabold tracking-[-.02em]">
         Escalabilidad de Módulos Geográficos
       </h1>
-      <p className="mb-5 max-w-[660px] text-[13.5px] leading-[1.65] text-apagado">
+      <p className="mb-5 max-w-[660px] text-[0.84375rem] leading-[1.65] text-apagado">
         Añade nuevos casos de estudio reutilizando la arquitectura modular: cada caso hereda los ejes, las
         plantillas de sesión y los componentes de actividad.
       </p>
@@ -75,11 +75,11 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
             <div key={c.id} className="rounded-xl border border-borde bg-superficie p-[18px]">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-[15px] font-bold">{c.nombre}</div>
-                  <div className="mt-0.5 text-[11.5px] text-suave">{c.depto}</div>
+                  <div className="text-[0.9375rem] font-bold">{c.nombre}</div>
+                  <div className="mt-0.5 text-[0.71875rem] text-suave">{c.depto}</div>
                 </div>
                 <span
-                  className="rounded-full px-2.5 py-1 text-[9.5px] font-extrabold tracking-[.07em]"
+                  className="rounded-full px-2.5 py-1 text-[0.59375rem] font-extrabold tracking-[.07em]"
                   style={{
                     background: c.estado === "ACTIVO" ? "#E5F1F0" : "#FDF8EF",
                     color: c.estado === "ACTIVO" ? "#177575" : "#886216",
@@ -92,13 +92,13 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 {c.ejes.map((e) => (
                   <span
                     key={e}
-                    className="rounded-full border border-borde px-2.5 py-[3px] text-[10.5px] font-semibold text-apagado"
+                    className="rounded-full border border-borde px-2.5 py-[3px] text-[0.65625rem] font-semibold text-apagado"
                   >
                     {e}
                   </span>
                 ))}
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-[18px] text-[11.5px] text-tenue">
+              <div className="mt-3 flex flex-wrap items-center gap-[18px] text-[0.71875rem] text-tenue">
                 <span>
                   Recursos: <strong className="text-tinta">{c.recursos}</strong>
                 </span>
@@ -110,14 +110,14 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 </span>
                 <Link
                   href={`/admin/casos/${c.id}`}
-                  className="ml-auto text-[11.5px] font-bold text-secundario-fuerte no-underline hover:underline"
+                  className="ml-auto text-[0.71875rem] font-bold text-secundario-fuerte no-underline hover:underline"
                 >
                   Actividades de sus sesiones →
                 </Link>
                 <button
                   onClick={() => borrar(c.id, c.nombre, c.sesiones)}
                   disabled={borrando}
-                  className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[11.5px] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
+                  className="cursor-pointer rounded-md border border-borde-campo px-2.5 py-1.5 text-[0.71875rem] font-semibold text-apagado hover:border-peligro hover:text-peligro disabled:opacity-60"
                 >
                   {borrando ? "Eliminando..." : "Eliminar módulo"}
                 </button>
@@ -126,50 +126,50 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
           ))}
 
           {mensajeBorrado?.ok && (
-            <div role="status" className="text-[11.5px] font-semibold text-secundario-fuerte">
+            <div role="status" className="text-[0.71875rem] font-semibold text-secundario-fuerte">
               {mensajeBorrado.ok}
             </div>
           )}
           {mensajeBorrado?.error && (
-            <div role="alert" className="text-[11.5px] font-semibold text-peligro">
+            <div role="alert" className="text-[0.71875rem] font-semibold text-peligro">
               {mensajeBorrado.error}
             </div>
           )}
         </div>
 
         <form ref={formRef} action={accion} className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[12.5px] font-extrabold tracking-[.05em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
             NUEVO CASO DE ESTUDIO
           </div>
 
-          <label htmlFor="nombre" className="mt-3.5 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="nombre" className="mt-3.5 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             CORREGIMIENTO O MUNICIPIO
           </label>
           <input
             id="nombre"
             name="nombre"
             placeholder="ej. Bojayá"
-            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
           />
 
-          <label htmlFor="depto" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">
+          <label htmlFor="depto" className="mt-3 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
             DEPARTAMENTO
           </label>
           <input
             id="depto"
             name="depto"
             placeholder="ej. Chocó"
-            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
+            className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
           />
 
-          <div className="mt-3 text-[10px] font-bold tracking-[.12em] text-tenue">EJES HEREDADOS</div>
+          <div className="mt-3 text-[0.625rem] font-bold tracking-[.12em] text-tenue">EJES HEREDADOS</div>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {ejesBase.map((e) => {
               const activo = seleccionados.includes(e.numero);
               return (
                 <label
                   key={e.numero}
-                  className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[11px] font-bold"
+                  className="cursor-pointer rounded-full border px-[11px] py-1.5 text-[0.6875rem] font-bold"
                   style={
                     activo
                       ? { background: "#177D7D", borderColor: "#177D7D", color: "#fff" }
@@ -197,18 +197,18 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
           <button
             type="submit"
             disabled={pendiente}
-            className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[13px] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
+            className="mt-4 w-full cursor-pointer rounded-lg bg-primario-fuerte px-4 py-3 text-[0.8125rem] font-bold text-white hover:bg-primario-hover disabled:opacity-60"
           >
             {pendiente ? "Generando..." : "Generar módulo"}
           </button>
 
           {estado?.ok && (
-            <div role="status" className="mt-2.5 text-[11.5px] font-semibold text-secundario-fuerte">
+            <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
               {estado.ok}
             </div>
           )}
           {estado?.error && (
-            <div role="alert" className="mt-2.5 text-[11.5px] font-semibold text-peligro">
+            <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
               {estado.error}
             </div>
           )}

@@ -24,7 +24,7 @@ export function FormularioAcompanamiento({ sesionId }: { sesionId: string | null
 
   if (resultado?.ok) {
     return (
-      <div role="status" className="rounded-lg border border-secundario-borde bg-secundario-tinte px-3.5 py-3 text-[12.5px] leading-relaxed text-secundario-fuerte">
+      <div role="status" className="rounded-lg border border-secundario-borde bg-secundario-tinte px-3.5 py-3 text-[0.78125rem] leading-relaxed text-secundario-fuerte">
         {resultado.ok}
       </div>
     );
@@ -32,7 +32,7 @@ export function FormularioAcompanamiento({ sesionId }: { sesionId: string | null
 
   return (
     <form onSubmit={enviar} className="grid gap-2">
-      <label htmlFor={`mensaje-acompanamiento-${sesionId ?? "general"}`} className="text-[11.5px] font-semibold text-apagado">
+      <label htmlFor={`mensaje-acompanamiento-${sesionId ?? "general"}`} className="text-[0.71875rem] font-semibold text-apagado">
         Si quieres, cuéntale algo a tu docente <span className="font-normal text-suave">(opcional)</span>
       </label>
       <textarea
@@ -41,17 +41,17 @@ export function FormularioAcompanamiento({ sesionId }: { sesionId: string | null
         onChange={(e) => setMensaje(e.target.value)}
         maxLength={LIMITES_CUIDADO.mensajeMaximo}
         rows={3}
-        className="w-full rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[13px] leading-relaxed"
+        className="w-full rounded-lg border border-borde-campo bg-superficie px-3 py-2 text-[0.8125rem] leading-relaxed"
       />
       <button
         type="submit"
         disabled={enviando}
-        className="cursor-pointer justify-self-start rounded-lg bg-secundario-fuerte px-4 py-2.5 text-[12.5px] font-bold text-white hover:bg-secundario disabled:opacity-60"
+        className="cursor-pointer justify-self-start rounded-lg bg-secundario-fuerte px-4 py-2.5 text-[0.78125rem] font-bold text-white hover:bg-secundario disabled:opacity-60"
       >
         {enviando ? "Enviando..." : "Enviar a mi docente"}
       </button>
       {resultado?.error && (
-        <div role="alert" className="text-[12px] font-semibold text-peligro">
+        <div role="alert" className="text-[0.75rem] font-semibold text-peligro">
           {resultado.error}
         </div>
       )}
