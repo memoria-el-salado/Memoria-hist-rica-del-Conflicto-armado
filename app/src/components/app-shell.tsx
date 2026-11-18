@@ -139,10 +139,10 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         </ul>
 
         <div className="mt-auto hidden flex-col gap-3 md:flex">
-          {/* El docente va a los pedidos de acompañamiento que le llegaron. */}
+          {/* El docente va al registro de mensajes de sus estudiantes. */}
           {rol === "DOCENTE" && (
             <Link
-              href="/docente/panel#acompanamiento"
+              href="/docente/mensajes"
               className="flex items-center justify-center gap-2 rounded-[9px] bg-primario-fuerte px-3 py-[11px] text-[10.5px] font-extrabold tracking-[.07em] text-white no-underline hover:bg-primario-hover"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -175,7 +175,15 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-15 flex flex-wrap items-center justify-between gap-3.5 border-b border-borde bg-fondo/95 px-4 py-3 backdrop-blur-[8px] md:px-[26px] md:py-3.5">
-          <div className="flex min-w-0 items-baseline gap-3.5">
+          <div className="flex min-w-0 items-center gap-3.5">
+            {/* En el celular el menú lateral pasa abajo: el ícono queda arriba a la izquierda. */}
+            <Link
+              href={INICIO_POR_ROL[rol]}
+              aria-label="Memoria El Salado: ir al inicio"
+              className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-lg bg-primario-fuerte text-white md:hidden"
+            >
+              <IconoMemoria tamano={20} />
+            </Link>
             <span className="whitespace-nowrap text-[14px] font-extrabold tracking-[.1em] text-primario-fuerte">
               MEMORIA EL SALADO
             </span>

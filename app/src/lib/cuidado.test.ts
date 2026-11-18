@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   esRepeticion,
+  estadoDeMensajes,
+  registroDeMensajes,
   limpiarMensaje,
   ordenarSolicitudes,
   sesionDeRuta,
@@ -93,5 +95,37 @@ describe("unirMensajes", () => {
 
   it("si antes no había mensaje, queda el nuevo", () => {
     expect(unirMensajes(null, "Necesito salir un momento.")).toBe("Necesito salir un momento.");
+  });
+});
+
+describe("registro de mensajes", () => {
+  const d = (dia: number) => new Date(2026, 10, dia);
+  const pedidos = [
+    { id: "c", creadoEn: d(3), atendidaEn: null },
+    { id: "a", creadoEn: d(1), atendidaEn: d(2) },
+    { id: "b", creadoEn: d(2), atendidaEn: null },
+  ];
+
+  it("numera los casos del más antiguo al más reciente", () => {
+    const { casos } = registroDeMensajes(pedidos, "todos");
+    expect(Object.fromEntries(casos.map((c) => [c.id, c.numero]))).toEqual({ a: 1, b: 2, c: 3 });
+  });
+
+  it("los pendientes primero, lo más reciente arriba", () => {
+    expect(registroDeMensajes(pedidos, "todos").casos.map((c) => c.id)).toEqual(["c", "b", "a"]);
+  });
+
+  it("filtra por estado sin cambiar los números ni los totales", () => {
+    const pend = registroDeMensajes(pedidos, "pendientes");
+    expect(pend.casos.map((c) => c.numero)).toEqual([3, 2]);
+    expect([pend.pendientes, pend.atendidos]).toEqual([2, 1]);
+    expect(registroDeMensajes(pedidos, "atendidos").casos.map((c) => c.numero)).toEqual([1]);
+  });
+
+  it("lee el filtro de la dirección, con los pendientes por defecto", () => {
+    expect(estadoDeMensajes("todos")).toBe("todos");
+    expect(estadoDeMensajes(["atendidos"])).toBe("atendidos");
+    expect(estadoDeMensajes("otro")).toBe("pendientes");
+    expect(estadoDeMensajes(undefined)).toBe("pendientes");
   });
 });

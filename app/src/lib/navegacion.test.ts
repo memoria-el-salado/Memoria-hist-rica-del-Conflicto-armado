@@ -49,6 +49,7 @@ describe("separación de funcionalidades por rol", () => {
     expect(NAV_POR_ROL.DOCENTE.map((i) => i.href)).toContain("/docente/estudiantes");
     // Y los organiza en cursos y grupos; el estudiante no ve esa gestión.
     expect(NAV_POR_ROL.DOCENTE.map((i) => i.href)).toContain("/docente/cursos");
+    expect(NAV_POR_ROL.DOCENTE.map((i) => i.href)).toContain("/docente/mensajes");
     expect(NAV_POR_ROL.ESTUDIANTE.some((i) => /cursos/.test(i.href))).toBe(false);
     expect(NAV_POR_ROL.ESTUDIANTE.some((i) => /docentes|estudiantes/.test(i.href))).toBe(false);
   });

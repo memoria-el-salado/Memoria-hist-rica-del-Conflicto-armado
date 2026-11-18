@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTransition } from "react";
 import { marcarAtendida } from "./actions";
 
@@ -37,8 +38,8 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
 
       {solicitudes.length === 0 ? (
         <p className="mt-3 text-[12px] leading-[1.6] text-tenue">
-          Ningún estudiante ha pedido acompañamiento. Si alguno lo hace, desde una sesión con alerta o desde el
-          botón «Alerta de cuidado», aparecerá aquí.
+          Ningún estudiante ha pedido acompañamiento. Si alguno lo hace desde una sesión, aparecerá aquí y en
+          tus mensajes.
         </p>
       ) : (
         <ul className="mt-3 grid grid-cols-1 gap-2.5">
@@ -72,6 +73,9 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
           ))}
         </ul>
       )}
+      <Link href="/docente/mensajes" className="mt-3 inline-block text-[12px] font-bold text-secundario-fuerte">
+        Ver todos los mensajes →
+      </Link>
     </section>
   );
 }

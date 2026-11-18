@@ -163,6 +163,22 @@ await ejecutar(
     const atendidas = await prisma.solicitudAcompanamiento.count({ where: { docenteId: docente.id, atendidaEn: { not: null } } });
     comprobar("marca un pedido como atendido", atendidas === 1);
 
+    // --- El registro de mensajes: casos que se leen, no un chat ----------------
+    await doc.goto(`${BASE}/docente/mensajes`, { waitUntil: "networkidle0" });
+    comprobar("el registro de mensajes muestra lo que falta por atender", (await hay(doc, "Por atender (1)")) && (await hay(doc, "Atendidos (1)")));
+    comprobar("cada mensaje es un caso numerado, con el estudiante", (await doc.$$eval("article h2", (h) => h.map((e) => e.innerText))).some((t) => /^Caso \d+ · Prueba est1$/.test(t)));
+    comprobar("no tiene dónde responder: no es un chat", (await doc.$$("main textarea, main input[type=text]")).length === 0);
+    await capturar(doc, "cuidado-mensajes");
+    await doc.click("::-p-text(Marcar como atendido)");
+    await esperarTexto(doc, "No tienes mensajes por atender.");
+    comprobar("desde el registro también se marca como atendido", true);
+    await doc.goto(`${BASE}/docente/mensajes?estado=atendidos`, { waitUntil: "networkidle0" });
+    comprobar(
+      "y los atendidos quedan en el registro con su fecha",
+      (await hay(doc, "Atendidos (2)")) && (await doc.$$("article")).length === 2
+    );
+    comprobar("el menú lleva al registro", Boolean(await doc.$('nav a[href="/docente/mensajes"]')));
+
     // --- Otro docente no ve los pedidos de este grupo -----------------------
     const otroDoc = await como(navegador, "prueba.otro.docente", "DOCENTE");
     await otroDoc.goto(`${BASE}/docente/panel`, { waitUntil: "networkidle0" });
@@ -178,6 +194,7 @@ await ejecutar(
     comprobar("el administrador no tiene el botón de alerta", botonAdmin.length === 0);
 
     // --- El docente quita la alerta -----------------------------------------
+    await doc.goto(`${BASE}/docente/panel`, { waitUntil: "networkidle0" });
     await doc.click(`[aria-label="Quitar la alerta de la sesión ${sesion.codigo}"]`);
     await doc.waitForFunction(() => document.body.innerText.includes("Ninguna sesión tiene alerta"), { timeout: 20_000 });
     const sinAlerta = await prisma.sesion.findUnique({ where: { id: sesion.id } });
