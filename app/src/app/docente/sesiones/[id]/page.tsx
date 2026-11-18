@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { esGuiada, leerDatosGuiada, leerDilema, leerInvestigacion, repartoDeOpciones, SE_PLANTEA } from "@/lib/actividades";
 import { cargarAnotaciones } from "@/lib/anotaciones-datos";
 import { cursoElegido, etiquetaCurso } from "@/lib/cursos";
-import { ACTIVIDADES } from "@/lib/importador-pdf";
+import { ACTIVIDADES, esEspecial } from "@/lib/importador-pdf";
 import { prisma } from "@/lib/prisma";
 import { Conversacion } from "@/components/anotaciones/conversacion";
 import { FiltroCurso } from "@/components/filtro-curso";
@@ -67,7 +67,8 @@ export default async function SesionDocentePage({
         ← Panel del docente
       </Link>
       <div className="mt-2 text-[10.5px] font-bold tracking-[.14em] text-primario-texto">
-        EJE {sesion.eje.numero} · {etiqueta.toUpperCase()}
+        EJE {sesion.eje.numero} · {esEspecial(sesion.pantalla) && "ACTIVIDAD ESPECIAL: "}
+        {etiqueta.toUpperCase()}
         {!sesion.publicada && <span className="text-suave"> · BORRADOR</span>}
       </div>
       <h1 className="mb-1.5 mt-1.5 text-[24px] font-extrabold leading-tight tracking-[-.02em]">

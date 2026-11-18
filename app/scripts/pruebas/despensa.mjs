@@ -78,6 +78,7 @@ await ejecutar("2.3 · Copla interactiva: la despensa del Caribe", async ({ abri
   // --- El primer estudiante hace su mapa ------------------------------------
   const est1 = await como(navegador, "prueba.est1", "ESTUDIANTE");
   await est1.goto(url, { waitUntil: "networkidle0" });
+  comprobar("se presenta como actividad especial", (await hay(est1, "ACTIVIDAD ESPECIAL")) && (await hay(est1, "Copla y mapa de la despensa")));
   comprobar("muestra los productos por ubicar y los lugares", (await hay(est1, "PRODUCTOS Y OFICIOS POR UBICAR")) && (await hay(est1, "La Cansona")));
   comprobar("sin haber guardado, todavía no muestra el mapa del curso", !(await hay(est1, "CÓMO LO UBICÓ TU CURSO")));
   comprobar("no guarda sin ubicar lo mínimo", await guardar(est1, "Ubica al menos 4 productos en el mapa (llevas 0)."));

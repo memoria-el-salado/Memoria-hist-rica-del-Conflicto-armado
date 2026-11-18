@@ -25,6 +25,8 @@ export type SesionDelMapa = {
   titulo: string;
   objetivo: string | null;
   tipo: string;
+  /** Material propio del proyecto, no de la cartilla. */
+  especial: boolean;
   publicada: boolean;
   completada: boolean;
   material: number;
@@ -462,7 +464,11 @@ function PanelEstacion({
                   )}
                 </div>
                 <div className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tracking-[.04em] text-suave">
-                  <span>Actividad: {s.tipo}</span>
+                  {s.especial ? (
+                    <span className="font-bold text-terciario-fuerte">Actividad especial: {s.tipo}</span>
+                  ) : (
+                    <span>Actividad: {s.tipo}</span>
+                  )}
                   {s.material > 0 && <span className="font-semibold text-secundario-fuerte">Material: {recursos(s.material)}</span>}
                 </div>
                 {s.objetivo && <p className="mt-1.5 text-[11.5px] leading-[1.6] text-apagado">{s.objetivo}</p>}

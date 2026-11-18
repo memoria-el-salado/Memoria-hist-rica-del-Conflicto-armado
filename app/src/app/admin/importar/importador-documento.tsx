@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
-import { ACTIVIDADES, type EjeArmado } from "@/lib/importador-pdf";
+import { GRUPOS_DE_ACTIVIDADES, type EjeArmado } from "@/lib/importador-pdf";
 import { subirConProgreso } from "@/lib/subir-con-progreso";
 import {
   alternarVisibilidadDocumento,
@@ -384,10 +384,14 @@ export function ImportadorDocumento({
                           onChange={(e) => editarActividad(eje.codigo, sesion.codigo, e.target.value)}
                           className="rounded-md border border-borde-campo bg-superficie px-2 py-1 text-[12px]"
                         >
-                          {ACTIVIDADES.map((a) => (
-                            <option key={a.valor} value={a.valor}>
-                              {a.etiqueta}
-                            </option>
+                          {GRUPOS_DE_ACTIVIDADES.map((g) => (
+                            <optgroup key={g.etiqueta} label={g.etiqueta}>
+                              {g.opciones.map((a) => (
+                                <option key={a.valor} value={a.valor}>
+                                  {a.etiqueta}
+                                </option>
+                              ))}
+                            </optgroup>
                           ))}
                         </select>
 

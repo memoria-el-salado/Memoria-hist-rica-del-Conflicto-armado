@@ -56,6 +56,7 @@ await ejecutar("4.4 · Simulador con plano de lotes", async ({ abrir }) => {
   const navegador = await abrir();
   const p = await como(navegador, "prueba.est1", "ESTUDIANTE");
   await p.goto(`${BASE}/estudiante/sesion/${modulo.sesionId}`, { waitUntil: "networkidle0" });
+  comprobar("se presenta como actividad especial", (await hay(p, "ACTIVIDAD ESPECIAL")) && (await hay(p, "Simulador de tierras")));
   comprobar("muestra los 20 lotes del plano y las 20 familias", (await p.$$("button[data-lote]")).length === 20 && (await p.$$('section[aria-labelledby="titulo-familias"] li')).length === 20);
   comprobar("con toda la tierra y el presupuesto disponibles", (await hay(p, "Familias sin tierra (20)")) && (await hay(p, "200 ha")) && (await hay(p, "$100.000")));
 

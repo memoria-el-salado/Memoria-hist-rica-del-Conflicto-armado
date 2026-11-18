@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ACTIVIDADES } from "@/lib/importador-pdf";
+import { ACTIVIDADES, GRUPOS_DE_ACTIVIDADES } from "@/lib/importador-pdf";
 import { aplicarSugeridas, cambiarActividad } from "../actions";
 
 type Sesion = { id: string; codigo: string; titulo: string; pantalla: string; publicada: boolean; sugerida: string };
@@ -80,10 +80,14 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
                   onChange={(ev) => cambiar(s, ev.target.value)}
                   className="rounded-lg border border-borde-campo bg-superficie-suave px-2.5 py-1.5 text-[12.5px] disabled:opacity-60"
                 >
-                  {ACTIVIDADES.map((a) => (
-                    <option key={a.valor} value={a.valor}>
-                      {a.etiqueta}
-                    </option>
+                  {GRUPOS_DE_ACTIVIDADES.map((g) => (
+                    <optgroup key={g.etiqueta} label={g.etiqueta}>
+                      {g.opciones.map((a) => (
+                        <option key={a.valor} value={a.valor}>
+                          {a.etiqueta}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </li>

@@ -5,7 +5,7 @@ import { avanceDeEstudiante } from "@/lib/avance";
 import { etiquetaCurso } from "@/lib/cursos";
 import { avanceDeCompetencias } from "@/lib/competencias";
 import { recorridoDe } from "@/lib/recorrido-datos";
-import { ACTIVIDADES } from "@/lib/importador-pdf";
+import { ACTIVIDADES, esEspecial } from "@/lib/importador-pdf";
 import { puedeVerRecurso } from "@/lib/recursos";
 import { siguienteDelViaje } from "@/lib/ruta";
 import { estadoAccesibilidad } from "@/lib/transcripcion";
@@ -105,6 +105,7 @@ export default async function MapaPage() {
         titulo: s.titulo,
         objetivo: s.objetivo,
         tipo: actividadDe.get(s.pantalla) ?? s.tipo,
+        especial: esEspecial(s.pantalla),
         material: materialDeSesion.get(s.id) ?? 0,
         pantalla: s.pantalla,
         publicada: s.publicada,

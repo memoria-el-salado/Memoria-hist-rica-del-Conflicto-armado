@@ -583,6 +583,25 @@ export const ACTIVIDADES = [
 export type Actividad = (typeof ACTIVIDADES)[number]["valor"];
 
 /**
+ * Las actividades especiales: material propio del proyecto (la cartografía
+ * social, la copla con el mapa de la despensa y el simulador de tierras). No
+ * salen de la cartilla ni llevan su numeración: dialogan con el contenido de la
+ * sesión que las acoge, y así se presentan al estudiante y al docente.
+ */
+export const ESPECIALES: readonly string[] = ["cartografia", "despensa", "simulador"];
+
+export const esEspecial = (pantalla: string) => ESPECIALES.includes(pantalla);
+
+/** El nombre de la actividad, tal como aparece en el selector del administrador. */
+export const nombreDeActividad = (pantalla: string) => ACTIVIDADES.find((a) => a.valor === pantalla)?.etiqueta ?? null;
+
+/** Las opciones del selector, con las especiales aparte de las de la cartilla. */
+export const GRUPOS_DE_ACTIVIDADES = [
+  { etiqueta: "Actividades de la sesión", opciones: ACTIVIDADES.filter((a) => !esEspecial(a.valor)) },
+  { etiqueta: "Actividades especiales", opciones: ACTIVIDADES.filter((a) => esEspecial(a.valor)) },
+];
+
+/**
  * Propone la actividad de una sesión a partir de su título y el de sus
  * subsecciones. Es solo una sugerencia: el administrador la confirma o la
  * cambia en la pantalla de revisión.

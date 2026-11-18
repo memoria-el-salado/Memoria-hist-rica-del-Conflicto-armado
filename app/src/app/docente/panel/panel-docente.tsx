@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { esGuiada, SE_PLANTEA } from "@/lib/actividades";
-import { ACTIVIDADES } from "@/lib/importador-pdf";
+import { ACTIVIDADES, esEspecial } from "@/lib/importador-pdf";
 import { alternarPublicacion } from "./actions";
 import { RepartoPesos, type EjePeso } from "./reparto-pesos";
 import { AlertasCuidado } from "./alertas-cuidado";
@@ -161,6 +161,7 @@ export function PanelDocente({
                     <div className="text-[10.5px] tracking-[.06em] text-suave">
                       {s.eje}
                       {" · "}
+                      {esEspecial(s.pantalla) && "ACTIVIDAD ESPECIAL: "}
                       {(ACTIVIDADES.find((a) => a.valor === s.pantalla)?.etiqueta ?? s.pantalla).toUpperCase()}
                       {s.alertaCuidado && " · CON ALERTA DE CUIDADO"}
                     </div>

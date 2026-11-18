@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { armarArbol, detectarEstructura, limpiarTitulo, sugerirActividad } from "./importador-pdf";
+import { ACTIVIDADES, GRUPOS_DE_ACTIVIDADES, armarArbol, detectarEstructura, esEspecial, limpiarTitulo, nombreDeActividad, sugerirActividad } from "./importador-pdf";
 
 // Fragmento representativo del texto que produce la extracción del PDF del CNMH:
 // columnas entremezcladas, encabezados repetidos y títulos truncados en el índice.
@@ -194,5 +194,25 @@ describe("sugerirActividad", () => {
     expect(sesiones.get("1.2")).toBe("despensa");
     expect(sesiones.get("1.1")).toBe("cartografia");
     expect(sesiones.get("2.2")).toBe("zona");
+  });
+});
+
+describe("actividades especiales", () => {
+  it("son la cartografía, la copla con la despensa y el simulador", () => {
+    expect(ACTIVIDADES.filter((a) => esEspecial(a.valor)).map((a) => a.valor)).toEqual(["cartografia", "despensa", "simulador"]);
+    expect(esEspecial("zona")).toBe(false);
+    expect(esEspecial("jardin")).toBe(false);
+  });
+
+  it("conservan su nombre", () => {
+    expect(nombreDeActividad("cartografia")).toBe("Cartografía social");
+    expect(nombreDeActividad("simulador")).toBe("Simulador de tierras");
+    expect(nombreDeActividad("no-existe")).toBeNull();
+  });
+
+  it("el selector las agrupa aparte sin perder ninguna", () => {
+    const [sesion, especiales] = GRUPOS_DE_ACTIVIDADES;
+    expect(especiales.opciones.map((a) => a.valor)).toEqual(["cartografia", "despensa", "simulador"]);
+    expect(sesion.opciones.length + especiales.opciones.length).toBe(ACTIVIDADES.length);
   });
 });

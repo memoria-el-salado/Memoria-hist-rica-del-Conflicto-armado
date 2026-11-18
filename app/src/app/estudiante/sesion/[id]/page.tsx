@@ -1,3 +1,4 @@
+import { esEspecial, nombreDeActividad } from "@/lib/importador-pdf";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
@@ -160,6 +161,7 @@ export default async function SesionPage({ params }: { params: Promise<{ id: str
     })),
     documento: documento ? { id: documento.id, titulo: documento.titulo, enlace: documento.enlace } : null,
     cartillas,
+    especial: esEspecial(sesion.pantalla) ? nombreDeActividad(sesion.pantalla) : null,
     ruta: {
       material: visibles,
       pasos: pasosDeSesion({

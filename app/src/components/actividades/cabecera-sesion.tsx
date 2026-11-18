@@ -32,6 +32,11 @@ export type DatosSesion = {
   /** Las cartillas del CNMH que acompañan la sesión, cada una en su página. */
   cartillas?: CartillaDeSesion[];
   /**
+   * El nombre de la actividad especial que acoge la sesión, si la tiene: es
+   * material propio del proyecto, no de la cartilla, y así se presenta.
+   */
+  especial?: string | null;
+  /**
    * La ruta de la sesión y el material para explorarla. Va en la cabecera para
    * que la información llegue antes que la actividad, como pidieron los
    * docentes que probaron la plataforma.
@@ -93,7 +98,26 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
       )}
       {/* Aquí empieza la actividad: el tercer paso de la ruta lleva hasta este punto. */}
       <span id="actividad" className="block scroll-mt-24" />
+      {sesion.especial && <RotuloEspecial nombre={sesion.especial} />}
     </header>
+  );
+}
+
+/**
+ * Anuncia la actividad especial: material propio del proyecto que dialoga con
+ * la cartilla sin ser parte de ella, por eso no lleva su numeración.
+ */
+export function RotuloEspecial({ nombre }: { nombre: string }) {
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-terciario-borde bg-terciario-tinte px-5 py-3.5">
+      <span className="rounded-full bg-terciario-fuerte px-2.5 py-1 text-[10.5px] font-bold tracking-[.08em] text-white">
+        ACTIVIDAD ESPECIAL
+      </span>
+      <span className="text-[15px] font-extrabold text-tinta-media">{nombre}</span>
+      <p className="basis-full text-[12px] leading-[1.55] text-apagado">
+        Material propio del proyecto que complementa el contenido de la cartilla.
+      </p>
+    </div>
   );
 }
 

@@ -34,6 +34,8 @@ async function abrirSesion(pagina, sesionId) {
 
 /** Marca un punto haciendo clic en el mapa, algo desplazado del centro. */
 async function marcarEnMapa(pagina, dx = 40, dy = -30) {
+  // Se lleva el mapa a la vista: un clic fuera de ella no le llega.
+  await pagina.$eval(".leaflet-container", (e) => e.scrollIntoView({ block: "center" }));
   const caja = await (await pagina.$(".leaflet-container")).boundingBox();
   await pagina.mouse.click(caja.x + caja.width / 2 + dx, caja.y + caja.height / 2 + dy);
   await esperarTexto(pagina, "Lat ");
@@ -84,6 +86,7 @@ await ejecutar("2.1 · Cartografía con voz, foto y en grupo", async ({ abrir })
   // --- El estudiante marca, graba y fotografía ------------------------------
   const est1 = await como(navegador, "prueba.est1", "ESTUDIANTE");
   await abrirSesion(est1, sesion.id);
+  comprobar("se presenta como actividad especial", (await hay(est1, "ACTIVIDAD ESPECIAL")) && (await hay(est1, "Cartografía social")));
   await marcarEnMapa(est1);
   await est1.type("#lugar", LUGAR);
   await est1.click("::-p-text(Sembrar en el mapa)");
