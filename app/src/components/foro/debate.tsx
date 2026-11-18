@@ -25,10 +25,13 @@ export function DebateForo({
   debate,
   volver,
   mediacion,
+  contexto,
 }: {
   debate: Debate;
   volver: string;
   mediacion?: Mediacion;
+  /** Lo que da pie al debate, como el lugar de la cartografía del que parte. */
+  contexto?: React.ReactNode;
 }) {
   const { foro, hilos, miPostura, conteo } = debate;
   const esDocente = Boolean(mediacion);
@@ -54,6 +57,8 @@ export function DebateForo({
           </span>
         )}
       </p>
+
+      {contexto}
 
       <div className="mb-5 grid gap-2.5 sm:grid-cols-2">
         {(["A", "B"] as const).map((p) => {

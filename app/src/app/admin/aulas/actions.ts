@@ -119,7 +119,10 @@ export async function crearAula(_prev: unknown, formData: FormData): Promise<Res
  * docente. Si se deja sin aula, la cuenta existe pero no ve contenidos hasta
  * que se le asigne.
  */
-export async function crearEstudianteEnAula(_prev: unknown, formData: FormData) {
+export async function crearEstudianteEnAula(
+  _prev: unknown,
+  formData: FormData
+): Promise<{ ok?: string; error?: string; entrega?: { nombre: string; usuario: string; contrasena: string } }> {
   if (!(await esAdmin())) return { error: "No autorizado." };
 
   const revision = validarAltaUsuario({

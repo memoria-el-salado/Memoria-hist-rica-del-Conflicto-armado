@@ -29,6 +29,7 @@
     "humo:cuidado": "node scripts/pruebas/cuidado.mjs",
     "humo:cursos": "node scripts/pruebas/cursos.mjs",
     "humo:cartografia": "node scripts/pruebas/cartografia.mjs",
+    "humo:comentarios": "node scripts/pruebas/comentarios-cartografia.mjs",
     "humo:jardin": "node scripts/pruebas/jardin.mjs",
     "humo:despensa": "node scripts/pruebas/despensa.mjs",
     "humo:actividades": "node scripts/pruebas/actividades.mjs",

@@ -32,6 +32,7 @@ const foroSchema = z.object({
   fuentes: z.string().trim().max(400).optional(),
   sesionId: z.string().optional(),
   cursoId: z.string().optional(),
+  marcaId: z.string().optional(),
 });
 
 export async function crearForo(_prev: unknown, formData: FormData) {
@@ -45,10 +46,16 @@ export async function crearForo(_prev: unknown, formData: FormData) {
     fuentes: formData.get("fuentes") ?? undefined,
     sesionId: formData.get("sesionId") || undefined,
     cursoId: formData.get("cursoId") || undefined,
+    marcaId: formData.get("marcaId") || undefined,
   });
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
-  const { sesionId, cursoId, fuentes, ...datos } = parsed.data;
+  const { sesionId, cursoId, marcaId, fuentes, ...datos } = parsed.data;
+  // Solo se puede debatir un lugar sembrado por un estudiante propio.
+  if (marcaId) {
+    const marca = await prisma.marcaCartografia.findUnique({ where: { id: marcaId }, select: { autor: { select: { creadoPorId: true } } } });
+    if (marca?.autor.creadoPorId !== quien.id) return { error: "Ese lugar no es de la cartografía de tus estudiantes." };
+  }
   if (sesionId && !(await prisma.sesion.findUnique({ where: { id: sesionId }, select: { id: true } }))) {
     return { error: "La sesión elegida ya no existe." };
   }
@@ -63,6 +70,7 @@ export async function crearForo(_prev: unknown, formData: FormData) {
       fuentes: fuentes || "Por asignar",
       sesionId: sesionId ?? null,
       cursoId: cursoId ?? null,
+      marcaId: marcaId ?? null,
       autorId: quien.id,
     },
   });

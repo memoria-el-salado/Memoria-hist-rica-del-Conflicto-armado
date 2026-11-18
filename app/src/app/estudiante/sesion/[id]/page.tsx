@@ -368,7 +368,16 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
           OR: aportesVisiblesPara({ id: userId, creadoPorId: yo?.creadoPorId ?? null, cursoId: yo?.cursoId ?? null }),
         },
         orderBy: { creadoEn: "asc" },
-        include: { autor: { select: { nombre: true } }, grupo: { select: { nombre: true } } },
+        include: {
+          autor: { select: { nombre: true } },
+          grupo: { select: { nombre: true } },
+          comentarios: { orderBy: { creadoEn: "asc" }, include: { autor: { select: { nombre: true, rol: true } } } },
+          // Los debates de su docente abiertos a partir del lugar, para su curso o para todos.
+          foros: {
+            where: { autorId: yo?.creadoPorId ?? "-", OR: [{ cursoId: null }, { cursoId: yo?.cursoId ?? "-" }] },
+            select: { id: true, pregunta: true },
+          },
+        },
       });
       return (
         <CartografiaSocial
@@ -386,6 +395,15 @@ async function pantallaDeActividad(pantalla: string, sesionId: string, datos: Da
             autor: m.autor.nombre,
             grupo: m.grupo?.nombre ?? null,
             propia: m.autorId === userId,
+            comentarios: m.comentarios.map((c) => ({
+              id: c.id,
+              autor: c.autor.nombre,
+              texto: c.texto,
+              cuando: fechaYHora(c.creadoEn),
+              delDocente: c.autor.rol === "DOCENTE",
+              borrable: c.autorId === userId,
+            })),
+            foros: m.foros.map((f) => ({ href: `/estudiante/foros/${f.id}`, pregunta: f.pregunta })),
           }))}
         />
       );

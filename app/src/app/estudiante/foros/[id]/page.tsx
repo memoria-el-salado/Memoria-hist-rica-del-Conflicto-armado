@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DebateForo } from "@/components/foro/debate";
 import { cargarDebate, quienSoy } from "@/lib/debate";
+import { LugarDelDebate } from "@/components/foro/lugar-del-debate";
 
 export default async function DebateEstudiantePage({ params }: { params: Promise<{ id: string }> }) {
   const quien = await quienSoy();
@@ -11,5 +12,11 @@ export default async function DebateEstudiantePage({ params }: { params: Promise
   const debate = await cargarDebate(id, quien);
   if (!debate) notFound();
 
-  return <DebateForo debate={debate} volver="/estudiante/foros" />;
+  return (
+    <DebateForo
+      debate={debate}
+      volver="/estudiante/foros"
+      contexto={<LugarDelDebate marcaId={debate.foro.marcaId} quien={quien} />}
+    />
+  );
 }

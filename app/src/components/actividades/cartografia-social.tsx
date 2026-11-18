@@ -15,6 +15,7 @@ import { subirConProgreso } from "@/lib/subir-con-progreso";
 import { CabeceraSesion, type DatosSesion } from "./cabecera-sesion";
 import { FotoLugar, type Foto } from "./foto-lugar";
 import { GrabadorRelato, type Grabacion } from "./grabador-relato";
+import { ComentariosLugar, type ComentarioVista } from "./comentarios-lugar";
 
 // Leaflet necesita el DOM, así que el mapa solo se carga en el navegador.
 const MapaReal = dynamic(() => import("@/components/mapa-real").then((m) => m.MapaReal), {
@@ -48,6 +49,9 @@ type Marca = {
   autor: string;
   grupo: string | null;
   propia: boolean;
+  comentarios: ComentarioVista[];
+  /** Debates que el docente abrió a partir de este lugar. */
+  foros: { href: string; pregunta: string }[];
 };
 
 export function CartografiaSocial({
@@ -261,6 +265,7 @@ export function CartografiaSocial({
                     </button>
                   )}
                 </div>
+                <ComentariosLugar marcaId={m.id} lugar={m.lugar} comentarios={m.comentarios} foros={m.foros} />
               </article>
             ))}
           </div>

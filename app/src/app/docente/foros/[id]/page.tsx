@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { DebateForo } from "@/components/foro/debate";
 import { cargarDebate, quienSoy } from "@/lib/debate";
 import { prisma } from "@/lib/prisma";
+import { LugarDelDebate } from "@/components/foro/lugar-del-debate";
 import { alternarDestacado, retirarMensaje } from "../actions";
 import { RepartoRoles } from "./reparto-roles";
 
@@ -29,6 +30,7 @@ export default async function DebateDocentePage({ params }: { params: Promise<{ 
         debate={debate}
         volver="/docente/foros"
         mediacion={{ destacar: alternarDestacado, retirar: retirarMensaje }}
+        contexto={<LugarDelDebate marcaId={debate.foro.marcaId} quien={quien} />}
       />
       <RepartoRoles
         foroId={id}

@@ -31,7 +31,8 @@ cartillas recortadas de El Salado se pueden leer dentro de cada sesión. El estu
 en un **mapa ilustrado** en el que los ejes son estaciones de un camino por los Montes de María.
 
 El docente organiza a sus estudiantes en cursos y grupos, decide si los ejes se recorren libres o en
-orden, comenta el trabajo desde Revisión y lee en **Mensajes** lo que le escriben los estudiantes que
+orden, comenta el trabajo desde Revisión y lee en **Mensajes** lo que le escriben, desde el botón
+«Acompañamiento» o desde una sesión, los estudiantes que
 no se sienten bien para continuar una sesión. Lo que un estudiante comparte lo ven solo su curso y su
 docente.
 
@@ -69,10 +70,10 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0 final. Cubre por completo los diez casos de uso del proyecto, los mockups revisados del
-documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 408 pruebas
+documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 411 pruebas
 unitarias —política de contraseñas, separación de funciones por rol, visibilidad entre cursos, aulas,
 reglas del simulador, importación de los PDF, ubicación de las cartillas, actividades de la cartilla,
-avance ponderado, competencias y subpoblaciones— y 27 pruebas de extremo a extremo que recorren cada
+avance ponderado, competencias y subpoblaciones— y 28 pruebas de extremo a extremo que recorren cada
 funcionalidad en un navegador real (`npm run humo:*`, sección 7). La auditoría automática de
 accesibilidad (WCAG 2.1 AA) no encuentra fallos en ninguna pantalla, y `npm run rendimiento` mide las
 Core Web Vitals de cada pantalla y la carga con usuarios simultáneos.
@@ -274,6 +275,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:transcripciones` | Un audio sin transcripción no se publica; con ella, el estudiante la sigue sincronizada y el video carga sus subtítulos |
 | `npm run humo:cursos` | Cursos y grupos: el docente los arma y reparte; panel, reportes y debates se filtran por curso, y otro docente no los ve |
 | `npm run humo:cartografia` | Un estudiante graba su relato, suma una foto que el navegador reduce y siembra el lugar a nombre de su grupo; solo su curso y su docente lo ven |
+| `npm run humo:comentarios` | Los compañeros comentan un lugar de la cartografía; otro curso no lo ve; el docente abre un debate a partir del lugar y el foro muestra sus comentarios, que se pueden seguir sumando desde ahí |
 | `npm run humo:jardin` | Flores con poema, dibujo hecho en el lienzo y foto de una obra; al abrirlas se ve la creación, solo dentro del curso |
 | `npm run humo:despensa` | La copla «Tierra de abundancia»: ubicar productos en los Montes de María tocando o arrastrando, explicar la despensa y comparar con el curso |
 | `npm run humo:actividades` | Me ubico, Dilema, A investigar, Testimonios y Compromiso: el docente plantea, el estudiante responde y ve lo de su curso; el administrador cambia actividades |
@@ -289,7 +291,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:actividades-cartilla` | Los ejercicios de la cartilla en cada sesión: ordenar, clasificar y responder con el número del apartado; se corrigen al guardar y el docente ve las respuestas |
 | `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 38 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
 | `npm run humo:ruta` | El mapa ilustrado (cómo funciona, por dónde seguir, estaciones que se tocan o se recorren con las flechas, panel a la vista y camino en zigzag en el celular) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
-| `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión y le escribe a su docente; el mensaje queda como un caso en el registro del docente, que lo marca como atendido |
+| `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión y le escribe a su docente, también desde el botón «Acompañamiento» del menú; el mensaje queda como un caso en «Mensajes» del docente, que lo marca como atendido |
 | `npm run humo:escala-texto` | Mide en el navegador que A+ y A++ agrandan un 12 % y un 25 % el título, el menú y la cabecera; la elección se recuerda al recargar y en el celular nada se desborda |
 | `npm run humo:aulas` | Sin docente, el estudiante no ve contenidos ni abre la cartilla; el administrador lo asigna a un aula, pasa un aula a otro docente con sus estudiantes, crea aulas y da de alta estudiantes en ellas |
 | `npm run rendimiento` | Core Web Vitals (TTFB, FCP, LCP, CLS) de 13 pantallas en computador y en un celular simulado, y carga con 1, 5, 10 y 20 usuarios simultáneos; deja el resultado en `reportes/rendimiento.json` |
@@ -372,7 +374,7 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU01 | Las cuatro competencias ciudadanas de la guía en el mapa, y recorrido libre o en orden por curso | `/estudiante/mapa`, `/docente/cursos/[id]` |
 | CU01 | El administrador asigna estudiantes y aulas a cada docente; sin docente, el estudiante no ve contenidos | `/admin/aulas` |
 | CU01 | El mapa ilustrado del viaje: los ejes como estaciones de un camino por los Montes de María, con el explorador del estudiante, «Continúa tu viaje», y cada sesión en cuatro pasos: explorar, reflexionar, hacer la actividad y leer la retroalimentación | `/estudiante/mapa`, `/estudiante/sesion/[id]` |
-| CU02 | Actividad especial: cartografía social sobre mapa real, con relato grabado, foto del lugar y marcas de grupo | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
+| CU02 | Actividad especial: cartografía social sobre mapa real, con relato grabado, foto del lugar, marcas de grupo y comentarios de los compañeros | Sesión con actividad `cartografia`, `/api/cartografia/[id]/[audio\|foto]` |
 | CU03 | Actividad especial: simulador de repartición de tierras sobre el plano de la finca «La Esperanza»: 20 lotes que se arrastran o se tocan, subsidios por familia, equidad y riesgo | Sesión con actividad `simulador` |
 | Guía 1.2.1 | Actividad especial: copla «Tierra de abundancia», con el mapa de productos de los Montes de María y el resumen del curso para la plenaria | Sesión con actividad `despensa` |
 | Cartilla | Los ejercicios de cada apartado del Eje 1 (1.1 a 1.4.2) y una investigación para cada «A investigar» de los demás ejes, corregidos al guardar y visibles para el docente | `/estudiante/sesion/[id]`, `/docente/sesiones/[id]` |
@@ -387,10 +389,10 @@ documentos-cnmh/            PDF del CNMH que carga la semilla
 | CU06 | Alertas de cuidado con texto del docente, y mensajes de acompañamiento que le llegan como casos para leer y marcar atendidos, sin chat | `/docente/panel`, `/docente/mensajes` |
 | Seguimiento | Revisión con comentarios del docente y campana de avisos (comentarios, sesiones publicadas, entregas y pedidos de acompañamiento) | `/docente/revision`, cabecera |
 | CU07 | Reportes por subpoblaciones, con consentimiento del acudiente y sin grupos de menos de cinco | `/docente/subpoblaciones`, `/docente/estudiantes` |
-| CU08 | Debates con roles, argumentos con fuente y mediación del docente | `/docente/foros`, `/estudiante/foros` |
+| CU08 | Debates con roles, argumentos con fuente y mediación del docente; un debate puede partir de un lugar de la cartografía y mostrar lo que el curso comentó de él | `/docente/foros`, `/estudiante/foros` |
 | CU09 | Escalabilidad de módulos geográficos | `/admin/casos` |
 | CU09 | Creación de módulos desde documentos PDF | `/admin/importar` |
-| CU10 | Transcripciones y subtítulos obligatorios, auditoría calculada a partir de los datos | `/admin/accesibilidad` |
+| CU10 | Accesibilidad del material de clase: transcripciones, subtítulos y descripciones obligatorios, calculados en vivo; sin ellos el estudiante no ve el recurso. La interfaz se audita aparte con axe-core | `/admin/accesibilidad` |
 
 **Las dos guías del CNMH.** Cada caso se publica en dos documentos: la guía del estudiante, que es
 la que se importa para construir el módulo, y la guía para maestros, que trae las orientaciones y lo

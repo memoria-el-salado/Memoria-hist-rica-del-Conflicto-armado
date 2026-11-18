@@ -82,6 +82,7 @@ model User {
 
   anotaciones        Anotacion[]
   marcas             MarcaCartografia[]
+  comentariosMarca   ComentarioMarca[]
   simulaciones       Simulacion[]
   floresJardin       FlorJardin[]
   entradasDiario     EntradaDiario[]
@@ -471,7 +472,27 @@ model MarcaCartografia {
   grupoId String?
   grupo   Grupo?  @relation(fields: [grupoId], references: [id], onDelete: SetNull)
 
+  /// Lo que opinan los compañeros y el docente sobre este lugar.
+  comentarios ComentarioMarca[]
+  /// Debates que el docente abrió a partir de este lugar.
+  foros       Foro[]
+
   @@index([sesionId])
+}
+
+/// Un comentario sobre un lugar de la cartografía social. Lo ve quien ve el
+/// lugar: el curso del autor y su docente.
+model ComentarioMarca {
+  id       String   @id @default(cuid())
+  texto    String   @db.Text
+  creadoEn DateTime @default(now())
+
+  marcaId String
+  marca   MarcaCartografia @relation(fields: [marcaId], references: [id], onDelete: Cascade)
+  autorId String
+  autor   User             @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  @@index([marcaId])
 }
 
 model Simulacion {
@@ -600,6 +621,11 @@ model Foro {
   /// Curso al que se abre. Sin curso, lo ven todos los estudiantes del docente.
   cursoId String?
   curso   Curso?  @relation(fields: [cursoId], references: [id], onDelete: SetNull)
+
+  /// Lugar de la cartografía social del que parte el debate, si lo hay: el
+  /// foro muestra el lugar y lo que el curso comentó sobre él.
+  marcaId String?
+  marca   MarcaCartografia? @relation(fields: [marcaId], references: [id], onDelete: SetNull)
 
   participantes ParticipanteForo[]
   mensajes      MensajeForo[]

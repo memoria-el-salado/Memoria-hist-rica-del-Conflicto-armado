@@ -80,3 +80,29 @@ export function quienesCuentan(marca: { autorId: string; grupoId: string | null 
   const grupo = marca.grupoId ? (miembros.get(marca.grupoId) ?? []) : [];
   return [...new Set([marca.autorId, ...grupo])];
 }
+
+/** Un comentario sobre un lugar: corto, como una opinión en el muro del curso. */
+export const LIMITES_COMENTARIO = { minimo: 2, maximo: 500 };
+
+/** El texto del comentario ya limpio, o el motivo por el que no se acepta. */
+export function validarComentario(texto: unknown): { texto: string } | { error: string } {
+  const limpio = String(texto ?? "").trim().replace(/\n{3,}/g, "\n\n");
+  if (limpio.length < LIMITES_COMENTARIO.minimo) return { error: "Escribe tu comentario." };
+  if (limpio.length > LIMITES_COMENTARIO.maximo) {
+    return { error: `El comentario puede tener hasta ${LIMITES_COMENTARIO.maximo} caracteres.` };
+  }
+  return { texto: limpio };
+}
+
+/**
+ * Quién puede borrar un comentario: quien lo escribió y el docente a cargo del
+ * autor del lugar, que modera la conversación de su curso.
+ */
+export function puedeBorrarComentario(
+  quien: { id: string; rol: string },
+  comentario: { autorId: string },
+  autorDelLugar: { creadoPorId: string | null }
+): boolean {
+  if (comentario.autorId === quien.id) return true;
+  return quien.rol === "DOCENTE" && autorDelLugar.creadoPorId === quien.id;
+}

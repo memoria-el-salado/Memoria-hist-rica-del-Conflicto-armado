@@ -116,6 +116,7 @@ export async function cargarDebate(foroId: string, quien: Quien) {
       abierto: foro.abierto,
       sesion: foro.sesion ? `${foro.sesion.codigo} · ${foro.sesion.titulo}` : null,
       cursoId: foro.cursoId,
+      marcaId: foro.marcaId,
       curso: foro.curso ? `${foro.curso.nombre} · ${foro.curso.anio}` : null,
     },
     hilos,

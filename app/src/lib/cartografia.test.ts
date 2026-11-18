@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  puedeBorrarComentario,
+  validarComentario,
   duracion,
   extensionDe,
   LIMITES_MARCA,
@@ -86,5 +88,26 @@ describe("quienesCuentan", () => {
 
   it("si el autor ya no está en el grupo, cuenta para él y para el grupo", () => {
     expect(quienesCuentan({ autorId: "e9", grupoId: "g1" }, miembros)).toEqual(["e9", "e1", "e2", "e3"]);
+  });
+});
+
+describe("comentarios de la cartografía", () => {
+  it("acepta un comentario y lo limpia", () => {
+    expect(validarComentario("  Yo también voy a ese río.  ")).toEqual({ texto: "Yo también voy a ese río." });
+    expect(validarComentario("a\n\n\n\nb")).toEqual({ texto: "a\n\nb" });
+  });
+
+  it("rechaza el vacío y lo demasiado largo", () => {
+    expect(validarComentario("   ")).toHaveProperty("error");
+    expect(validarComentario(null)).toHaveProperty("error");
+    expect(validarComentario("x".repeat(501))).toHaveProperty("error");
+  });
+
+  it("lo borra su autor o el docente del curso, nadie más", () => {
+    const lugar = { creadoPorId: "doc1" };
+    expect(puedeBorrarComentario({ id: "e1", rol: "ESTUDIANTE" }, { autorId: "e1" }, lugar)).toBe(true);
+    expect(puedeBorrarComentario({ id: "e2", rol: "ESTUDIANTE" }, { autorId: "e1" }, lugar)).toBe(false);
+    expect(puedeBorrarComentario({ id: "doc1", rol: "DOCENTE" }, { autorId: "e1" }, lugar)).toBe(true);
+    expect(puedeBorrarComentario({ id: "doc2", rol: "DOCENTE" }, { autorId: "e1" }, lugar)).toBe(false);
   });
 });

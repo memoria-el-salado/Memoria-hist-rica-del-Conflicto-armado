@@ -13,6 +13,8 @@ type Foro = {
   abierto: boolean;
   sesion: string | null;
   curso: string | null;
+  /** Lugar de la cartografía del que parte el debate. */
+  lugar: string | null;
   mensajes: number;
   participantes: number;
 };
@@ -23,10 +25,13 @@ export function MediacionForos({
   foros,
   sesiones,
   cursos,
+  lugares,
 }: {
   foros: Foro[];
   sesiones: Opciones;
   cursos: { id: string; etiqueta: string }[];
+  /** Lugares de la cartografía de sus estudiantes, los más comentados primero. */
+  lugares: { id: string; etiqueta: string }[];
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [, iniciarTransicion] = useTransition();
@@ -152,6 +157,29 @@ export function MediacionForos({
             </div>
           )}
         </div>
+        {lugares.length > 0 && (
+          <div className="mt-3">
+            <label htmlFor="marcaId" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
+              A PARTIR DE UN LUGAR DE LA CARTOGRAFÍA SOCIAL (OPCIONAL)
+            </label>
+            <select
+              id="marcaId"
+              name="marcaId"
+              defaultValue=""
+              className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem]"
+            >
+              <option value="">Ninguno</option>
+              {lugares.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.etiqueta}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-[0.6875rem] text-suave">
+              El foro mostrará el lugar y lo que el curso comentó sobre él, y se podrá seguir comentando desde ahí.
+            </p>
+          </div>
+        )}
         {estado?.error && (
           <div role="alert" className="mt-2.5 text-[0.71875rem] font-semibold text-peligro">
             {estado.error}
@@ -201,6 +229,7 @@ export function MediacionForos({
               <div className="text-[0.71875rem] text-suave">
                 Fuentes obligatorias: {f.fuentes}
                 {f.sesion && <> · Sesión {f.sesion}</>}
+                {f.lugar && <> · Lugar de la cartografía: {f.lugar}</>}
                 {" · "}
                 {f.curso ? `Curso ${f.curso}` : "Todos tus estudiantes"}
               </div>
