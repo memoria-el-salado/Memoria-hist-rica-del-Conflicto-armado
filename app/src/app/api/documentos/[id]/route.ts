@@ -1,3 +1,4 @@
+import { estudianteConAula } from "@/lib/aulas-datos";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { leerDocumento } from "@/lib/almacen";
@@ -12,6 +13,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const sesion = await auth();
   if (!sesion?.user) {
     return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  }
+
+  // Sin aula, el estudiante no ve contenidos: tampoco escribiendo la dirección.
+  if (sesion.user.rol === "ESTUDIANTE" && !(await estudianteConAula(sesion.user.id))) {
+    return NextResponse.json({ error: "Todavía no estás en el aula de un docente." }, { status: 403 });
   }
 
   const { id } = await params;

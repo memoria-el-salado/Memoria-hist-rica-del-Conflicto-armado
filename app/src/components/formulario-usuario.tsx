@@ -20,6 +20,8 @@ type Props = {
   sugerencia: string;
   /** Cursos del docente, para dejar al estudiante en uno desde el alta. */
   cursos?: { id: string; etiqueta: string }[];
+  /** Campos propios de quien usa el formulario, como el aula del estudiante. */
+  extra?: React.ReactNode;
   titulo: string;
   textoBoton: string;
   pendiente: boolean;
@@ -38,6 +40,7 @@ type Props = {
 export function FormularioUsuario({
   sugerencia,
   cursos,
+  extra,
   titulo,
   textoBoton,
   pendiente,
@@ -97,6 +100,7 @@ export function FormularioUsuario({
         className="mt-1.5 w-full rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[13px]"
       />
 
+      {extra}
       {cursos && (
         <>
           <label htmlFor="cursoId" className="mt-3 block text-[10px] font-bold tracking-[.12em] text-tenue">

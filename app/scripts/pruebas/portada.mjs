@@ -13,7 +13,8 @@ import { BASE, capturar, como, comprobar, crearCuenta, ejecutar } from "./entorn
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 
 await ejecutar("4.1 · La portada pública", async ({ abrir }) => {
-  await crearCuenta("est1", "ESTUDIANTE");
+  const docente = await crearCuenta("docente", "DOCENTE");
+  await crearCuenta("est1", "ESTUDIANTE", { creadoPorId: docente.id });
   const navegador = await abrir();
 
   const contexto = await navegador.createBrowserContext();

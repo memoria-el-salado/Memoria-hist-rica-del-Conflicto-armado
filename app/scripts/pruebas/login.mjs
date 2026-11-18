@@ -14,7 +14,9 @@ import { BASE, capturar, CLAVE, comprobar, crearCuenta, ejecutar, esperarTexto, 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 
 await ejecutar("4.2 · Login y primera entrada", async ({ abrir }) => {
-  const est = await crearCuenta("est1", "ESTUDIANTE", { nombre: "Prueba Estudiante", explorador: null });
+  // En el aula de un docente: sin él, el estudiante no ve los contenidos.
+  const docente = await crearCuenta("docente", "DOCENTE");
+  const est = await crearCuenta("est1", "ESTUDIANTE", { nombre: "Prueba Estudiante", explorador: null, creadoPorId: docente.id });
   const navegador = await abrir();
   const contexto = await navegador.createBrowserContext();
   const p = await contexto.newPage();

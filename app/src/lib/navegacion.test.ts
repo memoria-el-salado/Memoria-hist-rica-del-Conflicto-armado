@@ -54,9 +54,10 @@ describe("separación de funcionalidades por rol", () => {
     expect(NAV_POR_ROL.ESTUDIANTE.some((i) => /docentes|estudiantes/.test(i.href))).toBe(false);
   });
 
-  it("el administrador ve cuentas, escalabilidad, importación y accesibilidad", () => {
+  it("el administrador ve cuentas, aulas, escalabilidad, importación y accesibilidad", () => {
     expect(NAV_POR_ROL.ADMIN.map((i) => i.href)).toEqual([
       "/admin/docentes",
+      "/admin/aulas",
       "/admin/casos",
       "/admin/importar",
       "/admin/accesibilidad",

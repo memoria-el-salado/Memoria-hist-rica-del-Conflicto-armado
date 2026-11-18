@@ -1,3 +1,4 @@
+import { estudianteConAula } from "@/lib/aulas-datos";
 import { readFile } from "fs/promises";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
@@ -20,6 +21,11 @@ const VIGENCIA = 3 * 60 * 60;
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const sesion = await auth();
   if (!sesion?.user) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+
+  // Sin aula, el estudiante no ve contenidos: tampoco escribiendo la dirección.
+  if (sesion.user.rol === "ESTUDIANTE" && !(await estudianteConAula(sesion.user.id))) {
+    return NextResponse.json({ error: "Todavía no estás en el aula de un docente." }, { status: 403 });
+  }
 
   const { id } = await params;
   const recurso = await prisma.recurso.findUnique({

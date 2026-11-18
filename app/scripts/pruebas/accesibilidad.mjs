@@ -128,6 +128,7 @@ await ejecutar("Accesibilidad (WCAG 2.1 AA) y diseño responsivo", async ({ abri
       doc,
       [
         "/docente/panel",
+        "/docente/mensajes",
         "/docente/contenidos",
         "/docente/cursos",
         `/docente/cursos/${curso.id}`,
@@ -140,7 +141,7 @@ await ejecutar("Accesibilidad (WCAG 2.1 AA) y diseño responsivo", async ({ abri
         `/docente/sesiones/${modulo.sesiones[8]}`,
       ],
     ],
-    [adm, ["/admin/docentes", "/admin/importar", "/admin/casos", `/admin/casos/${modulo.casoId}`, "/admin/accesibilidad"]],
+    [adm, ["/admin/docentes", "/admin/aulas", "/admin/importar", "/admin/casos", `/admin/casos/${modulo.casoId}`, "/admin/accesibilidad"]],
   ];
 
   const soloRuta = process.env.RUTA;
