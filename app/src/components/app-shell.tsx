@@ -218,7 +218,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
       </nav>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-15 flex flex-wrap items-center justify-between gap-3.5 border-b border-borde bg-fondo/95 px-4 py-3 backdrop-blur-[8px] md:px-[26px] md:py-3.5">
+        <header className="relative z-15 flex flex-wrap md:sticky md:top-0 items-center justify-between gap-3.5 border-b border-borde bg-fondo/95 px-4 py-3 backdrop-blur-[8px] md:px-[26px] md:py-3.5">
           <div className="flex min-w-0 items-center gap-3.5">
             {/* En el celular el menú lateral pasa abajo: el ícono queda arriba a la izquierda. */}
             <Link
@@ -233,7 +233,8 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             </span>
             <span className="truncate text-[0.75rem] text-suave">{titulo}</span>
           </div>
-          <div className="flex items-center gap-2.5">
+          {/* En el celular el grupo puede pasar a otra línea antes que salirse de la pantalla. */}
+          <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 md:gap-2.5">
             {rol === "ESTUDIANTE" && (
               <button
                 onClick={() => setAyudaAbierta(true)}
@@ -245,7 +246,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                 </svg>
               </button>
             )}
-            <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-texto md:block">
+            <div className="hidden whitespace-nowrap rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-texto xl:block">
               {indicador}
             </div>
             {avisos && <Campana avisos={avisos.avisos} nuevos={avisos.nuevos} />}
@@ -262,9 +263,9 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             >
               {ETIQUETA_ESCALA[escala]}
             </button>
-            <div className="flex items-center gap-2 rounded-full border border-borde py-[5px] pl-2.5 pr-1.5">
-              <span className="flex flex-col items-end leading-tight">
-                <span className="max-w-[160px] truncate text-[0.71875rem] font-bold text-tinta-media" title={nombre}>
+            <div className="flex min-w-0 items-center gap-2 rounded-full border border-borde py-[5px] pl-2.5 pr-1.5">
+              <span className="flex min-w-0 flex-col items-end leading-tight">
+                <span className="max-w-[96px] truncate text-[0.71875rem] font-bold text-tinta-media sm:max-w-[140px] xl:max-w-[180px]" title={nombre}>
                   {nombre}
                 </span>
                 <span className="text-[0.625rem] font-semibold text-apagado">{ETIQUETA_ROL[rol]}</span>

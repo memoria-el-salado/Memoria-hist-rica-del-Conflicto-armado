@@ -8,7 +8,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:escala-texto
  */
-import { BASE, capturar, como, comprobar, crearCuenta, ejecutar } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, desborde, ejecutar } from "./entorno.mjs";
 
 /** Tamaño de letra calculado, en px, del primer elemento que coincide. */
 const tamano = (pagina, selector) =>
@@ -28,7 +28,6 @@ async function medir(pagina) {
 
 const boton = '[aria-label^="Tamaño de texto actual"]';
 const cerca = (a, b) => Math.abs(a - b) < 0.02;
-const desborde = (pagina) => pagina.evaluate(() => document.documentElement.scrollWidth - innerWidth);
 
 await ejecutar("WCAG 1.4.4 · Tamaño de texto", async ({ abrir }) => {
   const docente = await crearCuenta("docente", "DOCENTE");

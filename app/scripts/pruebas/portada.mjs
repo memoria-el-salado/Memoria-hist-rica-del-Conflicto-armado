@@ -8,7 +8,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:portada
  */
-import { BASE, capturar, como, comprobar, crearCuenta, ejecutar } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, desborde, ejecutar } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 
@@ -36,7 +36,7 @@ await ejecutar("4.1 · La portada pública", async ({ abrir }) => {
 
   await visita.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await visita.goto(`${BASE}/`, { waitUntil: "networkidle0" });
-  comprobar("en el móvil no se desborda", (await visita.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("en el móvil no se desborda", (await desborde(visita)) <= 0);
   await capturar(visita, "portada-movil");
 
   const est = await como(navegador, "prueba.est1", "ESTUDIANTE");

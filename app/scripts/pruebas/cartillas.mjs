@@ -13,7 +13,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:cartillas
  */
-import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, desborde, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 const enlaces = (pagina) =>
@@ -102,7 +102,7 @@ await ejecutar("Cartillas de El Salado en cada sesión", async ({ abrir }) => {
 
   await p.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await visitar(p, `${BASE}/estudiante/sesion/${s1}`);
-  comprobar("en el móvil la sesión no se desborda", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("en el móvil la sesión no se desborda", (await desborde(p)) <= 0);
   const leerVisible = await p.$eval("#cartillas button", (b) => getComputedStyle(b).display !== "none");
   comprobar("y la cartilla se abre en otra pestaña en vez de dentro de la página", !leerVisible && (await enlaces(p)).length === 1);
 

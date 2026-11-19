@@ -15,7 +15,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:actividades-cartilla
  */
-import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, desborde, ejecutar, esperarTexto, prisma, visitar } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 const form = (id) => `form[aria-labelledby="act-${id}-titulo"]`;
@@ -138,5 +138,5 @@ await ejecutar("Actividades de la cartilla y acuerdos del Preámbulo", async ({ 
   // --- En el celular ------------------------------------------------------------------
   await p.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await visitar(p, `${BASE}/estudiante/sesion/${s12}`);
-  comprobar("en el celular nada se desborda", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("en el celular nada se desborda", (await desborde(p)) <= 0);
 });

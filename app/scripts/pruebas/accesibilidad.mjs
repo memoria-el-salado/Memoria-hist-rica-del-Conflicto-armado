@@ -53,12 +53,14 @@ async function auditar(pagina) {
 
 /** Cuánto se sale la página a lo ancho, y qué elemento lo provoca. */
 function desborde(pagina) {
-  return pagina.evaluate(() => {
-    const exceso = document.documentElement.scrollWidth - innerWidth;
+  // Contra el ancho pedido: en un celular emulado innerWidth crece con lo que no cabe.
+  return pagina.evaluate((pedido) => {
+    const ancho = pedido ?? innerWidth;
+    const exceso = Math.max(document.documentElement.scrollWidth, innerWidth) - ancho;
     if (exceso <= 0) return null;
-    const culpable = [...document.querySelectorAll("body *")].find((e) => e.getBoundingClientRect().right > innerWidth + 1 && getComputedStyle(e).position !== "fixed");
+    const culpable = [...document.querySelectorAll("body *")].find((e) => e.getBoundingClientRect().right > ancho + 1 && getComputedStyle(e).position !== "fixed");
     return `${exceso}px · ${culpable ? culpable.tagName.toLowerCase() + (culpable.id ? "#" + culpable.id : "") + "." + [...culpable.classList].slice(0, 3).join(".") : "?"}`;
-  });
+  }, pagina.viewport()?.width ?? null);
 }
 
 const resumen = new Map();

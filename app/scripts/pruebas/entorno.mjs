@@ -258,3 +258,15 @@ export async function visitar(pagina, url) {
 export function esperarTexto(pagina, texto, timeout = 30_000) {
   return pagina.waitForFunction((t) => document.body.innerText.includes(t), { timeout }, texto);
 }
+
+/**
+ * Cuántos píxeles se sale la página a lo ancho. Se compara con el ancho que la
+ * prueba pidió para la pantalla y no con innerWidth: en un celular emulado, si
+ * algo no cabe, el navegador agranda la página y aleja la vista, de modo que
+ * innerWidth crece con el contenido y el desborde no se vería.
+ */
+export async function desborde(pagina) {
+  const pedido = pagina.viewport()?.width;
+  const [scroll, interior] = await pagina.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
+  return Math.max(scroll, interior) - (pedido ?? interior);
+}

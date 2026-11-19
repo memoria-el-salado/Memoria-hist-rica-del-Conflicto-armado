@@ -9,17 +9,18 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:panel
  */
-import { BASE, capturar, como, comprobar, crearCuenta, ejecutar, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, desborde, ejecutar, prisma } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
-const desborde = (pagina) => pagina.evaluate(() => document.documentElement.scrollWidth - innerWidth);
 
 await ejecutar("3.5 · Panel del docente", async ({ abrir }) => {
   const sesion = await prisma.sesion.findFirst({ where: { publicada: true, eje: { caso: { activo: true } } }, orderBy: [{ eje: { orden: "asc" } }, { orden: "asc" }] });
   if (!sesion) throw new Error("Hace falta una sesión publicada en el módulo activo.");
 
-  const docente = await crearCuenta("docente", "DOCENTE");
-  const e1 = await crearCuenta("est1", "ESTUDIANTE", { creadoPorId: docente.id });
+  // Un nombre largo, para comprobar que la cabecera lo recorta sin desbordarse.
+  const NOMBRE_DOCENTE = "Prueba Docente Con Un Nombre Bastante Largo Para La Cabecera";
+  const docente = await crearCuenta("docente", "DOCENTE", { nombre: NOMBRE_DOCENTE });
+  const e1 = await crearCuenta("est1", "ESTUDIANTE", { creadoPorId: docente.id, nombre: "Prueba Estudiante Uno" });
   const e2 = await crearCuenta("est2", "ESTUDIANTE", { creadoPorId: docente.id });
   // Uno de los dos hizo la sesión publicada; el otro entregó una respuesta sin comentar.
   await prisma.marcaCartografia.create({ data: { autorId: e1.id, sesionId: sesion.id, lugar: "Prueba panel", relato: "Relato de prueba.", lat: 9.7, lon: -75.1 } });
@@ -30,6 +31,11 @@ await ejecutar("3.5 · Panel del docente", async ({ abrir }) => {
   await doc.goto(`${BASE}/docente/panel`, { waitUntil: "networkidle0" });
 
   comprobar("el panel muestra el ciclo del año en curso", await hay(doc, `Ciclo ${new Date().getFullYear()}`));
+  // La cabecera dice quién entró: su nombre y, debajo, su rol.
+  const cabecera = await doc.$eval("header", (h) => h.innerText);
+  comprobar("la cabecera muestra el nombre de quien entró, con su rol", cabecera.includes(NOMBRE_DOCENTE) && cabecera.includes("Docente"));
+  const nombreRecortado = await doc.$eval(`header [title="${NOMBRE_DOCENTE}"]`, (e) => e.scrollWidth > e.clientWidth && e.getBoundingClientRect().width <= 181);
+  comprobar("un nombre largo se recorta con puntos suspensivos", nombreRecortado);
   const competencias = await doc.$eval('section[aria-labelledby="titulo-competencias-grupo"]', (s) => s.innerText);
   comprobar("muestra las competencias del grupo", competencias.includes("Empatía") && competencias.includes("Asertividad"));
   // Uno de dos hizo la sesión: el promedio del grupo queda entre 0 y 100 (el valor exacto
@@ -70,5 +76,12 @@ await ejecutar("3.5 · Panel del docente", async ({ abrir }) => {
     comprobar(`${ruta.replace(sesion.id, "[id]")} no se desborda en el móvil`, (await desborde(est)) <= 0, `${await desborde(est)} px`);
   }
   comprobar("el estudiante, con tres secciones, no necesita «Más»", !(await est.$('[aria-label="Más secciones"]')));
+  const cabeceraEst = await est.$eval("header", (h) => h.innerText);
+  comprobar("en el móvil la cabecera del estudiante muestra su nombre y su rol", cabeceraEst.includes("Prueba Estudiante Uno") && cabeceraEst.includes("Estudiante"));
+  await capturar(est, "cabecera-nombre-movil");
+  // El celular más angosto en uso (320 px): la cabecera con el nombre pasa a otra línea, no se sale.
+  await est.setViewport({ width: 320, height: 640, isMobile: true, hasTouch: true });
+  await est.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
+  comprobar("en un celular de 320 px la cabecera con el nombre no se desborda", (await desborde(est)) <= 0, `${await desborde(est)} px`);
   await capturar(est, "mapa-movil");
 });

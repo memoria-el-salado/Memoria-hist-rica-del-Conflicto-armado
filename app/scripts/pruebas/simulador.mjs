@@ -13,7 +13,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:simulador
  */
-import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, desborde, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 const lote = (id) => `button[data-lote="${id}"]`;
@@ -133,5 +133,5 @@ await ejecutar("4.4 · Simulador con plano de lotes", async ({ abrir }) => {
 
   await p.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await p.reload({ waitUntil: "networkidle0" });
-  comprobar("el plano no se desborda en el móvil", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("el plano no se desborda en el móvil", (await desborde(p)) <= 0);
 });

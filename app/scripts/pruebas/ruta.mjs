@@ -15,7 +15,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:ruta
  */
-import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, desborde, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 
@@ -118,7 +118,7 @@ await ejecutar("Ruta del viaje y de la sesión", async ({ abrir }) => {
     { timeout: 10_000 }
   );
   comprobar("al tocar una estación en el celular, la vista baja hasta sus sesiones", true);
-  comprobar("y nada se desborda a lo ancho", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("y nada se desborda a lo ancho", (await desborde(p)) <= 0);
   await capturar(p, "ruta-mapa-celular");
   await p.setViewport({ width: 1280, height: 900 });
   await p.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
@@ -175,7 +175,7 @@ await ejecutar("Ruta del viaje y de la sesión", async ({ abrir }) => {
 
   await p.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await p.reload({ waitUntil: "networkidle0" });
-  comprobar("la sesión no se desborda en el móvil", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("la sesión no se desborda en el móvil", (await desborde(p)) <= 0);
   await p.goto(`${BASE}/estudiante/mapa`, { waitUntil: "networkidle0" });
-  comprobar("ni el mapa", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("ni el mapa", (await desborde(p)) <= 0);
 });

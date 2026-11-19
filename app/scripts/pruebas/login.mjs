@@ -9,7 +9,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:login
  */
-import { BASE, capturar, CLAVE, comprobar, crearCuenta, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, CLAVE, comprobar, crearCuenta, desborde, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
 
 const hay = (pagina, texto) => pagina.evaluate((t) => document.body.innerText.includes(t), texto);
 
@@ -69,5 +69,5 @@ await ejecutar("4.2 · Login y primera entrada", async ({ abrir }) => {
 
   await p.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await p.reload({ waitUntil: "networkidle0" });
-  comprobar("la elección no se desborda en el móvil", (await p.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("la elección no se desborda en el móvil", (await desborde(p)) <= 0);
 });

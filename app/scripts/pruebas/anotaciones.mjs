@@ -12,7 +12,7 @@
  *   npm run dev            (en otra terminal)
  *   npm run humo:anotaciones
  */
-import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
+import { BASE, capturar, como, comprobar, crearCuenta, crearModuloDePrueba, desborde, ejecutar, esperarTexto, prisma } from "./entorno.mjs";
 
 const PARRAFO_1 = "Durante años la comunidad sostuvo la memoria con sus cantos, sus fiestas y su trabajo en el campo (texto de prueba).";
 const PARRAFO_2 = "El retorno fue posible porque las familias se organizaron y exigieron garantías para volver a su tierra (texto de prueba).";
@@ -135,5 +135,5 @@ await ejecutar("4.3 · Anotaciones en hilo", async ({ abrir }) => {
 
   await est1.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
   await est1.reload({ waitUntil: "networkidle0" });
-  comprobar("la conversación no se desborda en el móvil", (await est1.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0);
+  comprobar("la conversación no se desborda en el móvil", (await desborde(est1)) <= 0);
 });
