@@ -263,7 +263,12 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
               {ETIQUETA_ESCALA[escala]}
             </button>
             <div className="flex items-center gap-2 rounded-full border border-borde py-[5px] pl-2.5 pr-1.5">
-              <span className="text-[0.6875rem] font-bold text-apagado">{ETIQUETA_ROL[rol]}</span>
+              <span className="flex flex-col items-end leading-tight">
+                <span className="max-w-[160px] truncate text-[0.71875rem] font-bold text-tinta-media" title={nombre}>
+                  {nombre}
+                </span>
+                <span className="text-[0.625rem] font-semibold text-apagado">{ETIQUETA_ROL[rol]}</span>
+              </span>
               {explorador ? (
                 <span title={nombre}>
                   <AvatarExplorador tipo={explorador} tamano={24} />
