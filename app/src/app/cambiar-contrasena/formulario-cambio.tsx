@@ -1,5 +1,6 @@
 "use client";
 
+import { BotonTema } from "@/components/boton-tema";
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -39,6 +40,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
   return (
     <main id="contenido" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-fondo px-5 py-10 outline-none">
       <a href="#formulario-contrasena" className="saltar-contenido">Saltar al contenido</a>
+      <BotonTema className="fixed right-4 top-4 z-10" />
       <div id="formulario-contrasena" className="w-full max-w-[480px] rounded-[14px] border border-borde bg-superficie px-8 py-9 shadow-[0_18px_50px_rgba(70,45,30,.07)]">
         <div className="flex items-center gap-[7px] text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -128,7 +130,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
                   ))}
                 </ul>
               ) : (
-                <p className="mt-2 text-[0.6875rem] font-semibold text-secundario-fuerte">
+                <p className="mt-2 text-[0.6875rem] font-semibold text-secundario-texto">
                   La contraseña cumple la política de seguridad.
                 </p>
               )}
@@ -176,7 +178,7 @@ export function FormularioCambio({ nombre, usuario, primeraVez, volverA }: Props
           </button>
         </form>
 
-        <div className="mt-5 border-t border-[#F1EBE5] pt-4 text-center text-[0.71875rem] text-tenue">
+        <div className="mt-5 border-t border-linea pt-4 text-center text-[0.71875rem] text-tenue">
           {primeraVez ? (
             <button
               onClick={() => signOut({ redirectTo: "/login" })}

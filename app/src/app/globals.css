@@ -11,12 +11,17 @@
   --color-primario-tinte: #fdf4f0;
   --color-primario-borde: #f2d9cf;
 
+  /* El texto de cada tono tiene su propio token, separado del de fondos
+     («-fuerte»): en el tema oscuro el texto se aclara y el fondo no. */
   --color-secundario: #177d7d;
+  --color-secundario-texto: #177575;
+  --color-secundario-apagado: #3f6e6c;
   --color-secundario-fuerte: #177575;
   --color-secundario-tinte: #f1f7f6;
   --color-secundario-borde: #cfe6e4;
 
   --color-terciario: #ebb035;
+  --color-terciario-texto: #886216;
   --color-terciario-fuerte: #886216;
   --color-terciario-tinte: #fdf8ef;
   --color-terciario-borde: #e7dcc6;
@@ -32,9 +37,76 @@
   --color-suave: #6d6762;
   --color-borde: #ede7e1;
   --color-borde-campo: #e4ddd6;
+  /* Separadores dentro de una tarjeta, fondos hundidos (barras, huecos) y de realce (hover). */
+  --color-linea: #f1ebe5;
+  --color-linea-suave: #f7f2ed;
+  --color-hundido: #f0eae4;
+  --color-realce: #f7f2ed;
+  --color-deshabilitado: #b3aaa2;
   --color-peligro: #c0392b;
+  --color-peligro-fuerte: #c0392b;
+  --color-peligro-tinte: #fdf0ee;
+  --color-aviso-texto: #8a6410;
+  --color-aviso-tinte: #fbf1dc;
+  --color-morado-texto: #5b4b8a;
+  --color-morado-tinte: #ede7f6;
+  --color-exito: #2e9b5e;
 
   --font-sans: var(--fuente-public-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   Tema oscuro. Se activa con <html data-tema="oscuro">: lo pone el script del
+   layout raíz según la elección guardada o, si no la hay, la preferencia del
+   sistema. Solo cambian los tokens; los componentes no saben de temas.
+   Los tonos de texto llegan a 4.5:1 sobre el fondo y las superficies oscuras.
+   -------------------------------------------------------------------------- */
+html[data-tema="oscuro"] {
+  color-scheme: dark;
+  --color-primario-texto: #f39373;
+  --color-primario-hover: #c4502e;
+  --color-primario-tinte: #36211a;
+  --color-primario-borde: #5a3527;
+
+  --color-secundario-texto: #72cfca;
+  --color-secundario-apagado: #93c3bf;
+  --color-secundario-tinte: #142a29;
+  --color-secundario-borde: #25514e;
+
+  --color-terciario-texto: #efc25e;
+  --color-terciario-tinte: #2d2414;
+  --color-terciario-borde: #574522;
+
+  --color-fondo: #161311;
+  --color-superficie: #211d1a;
+  --color-superficie-suave: #1c1917;
+  --color-tinta: #f1ebe5;
+  --color-tinta-media: #ddd4cb;
+  --color-apagado: #c3b9af;
+  --color-tenue: #b5aba1;
+  --color-suave: #b1a79d;
+  --color-borde: #38312c;
+  --color-borde-campo: #4b433c;
+  --color-linea: #2f2a26;
+  --color-linea-suave: #2a2521;
+  --color-hundido: #312b26;
+  --color-realce: #2b2622;
+  --color-deshabilitado: #6e665f;
+  --color-peligro: #ff8f80;
+  --color-peligro-tinte: #3a1e1a;
+  --color-aviso-texto: #efc25e;
+  --color-aviso-tinte: #352a12;
+  --color-morado-texto: #c7b8f2;
+  --color-morado-tinte: #2a2441;
+}
+
+/* Texto en el color de un eje o una serie (--tono). En oscuro se mezcla con
+   blanco para que se lea sobre el fondo oscuro. */
+.texto-tono {
+  color: var(--tono);
+}
+html[data-tema="oscuro"] .texto-tono {
+  color: color-mix(in srgb, var(--tono) 45%, #fff);
 }
 
 @layer base {
@@ -50,7 +122,7 @@
   }
 
   a:hover {
-    color: var(--color-primario-fuerte);
+    color: var(--color-primario-texto);
     text-decoration: underline;
   }
 
@@ -69,7 +141,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #ded7d0;
+    background: var(--color-borde-campo);
     border-radius: 9px;
   }
 }
@@ -122,7 +194,7 @@
   top: -60px;
   z-index: 100;
   border-radius: 8px;
-  background: var(--color-tinta);
+  background: #33302c;
   padding: 10px 14px;
   font-size: 0.8125rem;
   font-weight: 700;

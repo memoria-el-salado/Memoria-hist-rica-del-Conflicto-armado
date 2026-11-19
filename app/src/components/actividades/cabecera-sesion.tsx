@@ -66,7 +66,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
         </span>
         <span className="text-[0.71875rem] font-semibold text-suave">{sesion.eje.nombre}</span>
         {sesion.alertaCuidado && (
-          <span className="rounded-full bg-[#FBF1DC] px-2.5 py-1 text-[0.65625rem] font-bold text-[#8A6410]">
+          <span className="rounded-full bg-aviso-tinte px-2.5 py-1 text-[0.65625rem] font-bold text-aviso-texto">
             Contenido sensible
           </span>
         )}
@@ -91,7 +91,7 @@ export function CabeceraSesion({ sesion }: { sesion: DatosSesion }) {
           <div className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">
             PREGUNTA ORIENTADORA
           </div>
-          <p className="mt-1.5 text-[0.96875rem] font-semibold leading-[1.45] text-[#5B524B]">
+          <p className="mt-1.5 text-[0.96875rem] font-semibold leading-[1.45] text-tinta-media">
             {sesion.preguntaOrientadora}
           </p>
         </div>
@@ -162,7 +162,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
   return (
     <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
       {sesion.documento && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] pb-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-linea pb-3">
           <span className="text-[0.65625rem] font-bold tracking-[.1em] text-suave">
             DOCUMENTO FUENTE
           </span>
@@ -170,7 +170,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
             href={sesion.documento.enlace}
             target="_blank"
             rel="noreferrer"
-            className="text-[0.71875rem] font-semibold text-secundario-fuerte"
+            className="text-[0.71875rem] font-semibold text-secundario-texto"
           >
             {sesion.documento.titulo} · abrir PDF
           </a>
@@ -204,7 +204,7 @@ export function TextoSesion({ sesion }: { sesion: DatosSesion }) {
       )}
 
       {sinTexto.length > 0 && (
-        <div className="mt-5 border-t border-[#F1EBE5] pt-4">
+        <div className="mt-5 border-t border-linea pt-4">
           <div className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
             TAMBIÉN EN ESTA SESIÓN
           </div>

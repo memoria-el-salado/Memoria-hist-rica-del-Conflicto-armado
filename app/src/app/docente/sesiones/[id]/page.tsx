@@ -100,7 +100,7 @@ export default async function SesionDocentePage({
       {!sePlantea && !conAnotaciones && (
         <p className="rounded-xl border border-borde bg-superficie p-5 text-[0.84375rem] leading-[1.65] text-apagado">
           Lo que tus estudiantes entregan en esta sesión lo ves y lo comentas en{" "}
-          <Link href="/docente/revision" className="font-bold text-primario-fuerte">
+          <Link href="/docente/revision" className="font-bold text-primario-texto">
             Revisión
           </Link>
           .
@@ -146,7 +146,7 @@ async function RespuestasCartilla({
           return (
             <li key={actividad.id} className="rounded-lg border border-borde bg-superficie-suave p-3.5">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-primario-tinte px-2 py-0.5 text-[0.6875rem] font-extrabold text-primario-fuerte">{apartado.codigo}</span>
+                <span className="rounded-full bg-primario-tinte px-2 py-0.5 text-[0.6875rem] font-extrabold text-primario-texto">{apartado.codigo}</span>
                 <span className="text-[0.84375rem] font-bold">{actividad.titulo}</span>
                 <span className="ml-auto text-[0.71875rem] font-bold text-apagado">
                   {deEsta.length === 1 ? "1 respuesta" : `${deEsta.length} respuestas`}
@@ -156,7 +156,7 @@ async function RespuestasCartilla({
                 <ul className="mt-2 grid gap-1.5">
                   {deEsta.map((r) => (
                     <li key={r.id}>
-                      <details className="rounded-lg border border-borde bg-white px-3 py-2">
+                      <details className="rounded-lg border border-borde bg-superficie px-3 py-2">
                         <summary className="cursor-pointer text-[0.78125rem] font-bold text-tinta-media">
                           {r.user.nombre} <span className="font-normal text-apagado">· {fechaYHora(r.actualizadoEn)}</span>
                         </summary>

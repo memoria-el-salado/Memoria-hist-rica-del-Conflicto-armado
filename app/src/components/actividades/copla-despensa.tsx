@@ -9,7 +9,7 @@ import { CabeceraSesion, TextoSesion, type DatosSesion } from "./cabecera-sesion
 const MapaReal = dynamic(() => import("@/components/mapa-real").then((m) => m.MapaReal), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[360px] w-full items-center justify-center rounded-xl border border-borde bg-[#F4EFE8] text-[0.8125rem] text-tenue">
+    <div className="flex h-[360px] w-full items-center justify-center rounded-xl border border-borde bg-hundido text-[0.8125rem] text-tenue">
       Cargando el mapa...
     </div>
   ),
@@ -73,7 +73,7 @@ export function CoplaDespensa({
       key={id}
       draggable
       onDragStart={(e) => e.dataTransfer.setData("text/plain", id)}
-      className="inline-flex items-center gap-1 rounded-full border border-terciario-borde bg-terciario-tinte py-1 pl-2.5 pr-1 text-[0.71875rem] font-bold text-terciario-fuerte"
+      className="inline-flex items-center gap-1 rounded-full border border-terciario-borde bg-terciario-tinte py-1 pl-2.5 pr-1 text-[0.71875rem] font-bold text-terciario-texto"
     >
       {nombreProducto(id)}
       {dentro && (
@@ -121,7 +121,7 @@ export function CoplaDespensa({
         <div className="grid content-start gap-3.5">
           <section aria-labelledby="titulo-productos" className="rounded-xl border border-borde bg-superficie p-4">
             <div className="flex items-baseline justify-between gap-2">
-              <h2 id="titulo-productos" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">
+              <h2 id="titulo-productos" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-texto">
                 PRODUCTOS Y OFICIOS POR UBICAR
               </h2>
               <span className="text-[0.6875rem] font-bold text-suave">
@@ -142,7 +142,7 @@ export function CoplaDespensa({
                   onClick={() => setElegido((x) => (x === p.id ? null : p.id))}
                   aria-pressed={elegido === p.id}
                   className={`cursor-grab rounded-full border px-2.5 py-1 text-[0.71875rem] font-bold ${
-                    elegido === p.id ? "border-secundario bg-secundario text-white" : "border-terciario-borde bg-terciario-tinte text-terciario-fuerte"
+                    elegido === p.id ? "border-secundario bg-secundario text-white" : "border-terciario-borde bg-terciario-tinte text-terciario-texto"
                   }`}
                 >
                   {p.nombre}
@@ -152,7 +152,7 @@ export function CoplaDespensa({
           </section>
 
           <section aria-labelledby="titulo-lugares" className="rounded-xl border border-borde bg-superficie p-4">
-            <h2 id="titulo-lugares" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">
+            <h2 id="titulo-lugares" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-texto">
               LUGARES DE LOS MONTES DE MARÍA
             </h2>
             <ul className="mt-2.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
@@ -187,7 +187,7 @@ export function CoplaDespensa({
           </section>
 
           <section aria-labelledby="titulo-despensa" className="rounded-xl border border-borde bg-superficie p-4">
-            <h2 id="titulo-despensa" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">
+            <h2 id="titulo-despensa" className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-texto">
               ¿POR QUÉ LA DESPENSA DEL CARIBE?
             </h2>
             <label htmlFor="despensa" className="mt-1 block text-[0.71875rem] text-tenue">
@@ -220,7 +220,7 @@ export function CoplaDespensa({
               {pendiente ? "Guardando..." : previa ? "Actualizar mi mapa y mi respuesta" : "Guardar mi mapa y mi respuesta"}
             </button>
             {estado?.ok && (
-              <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
+              <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">
                 {estado.ok}
               </div>
             )}
@@ -239,10 +239,10 @@ export function CoplaDespensa({
 
       {curso && (
         <section aria-labelledby="titulo-curso" className="mt-[18px] rounded-xl border border-secundario-borde bg-secundario-tinte p-5">
-          <h2 id="titulo-curso" className="text-[0.75rem] font-extrabold tracking-[.06em] text-secundario-fuerte">
+          <h2 id="titulo-curso" className="text-[0.75rem] font-extrabold tracking-[.06em] text-secundario-texto">
             CÓMO LO UBICÓ TU CURSO
           </h2>
-          <p className="mt-1 text-[0.71875rem] text-[#3F6E6C]">
+          <p className="mt-1 text-[0.71875rem] text-secundario-apagado">
             {curso.total === 1 ? "Por ahora solo está tu mapa." : `${curso.total} mapas guardados.`} Úsalo para la puesta
             en común: donde no coinciden, vale la pena volver a escuchar la copla.
           </p>
@@ -250,7 +250,7 @@ export function CoplaDespensa({
             {curso.productos.map((p) => (
               <div key={p.productoId} className="flex gap-2 text-[0.75rem]">
                 <dt className="w-[130px] flex-none font-bold text-tinta-media">{nombreProducto(p.productoId)}</dt>
-                <dd className="text-[#3F6E6C]">{p.lugares.map((l) => `${nombreLugar(l.lugarId)} (${l.cuantos})`).join(" · ")}</dd>
+                <dd className="text-secundario-apagado">{p.lugares.map((l) => `${nombreLugar(l.lugarId)} (${l.cuantos})`).join(" · ")}</dd>
               </div>
             ))}
           </dl>

@@ -18,9 +18,9 @@ type Props = {
 };
 
 function Estado({ ok, si, no }: { ok: boolean | null; si: string; no: string }) {
-  if (ok === null) return <span className="text-[0.65625rem] font-bold text-[#CFC7C0]">NO APLICA</span>;
+  if (ok === null) return <span className="text-[0.65625rem] font-bold text-deshabilitado">NO APLICA</span>;
   return (
-    <span className={`text-[0.65625rem] font-extrabold tracking-[.05em] ${ok ? "text-secundario-fuerte" : "text-peligro"}`}>
+    <span className={`text-[0.65625rem] font-extrabold tracking-[.05em] ${ok ? "text-secundario-texto" : "text-peligro"}`}>
       {ok ? si : no}
     </span>
   );
@@ -30,7 +30,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
   const accesibles = filas.filter((f) => f.alternativa && f.descripcion).length;
   const porcentaje = filas.length ? Math.round((accesibles / filas.length) * 100) : 100;
   const ocultos = filas.filter((f) => !f.visible).length;
-  const color = porcentaje >= 90 ? "#177575" : porcentaje >= 70 ? "#886216" : "#C0392B";
+  const color = porcentaje >= 90 ? "var(--color-secundario-texto)" : porcentaje >= 70 ? "var(--color-terciario-texto)" : "var(--color-peligro)";
 
   return (
     <div className="animar-aparecer max-w-[1020px]">
@@ -55,7 +55,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
           <div className="text-[1.875rem] font-extrabold tracking-[-.03em]" style={{ color }}>
             {porcentaje}%
           </div>
-          <div className="mt-2 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]">
+          <div className="mt-2 h-[7px] overflow-hidden rounded-[9px] bg-hundido">
             <div className="h-full" style={{ width: `${porcentaje}%`, background: color }} />
           </div>
         </div>
@@ -85,7 +85,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
       ) : (
         <div role="region" aria-label="Recursos auditados" tabIndex={0} className="overflow-x-auto rounded-xl border border-borde bg-superficie">
           <div className="min-w-[760px]">
-            <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] gap-2.5 border-b border-[#F1EBE5] bg-superficie-suave px-[18px] py-3 text-[0.625rem] font-bold tracking-[.1em] text-suave">
+            <div className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] gap-2.5 border-b border-linea bg-superficie-suave px-[18px] py-3 text-[0.625rem] font-bold tracking-[.1em] text-suave">
               <span>CONTENIDO</span>
               <span>ALTERNATIVA</span>
               <span>SINCRONÍA</span>
@@ -95,7 +95,7 @@ export function AuditoriaAccesibilidad({ filas, ultimaRevision }: Props) {
             {filas.map((f) => (
               <div
                 key={f.id}
-                className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] items-center gap-2.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
+                className="grid grid-cols-[2.2fr_1fr_1fr_1fr_1.8fr] items-center gap-2.5 border-b border-linea-suave px-[18px] py-3.5"
               >
                 <div>
                   <div className="text-[0.8125rem] font-bold">{f.titulo}</div>

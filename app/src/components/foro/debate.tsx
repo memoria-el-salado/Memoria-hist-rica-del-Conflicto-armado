@@ -12,9 +12,9 @@ type Accion = (id: string) => Promise<{ ok?: unknown; error?: string }>;
 export type Mediacion = { destacar: Accion; retirar: Accion };
 
 const ESTILO_BANDO: Record<Postura | "DOCENTE", { borde: string; fondo: string; texto: string; etiqueta: string }> = {
-  A: { borde: "border-l-secundario", fondo: "bg-secundario-tinte", texto: "text-secundario-fuerte", etiqueta: "ROL A" },
-  B: { borde: "border-l-terciario", fondo: "bg-terciario-tinte", texto: "text-terciario-fuerte", etiqueta: "ROL B" },
-  DOCENTE: { borde: "border-l-primario", fondo: "bg-primario-tinte", texto: "text-primario-fuerte", etiqueta: "MEDIACIÓN" },
+  A: { borde: "border-l-secundario", fondo: "bg-secundario-tinte", texto: "text-secundario-texto", etiqueta: "ROL A" },
+  B: { borde: "border-l-terciario", fondo: "bg-terciario-tinte", texto: "text-terciario-texto", etiqueta: "ROL B" },
+  DOCENTE: { borde: "border-l-primario", fondo: "bg-primario-tinte", texto: "text-primario-texto", etiqueta: "MEDIACIÓN" },
 };
 
 function estiloDe(m: MensajeVista) {
@@ -222,7 +222,7 @@ function Hilo({
           ) : (
             <button
               onClick={() => setRespondiendo(true)}
-              className="cursor-pointer text-[0.71875rem] font-bold text-primario-texto hover:text-primario-fuerte"
+              className="cursor-pointer text-[0.71875rem] font-bold text-primario-texto hover:text-primario-texto"
             >
               Responder
             </button>
@@ -255,7 +255,7 @@ function Mensaje({
         <span className={`font-bold tracking-[.06em] ${estilo.texto}`}>{estilo.etiqueta}</span>
         <span className="text-suave">{mensaje.fecha}</span>
         {mensaje.destacado && (
-          <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.625rem] font-extrabold tracking-[.05em] text-terciario-fuerte">
+          <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.625rem] font-extrabold tracking-[.05em] text-terciario-texto">
             ★ DESTACADO POR EL DOCENTE
           </span>
         )}
@@ -273,7 +273,7 @@ function Mensaje({
           <button
             disabled={pendiente}
             onClick={() => iniciar(async () => void (await mediacion.destacar(mensaje.id)))}
-            className="cursor-pointer text-terciario-fuerte hover:underline disabled:opacity-50"
+            className="cursor-pointer text-terciario-texto hover:underline disabled:opacity-50"
           >
             {mensaje.destacado ? "Quitar destacado" : "Destacar"}
           </button>

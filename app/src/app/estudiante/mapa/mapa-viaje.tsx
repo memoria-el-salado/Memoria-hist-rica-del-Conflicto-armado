@@ -11,7 +11,7 @@ import { CENTRO_COLOMBIA } from "@/lib/datos-geograficos";
 const MapaReal = dynamic(() => import("@/components/mapa-real").then((m) => m.MapaReal), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[280px] w-full items-center justify-center rounded-xl border border-borde bg-[#F4EFE8] text-[0.8125rem] text-tenue">
+    <div className="flex h-[280px] w-full items-center justify-center rounded-xl border border-borde bg-hundido text-[0.8125rem] text-tenue">
       Cargando el mapa...
     </div>
   ),
@@ -76,7 +76,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[0.65625rem] font-bold tracking-[.14em] text-primario-texto">TU VIAJE</span>
             {pertenencia && (
-              <span className="rounded-full bg-secundario-tinte px-2.5 py-0.5 text-[0.6875rem] font-bold text-secundario-fuerte">
+              <span className="rounded-full bg-secundario-tinte px-2.5 py-0.5 text-[0.6875rem] font-bold text-secundario-texto">
                 {pertenencia}
               </span>
             )}
@@ -94,7 +94,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
           {indicadores.map((c) => (
             <div key={c.nombre} className="rounded-[10px] border border-borde bg-superficie p-3">
               <div className="text-[0.625rem] font-bold tracking-[.08em] text-suave">{c.nombre}</div>
-              <div className="text-[1.375rem] font-extrabold tracking-[-.02em]" style={{ color: c.color }}>
+              <div className="texto-tono text-[1.375rem] font-extrabold tracking-[-.02em]" style={{ "--tono": c.color } as React.CSSProperties}>
                 {c.valor}
               </div>
             </div>
@@ -104,10 +104,10 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
               <div className="text-[0.625rem] font-bold tracking-[.08em] text-suave">
                 ÍNDICE DE EQUIDAD DEL SIMULADOR
               </div>
-              <div className="text-[1.375rem] font-extrabold tracking-[-.02em] text-secundario-fuerte">
+              <div className="text-[1.375rem] font-extrabold tracking-[-.02em] text-secundario-texto">
                 {equidad}%
               </div>
-              <div className="mt-1.5 h-1 overflow-hidden rounded-[9px] bg-[#F0EAE4]">
+              <div className="mt-1.5 h-1 overflow-hidden rounded-[9px] bg-hundido">
                 <div className="h-full bg-secundario" style={{ width: `${equidad}%` }} />
               </div>
             </div>
@@ -128,7 +128,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
             <ol className="mt-3 grid gap-2 sm:grid-cols-2">
               {PASOS.map(([titulo, detalle], i) => (
                 <li key={titulo} className="flex items-start gap-2.5">
-                  <span aria-hidden="true" className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-primario-tinte text-[0.71875rem] font-extrabold text-primario-fuerte">
+                  <span aria-hidden="true" className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-primario-tinte text-[0.71875rem] font-extrabold text-primario-texto">
                     {i + 1}
                   </span>
                   <span className="text-[0.78125rem] leading-snug">
@@ -141,12 +141,12 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
 
           <section aria-labelledby="titulo-sigue" className="flex flex-col justify-between gap-3 rounded-xl border border-primario-borde bg-primario-tinte p-[18px]">
             <div>
-              <h2 id="titulo-sigue" className="text-[0.625rem] font-extrabold tracking-[.12em] text-primario-fuerte">
+              <h2 id="titulo-sigue" className="text-[0.625rem] font-extrabold tracking-[.12em] text-primario-texto">
                 {siguiente ? "CONTINÚA TU VIAJE" : "VAS AL DÍA"}
               </h2>
               {siguiente ? (
                 <p className="mt-1.5 text-[0.9375rem] font-bold leading-snug">
-                  <span className="text-primario-fuerte">{siguiente.codigo}</span> {siguiente.titulo}
+                  <span className="text-primario-texto">{siguiente.codigo}</span> {siguiente.titulo}
                 </p>
               ) : (
                 <p className="mt-1.5 text-[0.8125rem] leading-[1.6] text-tinta-media">
@@ -165,7 +165,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                 <button
                   type="button"
                   onClick={irASiguiente}
-                  className="cursor-pointer rounded-lg border border-primario bg-superficie px-4 py-2.5 text-[0.78125rem] font-bold text-primario-fuerte hover:bg-primario-tinte"
+                  className="cursor-pointer rounded-lg border border-primario bg-superficie px-4 py-2.5 text-[0.78125rem] font-bold text-primario-texto hover:bg-primario-tinte"
                 >
                   Verla en el mapa
                 </button>
@@ -230,7 +230,7 @@ export function MapaViaje({ ejes, estaciones, indicadores, equidad, casosSinUbic
                   </span>
                 </div>
                 <div
-                  className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]"
+                  className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-hundido"
                   role="progressbar"
                   aria-label={c.nombre}
                   aria-valuenow={c.porcentaje}

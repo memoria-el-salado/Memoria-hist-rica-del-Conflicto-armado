@@ -105,13 +105,13 @@ export function validarDistribucion(
 
   if (t.gasto > PRESUPUESTO_TOTAL) {
     criterios.push({
-      color: "#C0392B",
+      color: "var(--color-peligro)",
       titulo: "Presupuesto excedido",
       detalle: `Superas los ${pesos(PRESUPUESTO_TOTAL)} en ${pesos(t.gasto - PRESUPUESTO_TOTAL)}. Retira subsidios de riego en zonas fértiles.`,
     });
   } else {
     criterios.push({
-      color: "#177575",
+      color: "var(--color-secundario-texto)",
       titulo: "Presupuesto dentro del límite",
       detalle: `Te quedan ${pesos(PRESUPUESTO_TOTAL - t.gasto)} sin ejecutar.`,
     });
@@ -119,7 +119,7 @@ export function validarDistribucion(
 
   if (t.hectareas > HECTAREAS_TOTALES) {
     criterios.push({
-      color: "#C0392B",
+      color: "var(--color-peligro)",
       titulo: "Tierra insuficiente",
       detalle: `Asignaste ${t.hectareas} ha de un latifundio de ${HECTAREAS_TOTALES} ha.`,
     });
@@ -131,7 +131,7 @@ export function validarDistribucion(
     });
   } else {
     criterios.push({
-      color: "#177575",
+      color: "var(--color-secundario-texto)",
       titulo: "Distribución completa",
       detalle: `Las ${HECTAREAS_TOTALES} hectáreas quedaron adjudicadas.`,
     });
@@ -139,7 +139,7 @@ export function validarDistribucion(
 
   if (prioritariasSinTierra) {
     criterios.push({
-      color: "#C0392B",
+      color: "var(--color-peligro)",
       titulo: `${prioritariasSinTierra} familias de prioridad alta sin tierra`,
       detalle: "La Ley 135 exige prelación para quienes trabajan la tierra sin poseerla.",
     });
@@ -155,14 +155,14 @@ export function validarDistribucion(
 
   if (!prioritariasSinTierra && !diferencialSinTierra) {
     criterios.push({
-      color: "#177575",
+      color: "var(--color-secundario-texto)",
       titulo: "Enfoque diferencial cumplido",
       detalle: "Todas las familias priorizadas y con enfoque diferencial recibieron tierra.",
     });
   }
 
   criterios.push({
-    color: "#33302C",
+    color: "var(--color-tinta)",
     titulo: `Índice de equidad: ${calcularEquidad(familias, asignaciones)}%`,
     detalle: "Combina cobertura, prelación, enfoque diferencial y uso del presupuesto.",
   });

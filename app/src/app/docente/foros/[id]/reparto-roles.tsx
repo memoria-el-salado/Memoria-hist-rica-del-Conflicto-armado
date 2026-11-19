@@ -73,7 +73,7 @@ export function RepartoRoles({
               setAviso(typeof res.ok === "string" ? res.ok : (res.error ?? ""));
             })
           }
-          className="mt-3 w-full cursor-pointer rounded-lg border border-primario-borde bg-primario-tinte px-3 py-2 text-[0.71875rem] font-bold text-primario-fuerte disabled:opacity-60"
+          className="mt-3 w-full cursor-pointer rounded-lg border border-primario-borde bg-primario-tinte px-3 py-2 text-[0.71875rem] font-bold text-primario-texto disabled:opacity-60"
         >
           {sinRol === 1 ? "Dar rol al estudiante que falta" : `Repartir a los ${sinRol} que faltan`}
         </button>

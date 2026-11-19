@@ -69,10 +69,10 @@ const ESTADO_EN_PANEL: Record<EstadoEstacion, string> = {
 };
 
 const ESTILO_ESTADO: Record<EstadoEstacion, { fondo: string; texto: string }> = {
-  CERRADO: { fondo: "#FDF8EF", texto: "#886216" },
-  COMPLETO: { fondo: "#E5F1F0", texto: "#177575" },
-  "EN CURSO": { fondo: "#FDF4F0", texto: "#B24528" },
-  "SIN INICIAR": { fondo: "#F3F0EC", texto: "#6D6762" },
+  CERRADO: { fondo: "var(--color-terciario-tinte)", texto: "var(--color-terciario-texto)" },
+  COMPLETO: { fondo: "var(--color-secundario-tinte)", texto: "var(--color-secundario-texto)" },
+  "EN CURSO": { fondo: "var(--color-primario-tinte)", texto: "var(--color-primario-texto)" },
+  "SIN INICIAR": { fondo: "var(--color-hundido)", texto: "var(--color-suave)" },
 };
 
 /** Mueve la vista hasta un elemento, sin animación si la persona la desactivó. */
@@ -124,14 +124,14 @@ export function RecorridoIlustrado({ ejes, explorador, siguiente, seleccionado, 
       {/* Lado a lado solo cuando hay ancho para los dos; si no, el panel va debajo del mapa. */}
       <div className="grid items-start gap-[18px] xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         {/* El camino va de lado si el mapa tiene ancho para sus etiquetas, y baja en zigzag si no. */}
-        <div className="@container overflow-hidden rounded-[14px] border border-borde bg-[#FBF6EF]">
+        <div className="@container overflow-hidden rounded-[14px] border border-borde bg-realce">
           <Escenario orientacion="horizontal" className="hidden @[580px]:block" {...{ ejes, explorador, siguiente, actual, onSeleccionar }} />
           <Escenario orientacion="vertical" className="mx-auto max-w-[420px] @[580px]:hidden" {...{ ejes, explorador, siguiente, actual, onSeleccionar }} />
           <p className="border-t border-borde bg-superficie px-4 py-2 text-[0.6875rem] text-apagado">
             El camino se llena hasta donde vas; tu explorador marca la estación por donde sigue tu viaje.
           </p>
           {proximaCerrada && (
-            <p className="flex items-start gap-1.5 border-t border-terciario-borde bg-terciario-tinte px-4 py-2 text-[0.71875rem] font-semibold text-terciario-fuerte">
+            <p className="flex items-start gap-1.5 border-t border-terciario-borde bg-terciario-tinte px-4 py-2 text-[0.71875rem] font-semibold text-terciario-texto">
               <svg className="mt-0.5 flex-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
               </svg>
@@ -235,7 +235,7 @@ function Escenario({
                 <span
                   aria-hidden="true"
                   className={`relative flex h-[52px] w-[52px] items-center justify-center rounded-full border-[3px] border-white text-[1.125rem] font-extrabold text-white shadow-[0_6px_14px_rgba(80,50,30,.22)] transition-transform group-hover:scale-110 ${
-                    elegida ? "scale-110 ring-4 ring-primario ring-offset-2 ring-offset-[#FBF6EF]" : ""
+                    elegida ? "scale-110 ring-4 ring-primario ring-offset-2 ring-offset-realce" : ""
                   }`}
                   style={{ background: cerrada ? "#6F6760" : fondoParaTextoBlanco(e.tono) }}
                 >
@@ -254,7 +254,7 @@ function Escenario({
                     </span>
                   )}
                 </span>
-                <span aria-hidden="true" className="rounded-md bg-white/90 px-1.5 py-0.5 text-[0.6875rem] font-bold leading-tight text-tinta shadow-[0_1px_2px_rgba(0,0,0,.06)]">
+                <span aria-hidden="true" className="rounded-md bg-superficie/90 px-1.5 py-0.5 text-[0.6875rem] font-bold leading-tight text-tinta shadow-[0_1px_2px_rgba(0,0,0,.06)]">
                   {corto}
                 </span>
                 <span
@@ -410,7 +410,7 @@ function PanelEstacion({
           aria-valuenow={eje.progreso}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="h-1.5 max-w-[220px] flex-1 overflow-hidden rounded-[9px] bg-[#F0EAE4]"
+          className="h-1.5 max-w-[220px] flex-1 overflow-hidden rounded-[9px] bg-hundido"
         >
           <span className="block h-full" style={{ width: `${eje.progreso}%`, background: eje.tono }} />
         </span>
@@ -420,7 +420,7 @@ function PanelEstacion({
       </div>
 
       {eje.bloqueo && (
-        <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-terciario-tinte px-3 py-2 text-[0.75rem] font-semibold text-terciario-fuerte">
+        <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-terciario-tinte px-3 py-2 text-[0.75rem] font-semibold text-terciario-texto">
           <svg className="mt-0.5 flex-none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
           </svg>
@@ -434,7 +434,7 @@ function PanelEstacion({
         </p>
       )}
       {eje.material > 0 && (
-        <p className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">
+        <p className="mt-2 text-[0.75rem] font-semibold text-secundario-texto">
           Este eje trae {recursos(eje.material)} de tu docente: los encuentras dentro de cada sesión.
         </p>
       )}
@@ -449,13 +449,13 @@ function PanelEstacion({
                 esSiguiente ? "border-primario bg-primario-tinte" : "border-borde bg-superficie-suave"
               }`}
             >
-              <div className="w-[34px] flex-none pt-0.5 text-[0.75rem] font-extrabold text-primario-fuerte">{s.codigo}</div>
+              <div className="w-[34px] flex-none pt-0.5 text-[0.75rem] font-extrabold text-primario-texto">{s.codigo}</div>
               <div className="min-w-0 flex-1 basis-[180px]">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[0.84375rem] font-bold">{s.titulo}</span>
                   {esSiguiente && <span className="rounded-full bg-primario-fuerte px-2 py-0.5 text-[0.625rem] font-bold text-white">Continúa aquí</span>}
                   {s.publicada && s.completada && (
-                    <span className="flex items-center gap-1 rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-fuerte">
+                    <span className="flex items-center gap-1 rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-texto">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
@@ -465,11 +465,11 @@ function PanelEstacion({
                 </div>
                 <div className="mt-0.5 flex flex-wrap gap-x-3 text-[0.6875rem] tracking-[.04em] text-suave">
                   {s.especial ? (
-                    <span className="font-bold text-terciario-fuerte">Actividad especial: {s.tipo}</span>
+                    <span className="font-bold text-terciario-texto">Actividad especial: {s.tipo}</span>
                   ) : (
                     <span>Actividad: {s.tipo}</span>
                   )}
-                  {s.material > 0 && <span className="font-semibold text-secundario-fuerte">Material: {recursos(s.material)}</span>}
+                  {s.material > 0 && <span className="font-semibold text-secundario-texto">Material: {recursos(s.material)}</span>}
                 </div>
                 {s.objetivo && <p className="mt-1.5 text-[0.71875rem] leading-[1.6] text-apagado">{s.objetivo}</p>}
                 {s.subsecciones.length > 0 && (
@@ -483,7 +483,7 @@ function PanelEstacion({
                 )}
               </div>
               {s.publicada && eje.bloqueo ? (
-                <span title={eje.bloqueo} className="flex-none rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2 text-[0.75rem] font-bold text-terciario-fuerte">
+                <span title={eje.bloqueo} className="flex-none rounded-lg border border-terciario-borde bg-terciario-tinte px-3.5 py-2 text-[0.75rem] font-bold text-terciario-texto">
                   Cerrada
                 </span>
               ) : s.publicada ? (
@@ -493,7 +493,7 @@ function PanelEstacion({
                   className={`flex min-h-10 flex-none items-center rounded-lg border px-3.5 text-[0.75rem] font-bold no-underline hover:no-underline ${
                     esSiguiente
                       ? "border-primario-fuerte bg-primario-fuerte text-white hover:bg-primario-hover"
-                      : "border-primario text-primario-fuerte hover:bg-primario-tinte"
+                      : "border-primario text-primario-texto hover:bg-primario-tinte"
                   }`}
                 >
                   Abrir

@@ -81,8 +81,8 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 <span
                   className="rounded-full px-2.5 py-1 text-[0.59375rem] font-extrabold tracking-[.07em]"
                   style={{
-                    background: c.estado === "ACTIVO" ? "#E5F1F0" : "#FDF8EF",
-                    color: c.estado === "ACTIVO" ? "#177575" : "#886216",
+                    background: c.estado === "ACTIVO" ? "var(--color-secundario-tinte)" : "var(--color-terciario-tinte)",
+                    color: c.estado === "ACTIVO" ? "var(--color-secundario-texto)" : "var(--color-terciario-texto)",
                   }}
                 >
                   {ETIQUETA_ESTADO[c.estado] ?? c.estado}
@@ -110,7 +110,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                 </span>
                 <Link
                   href={`/admin/casos/${c.id}`}
-                  className="ml-auto text-[0.71875rem] font-bold text-secundario-fuerte no-underline hover:underline"
+                  className="ml-auto text-[0.71875rem] font-bold text-secundario-texto no-underline hover:underline"
                 >
                   Actividades de sus sesiones →
                 </Link>
@@ -126,7 +126,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
           ))}
 
           {mensajeBorrado?.ok && (
-            <div role="status" className="text-[0.71875rem] font-semibold text-secundario-fuerte">
+            <div role="status" className="text-[0.71875rem] font-semibold text-secundario-texto">
               {mensajeBorrado.ok}
             </div>
           )}
@@ -138,7 +138,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
         </div>
 
         <form ref={formRef} action={accion} className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
             NUEVO CASO DE ESTUDIO
           </div>
 
@@ -173,7 +173,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
                   style={
                     activo
                       ? { background: "#177D7D", borderColor: "#177D7D", color: "#fff" }
-                      : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
+                      : { background: "var(--color-superficie)", borderColor: "var(--color-borde-campo)", color: "var(--color-tenue)" }
                   }
                 >
                   <input
@@ -203,7 +203,7 @@ export function ModulosGeograficos({ casos, ejesBase }: Props) {
           </button>
 
           {estado?.ok && (
-            <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
+            <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-texto">
               {estado.ok}
             </div>
           )}

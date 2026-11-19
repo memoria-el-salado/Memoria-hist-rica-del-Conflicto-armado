@@ -88,7 +88,7 @@ export function PanelDocente({
           <div className="rounded-xl border border-borde bg-superficie p-5">
             <div className="flex items-center justify-between">
               <span className="text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">PROGRESO COLECTIVO</span>
-              <span className="rounded-full bg-[#F5E3DC] px-2.5 py-1 text-[0.65625rem] font-bold text-primario-hover">
+              <span className="rounded-full border border-primario-borde bg-primario-tinte px-2.5 py-1 text-[0.65625rem] font-bold text-primario-texto">
                 Ciclo {ciclo}
               </span>
             </div>
@@ -121,7 +121,7 @@ export function PanelDocente({
           </div>
 
           <section aria-labelledby="titulo-competencias-grupo" className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 id="titulo-competencias-grupo" className="text-[0.6875rem] font-bold tracking-[.12em] text-secundario-fuerte">
+            <h2 id="titulo-competencias-grupo" className="text-[0.6875rem] font-bold tracking-[.12em] text-secundario-texto">
               COMPETENCIAS DEL GRUPO
             </h2>
             <ul className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2">
@@ -131,7 +131,7 @@ export function PanelDocente({
                     <span className="font-semibold text-tinta-media">{c.nombre}</span>
                     <span className="font-extrabold">{c.porcentaje}%</span>
                   </div>
-                  <div className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]">
+                  <div className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-hundido">
                     <div className="h-full bg-secundario" style={{ width: `${c.porcentaje}%` }} />
                   </div>
                 </li>
@@ -143,7 +143,7 @@ export function PanelDocente({
           </section>
 
           <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
-            <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+            <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
               <span className="text-[0.8125rem] font-extrabold">Gestión de Sesiones</span>
               <span className="text-[0.6875rem] font-bold text-suave">
                 {sesiones.filter((s) => s.publicada).length} de {sesiones.length} publicadas
@@ -153,7 +153,7 @@ export function PanelDocente({
               {sesiones.map((s) => (
                 <div
                   key={s.id}
-                  className="flex items-center gap-3.5 border-b border-[#F7F2ED] px-[18px] py-3.5"
+                  className="flex items-center gap-3.5 border-b border-linea-suave px-[18px] py-3.5"
                 >
                   <div className="w-[34px] text-[0.8125rem] font-extrabold text-tenue">{s.codigo}</div>
                   <div className="min-w-0 flex-1">
@@ -169,7 +169,7 @@ export function PanelDocente({
                       href={`/docente/sesiones/${s.id}`}
                       aria-label={`${textoEnlace(s)}: sesión ${s.codigo}`}
                       className={`mt-1 inline-block text-[0.71875rem] font-bold no-underline hover:underline ${
-                        esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && !s.planteada ? "text-primario-fuerte" : "text-secundario-fuerte"
+                        esGuiada(s.pantalla) && SE_PLANTEA[s.pantalla] && !s.planteada ? "text-primario-texto" : "text-secundario-texto"
                       }`}
                     >
                       {textoEnlace(s)}
@@ -185,7 +185,7 @@ export function PanelDocente({
                     onClick={() => iniciarTransicion(async () => { await alternarPublicacion(s.id); })}
                     className="flex h-[22px] w-10 cursor-pointer rounded-full p-0.5"
                     style={{
-                      background: s.publicada ? "#D95D39" : "#E1DAD3",
+                      background: s.publicada ? "#D95D39" : "var(--color-borde-campo)",
                       justifyContent: s.publicada ? "flex-end" : "flex-start",
                     }}
                   >
@@ -230,7 +230,7 @@ export function PanelDocente({
                     <span className="font-semibold text-tinta-media">{s.nombre}</span>
                     <span className="font-extrabold">{s.porcentaje}%</span>
                   </div>
-                  <div className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-[#F0EAE4]">
+                  <div className="mt-1.5 h-[7px] overflow-hidden rounded-[9px] bg-hundido">
                     <div className="h-full" style={{ width: `${s.porcentaje}%`, background: s.color }} />
                   </div>
                 </div>

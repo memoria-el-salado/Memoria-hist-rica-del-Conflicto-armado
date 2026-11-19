@@ -43,7 +43,7 @@ export default async function ForosEstudiantePage() {
                 className="block rounded-xl border border-borde bg-superficie p-[18px] transition-colors hover:border-primario/40"
               >
                 <div className="flex flex-wrap items-center gap-2 text-[0.625rem] font-extrabold tracking-[.07em]">
-                  <span className={f.abierto ? "text-secundario-fuerte" : "text-suave"}>
+                  <span className={f.abierto ? "text-secundario-texto" : "text-suave"}>
                     {f.abierto ? "ABIERTO" : "CERRADO"}
                   </span>
                   {f.sesion && <span className="text-tenue">SESIÓN {f.sesion.codigo}</span>}

@@ -44,15 +44,15 @@ const SUBSIDIOS: { valor: Subsidio; etiqueta: string }[] = [
 ];
 
 const PRIORIDAD: Record<Familia["prioridad"], { texto: string; clase: string }> = {
-  ALTA: { texto: "ALTA PRIORIDAD", clase: "bg-primario-tinte text-primario-fuerte" },
-  MEDIA: { texto: "MEDIA", clase: "bg-[#F3F0EC] text-apagado" },
-  BAJA: { texto: "BAJA", clase: "bg-[#F3F0EC] text-suave" },
+  ALTA: { texto: "ALTA PRIORIDAD", clase: "bg-primario-tinte text-primario-texto" },
+  MEDIA: { texto: "MEDIA", clase: "bg-hundido text-apagado" },
+  BAJA: { texto: "BAJA", clase: "bg-hundido text-suave" },
 };
 
 const RIESGO: Record<Riesgo, { color: string; fondo: string }> = {
-  BAJO: { color: "#177575", fondo: "#F1F7F6" },
-  MEDIO: { color: "#8A6516", fondo: "#FDF8EF" },
-  ALTO: { color: "#C0392B", fondo: "#FDF0EE" },
+  BAJO: { color: "var(--color-secundario-texto)", fondo: "var(--color-secundario-tinte)" },
+  MEDIO: { color: "#8A6516", fondo: "var(--color-terciario-tinte)" },
+  ALTO: { color: "var(--color-peligro)", fondo: "var(--color-peligro-tinte)" },
 };
 
 type Props = {
@@ -142,8 +142,8 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
           retornadas, con equidad según lo que cada una necesita.
         </p>
         <dl className="flex flex-wrap gap-2.5">
-          <Indicador titulo="PRESUPUESTO RESTANTE" valor={pesos(restante)} color={restante < 0 ? "#C0392B" : "#B8482A"} fondo={restante < 0 ? "#FDF0EE" : "#FDF4F0"} />
-          <Indicador titulo="HECTÁREAS DISPONIBLES" valor={`${HECTAREAS_TOTALES - totales.hectareas} ha`} color="#177575" fondo="#F1F7F6" />
+          <Indicador titulo="PRESUPUESTO RESTANTE" valor={pesos(restante)} color={restante < 0 ? "var(--color-peligro)" : "var(--color-primario-texto)"} fondo={restante < 0 ? "var(--color-peligro-tinte)" : "var(--color-primario-tinte)"} />
+          <Indicador titulo="HECTÁREAS DISPONIBLES" valor={`${HECTAREAS_TOTALES - totales.hectareas} ha`} color="var(--color-secundario-texto)" fondo="var(--color-secundario-tinte)" />
         </dl>
       </div>
 
@@ -193,7 +193,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     {marcas.length > 0 && <> · {marcas.join(" · ")}</>}
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-2">
-                    <span className={`text-[0.71875rem] font-bold ${ha > 0 ? "text-secundario-fuerte" : "text-suave"}`}>
+                    <span className={`text-[0.71875rem] font-bold ${ha > 0 ? "text-secundario-texto" : "text-suave"}`}>
                       {ha > 0 ? `${ha} ha · lote ${lotes.map(numero).join(", ")}` : "Sin tierra"}
                     </span>
                     <button
@@ -230,7 +230,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
         </section>
 
         <div className="grid min-w-0 content-start gap-4">
-          <section aria-labelledby="titulo-plano" className="rounded-2xl border border-borde bg-[#EFEAE4] p-4 sm:p-5">
+          <section aria-labelledby="titulo-plano" className="rounded-2xl border border-borde bg-hundido p-4 sm:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 id="titulo-plano" className="text-[0.9375rem] font-bold">
@@ -239,7 +239,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                 <p className="text-[0.71875rem] text-apagado">Subdivisiones de la finca «La Esperanza»</p>
               </div>
               <dl className="flex gap-2">
-                <Indicador titulo="EQUIDAD" valor={`${equidad}%`} color={equidad >= 70 ? "#177575" : "#8A6516"} fondo="#fff" />
+                <Indicador titulo="EQUIDAD" valor={`${equidad}%`} color={equidad >= 70 ? "var(--color-secundario-texto)" : "#8A6516"} fondo="#fff" />
                 <Indicador titulo="RIESGO" valor={riesgo} color={RIESGO[riesgo].color} fondo={RIESGO[riesgo].fondo} />
               </dl>
             </div>
@@ -250,7 +250,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
             </p>
 
             {error && (
-              <p role="alert" className="mt-2 rounded-lg bg-[#FDF0EE] px-3 py-2 text-[0.75rem] font-semibold text-peligro">
+              <p role="alert" className="mt-2 rounded-lg bg-peligro-tinte px-3 py-2 text-[0.75rem] font-semibold text-peligro">
                 {error}
               </p>
             )}
@@ -274,11 +274,11 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                     style={posicion}
                     className={`relative flex min-h-[76px] min-w-0 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border-2 border-dashed px-1 pb-1.5 pt-6 text-center sm:[grid-column:var(--col)] sm:[grid-row:var(--fila)] ${
                       loteElegido === l.id ? "ring-2 ring-primario" : ""
-                    } ${familia ? (bien ? "border-[#2E9B5E] bg-superficie" : "border-peligro bg-superficie") : "border-[#D9CFC6] bg-[#F7F3EF] hover:border-primario"}`}
+                    } ${familia ? (bien ? "border-exito bg-superficie" : "border-peligro bg-superficie") : "border-borde-campo bg-realce hover:border-primario"}`}
                   >
                     <span
                       className={`absolute left-1/2 top-1 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-[2px] text-[0.5625rem] font-extrabold ${
-                        familia ? (bien ? "bg-[#2E9B5E] text-white" : "bg-peligro text-white") : "bg-[#E9DDD3] text-tinta-media"
+                        familia ? (bien ? "bg-exito text-white" : "bg-peligro-fuerte text-white") : "bg-hundido text-tinta-media"
                       }`}
                     >
                       {pequeno ? (
@@ -351,7 +351,7 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
               <ul className="mt-3 grid gap-2.5" aria-live="polite">
                 {(criterios.length
                   ? criterios
-                  : [{ color: "#6D6762", titulo: "Sin validar", detalle: "Reparte los lotes y los subsidios, y pulsa «Validar distribución» para ver el dictamen." }]
+                  : [{ color: "var(--color-suave)", titulo: "Sin validar", detalle: "Reparte los lotes y los subsidios, y pulsa «Validar distribución» para ver el dictamen." }]
                 ).map((c) => (
                   <li key={c.titulo} className="flex items-start gap-2.5">
                     <span className="mt-[5px] h-[9px] w-[9px] flex-none rounded-full" style={{ background: c.color }} />
@@ -383,14 +383,14 @@ export function SimuladorTierras({ sesion, familias, inicial, repartoAnterior }:
                 </button>
               </div>
               {mensaje && (
-                <p role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">
+                <p role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-texto">
                   {mensaje}
                 </p>
               )}
             </section>
 
             <aside className="rounded-xl border border-terciario-borde bg-terciario-tinte p-4">
-              <div className="flex items-center gap-[7px] text-[0.65625rem] font-bold tracking-[.1em] text-terciario-fuerte">
+              <div className="flex items-center gap-[7px] text-[0.65625rem] font-bold tracking-[.1em] text-terciario-texto">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 16v-4M12 8h.01" />
@@ -421,7 +421,7 @@ function Indicador({ titulo, valor, color, fondo }: { titulo: string; valor: str
 function Estado({ bien, texto }: { bien: boolean; texto: string }) {
   return (
     <span className={`flex items-center justify-center gap-1 ${bien ? "text-tinta-media" : "font-bold text-peligro"}`}>
-      <span className={`h-1.5 w-1.5 flex-none rounded-full ${bien ? "bg-[#2E9B5E]" : "bg-peligro"}`} aria-hidden="true" />
+      <span className={`h-1.5 w-1.5 flex-none rounded-full ${bien ? "bg-exito" : "bg-peligro"}`} aria-hidden="true" />
       {texto}
     </span>
   );

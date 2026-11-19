@@ -163,7 +163,7 @@ export function MapaRespaldo({
   };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-xl border border-borde bg-[#F4EFE8]">
+    <div className="relative w-full overflow-hidden rounded-xl border border-borde bg-hundido">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${ANCHO} ${alto}`}
@@ -202,7 +202,7 @@ export function MapaRespaldo({
           marca(provisional.lat, provisional.lon, provisional.etiqueta, "provisional", true, false)}
       </svg>
 
-      <div className="absolute right-2 top-2 rounded-md bg-white/90 px-2.5 py-1 text-[0.65625rem] font-semibold text-tenue">
+      <div className="absolute right-2 top-2 rounded-md bg-superficie/90 px-2.5 py-1 text-[0.65625rem] font-semibold text-tenue">
         Sin conexión · coordenadas reales
       </div>
     </div>

@@ -23,7 +23,7 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
 
   return (
     <section aria-labelledby="titulo-recorrido" className="rounded-xl border border-borde bg-superficie p-5">
-      <h2 id="titulo-recorrido" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+      <h2 id="titulo-recorrido" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
         RECORRIDO DEL MAPA
       </h2>
       <p className="mt-1.5 text-[0.71875rem] leading-relaxed text-tenue">
@@ -76,7 +76,7 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
       </form>
 
       {enOrden && (
-        <ul className="mt-3.5 grid gap-1.5 border-t border-[#F1EBE5] pt-3">
+        <ul className="mt-3.5 grid gap-1.5 border-t border-linea pt-3">
           {ejes
             .filter((e) => !e.esPreambulo)
             .map((e, i) => {
@@ -106,7 +106,7 @@ export function RecorridoCurso({ cursoId, recorrido, ejes }: Props) {
             })}
         </ul>
       )}
-      {aviso?.ok && <p role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">{aviso.ok}</p>}
+      {aviso?.ok && <p role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">{aviso.ok}</p>}
       {aviso?.error && <p role="alert" className="mt-2 text-[0.71875rem] font-semibold text-peligro">{aviso.error}</p>}
     </section>
   );

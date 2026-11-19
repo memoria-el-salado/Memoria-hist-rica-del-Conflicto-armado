@@ -52,7 +52,7 @@ export function ComentariosLugar({
 
   return (
     <details open={abierto || undefined} className="group mt-2.5 rounded-lg border border-borde bg-superficie-suave">
-      <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-[0.71875rem] font-bold text-secundario-fuerte">
+      <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-[0.71875rem] font-bold text-secundario-texto">
         <svg
           width="14"
           height="14"
@@ -78,7 +78,7 @@ export function ComentariosLugar({
           <Link
             key={f.href}
             href={f.href}
-            className="mb-2 block rounded-md bg-terciario-tinte px-2.5 py-1.5 text-[0.71875rem] font-semibold text-terciario-fuerte"
+            className="mb-2 block rounded-md bg-terciario-tinte px-2.5 py-1.5 text-[0.71875rem] font-semibold text-terciario-texto"
           >
             Se debate en el foro: «{f.pregunta}» →
           </Link>
@@ -91,7 +91,7 @@ export function ComentariosLugar({
                 <div className="flex flex-wrap items-baseline gap-x-2 text-[0.6875rem]">
                   <span className="font-bold text-tinta-media">{c.autor}</span>
                   {c.delDocente && (
-                    <span className="rounded-full bg-primario-tinte px-1.5 text-[0.625rem] font-bold text-primario-fuerte">Docente</span>
+                    <span className="rounded-full bg-primario-tinte px-1.5 text-[0.625rem] font-bold text-primario-texto">Docente</span>
                   )}
                   <span className="text-suave">{c.cuando}</span>
                   {c.borrable && (
@@ -142,7 +142,7 @@ export function ComentariosLugar({
                 </span>
               )}
               {aviso?.ok && (
-                <span role="status" className="text-[0.6875rem] font-semibold text-secundario-fuerte">
+                <span role="status" className="text-[0.6875rem] font-semibold text-secundario-texto">
                   {aviso.ok}
                 </span>
               )}

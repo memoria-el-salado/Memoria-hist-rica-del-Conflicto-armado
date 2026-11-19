@@ -106,7 +106,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
               style={
                 activo
                   ? { background: "#B8482A", borderColor: "#B8482A", color: "#fff" }
-                  : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
+                  : { background: "var(--color-superficie)", borderColor: "var(--color-borde-campo)", color: "var(--color-tenue)" }
               }
             >
               {f.label}
@@ -118,7 +118,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
       {aviso && (
         <div
           role={aviso.error ? "alert" : "status"}
-          className={`mx-auto mb-4 max-w-[720px] text-center text-[0.78125rem] font-semibold ${aviso.error ? "text-peligro" : "text-secundario-fuerte"}`}
+          className={`mx-auto mb-4 max-w-[720px] text-center text-[0.78125rem] font-semibold ${aviso.error ? "text-peligro" : "text-secundario-texto"}`}
         >
           {aviso.error ?? aviso.ok}
         </div>
@@ -185,7 +185,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
       />
 
       <div className="mt-[22px] rounded-xl border border-borde bg-superficie p-6">
-        <h2 className="inline-block border-b-2 border-secundario pb-1 text-[1.125rem] font-extrabold text-secundario-fuerte">
+        <h2 className="inline-block border-b-2 border-secundario pb-1 text-[1.125rem] font-extrabold text-secundario-texto">
           Instrucciones del Sembrado
         </h2>
         <div className="mt-[18px] grid gap-[22px] sm:grid-cols-2">
@@ -206,7 +206,7 @@ export function JardinMemoria({ sesion, flores }: { sesion: DatosSesion; flores:
         </div>
       </div>
 
-      <p className="mt-6 text-center text-[0.9375rem] italic text-secundario-fuerte">
+      <p className="mt-6 text-center text-[0.9375rem] italic text-secundario-texto">
         &quot;La memoria es el único jardín del que no podemos ser expulsados.&quot;
       </p>
       <div className="mt-2 text-center text-[0.625rem] font-bold tracking-[.12em] text-suave">
@@ -306,7 +306,7 @@ function FormularioFlor({
 
   return (
     <form onSubmit={sembrar} className="animar-aparecer mx-auto mb-[26px] max-w-[720px] rounded-xl border border-borde bg-superficie p-[22px]">
-      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">SEMBRAR UNA MEMORIA</div>
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">SEMBRAR UNA MEMORIA</div>
       <div className="mt-3.5 grid gap-3.5 sm:grid-cols-2">
         <div>
           <label htmlFor="nombre" className={rotulo}>NOMBRE DE LA PERSONA</label>

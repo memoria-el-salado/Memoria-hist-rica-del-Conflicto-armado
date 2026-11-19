@@ -32,7 +32,7 @@ function OpcionesDestino({ docentes }: { docentes: Docente[] }) {
 }
 
 function Mensaje({ aviso }: { aviso: Aviso }) {
-  if (aviso?.ok) return <div role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">{aviso.ok}</div>;
+  if (aviso?.ok) return <div role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-texto">{aviso.ok}</div>;
   if (aviso?.error) return <div role="alert" className="mt-2 text-[0.75rem] font-semibold text-peligro">{aviso.error}</div>;
   return null;
 }
@@ -80,7 +80,7 @@ export function GestionAulas({
       <div className="rejilla-panel">
         <div className="grid min-w-0 content-start gap-5">
           <section aria-labelledby="titulo-aulas" className="overflow-hidden rounded-xl border border-borde bg-superficie">
-            <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+            <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
               <h2 id="titulo-aulas" className="text-[0.8125rem] font-extrabold">Aulas</h2>
               <span className="text-[0.6875rem] font-bold text-suave">{aulas.length}</span>
             </div>
@@ -92,7 +92,7 @@ export function GestionAulas({
             ) : (
               <ul>
                 {aulas.map((a) => (
-                  <li key={a.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
+                  <li key={a.id} className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-[18px] py-3 last:border-b-0">
                     <div className="min-w-0 flex-1 basis-[180px]">
                       <div className="text-[0.84375rem] font-bold">{a.etiqueta}</div>
                       <div className="text-[0.6875rem] text-suave">
@@ -119,14 +119,14 @@ export function GestionAulas({
           </section>
 
           <section aria-labelledby="titulo-estudiantes" className="overflow-hidden rounded-xl border border-borde bg-superficie">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] px-[18px] py-[15px]">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-linea px-[18px] py-[15px]">
               <h2 id="titulo-estudiantes" className="text-[0.8125rem] font-extrabold">Estudiantes</h2>
               <span className="text-[0.6875rem] font-bold text-suave">
                 {estudiantes.length}
                 {sinAula > 0 && <span className="text-peligro"> · {sinAula} sin docente</span>}
               </span>
             </div>
-            <div className="border-b border-[#F7F2ED] px-[18px] py-3">
+            <div className="border-b border-linea-suave px-[18px] py-3">
               <label htmlFor="filtro-estudiantes" className="sr-only">Buscar estudiante</label>
               <input
                 id="filtro-estudiantes"
@@ -147,12 +147,12 @@ export function GestionAulas({
             ) : (
               <ul>
                 {visibles.map((e) => (
-                  <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
+                  <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-[18px] py-3 last:border-b-0">
                     <div className="min-w-0 flex-1 basis-[160px]">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-[0.84375rem] font-bold">{e.nombre}</span>
                         {!e.conectado && (
-                          <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[0.625rem] font-bold text-[#8A6410]">Sin docente</span>
+                          <span className="rounded-full bg-aviso-tinte px-2 py-0.5 text-[0.625rem] font-bold text-aviso-texto">Sin docente</span>
                         )}
                       </div>
                       <div className="text-[0.6875rem] text-suave">{e.usuario}</div>

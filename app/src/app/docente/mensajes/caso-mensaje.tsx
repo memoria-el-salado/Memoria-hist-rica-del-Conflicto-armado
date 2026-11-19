@@ -32,7 +32,7 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
             {caso.estudiante}
           </h2>
           {caso.atendido ? (
-            <span className="rounded-full bg-secundario-tinte px-2.5 py-1 text-[0.65625rem] font-bold text-secundario-fuerte">Atendido</span>
+            <span className="rounded-full bg-secundario-tinte px-2.5 py-1 text-[0.65625rem] font-bold text-secundario-texto">Atendido</span>
           ) : (
             <span className="rounded-full bg-primario-fuerte px-2.5 py-1 text-[0.65625rem] font-bold text-white">Por atender</span>
           )}
@@ -50,7 +50,7 @@ export function CasoMensaje({ caso }: { caso: CasoVista }) {
           <dt className="font-bold text-tenue">Desde</dt>
           <dd>
             {caso.sesion ? (
-              <Link href={`/docente/sesiones/${caso.sesion.id}`} className="font-semibold text-secundario-fuerte">
+              <Link href={`/docente/sesiones/${caso.sesion.id}`} className="font-semibold text-secundario-texto">
                 la sesión {caso.sesion.nombre}
               </Link>
             ) : (

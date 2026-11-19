@@ -99,12 +99,12 @@ export function GrabadorRelato({
     <div className="grid gap-2">
       {grabacion && estado === "inactivo" ? (
         <div className="rounded-lg border border-secundario-borde bg-secundario-tinte p-2.5">
-          <div className="mb-1.5 text-[0.6875rem] font-bold text-secundario-fuerte">
+          <div className="mb-1.5 text-[0.6875rem] font-bold text-secundario-texto">
             Relato grabado · {duracion(grabacion.segundos)}
           </div>
           <audio controls src={grabacion.url} className="w-full" aria-label="Escuchar tu relato grabado" />
           <div className="mt-1.5 flex gap-3">
-            <button type="button" onClick={() => { quitar(); void empezar(); }} className="cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline">
+            <button type="button" onClick={() => { quitar(); void empezar(); }} className="cursor-pointer text-[0.71875rem] font-bold text-secundario-texto hover:underline">
               Volver a grabar
             </button>
             <button type="button" onClick={quitar} className="cursor-pointer text-[0.71875rem] font-bold text-apagado hover:text-peligro">
@@ -120,8 +120,8 @@ export function GrabadorRelato({
           aria-pressed={estado === "grabando"}
           className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 text-[0.78125rem] font-bold disabled:opacity-60 ${
             estado === "grabando"
-              ? "border-peligro bg-[#FDF0EE] text-peligro"
-              : "border-secundario bg-transparent text-secundario-fuerte"
+              ? "border-peligro bg-peligro-tinte text-peligro"
+              : "border-secundario bg-transparent text-secundario-texto"
           }`}
         >
           {estado === "grabando"

@@ -33,7 +33,7 @@ export function DeclaracionSubpoblacion({
         onClick={() => setAbierta((a) => !a)}
         aria-expanded={abierta}
         aria-label={`Declarar la subpoblación de ${estudiante.nombre}`}
-        className="ml-2 cursor-pointer font-bold text-secundario-fuerte hover:underline"
+        className="ml-2 cursor-pointer font-bold text-secundario-texto hover:underline"
       >
         {abierta ? "Cerrar" : "Cambiar"}
       </button>
@@ -93,7 +93,7 @@ export function DeclaracionSubpoblacion({
         </p>
       )}
       {aviso?.ok && (
-        <p role="status" className="mt-1 font-semibold text-secundario-fuerte">
+        <p role="status" className="mt-1 font-semibold text-secundario-texto">
           {aviso.ok}
         </p>
       )}

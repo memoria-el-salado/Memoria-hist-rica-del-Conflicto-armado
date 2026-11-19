@@ -59,7 +59,7 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
                 {s.mensaje ?? "Sin mensaje: no tiene que explicarse para pedir ayuda."}
               </p>
               {s.atendida ? (
-                <div className="mt-1.5 text-[0.6875rem] font-semibold text-secundario-fuerte">Atendida · {s.atendida}</div>
+                <div className="mt-1.5 text-[0.6875rem] font-semibold text-secundario-texto">Atendida · {s.atendida}</div>
               ) : (
                 <button
                   disabled={pendiente}
@@ -73,7 +73,7 @@ export function SolicitudesAcompanamiento({ solicitudes }: { solicitudes: Solici
           ))}
         </ul>
       )}
-      <Link href="/docente/mensajes" className="mt-3 inline-block text-[0.75rem] font-bold text-secundario-fuerte">
+      <Link href="/docente/mensajes" className="mt-3 inline-block text-[0.75rem] font-bold text-secundario-texto">
         Ver todos los mensajes →
       </Link>
     </section>

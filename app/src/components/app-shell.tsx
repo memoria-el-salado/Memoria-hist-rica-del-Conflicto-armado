@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import type { Rol } from "@prisma/client";
 import { ETIQUETA_ROL, INICIO_POR_ROL, NAV_POR_ROL, tituloDeRuta } from "@/lib/navegacion";
 import { Campana } from "@/components/avisos/campana";
+import { BotonTema } from "@/components/boton-tema";
 import { sesionDeRuta } from "@/lib/cuidado";
 import { FormularioAcompanamiento } from "@/components/cuidado/formulario-acompanamiento";
 import type { AvisoVista } from "@/lib/avisos-datos";
@@ -103,13 +104,13 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
         <Link
           href={INICIO_POR_ROL[rol]}
           aria-label="Ruta Pedagógica: ir al inicio"
-          className="hidden items-center gap-2.5 border-b border-[#F1EBE5] px-1 pb-4 text-inherit no-underline hover:no-underline md:flex"
+          className="hidden items-center gap-2.5 border-b border-linea px-1 pb-4 text-inherit no-underline hover:no-underline md:flex"
         >
           <div className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-lg bg-primario-fuerte text-white">
             <IconoMemoria tamano={22} />
           </div>
           <div>
-            <div className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">RUTA PEDAGÓGICA</div>
+            <div className="text-[0.75rem] font-extrabold tracking-[.06em] text-primario-texto">RUTA PEDAGÓGICA</div>
             <div className="text-[0.59375rem] tracking-[.08em] text-suave">ARCHIVO VIVO DE EL SALADO</div>
           </div>
         </Link>
@@ -128,8 +129,8 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                   aria-current={pathname === item.href ? "page" : activo ? "location" : undefined}
                   className={`relative flex w-full flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 text-center md:flex-row md:justify-start md:gap-[11px] md:px-[13px] md:py-2.5 md:text-left ${
                     activo
-                      ? "bg-primario-tinte font-bold text-primario-fuerte"
-                      : "font-medium text-apagado hover:bg-[#F7F2ED]"
+                      ? "bg-primario-tinte font-bold text-primario-texto"
+                      : "font-medium text-apagado hover:bg-realce"
                   }`}
                 >
                   <svg className="flex-none" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -158,7 +159,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                 aria-expanded={masAbierto}
                 aria-label="Más secciones"
                 className={`flex w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-[9px] px-1.5 py-2 ${
-                  ocultas.some((i) => pathname.startsWith(i.href)) ? "bg-primario-tinte font-bold text-primario-fuerte" : "font-medium text-apagado"
+                  ocultas.some((i) => pathname.startsWith(i.href)) ? "bg-primario-tinte font-bold text-primario-texto" : "font-medium text-apagado"
                 }`}
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
@@ -174,7 +175,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                         href={item.href}
                         onClick={() => setMasAbierto(false)}
                         aria-current={pathname === item.href ? "page" : undefined}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-[0.8125rem] font-semibold text-tinta no-underline hover:bg-[#F7F2ED]"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-[0.8125rem] font-semibold text-tinta no-underline hover:bg-realce"
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d={item.icon} />
@@ -227,7 +228,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             >
               <IconoMemoria tamano={20} />
             </Link>
-            <span className="whitespace-nowrap text-[0.875rem] font-extrabold tracking-[.1em] text-primario-fuerte">
+            <span className="whitespace-nowrap text-[0.875rem] font-extrabold tracking-[.1em] text-primario-texto">
               MEMORIA EL SALADO
             </span>
             <span className="truncate text-[0.75rem] text-suave">{titulo}</span>
@@ -244,17 +245,18 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
                 </svg>
               </button>
             )}
-            <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-fuerte md:block">
+            <div className="hidden rounded-full bg-secundario-tinte px-3 py-1.5 text-[0.6875rem] font-bold text-secundario-texto md:block">
               {indicador}
             </div>
             {avisos && <Campana avisos={avisos.avisos} nuevos={avisos.nuevos} />}
+            <BotonTema />
             <button
               onClick={ciclarEscala}
               title="Tamaño de texto"
               aria-label={`Tamaño de texto actual ${ETIQUETA_ESCALA[escala]}. Pulsa para cambiar.`}
               className={`cursor-pointer rounded-lg border px-[11px] py-1.5 text-[0.75rem] font-extrabold ${
                 escala !== "1"
-                  ? "border-secundario bg-secundario-tinte text-secundario-fuerte"
+                  ? "border-secundario bg-secundario-tinte text-secundario-texto"
                   : "border-borde-campo bg-superficie text-apagado"
               }`}
             >
@@ -302,7 +304,7 @@ export function AppShell({ rol, nombre, iniciales, indicador, solicitudesPendien
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-[480px] rounded-[14px] bg-superficie px-7 py-[26px] shadow-[0_24px_60px_rgba(0,0,0,.22)]"
           >
-            <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-fuerte">
+            <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d={ICONO_ACOMPANAMIENTO} />
               </svg>

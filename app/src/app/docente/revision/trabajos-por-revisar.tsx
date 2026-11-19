@@ -51,11 +51,11 @@ function TarjetaTrabajo({ trabajo: t }: { trabajo: Trabajo }) {
         </div>
         <span className="text-[0.65625rem] text-suave">
           {t.cuando}
-          {t.pendiente && <strong className="ml-2 text-primario-fuerte">SIN COMENTAR</strong>}
+          {t.pendiente && <strong className="ml-2 text-primario-texto">SIN COMENTAR</strong>}
         </span>
       </div>
       {t.detalle.map((d) => (
-        <p key={d} className="mt-1.5 text-[0.75rem] font-semibold text-secundario-fuerte">
+        <p key={d} className="mt-1.5 text-[0.75rem] font-semibold text-secundario-texto">
           {d}
         </p>
       ))}
@@ -108,7 +108,7 @@ function TarjetaTrabajo({ trabajo: t }: { trabajo: Trabajo }) {
           </p>
         )}
         {estado?.ok && (
-          <p role="status" className="basis-full text-[0.71875rem] font-semibold text-secundario-fuerte">
+          <p role="status" className="basis-full text-[0.71875rem] font-semibold text-secundario-texto">
             {estado.ok}
           </p>
         )}

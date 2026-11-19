@@ -22,7 +22,7 @@ export function ReproductorRecurso({ recurso, conAviso = true }: { recurso: Recu
   if (!aceptado) {
     return (
       <div role="note" className="rounded-lg border border-primario-borde bg-primario-tinte p-3.5">
-        <div className="text-[0.65625rem] font-extrabold tracking-[.1em] text-primario-fuerte">ALERTA DE CUIDADO</div>
+        <div className="text-[0.65625rem] font-extrabold tracking-[.1em] text-primario-texto">ALERTA DE CUIDADO</div>
         <p className="mt-1 text-[0.78125rem] leading-relaxed text-tinta-media">
           Este recurso trae contenido que puede ser difícil de ver o escuchar. Tómate tu tiempo: puedes
           detenerlo cuando quieras y hablarlo con tu docente.
@@ -42,7 +42,7 @@ export function ReproductorRecurso({ recurso, conAviso = true }: { recurso: Recu
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-block rounded-md border border-borde-campo bg-superficie px-3 py-1.5 text-[0.75rem] font-bold text-primario-fuerte hover:border-primario"
+      className="inline-block rounded-md border border-borde-campo bg-superficie px-3 py-1.5 text-[0.75rem] font-bold text-primario-texto hover:border-primario"
     >
       {texto}
     </a>

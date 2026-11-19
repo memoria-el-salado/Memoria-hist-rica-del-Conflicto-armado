@@ -24,7 +24,7 @@ export function FormularioAcompanamiento({ sesionId }: { sesionId: string | null
 
   if (resultado?.ok) {
     return (
-      <div role="status" className="rounded-lg border border-secundario-borde bg-secundario-tinte px-3.5 py-3 text-[0.78125rem] leading-relaxed text-secundario-fuerte">
+      <div role="status" className="rounded-lg border border-secundario-borde bg-secundario-tinte px-3.5 py-3 text-[0.78125rem] leading-relaxed text-secundario-texto">
         {resultado.ok}
       </div>
     );

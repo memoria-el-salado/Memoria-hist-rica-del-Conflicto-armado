@@ -134,7 +134,7 @@ export function LienzoDibujo({ onCambio }: { onCambio: (dibujo: Blob | null) => 
           </button>
         ))}
         <span className="mx-1 h-4 w-px bg-borde" aria-hidden="true" />
-        <button type="button" onClick={deshacer} disabled={pasos === 0} className="cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte disabled:opacity-40">
+        <button type="button" onClick={deshacer} disabled={pasos === 0} className="cursor-pointer text-[0.71875rem] font-bold text-secundario-texto disabled:opacity-40">
           Deshacer
         </button>
         <button type="button" onClick={borrarTodo} disabled={pasos === 0} className="cursor-pointer text-[0.71875rem] font-bold text-apagado hover:text-peligro disabled:opacity-40">

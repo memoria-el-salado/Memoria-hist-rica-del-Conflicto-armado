@@ -82,7 +82,7 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
         <TextoSesion sesion={sesion} />
 
         <form onSubmit={guardar} className="self-start rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">{consigna.rotulo}</div>
+          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">{consigna.rotulo}</div>
           <p className="mt-1.5 text-[0.75rem] leading-[1.6] text-tenue">{consigna.ayuda}</p>
 
           {tipo === "meubico" && sesion.preguntaOrientadora && (
@@ -167,7 +167,7 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
                     <button
                       type="button"
                       onClick={() => setFuentes((todas) => [...todas, ""])}
-                      className="mt-1.5 cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline"
+                      className="mt-1.5 cursor-pointer text-[0.71875rem] font-bold text-secundario-texto hover:underline"
                     >
                       + Otra fuente
                     </button>
@@ -191,7 +191,7 @@ export function ActividadGuiada({ sesion, tipo, previa, dilema, pregunta, repart
                 {pendiente ? "Guardando..." : previa ? "Actualizar" : "Guardar"}
               </button>
               {estado?.ok && (
-                <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
+                <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">
                   {estado.ok}
                 </div>
               )}
@@ -216,10 +216,10 @@ function RepartoDelCurso({ reparto, miOpcion }: { reparto: { opcion: string; cua
   const total = reparto.reduce((s, r) => s + r.cuantos, 0);
   return (
     <section aria-labelledby="titulo-reparto" className="mt-[18px] rounded-xl border border-secundario-borde bg-secundario-tinte p-5">
-      <h2 id="titulo-reparto" className="text-[0.75rem] font-extrabold tracking-[.06em] text-secundario-fuerte">
+      <h2 id="titulo-reparto" className="text-[0.75rem] font-extrabold tracking-[.06em] text-secundario-texto">
         CÓMO ELIGIÓ TU CURSO
       </h2>
-      <p className="mt-1 text-[0.71875rem] text-[#3F6E6C]">
+      <p className="mt-1 text-[0.71875rem] text-secundario-apagado">
         {total === 1 ? "1 respuesta" : `${total} respuestas`}, sin nombres. Llévalo a la discusión: ¿qué pesó en cada elección?
       </p>
       <ul className="mt-3 grid gap-2">
@@ -230,13 +230,13 @@ function RepartoDelCurso({ reparto, miOpcion }: { reparto: { opcion: string; cua
               <div className="flex justify-between gap-2 text-[0.78125rem]">
                 <span className="font-semibold text-tinta-media">
                   {r.opcion}
-                  {r.opcion === miOpcion && <span className="ml-1.5 text-[0.6875rem] font-bold text-secundario-fuerte">(tu elección)</span>}
+                  {r.opcion === miOpcion && <span className="ml-1.5 text-[0.6875rem] font-bold text-secundario-texto">(tu elección)</span>}
                 </span>
-                <span className="font-extrabold text-secundario-fuerte">
+                <span className="font-extrabold text-secundario-texto">
                   {r.cuantos} · {porcentaje}%
                 </span>
               </div>
-              <div className="mt-1 h-[7px] overflow-hidden rounded-[9px] bg-white/70">
+              <div className="mt-1 h-[7px] overflow-hidden rounded-[9px] bg-superficie/70">
                 <div className="h-full bg-secundario" style={{ width: `${porcentaje}%` }} />
               </div>
             </li>
@@ -250,7 +250,7 @@ function RepartoDelCurso({ reparto, miOpcion }: { reparto: { opcion: string; cua
 function MuroDeCompromisos({ muro, acuerdos }: { muro: { autor: string; texto: string; propio: boolean }[]; acuerdos: boolean }) {
   return (
     <section aria-labelledby="titulo-muro" className="mt-[18px] rounded-xl border border-terciario-borde bg-terciario-tinte p-5">
-      <h2 id="titulo-muro" className="text-[0.75rem] font-extrabold tracking-[.06em] text-terciario-fuerte">
+      <h2 id="titulo-muro" className="text-[0.75rem] font-extrabold tracking-[.06em] text-terciario-texto">
         {acuerdos ? "LOS ACUERDOS DE TU CURSO" : "COMPROMISOS DE TU CURSO"}
       </h2>
       {acuerdos && (
@@ -263,9 +263,9 @@ function MuroDeCompromisos({ muro, acuerdos }: { muro: { autor: string; texto: s
       ) : (
         <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
           {muro.map((m, i) => (
-            <li key={i} className="rounded-lg border border-white bg-white/70 px-3.5 py-3">
+            <li key={i} className="rounded-lg border border-superficie bg-superficie/70 px-3.5 py-3">
               <p className="whitespace-pre-line text-[0.8125rem] leading-relaxed text-tinta-media">{m.texto}</p>
-              <div className="mt-1.5 text-[0.6875rem] font-bold text-terciario-fuerte">{m.propio ? `${m.autor} (tú)` : m.autor}</div>
+              <div className="mt-1.5 text-[0.6875rem] font-bold text-terciario-texto">{m.propio ? `${m.autor} (tú)` : m.autor}</div>
             </li>
           ))}
         </ul>

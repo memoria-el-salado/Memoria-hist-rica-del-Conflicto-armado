@@ -29,7 +29,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
 
       <div className="rejilla-panel-ancha">
         <article className="rounded-xl border border-borde bg-superficie px-6 py-6 sm:px-8">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EBE5] pb-3">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-linea pb-3">
             <span className="text-[0.65625rem] font-bold tracking-[.1em] text-suave">
               TEXTO DE LA SESIÓN
             </span>
@@ -38,7 +38,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                 href={sesion.documento.enlace}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[0.71875rem] font-semibold text-secundario-fuerte"
+                className="text-[0.71875rem] font-semibold text-secundario-texto"
               >
                 Abrir el PDF original
               </a>
@@ -65,7 +65,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
                     style={{
                       borderLeftColor: cita === bloque.texto ? "#EBB035" : "transparent",
                       background: cita === bloque.texto ? "#FBEFD8" : "transparent",
-                      color: "#5B524B",
+                      color: "var(--color-tinta-media)",
                     }}
                   >
                     {bloque.texto}
@@ -84,7 +84,7 @@ export function LecturaAnotada({ sesion, hilos }: { sesion: DatosSesion; hilos: 
           )}
 
           {sinTexto.length > 0 && (
-            <div className="mt-5 border-t border-[#F1EBE5] pt-4">
+            <div className="mt-5 border-t border-linea pt-4">
               <div className="text-[0.65625rem] font-bold tracking-[.12em] text-tenue">
                 TAMBIÉN EN ESTA SESIÓN
               </div>

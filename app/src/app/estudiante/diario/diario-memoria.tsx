@@ -54,7 +54,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
         <svg className="mt-px flex-none" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#177575" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4" />
         </svg>
-        <div className="text-[0.78125rem] leading-[1.6] text-[#3F6E6C]">
+        <div className="text-[0.78125rem] leading-[1.6] text-secundario-apagado">
           Tus entradas son <strong>privadas por defecto</strong>. El docente solo verá las que marques como
           compartidas, y podrá responderte en ellas.
         </div>
@@ -76,7 +76,7 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
                 style={
                   activo
                     ? { background: e.color, borderColor: e.color, color: "#fff" }
-                    : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
+                    : { background: "var(--color-superficie)", borderColor: "var(--color-borde-campo)", color: "var(--color-tenue)" }
                 }
               >
                 {e.label}
@@ -104,15 +104,15 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
             className="cursor-pointer rounded-lg border px-3.5 py-2.5 text-[0.75rem] font-bold"
             style={
               compartir
-                ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
-                : { borderColor: "#E4DDD6", background: "#fff", color: "#6F6760" }
+                ? { borderColor: "#1B8A8A", background: "var(--color-secundario-tinte)", color: "var(--color-secundario-texto)" }
+                : { borderColor: "var(--color-borde-campo)", background: "var(--color-superficie)", color: "var(--color-tenue)" }
             }
           >
             Compartir con el docente: {compartir ? "SÍ" : "NO"}
           </button>
           <div className="flex items-center gap-2.5">
             {estado?.ok && (
-              <span role="status" className="text-[0.71875rem] font-semibold text-secundario-fuerte">
+              <span role="status" className="text-[0.71875rem] font-semibold text-secundario-texto">
                 {estado.ok}
               </span>
             )}
@@ -155,8 +155,8 @@ export function DiarioMemoria({ entradas }: { entradas: Entrada[] }) {
                 <span
                   className="rounded-full px-[9px] py-[3px] text-[0.59375rem] font-extrabold tracking-[.07em]"
                   style={{
-                    background: d.privada ? "#F3F0EC" : "#E5F1F0",
-                    color: d.privada ? "#6D6762" : "#177575",
+                    background: d.privada ? "var(--color-hundido)" : "var(--color-secundario-tinte)",
+                    color: d.privada ? "var(--color-suave)" : "var(--color-secundario-texto)",
                   }}
                 >
                   {d.privada ? "PRIVADA" : "COMPARTIDA CON DOCENTE"}

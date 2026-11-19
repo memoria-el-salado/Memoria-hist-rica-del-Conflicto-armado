@@ -268,7 +268,7 @@ export function ImportadorDocumento({
             type="file"
             accept="application/pdf,.pdf"
             required
-            className="flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1.5 file:text-[0.75rem] file:font-bold file:text-primario-fuerte"
+            className="flex-1 rounded-lg border border-borde-campo bg-superficie-suave px-3 py-2.5 text-[0.8125rem] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1.5 file:text-[0.75rem] file:font-bold file:text-primario-texto"
           />
           <button
             type="submit"
@@ -297,7 +297,7 @@ export function ImportadorDocumento({
         <div className="animar-aparecer rounded-xl border border-borde bg-superficie p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <div>
-              <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+              <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
                 REVISA LA ESTRUCTURA DETECTADA
               </div>
               <div className="mt-1 text-[0.71875rem] text-suave">
@@ -350,7 +350,7 @@ export function ImportadorDocumento({
                   {eje.sesiones.map((sesion) => (
                     <div key={sesion.codigo} className="border-l-2 border-borde pl-3">
                       <div className="flex items-center gap-2">
-                        <span className="w-9 flex-none text-[0.6875rem] font-extrabold text-primario-fuerte">
+                        <span className="w-9 flex-none text-[0.6875rem] font-extrabold text-primario-texto">
                           {sesion.codigo}
                         </span>
                         <label className="sr-only" htmlFor={`ses-${sesion.codigo}`}>
@@ -405,7 +405,7 @@ export function ImportadorDocumento({
                           className="rounded-full px-2 py-0.5 text-[0.625rem] font-bold"
                           style={
                             sesion.contenido.trim().length >= 200
-                              ? { background: "#E5F1F0", color: "#177575" }
+                              ? { background: "var(--color-secundario-tinte)", color: "var(--color-secundario-texto)" }
                               : { background: "#FBF1DC", color: "#8A6410" }
                           }
                         >
@@ -545,7 +545,7 @@ export function ImportadorDocumento({
       )}
 
       {mensaje?.ok && (
-        <div role="status" className="mt-4 rounded-lg border border-secundario-borde bg-secundario-tinte px-4 py-3 text-[0.78125rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-4 rounded-lg border border-secundario-borde bg-secundario-tinte px-4 py-3 text-[0.78125rem] font-semibold text-secundario-texto">
           {mensaje.ok}
         </div>
       )}
@@ -566,13 +566,13 @@ export function ImportadorDocumento({
           {documentos.map((d) => (
             <div
               key={d.id}
-              className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-4 py-3 last:border-b-0"
+              className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-4 py-3 last:border-b-0"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[0.8125rem] font-bold">{d.titulo}</span>
                   {d.soloDocentes && (
-                    <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[0.625rem] font-bold text-[#5B4B8A]">
+                    <span className="rounded-full bg-morado-tinte px-2 py-0.5 text-[0.625rem] font-bold text-morado-texto">
                       Solo docentes
                     </span>
                   )}

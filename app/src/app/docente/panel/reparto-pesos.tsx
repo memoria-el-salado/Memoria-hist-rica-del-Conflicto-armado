@@ -114,18 +114,18 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
         ))}
       </div>
 
-      <div className="mt-3.5 flex items-center justify-between border-t border-[#F1EBE5] pt-3">
+      <div className="mt-3.5 flex items-center justify-between border-t border-linea pt-3">
         <span className="text-[0.75rem] font-semibold text-tinta-media">Total repartido</span>
         <span
           className="text-[0.9375rem] font-extrabold"
-          style={{ color: revision.valida ? "#177575" : "#C0392B" }}
+          style={{ color: revision.valida ? "var(--color-secundario-texto)" : "var(--color-peligro)" }}
         >
           {revision.suma}%
         </span>
       </div>
       <p
         className="mt-1 text-[0.71875rem] font-semibold"
-        style={{ color: revision.valida ? "#177575" : "#C0392B" }}
+        style={{ color: revision.valida ? "var(--color-secundario-texto)" : "var(--color-peligro)" }}
       >
         {revision.mensaje}
       </p>
@@ -139,7 +139,7 @@ export function RepartoPesos({ ejes }: { ejes: EjePeso[] }) {
       </button>
 
       {mensaje?.ok && (
-        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">
           {mensaje.ok}
         </div>
       )}

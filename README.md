@@ -70,7 +70,7 @@ detalla la instalación, la arquitectura y las decisiones técnicas.
 ## Estado
 
 Versión 2.0 final. Cubre por completo los diez casos de uso del proyecto, los mockups revisados del
-documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 411 pruebas
+documento de avance y la retroalimentación de los docentes y de la tutora. Tiene 415 pruebas
 unitarias —política de contraseñas, separación de funciones por rol, visibilidad entre cursos, aulas,
 reglas del simulador, importación de los PDF, ubicación de las cartillas, actividades de la cartilla,
 avance ponderado, competencias y subpoblaciones— y 28 pruebas de extremo a extremo que recorren cada
@@ -289,7 +289,7 @@ La política vive en `src/lib/politica-contrasena.ts`, aislada del resto y cubie
 | `npm run humo:simulador` | Simulador por lotes: arrastrar, elegir y tocar, o asignar desde el lote; tope de 40 ha, subsidios, equidad y riesgo; guarda los lotes y reinicia |
 | `npm run humo:cartillas` | El administrador vincula las cartillas al módulo; la sesión las abre en su apartado (el estudiante, solo la suya; el docente, también la guía para maestros) y avisa cuando la cartilla no desarrolla la sesión |
 | `npm run humo:actividades-cartilla` | Los ejercicios de la cartilla en cada sesión: ordenar, clasificar y responder con el número del apartado; se corrigen al guardar y el docente ve las respuestas |
-| `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 38 pantallas de los tres roles en celular, tableta y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
+| `npm run humo:accesibilidad` | Pasa axe-core (WCAG 2.1, niveles A y AA) por las 38 pantallas de los tres roles en celular, tableta y computador, y en tema oscuro en celular y computador; comprueba que nada se desborda a lo ancho y que el primer Tab ofrece saltar al contenido |
 | `npm run humo:ruta` | El mapa ilustrado (cómo funciona, por dónde seguir, estaciones que se tocan o se recorren con las flechas, panel a la vista y camino en zigzag en el celular) y la sesión en cuatro pasos: material antes de la actividad, retroalimentación y siguiente sesión |
 | `npm run humo:cuidado` | El docente activa una alerta; el estudiante la lee antes de la sesión y le escribe a su docente, también desde el botón «Acompañamiento» del menú; el mensaje queda como un caso en «Mensajes» del docente, que lo marca como atendido |
 | `npm run humo:escala-texto` | Mide en el navegador que A+ y A++ agrandan un 12 % y un 25 % el título, el menú y la cabecera; la elección se recuerda al recargar y en el celular nada se desborda |
@@ -446,6 +446,8 @@ y la esquina superior izquierda de la interfaz.
 React) y hace en paralelo las consultas que no dependen entre sí. El tiempo lo domina la distancia
 a la base de Supabase (us-west-2): conviene que las funciones de Vercel corran en la región más
 cercana a ella. `npm run rendimiento` mide cada pantalla contra la aplicación en marcha.
+
+**Tema claro y oscuro**: todos los roles y la portada tienen un botón (sol y luna) para cambiar de tema; sin elección, se sigue la preferencia del sistema y la elegida se recuerda en el navegador. Solo cambian los tokens de color de `globals.css` (`html[data-tema="oscuro"]`); los textos de cada tono tienen su propio token (`*-texto`), separado del de fondos, para llegar a 4.5:1 en ambos temas.
 
 **Accesibilidad**: control de tamaño de texto (A / A+ / A++, WCAG 1.4.4) que agranda toda la interfaz
 —contenido, menú y cabecera— porque todo el texto está en `rem` y el control cambia la raíz; la elección

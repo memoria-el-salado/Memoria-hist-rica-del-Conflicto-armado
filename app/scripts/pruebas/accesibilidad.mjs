@@ -2,7 +2,7 @@
  * Accesibilidad y diseño responsivo de toda la plataforma.
  *
  * Recorre cada pantalla de los tres roles, y la portada y el login sin cuenta,
- * en un celular, una tableta y un computador. En cada una:
+ * en un celular, una tableta y un computador, y en tema oscuro en celular y computador. En cada una:
  *
  *   - pasa axe-core con las reglas de las WCAG 2.1, niveles A y AA (RNF02);
  *   - con el teclado, el primer Tab ofrece saltar al contenido (2.4.1);
@@ -27,6 +27,9 @@ const TAMANOS = [
   { nombre: "celular", width: 375, height: 812, isMobile: true, hasTouch: true },
   { nombre: "tableta", width: 768, height: 1024, isMobile: true, hasTouch: true },
   { nombre: "computador", width: 1280, height: 900 },
+  // El tema oscuro cambia todos los colores: el contraste se vuelve a medir.
+  { nombre: "celular, tema oscuro", width: 375, height: 812, isMobile: true, hasTouch: true, oscuro: true },
+  { nombre: "computador, tema oscuro", width: 1280, height: 900, oscuro: true },
 ];
 
 const ACTIVIDADES = ["zona", "cartografia", "copla", "despensa", "simulador", "jardin", "diario", "meubico", "dilema", "investigar", "testimonios", "compromiso"];
@@ -62,10 +65,17 @@ const resumen = new Map();
 
 async function revisar(pagina, ruta, tamano) {
   await pagina.setViewport(tamano);
-  const respuesta = await visitar(pagina, `${BASE}${ruta}`);
+  let respuesta = await visitar(pagina, `${BASE}${ruta}`);
   if (respuesta && respuesta.status() >= 400) {
     comprobar(`${ruta} abre (${tamano.nombre})`, false, `HTTP ${respuesta.status()}`);
     return;
+  }
+  // El tema se elige como lo haría la persona: queda guardado y se recarga.
+  const tema = tamano.oscuro ? "oscuro" : "claro";
+  if ((await pagina.evaluate(() => document.documentElement.dataset.tema)) !== tema) {
+    await pagina.evaluate((t) => localStorage.setItem("memoria.tema", t), tema);
+    respuesta = await pagina.reload({ waitUntil: "load" });
+    await pagina.waitForNetworkIdle({ idleTime: 500, timeout: 10_000 }).catch(() => {});
   }
   const fallas = await auditar(pagina);
   const ancho = await desborde(pagina);

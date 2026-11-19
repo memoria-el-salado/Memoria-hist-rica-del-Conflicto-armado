@@ -83,11 +83,11 @@ export function GestionContenido({ recursos, ejes, documentos }: Props) {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[0.8125rem] font-bold">{d.titulo}</span>
                     {d.soloDocentes ? (
-                      <span className="rounded-full bg-[#EDE7F6] px-2 py-0.5 text-[0.625rem] font-bold text-[#5B4B8A]">
+                      <span className="rounded-full bg-morado-tinte px-2 py-0.5 text-[0.625rem] font-bold text-morado-texto">
                         Solo docentes
                       </span>
                     ) : (
-                      <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-fuerte">
+                      <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.625rem] font-bold text-secundario-texto">
                         Visible para estudiantes
                       </span>
                     )}
@@ -120,14 +120,14 @@ function EstadoAccesible({ r }: { r: Recurso }) {
   if (r.requisito === "ninguno") return null;
   if (r.vista.pendiente) {
     return (
-      <div className="mt-2 rounded-md border border-primario-borde bg-primario-tinte px-2.5 py-1.5 text-[0.6875rem] text-primario-fuerte">
+      <div className="mt-2 rounded-md border border-primario-borde bg-primario-tinte px-2.5 py-1.5 text-[0.6875rem] text-primario-texto">
         <span className="font-extrabold tracking-[.05em]">NO LO VEN LOS ESTUDIANTES · </span>
         {r.vista.pendiente}
       </div>
     );
   }
   return (
-    <div className="mt-2 text-[0.625rem] font-extrabold tracking-[.06em] text-secundario-fuerte">
+    <div className="mt-2 text-[0.625rem] font-extrabold tracking-[.06em] text-secundario-texto">
       {r.vista.transcripcion?.sincronizada ? "TRANSCRIPCIÓN SINCRONIZADA" : "TRANSCRIPCIÓN EN TEXTO"}
     </div>
   );
@@ -237,7 +237,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
             <button
               onClick={() => setAbierto((a) => (a === r.id ? null : r.id))}
               aria-expanded={abierto === r.id}
-              className="cursor-pointer text-primario-texto hover:text-primario-fuerte"
+              className="cursor-pointer text-primario-texto hover:text-primario-texto"
             >
               {abierto === r.id ? "Ocultar" : "Ver"}
             </button>
@@ -245,7 +245,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
               <button
                 onClick={() => setEditando((a) => (a === r.id ? null : r.id))}
                 aria-expanded={editando === r.id}
-                className="cursor-pointer text-primario-texto hover:text-primario-fuerte"
+                className="cursor-pointer text-primario-texto hover:text-primario-texto"
               >
                 Transcripción
               </button>
@@ -260,8 +260,8 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                   className="cursor-pointer rounded-full border px-2.5 py-[3px] text-[0.59375rem] font-extrabold tracking-[.06em] disabled:opacity-60"
                   style={
                     r.alerta
-                      ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
-                      : { borderColor: "#E4DDD6", background: "#fff", color: "#6D6762" }
+                      ? { borderColor: "#D95D39", background: "var(--color-primario-tinte)", color: "var(--color-primario-texto)" }
+                      : { borderColor: "var(--color-borde-campo)", background: "var(--color-superficie)", color: "var(--color-suave)" }
                   }
                 >
                   ALERTA {r.alerta ? "ACTIVA" : "INACTIVA"}
@@ -281,7 +281,7 @@ function ListaRecursos({ recursos }: { recursos: Recurso[] }) {
                 </button>
               </>
             ) : (
-              r.alerta && <span className="text-[0.625rem] font-extrabold tracking-[.06em] text-primario-fuerte">ALERTA ACTIVA</span>
+              r.alerta && <span className="text-[0.625rem] font-extrabold tracking-[.06em] text-primario-texto">ALERTA ACTIVA</span>
             )}
           </div>
 
@@ -381,12 +381,12 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
 
   const pestaña = (activa: boolean) =>
     `flex-1 cursor-pointer rounded-md px-3 py-1.5 text-[0.71875rem] font-bold ${
-      activa ? "bg-superficie text-primario-fuerte shadow-sm" : "text-tenue"
+      activa ? "bg-superficie text-primario-texto shadow-sm" : "text-tenue"
     }`;
 
   return (
     <form key={formulario} onSubmit={enviar} className="h-fit rounded-xl border border-borde bg-superficie p-5">
-      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">NUEVO RECURSO</div>
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">NUEVO RECURSO</div>
 
       <label htmlFor="titulo" className={rotulo}>
         TÍTULO
@@ -462,7 +462,7 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
             type="file"
             accept={[...def.mimes, ...def.extensiones.map((x) => `.${x}`)].join(",")}
             onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
-            className={`${campo} file:mr-3 file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1 file:text-[0.75rem] file:font-bold file:text-primario-fuerte`}
+            className={`${campo} file:mr-3 file:rounded-md file:border-0 file:bg-primario-tinte file:px-3 file:py-1 file:text-[0.75rem] file:font-bold file:text-primario-texto`}
           />
         </>
       ) : (
@@ -506,8 +506,8 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
         className="mt-3.5 w-full cursor-pointer rounded-lg border px-4 py-2.5 text-[0.75rem] font-bold"
         style={
           alerta
-            ? { borderColor: "#D95D39", background: "#FDF4F0", color: "#B24528" }
-            : { borderColor: "#E4DDD6", background: "#fff", color: "#6F6760" }
+            ? { borderColor: "#D95D39", background: "var(--color-primario-tinte)", color: "var(--color-primario-texto)" }
+            : { borderColor: "var(--color-borde-campo)", background: "var(--color-superficie)", color: "var(--color-tenue)" }
         }
       >
         Alerta de cuidado: {alerta ? "ACTIVADA" : "desactivada"}
@@ -522,7 +522,7 @@ function NuevoRecurso({ ejes }: { ejes: Eje[] }) {
       </button>
 
       {estado?.ok && (
-        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-texto">
           {estado.ok}
         </div>
       )}

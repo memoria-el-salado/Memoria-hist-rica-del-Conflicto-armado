@@ -204,8 +204,8 @@ export function MediacionForos({
                 className="cursor-pointer rounded-full border px-3 py-1.5 text-[0.625rem] font-extrabold tracking-[.07em]"
                 style={
                   f.abierto
-                    ? { borderColor: "#1B8A8A", background: "#E5F1F0", color: "#177575" }
-                    : { borderColor: "#E4DDD6", background: "#fff", color: "#6D6762" }
+                    ? { borderColor: "#1B8A8A", background: "var(--color-secundario-tinte)", color: "var(--color-secundario-texto)" }
+                    : { borderColor: "var(--color-borde-campo)", background: "var(--color-superficie)", color: "var(--color-suave)" }
                 }
               >
                 {f.abierto ? "FORO ABIERTO" : "FORO CERRADO"}
@@ -213,16 +213,16 @@ export function MediacionForos({
             </div>
             <div className="mt-3 flex flex-wrap gap-2.5">
               <div className="min-w-[220px] flex-1 rounded-[9px] border border-secundario-borde bg-secundario-tinte px-3.5 py-3">
-                <div className="text-[0.625rem] font-bold tracking-[.1em] text-secundario-fuerte">
+                <div className="text-[0.625rem] font-bold tracking-[.1em] text-secundario-texto">
                   ROL A
                 </div>
-                <div className="mt-1 text-[0.8125rem] font-semibold text-[#3F6E6C]">{f.rolA}</div>
+                <div className="mt-1 text-[0.8125rem] font-semibold text-secundario-apagado">{f.rolA}</div>
               </div>
               <div className="min-w-[220px] flex-1 rounded-[9px] border border-terciario-borde bg-terciario-tinte px-3.5 py-3">
-                <div className="text-[0.625rem] font-bold tracking-[.1em] text-terciario-fuerte">
+                <div className="text-[0.625rem] font-bold tracking-[.1em] text-terciario-texto">
                   ROL B
                 </div>
-                <div className="mt-1 text-[0.8125rem] font-semibold text-[#8A6516]">{f.rolB}</div>
+                <div className="mt-1 text-[0.8125rem] font-semibold text-aviso-texto">{f.rolB}</div>
               </div>
             </div>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
@@ -235,7 +235,7 @@ export function MediacionForos({
               </div>
               <Link
                 href={`/docente/foros/${f.id}`}
-                className="rounded-lg border border-primario-borde bg-primario-tinte px-3 py-1.5 text-[0.71875rem] font-bold text-primario-fuerte hover:bg-primario-borde"
+                className="rounded-lg border border-primario-borde bg-primario-tinte px-3 py-1.5 text-[0.71875rem] font-bold text-primario-texto hover:bg-primario-borde"
               >
                 Abrir debate · {f.mensajes} {f.mensajes === 1 ? "mensaje" : "mensajes"} · {f.participantes} con rol
               </Link>

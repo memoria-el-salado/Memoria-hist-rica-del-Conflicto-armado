@@ -25,7 +25,7 @@ export function ComentariosDocente({ comentarios, compacto = false }: { comentar
           <p className="whitespace-pre-line text-[0.8125rem] leading-relaxed text-tinta-media">{c.texto}</p>
           <div className="mt-1 text-[0.65625rem] text-suave">
             {c.docente} · {c.cuando}
-            {c.nuevo && <strong className="ml-1.5 text-primario-fuerte">NUEVO</strong>}
+            {c.nuevo && <strong className="ml-1.5 text-primario-texto">NUEVO</strong>}
           </div>
         </li>
       ))}
@@ -35,7 +35,7 @@ export function ComentariosDocente({ comentarios, compacto = false }: { comentar
   if (compacto) return <div className="mt-2.5">{lista}</div>;
   return (
     <section aria-labelledby="titulo-comentarios" className="mt-[22px] rounded-xl border border-primario-borde bg-primario-tinte p-5">
-      <h2 id="titulo-comentarios" className="mb-2.5 text-[0.75rem] font-extrabold tracking-[.06em] text-primario-fuerte">
+      <h2 id="titulo-comentarios" className="mb-2.5 text-[0.75rem] font-extrabold tracking-[.06em] text-primario-texto">
         COMENTARIOS DE TU DOCENTE
       </h2>
       {lista}

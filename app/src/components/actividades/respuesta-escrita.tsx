@@ -36,7 +36,7 @@ export function RespuestaEscrita({
         <TextoSesion sesion={sesion} />
 
         <form action={accion} className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
             TU RESPUESTA
           </div>
           <p className="mt-1.5 text-[0.75rem] leading-[1.6] text-suave">
@@ -77,7 +77,7 @@ export function RespuestaEscrita({
             </p>
           )}
           {estado?.ok && (
-            <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
+            <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">
               {estado.ok}
             </div>
           )}

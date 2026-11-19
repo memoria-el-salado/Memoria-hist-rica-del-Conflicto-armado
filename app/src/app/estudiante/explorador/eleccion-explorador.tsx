@@ -16,7 +16,7 @@ export function EleccionExplorador({ nombre, actual }: { nombre: string; actual:
 
   return (
     <div className="animar-aparecer mx-auto max-w-[640px] py-6">
-      <h1 className="text-center text-[1.625rem] font-extrabold tracking-[-.02em] text-primario-fuerte">
+      <h1 className="text-center text-[1.625rem] font-extrabold tracking-[-.02em] text-primario-texto">
         {actual ? "Cambia tu explorador" : `¡Bienvenido a Memoria El Salado${nombre ? `, ${nombre}` : ""}!`}
       </h1>
       <p className="mx-auto mt-2 max-w-[460px] text-center text-[0.84375rem] leading-[1.65] text-apagado">

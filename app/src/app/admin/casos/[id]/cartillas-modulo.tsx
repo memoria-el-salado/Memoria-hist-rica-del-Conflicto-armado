@@ -48,7 +48,7 @@ export function CartillasModulo({
                 type="button"
                 disabled={pendiente}
                 onClick={() => iniciar(async () => setAviso(await desvincularCartilla(casoId, d.id)))}
-                className="min-h-11 cursor-pointer rounded-lg border border-borde px-3 text-[0.75rem] font-bold text-apagado hover:border-primario hover:text-primario-fuerte disabled:opacity-50"
+                className="min-h-11 cursor-pointer rounded-lg border border-borde px-3 text-[0.75rem] font-bold text-apagado hover:border-primario hover:text-primario-texto disabled:opacity-50"
               >
                 Quitar<span className="sr-only"> {d.titulo}</span>
               </button>
@@ -78,7 +78,7 @@ export function CartillasModulo({
             <select
               value={elegido}
               onChange={(e) => setElegido(e.target.value)}
-              className="min-h-11 w-full min-w-0 rounded-lg border border-borde bg-white px-3 text-[0.8125rem] font-normal"
+              className="min-h-11 w-full min-w-0 rounded-lg border border-borde bg-superficie px-3 text-[0.8125rem] font-normal"
             >
               <option value="">Elige un documento…</option>
               {disponibles.map((d) => (
@@ -98,7 +98,7 @@ export function CartillasModulo({
         </form>
       )}
       <p role="status" className="mt-2 text-[0.75rem] font-semibold">
-        {aviso?.error ? <span className="text-[#A1281F]">{aviso.error}</span> : aviso?.ok ? <span className="text-secundario-fuerte">Listo.</span> : null}
+        {aviso?.error ? <span className="text-peligro">{aviso.error}</span> : aviso?.ok ? <span className="text-secundario-texto">Listo.</span> : null}
       </p>
     </section>
   );

@@ -36,7 +36,7 @@ export function CartillasSesion({
               <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[0.65625rem] font-bold tracking-[.04em] ${
-                    c.soloDocentes ? "bg-[#FBF1DC] text-[#6E500C]" : "bg-secundario-tinte text-secundario-fuerte"
+                    c.soloDocentes ? "bg-aviso-tinte text-aviso-texto" : "bg-secundario-tinte text-secundario-texto"
                   }`}
                 >
                   {c.tipo.toUpperCase()}
@@ -73,7 +73,7 @@ export function CartillasSesion({
                   href={c.enlace}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-11 items-center rounded-lg border border-borde px-3.5 text-[0.78125rem] font-bold text-secundario-fuerte no-underline hover:border-secundario hover:no-underline"
+                  className="inline-flex min-h-11 items-center rounded-lg border border-borde px-3.5 text-[0.78125rem] font-bold text-secundario-texto no-underline hover:border-secundario hover:no-underline"
                 >
                   Abrir en otra pestaña
                   <span className="sr-only"> ({c.tipo}, se abre en una pestaña nueva)</span>

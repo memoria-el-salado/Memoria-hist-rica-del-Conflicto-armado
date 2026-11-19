@@ -71,7 +71,7 @@ export function FormularioUsuario({
       }}
       className="rounded-xl border border-borde bg-superficie p-5"
     >
-      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
         {titulo}
       </div>
 
@@ -202,7 +202,7 @@ export function FormularioUsuario({
       {mensaje?.entrega && <Credenciales entrega={mensaje.entrega} />}
 
       {mensaje?.ok && !mensaje.entrega && (
-        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-texto">
           {mensaje.ok}
         </div>
       )}
@@ -235,24 +235,24 @@ function Credenciales({ entrega }: { entrega: Entrega }) {
       role="status"
       className="mt-3.5 rounded-[10px] border border-secundario-borde bg-secundario-tinte p-3.5"
     >
-      <div className="text-[0.625rem] font-bold tracking-[.12em] text-secundario-fuerte">
+      <div className="text-[0.625rem] font-bold tracking-[.12em] text-secundario-texto">
         CREDENCIALES PARA ENTREGAR
       </div>
-      <div className="mt-2 text-[0.78125rem] font-bold text-[#2E5E5C]">{entrega.nombre}</div>
-      <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-1 text-[0.75rem] text-[#3F6E6C]">
+      <div className="mt-2 text-[0.78125rem] font-bold text-secundario-apagado">{entrega.nombre}</div>
+      <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-1 text-[0.75rem] text-secundario-apagado">
         <dt className="font-semibold">Usuario</dt>
         <dd className="font-mono break-all">{entrega.usuario}</dd>
         <dt className="font-semibold">Contraseña</dt>
         <dd className="font-mono break-all">{entrega.contrasena}</dd>
       </dl>
-      <p className="mt-2 text-[0.6875rem] leading-[1.5] text-[#5A8280]">
+      <p className="mt-2 text-[0.6875rem] leading-[1.5] text-secundario-apagado">
         Anótala antes de cerrar esta pantalla: no vuelve a mostrarse. Al entrar, la plataforma le
         pedirá cambiarla por una que solo esa persona conozca.
       </p>
       <button
         type="button"
         onClick={copiar}
-        className="mt-2.5 cursor-pointer rounded-lg border border-secundario bg-superficie px-3 py-1.5 text-[0.71875rem] font-bold text-secundario-fuerte hover:bg-secundario-tinte"
+        className="mt-2.5 cursor-pointer rounded-lg border border-secundario bg-superficie px-3 py-1.5 text-[0.71875rem] font-bold text-secundario-texto hover:bg-secundario-tinte"
       >
         {copiado ? "Copiado" : "Copiar credenciales"}
       </button>

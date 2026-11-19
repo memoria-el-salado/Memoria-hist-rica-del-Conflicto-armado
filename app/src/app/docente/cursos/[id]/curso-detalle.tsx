@@ -49,7 +49,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
       <div aria-live="polite" className="min-h-[1px]">
         {aviso?.ok && (
-          <div role="status" className="mb-3 rounded-lg bg-secundario-tinte px-3.5 py-2 text-[0.75rem] font-semibold text-secundario-fuerte">
+          <div role="status" className="mb-3 rounded-lg bg-secundario-tinte px-3.5 py-2 text-[0.75rem] font-semibold text-secundario-texto">
             {aviso.ok}
           </div>
         )}
@@ -62,7 +62,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
       <div className="rejilla-panel">
         <section aria-labelledby="titulo-estudiantes" className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+          <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
             <h2 id="titulo-estudiantes" className="text-[0.8125rem] font-extrabold">Estudiantes del curso</h2>
             <span className="text-[0.6875rem] font-bold text-suave">{estudiantes.length}</span>
           </div>
@@ -72,7 +72,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
           ) : (
             <ul>
               {estudiantes.map((e) => (
-                <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3">
+                <li key={e.id} className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-[18px] py-3">
                   <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[0.6875rem] font-extrabold text-white">
                     {e.iniciales}
                   </div>
@@ -108,7 +108,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
             </ul>
           )}
 
-          <div className="flex flex-wrap items-end gap-2 border-t border-[#F1EBE5] bg-superficie-suave px-[18px] py-3.5">
+          <div className="flex flex-wrap items-end gap-2 border-t border-linea bg-superficie-suave px-[18px] py-3.5">
             <div className="min-w-[200px] flex-1">
               <label htmlFor="sumar-estudiante" className="text-[0.625rem] font-bold tracking-[.12em] text-tenue">
                 SUMAR AL CURSO
@@ -142,7 +142,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
 
         <div className="grid content-start gap-[18px]">
           <section aria-labelledby="titulo-grupos" className="rounded-xl border border-borde bg-superficie p-5">
-            <h2 id="titulo-grupos" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">
+            <h2 id="titulo-grupos" className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">
               GRUPOS DE TRABAJO
             </h2>
             <p className="mt-1.5 text-[0.71875rem] leading-relaxed text-tenue">
@@ -207,7 +207,7 @@ export function CursoDetalle({ curso, grupos, estudiantes, sinCurso, recorrido, 
               <button
                 disabled={pendiente}
                 onClick={() => hacer(() => repartirGrupos(curso.id))}
-                className="mt-3 w-full cursor-pointer rounded-lg border border-secundario bg-secundario-tinte px-3 py-2 text-[0.75rem] font-bold text-secundario-fuerte hover:bg-superficie disabled:opacity-50"
+                className="mt-3 w-full cursor-pointer rounded-lg border border-secundario bg-secundario-tinte px-3 py-2 text-[0.75rem] font-bold text-secundario-texto hover:bg-superficie disabled:opacity-50"
               >
                 Repartir en los grupos a {sinGrupo === 1 ? "quien no tiene" : `los ${sinGrupo} que no tienen`}
               </button>

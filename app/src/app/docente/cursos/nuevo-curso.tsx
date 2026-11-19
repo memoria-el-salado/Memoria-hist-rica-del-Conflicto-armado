@@ -9,7 +9,7 @@ export function NuevoCurso({ anio }: { anio: number }) {
 
   return (
     <form action={accion} className="self-start rounded-xl border border-borde bg-superficie p-5">
-      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-fuerte">NUEVO CURSO</div>
+      <div className="text-[0.78125rem] font-extrabold tracking-[.05em] text-primario-texto">NUEVO CURSO</div>
 
       <label htmlFor="nombre-curso" className="mt-3.5 block text-[0.625rem] font-bold tracking-[.12em] text-tenue">
         NOMBRE
@@ -43,7 +43,7 @@ export function NuevoCurso({ anio }: { anio: number }) {
         {pendiente ? "Creando..." : "Crear curso"}
       </button>
       {estado?.ok && (
-        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2.5 text-[0.71875rem] font-semibold text-secundario-texto">
           {estado.ok}
         </div>
       )}

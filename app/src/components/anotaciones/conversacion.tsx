@@ -46,7 +46,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
 
   return (
     <section aria-labelledby="titulo-conversacion" className="flex flex-col overflow-hidden rounded-xl border border-borde bg-superficie">
-      <div className="flex flex-wrap items-center gap-2 border-b border-[#F1EBE5] px-[18px] py-[13px]">
+      <div className="flex flex-wrap items-center gap-2 border-b border-linea px-[18px] py-[13px]">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D95D39" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
@@ -60,7 +60,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
               type="button"
               aria-pressed={modo === m}
               onClick={() => setModo(m)}
-              className={`cursor-pointer ${modo === m ? "text-primario-fuerte underline underline-offset-4" : "text-suave hover:text-apagado"}`}
+              className={`cursor-pointer ${modo === m ? "text-primario-texto underline underline-offset-4" : "text-suave hover:text-apagado"}`}
             >
               {m}
             </button>
@@ -68,7 +68,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
         </div>
       </div>
 
-      <div role="region" aria-label="Anotaciones de la conversación" tabIndex={0} className="flex max-h-[460px] flex-col gap-3 overflow-auto bg-[#FBF8F5] px-3.5 py-3.5">
+      <div role="region" aria-label="Anotaciones de la conversación" tabIndex={0} className="flex max-h-[460px] flex-col gap-3 overflow-auto bg-realce px-3.5 py-3.5">
         {ordenados.length === 0 ? (
           <p className="py-6 text-center text-[0.78125rem] leading-[1.6] text-tenue">
             {modo === "DESTACADOS" ? "El docente todavía no ha destacado ninguna anotación." : "Todavía no hay anotaciones. La tuya sería la primera."}
@@ -78,7 +78,7 @@ export function Conversacion({ sesionId, hilos, puedeDestacar, cita = "", onQuit
         )}
       </div>
 
-      <form onSubmit={publicar} className="border-t border-[#F1EBE5] px-[18px] py-3.5">
+      <form onSubmit={publicar} className="border-t border-linea px-[18px] py-3.5">
         {cita && (
           <div className="mb-2 flex items-start gap-2 border-l-2 border-terciario bg-terciario-tinte px-[11px] py-2">
             <span className="flex-1 text-[0.71875rem] italic text-apagado">{cita.length > 160 ? `${cita.slice(0, 160)}…` : cita}</span>
@@ -130,7 +130,7 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
       className={`rounded-xl border bg-superficie px-3.5 py-3 ${hilo.destacada ? "border-terciario" : "border-borde"}`}
     >
       <Cabecera a={hilo} />
-      {hilo.destacada && <div className="mt-1.5 text-[0.59375rem] font-extrabold tracking-[.1em] text-terciario-fuerte">DESTACADA POR EL DOCENTE</div>}
+      {hilo.destacada && <div className="mt-1.5 text-[0.59375rem] font-extrabold tracking-[.1em] text-terciario-texto">DESTACADA POR EL DOCENTE</div>}
       {hilo.cita && (
         <blockquote className="mt-2 border-l-2 border-primario bg-primario-tinte px-[11px] py-2 text-[0.71875rem] italic text-apagado">
           {hilo.cita.length > 220 ? `${hilo.cita.slice(0, 220)}…` : hilo.cita}
@@ -140,7 +140,7 @@ function Hilo({ hilo, sesionId, puedeDestacar }: { hilo: HiloAnotacion; sesionId
       <Acciones a={hilo} puedeDestacar={puedeDestacar} onResponder={() => setRespondiendo((r) => !r)} respondiendo={respondiendo} />
 
       {hilo.respuestas.length > 0 && (
-        <ul className="mt-2.5 grid gap-2 border-t border-[#F1EBE5] pt-2.5">
+        <ul className="mt-2.5 grid gap-2 border-t border-linea pt-2.5">
           {hilo.respuestas.map((r) => (
             <li key={r.id} className="pl-3">
               <Cabecera a={r} pequena />
@@ -205,9 +205,9 @@ function Cabecera({ a, pequena = false }: { a: AnotacionVista; pequena?: boolean
       </div>
       <div className="min-w-0 flex-1">
         <span className={`${pequena ? "text-[0.75rem]" : "text-[0.78125rem]"} font-bold`}>{a.autor}</span>
-        {a.rol === "DOCENTE" && <span className="ml-1.5 whitespace-nowrap text-[0.59375rem] font-extrabold tracking-[.08em] text-secundario-fuerte">DOCENTE</span>}
+        {a.rol === "DOCENTE" && <span className="ml-1.5 whitespace-nowrap text-[0.59375rem] font-extrabold tracking-[.08em] text-secundario-texto">DOCENTE</span>}
       </div>
-      <span className="text-[0.65625rem] text-[#B3AAA2]">{a.hora}</span>
+      <span className="text-[0.65625rem] text-deshabilitado">{a.hora}</span>
     </div>
   );
 }
@@ -233,7 +233,7 @@ function Acciones({
         aria-pressed={a.yoMeSirve}
         aria-label={`Me sirve la anotación de ${a.autor}${a.meSirve ? `, ${a.meSirve}` : ""}`}
         title={a.propia ? "Es tuya" : "Me sirve"}
-        className={`flex cursor-pointer items-center gap-1 disabled:cursor-default ${a.yoMeSirve ? "text-primario-fuerte" : "hover:text-primario-texto"}`}
+        className={`flex cursor-pointer items-center gap-1 disabled:cursor-default ${a.yoMeSirve ? "text-primario-texto" : "hover:text-primario-texto"}`}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill={a.yoMeSirve ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M7 10v12M15 5.9 14 10h5.8a2 2 0 0 1 2 2.3l-1.4 8a2 2 0 0 1-2 1.7H7V10l4-8a3 3 0 0 1 4 3.9z" />
@@ -251,7 +251,7 @@ function Acciones({
           disabled={pendiente}
           onClick={() => iniciar(async () => { await alternarDestacada(a.id); })}
           aria-pressed={a.destacada}
-          className={`cursor-pointer ${a.destacada ? "text-terciario-fuerte" : "hover:text-terciario-fuerte"}`}
+          className={`cursor-pointer ${a.destacada ? "text-terciario-texto" : "hover:text-terciario-texto"}`}
         >
           {a.destacada ? "Quitar destacado" : "Destacar"}
         </button>

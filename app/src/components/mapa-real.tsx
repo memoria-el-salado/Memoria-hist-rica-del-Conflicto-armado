@@ -178,7 +178,7 @@ export function MapaReal(props: Props) {
       role="application"
       aria-label={etiquetaAccesible}
       style={{ height: alto }}
-      className="w-full overflow-hidden rounded-xl border border-borde bg-[#F4EFE8] [&_.leaflet-container]:font-sans"
+      className="w-full overflow-hidden rounded-xl border border-borde bg-hundido [&_.leaflet-container]:font-sans"
     />
   );
 }

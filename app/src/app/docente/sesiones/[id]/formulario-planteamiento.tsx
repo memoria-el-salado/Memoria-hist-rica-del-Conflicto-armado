@@ -78,7 +78,7 @@ export function FormularioPlanteamiento({
             <button
               type="button"
               onClick={() => setOpciones((todas) => [...todas, ""])}
-              className="mt-1.5 cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline"
+              className="mt-1.5 cursor-pointer text-[0.71875rem] font-bold text-secundario-texto hover:underline"
             >
               + Otra opción
             </button>
@@ -99,7 +99,7 @@ export function FormularioPlanteamiento({
         {pendiente ? "Guardando..." : yaPlanteada ? "Actualizar el planteamiento" : esDilema ? "Plantear el dilema" : "Plantear la pregunta"}
       </button>
       {estado?.ok && (
-        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-fuerte">
+        <div role="status" className="mt-2 text-[0.71875rem] font-semibold text-secundario-texto">
           {estado.ok}
         </div>
       )}

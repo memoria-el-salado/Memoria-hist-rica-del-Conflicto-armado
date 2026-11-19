@@ -21,7 +21,7 @@ import { ComentariosLugar, type ComentarioVista } from "./comentarios-lugar";
 const MapaReal = dynamic(() => import("@/components/mapa-real").then((m) => m.MapaReal), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[420px] w-full items-center justify-center rounded-xl border border-borde bg-[#F4EFE8] text-[0.8125rem] text-tenue">
+    <div className="flex h-[420px] w-full items-center justify-center rounded-xl border border-borde bg-hundido text-[0.8125rem] text-tenue">
       Cargando el mapa...
     </div>
   ),
@@ -219,7 +219,7 @@ export function CartografiaSocial({
                     <div className="flex flex-wrap items-baseline justify-between gap-x-2.5">
                       <div className="text-[0.875rem] font-bold">{m.lugar}</div>
                       {m.grupo && (
-                        <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.65625rem] font-bold text-terciario-fuerte">
+                        <span className="rounded-full bg-terciario-tinte px-2 py-0.5 text-[0.65625rem] font-bold text-terciario-texto">
                           Grupo {m.grupo}
                         </span>
                       )}
@@ -246,7 +246,7 @@ export function CartografiaSocial({
                   {m.tags.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full border border-secundario-borde bg-secundario-tinte px-2 py-[3px] text-[0.65625rem] font-bold tracking-[.04em] text-secundario-fuerte"
+                      className="rounded-full border border-secundario-borde bg-secundario-tinte px-2 py-[3px] text-[0.65625rem] font-bold tracking-[.04em] text-secundario-texto"
                     >
                       {t}
                     </span>
@@ -272,7 +272,7 @@ export function CartografiaSocial({
         </div>
 
         <div className="rounded-xl border border-borde bg-superficie p-5">
-          <div className="text-[0.78125rem] font-extrabold tracking-[.06em] text-primario-fuerte">
+          <div className="text-[0.78125rem] font-extrabold tracking-[.06em] text-primario-texto">
             NUEVO LUGAR SIGNIFICATIVO
           </div>
 
@@ -323,7 +323,7 @@ export function CartografiaSocial({
                   style={
                     activo
                       ? { background: "#1B8A8A", borderColor: "#1B8A8A", color: "#fff" }
-                      : { background: "#fff", borderColor: "#E4DDD6", color: "#6F6760" }
+                      : { background: "var(--color-superficie)", borderColor: "var(--color-borde-campo)", color: "var(--color-tenue)" }
                   }
                 >
                   {s}
@@ -375,7 +375,7 @@ export function CartografiaSocial({
           {mensaje && !progreso && (
             <div
               role={ok ? "status" : "alert"}
-              className={`mt-2.5 text-[0.71875rem] font-semibold ${ok ? "text-secundario-fuerte" : "text-peligro"}`}
+              className={`mt-2.5 text-[0.71875rem] font-semibold ${ok ? "text-secundario-texto" : "text-peligro"}`}
             >
               {mensaje}
             </div>

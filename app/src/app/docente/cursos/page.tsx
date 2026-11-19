@@ -32,7 +32,7 @@ export default async function CursosPage() {
 
       <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+          <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
             <span className="text-[0.8125rem] font-extrabold">Cursos</span>
             <span className="text-[0.6875rem] font-bold text-suave">{cursos.length}</span>
           </div>
@@ -45,7 +45,7 @@ export default async function CursosPage() {
           ) : (
             <ul>
               {cursos.map((c) => (
-                <li key={c.id} className="border-b border-[#F7F2ED] last:border-b-0">
+                <li key={c.id} className="border-b border-linea-suave last:border-b-0">
                   <Link
                     href={`/docente/cursos/${c.id}`}
                     className="flex items-center gap-3 px-[18px] py-3.5 text-tinta no-underline hover:bg-superficie-suave"
@@ -65,7 +65,7 @@ export default async function CursosPage() {
             </ul>
           )}
           {sinCurso > 0 && (
-            <p className="border-t border-[#F1EBE5] bg-terciario-tinte px-[18px] py-3 text-[0.75rem] text-terciario-fuerte">
+            <p className="border-t border-linea bg-terciario-tinte px-[18px] py-3 text-[0.75rem] text-terciario-texto">
               {sinCurso === 1 ? "1 estudiante tuyo no tiene" : `${sinCurso} estudiantes tuyos no tienen`} curso. Puedes
               sumarlos desde cada curso o desde <Link href="/docente/estudiantes">Mis estudiantes</Link>.
             </p>

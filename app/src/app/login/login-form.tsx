@@ -81,7 +81,7 @@ export function LoginForm() {
               aria-pressed={activo}
               className={`flex cursor-pointer flex-col items-center gap-1.5 rounded-[9px] border px-1.5 py-3 transition-colors ${
                 activo
-                  ? "border-primario bg-primario-tinte text-primario-fuerte"
+                  ? "border-primario bg-primario-tinte text-primario-texto"
                   : "border-borde-campo bg-superficie text-apagado hover:border-primario/40"
               }`}
             >
@@ -95,7 +95,7 @@ export function LoginForm() {
       </div>
 
       {rol && (
-        <p className="mb-3 rounded-lg border border-secundario-borde bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.5] text-[#3F6E6C]">
+        <p className="mb-3 rounded-lg border border-secundario-borde bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.5] text-secundario-apagado">
           {ROLES.find((r) => r.valor === rol)!.ayuda}
         </p>
       )}
@@ -120,7 +120,7 @@ export function LoginForm() {
           type="button"
           onClick={() => setOlvido((o) => !o)}
           aria-expanded={olvido}
-          className="cursor-pointer text-[0.65625rem] font-bold tracking-[.04em] text-secundario-fuerte hover:underline"
+          className="cursor-pointer text-[0.65625rem] font-bold tracking-[.04em] text-secundario-texto hover:underline"
         >
           ¿Olvidaste tu contraseña?
         </button>
@@ -152,7 +152,7 @@ export function LoginForm() {
         </button>
       </div>
       {olvido ? (
-        <p role="status" className="mb-2 rounded-lg bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.55] text-[#3F6E6C]">
+        <p role="status" className="mb-2 rounded-lg bg-secundario-tinte px-3 py-2 text-[0.71875rem] leading-[1.55] text-secundario-apagado">
           {rol ? ROLES.find((r) => r.valor === rol)!.olvido : "Elige arriba si eres estudiante, docente o administrador y te decimos quién la restablece."}
         </p>
       ) : (

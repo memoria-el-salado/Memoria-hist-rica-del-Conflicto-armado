@@ -43,18 +43,18 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
       </div>
 
       <div aria-live="polite">
-        {aviso?.ok && <div role="status" className="text-[0.75rem] font-semibold text-secundario-fuerte">{aviso.ok}</div>}
+        {aviso?.ok && <div role="status" className="text-[0.75rem] font-semibold text-secundario-texto">{aviso.ok}</div>}
         {aviso?.error && <div role="alert" className="text-[0.75rem] font-semibold text-peligro">{aviso.error}</div>}
       </div>
 
       {ejes.map((e) => (
         <section key={e.id} aria-labelledby={`eje-${e.id}`} className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <h2 id={`eje-${e.id}`} className="border-b border-[#F1EBE5] px-[18px] py-3 text-[0.78125rem] font-extrabold">
+          <h2 id={`eje-${e.id}`} className="border-b border-linea px-[18px] py-3 text-[0.78125rem] font-extrabold">
             Eje {e.numero} · {e.nombre}
           </h2>
           <ul>
             {e.sesiones.map((s) => (
-              <li key={s.id} className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3 last:border-b-0">
+              <li key={s.id} className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-[18px] py-3 last:border-b-0">
                 <span className="w-[34px] text-[0.8125rem] font-extrabold text-tenue">{s.codigo}</span>
                 <div className="min-w-[220px] flex-1">
                   <div className="text-[0.8125rem] font-bold">{s.titulo}</div>
@@ -68,7 +68,7 @@ export function EditorActividades({ casoId, ejes }: { casoId: string; ejes: Eje[
                     disabled={pendiente}
                     onClick={() => cambiar(s, s.sugerida)}
                     aria-label={`Usar la sugerida en la sesión ${s.codigo}`}
-                    className="cursor-pointer text-[0.71875rem] font-bold text-secundario-fuerte hover:underline disabled:opacity-50"
+                    className="cursor-pointer text-[0.71875rem] font-bold text-secundario-texto hover:underline disabled:opacity-50"
                   >
                     Usar la sugerida
                   </button>

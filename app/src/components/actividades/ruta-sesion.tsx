@@ -22,7 +22,7 @@ export function RutaSesion({ pasos }: { pasos: PasoDeSesion[] }) {
                 <span
                   aria-hidden="true"
                   className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-[0.71875rem] font-extrabold ${
-                    listo ? "bg-secundario text-white" : pendiente ? "border-2 border-primario text-primario-fuerte" : "bg-[#F0EAE4] text-apagado"
+                    listo ? "bg-secundario text-white" : pendiente ? "border-2 border-primario text-primario-texto" : "bg-hundido text-apagado"
                   }`}
                 >
                   {listo ? (

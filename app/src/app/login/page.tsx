@@ -1,3 +1,4 @@
+import { BotonTema } from "@/components/boton-tema";
 import { IconoMemoria } from "@/components/icono-memoria";
 import { Suspense } from "react";
 import { IlustracionEntrada } from "@/components/portada/ilustraciones";
@@ -8,6 +9,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-fondo">
       <a href="#contenido" className="saltar-contenido">Saltar al contenido</a>
+      <BotonTema className="fixed right-4 top-4 z-10" />
       <main id="contenido" tabIndex={-1} className="flex flex-1 items-center justify-center px-5 py-8 outline-none">
         <div className="grid w-full max-w-[1000px] overflow-hidden rounded-[14px] border border-borde bg-superficie shadow-[0_18px_50px_rgba(70,45,30,.07)] md:grid-cols-[1fr_1.05fr]">
           <div className="relative hidden min-h-[520px] flex-col overflow-hidden p-10 md:flex">
@@ -45,7 +47,7 @@ export default function LoginPage() {
             </Suspense>
 
             <p className="mt-5 text-center text-[0.71875rem] text-tenue">
-              ¿Eres nuevo aquí? <strong className="text-primario-fuerte">Pide a tu docente</strong> que cree tu cuenta.
+              ¿Eres nuevo aquí? <strong className="text-primario-texto">Pide a tu docente</strong> que cree tu cuenta.
             </p>
             <p className="mt-2 text-center text-[0.71875rem]">
               <Link href="/" className="font-semibold text-apagado hover:text-primario-texto">

@@ -37,7 +37,7 @@ export function BotonRestablecer({
       {resultado?.contrasena && (
         <div
           role="status"
-          className="mt-1.5 rounded-lg border border-secundario-borde bg-secundario-tinte px-2.5 py-1.5 text-[0.6875rem] leading-[1.5] text-[#3F6E6C]"
+          className="mt-1.5 rounded-lg border border-secundario-borde bg-secundario-tinte px-2.5 py-1.5 text-[0.6875rem] leading-[1.5] text-secundario-apagado"
         >
           Nueva contraseña de {nombre.split(" ")[0]}:{" "}
           <strong className="font-mono">{resultado.contrasena}</strong>

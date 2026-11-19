@@ -68,13 +68,13 @@ export function Campana({ avisos, nuevos }: { avisos: AvisoVista[]; nuevos: numb
           aria-label="Avisos"
           className="absolute right-0 top-[calc(100%+8px)] z-40 w-[min(360px,calc(100vw-32px))] overflow-hidden rounded-xl border border-borde bg-superficie shadow-[0_16px_40px_rgba(0,0,0,.14)]"
         >
-          <div className="border-b border-[#F1EBE5] px-4 py-3 text-[0.6875rem] font-bold tracking-[.12em] text-tenue">AVISOS</div>
+          <div className="border-b border-linea px-4 py-3 text-[0.6875rem] font-bold tracking-[.12em] text-tenue">AVISOS</div>
           {vista.length === 0 ? (
             <p className="px-4 py-6 text-center text-[0.78125rem] text-tenue">No hay nada nuevo por ahora.</p>
           ) : (
             <ul className="max-h-[60vh] overflow-y-auto">
               {vista.map((a) => (
-                <li key={a.id} className="border-b border-[#F7F2ED] last:border-b-0">
+                <li key={a.id} className="border-b border-linea-suave last:border-b-0">
                   <Link
                     href={a.enlace}
                     onClick={() => setAbierta(false)}

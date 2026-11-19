@@ -87,10 +87,10 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
   return (
     <form onSubmit={guardar} aria-labelledby={`${base}-titulo`} className="rounded-xl border border-borde bg-superficie p-5">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-primario-tinte px-2.5 py-0.5 text-[0.6875rem] font-extrabold text-primario-fuerte">{apartado.codigo}</span>
+        <span className="rounded-full bg-primario-tinte px-2.5 py-0.5 text-[0.6875rem] font-extrabold text-primario-texto">{apartado.codigo}</span>
         <span className="text-[0.71875rem] font-semibold text-apagado">{apartado.titulo}</span>
         {previa && (
-          <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.65625rem] font-bold text-secundario-fuerte">Hecha</span>
+          <span className="rounded-full bg-secundario-tinte px-2 py-0.5 text-[0.65625rem] font-bold text-secundario-texto">Hecha</span>
         )}
       </div>
       <h3 id={`${base}-titulo`} className="mt-2 text-[0.9375rem] font-extrabold leading-snug">
@@ -102,7 +102,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
         {cartilla && (
           <>
             {" · "}
-            <a href={cartilla.enlace} target="_blank" rel="noreferrer" className="font-bold text-secundario-fuerte">
+            <a href={cartilla.enlace} target="_blank" rel="noreferrer" className="font-bold text-secundario-texto">
               ver en la cartilla, página {cartilla.pagina}
               <span className="sr-only"> (se abre en una pestaña nueva)</span>
             </a>
@@ -138,7 +138,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
                       setAsignaciones((a) => ({ ...a, [t.id]: e.target.value }));
                       setCorregida(null);
                     }}
-                    className="mt-2 min-h-11 w-full rounded-lg border border-borde-campo bg-white px-3 text-[0.8125rem]"
+                    className="mt-2 min-h-11 w-full rounded-lg border border-borde-campo bg-superficie px-3 text-[0.8125rem]"
                   >
                     <option value="">Elige…</option>
                     {actividad.categorias.map((c) => (
@@ -148,7 +148,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
                     ))}
                   </select>
                   {corregida?.asignaciones && (
-                    <p className={`mt-1.5 text-[0.75rem] font-bold ${bien ? "text-secundario-fuerte" : "text-peligro"}`}>
+                    <p className={`mt-1.5 text-[0.75rem] font-bold ${bien ? "text-secundario-texto" : "text-peligro"}`}>
                       {bien ? "✓ Correcto" : `✗ Corresponde a: ${correcta}`}
                     </p>
                   )}
@@ -175,7 +175,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
                         {paso.texto}
                       </p>
                       {corregida?.orden && (
-                        <p className={`mt-1 text-[0.75rem] font-bold ${bien ? "text-secundario-fuerte" : "text-peligro"}`}>
+                        <p className={`mt-1 text-[0.75rem] font-bold ${bien ? "text-secundario-texto" : "text-peligro"}`}>
                           {bien ? "✓ En su lugar" : "✗ No va aquí"}
                         </p>
                       )}
@@ -186,7 +186,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
                         onClick={() => mover(i, -1)}
                         disabled={i === 0}
                         aria-label={`Subir el paso: ${paso.texto.slice(0, 50)}`}
-                        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-borde bg-white text-tinta-media hover:border-primario disabled:cursor-default disabled:opacity-40"
+                        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-borde bg-superficie text-tinta-media hover:border-primario disabled:cursor-default disabled:opacity-40"
                       >
                         ↑
                       </button>
@@ -195,7 +195,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
                         onClick={() => mover(i, 1)}
                         disabled={i === orden.length - 1}
                         aria-label={`Bajar el paso: ${paso.texto.slice(0, 50)}`}
-                        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-borde bg-white text-tinta-media hover:border-primario disabled:cursor-default disabled:opacity-40"
+                        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-borde bg-superficie text-tinta-media hover:border-primario disabled:cursor-default disabled:opacity-40"
                       >
                         ↓
                       </button>
@@ -216,7 +216,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
       </div>
 
       {resultado && resultado.total > 0 && (
-        <p className="mt-3 rounded-lg bg-secundario-tinte px-3 py-2 text-[0.78125rem] font-bold text-secundario-fuerte">
+        <p className="mt-3 rounded-lg bg-secundario-tinte px-3 py-2 text-[0.78125rem] font-bold text-secundario-texto">
           Acertaste {resultado.correctas} de {resultado.total}.
           {resultado.correctas < resultado.total && " Revisa los marcados, cámbialos y vuelve a guardar."}
         </p>
@@ -230,7 +230,7 @@ function TarjetaActividad({ sesionId, item }: { sesionId: string; item: Activida
         {pendiente ? "Guardando..." : previa || corregida ? "Actualizar" : "Guardar"}
       </button>
       {estado?.ok && (
-        <p role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-fuerte">
+        <p role="status" className="mt-2 text-[0.75rem] font-semibold text-secundario-texto">
           {estado.ok}
         </p>
       )}
@@ -281,7 +281,7 @@ function CampoPregunta({ base, campo, valor, cambiar }: { base: string; campo: C
       </label>
       {campo.ayuda && <p className="mt-0.5 text-[0.71875rem] text-apagado">{campo.ayuda}</p>}
       {campo.tipo === "opcion" ? (
-        <select id={id} value={valor} onChange={(e) => cambiar(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-lg border border-borde-campo bg-white px-3 text-[0.8125rem]">
+        <select id={id} value={valor} onChange={(e) => cambiar(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-lg border border-borde-campo bg-superficie px-3 text-[0.8125rem]">
           <option value="">Elige…</option>
           {campo.opciones!.map((o) => (
             <option key={o} value={o}>
@@ -300,7 +300,7 @@ function CampoPregunta({ base, campo, valor, cambiar }: { base: string; campo: C
 function BloqueFuente({ fuente }: { fuente: Fuente }) {
   return (
     <figure className="mt-3 rounded-lg border border-terciario-borde bg-terciario-tinte p-3.5">
-      <figcaption className="text-[0.6875rem] font-extrabold tracking-[.06em] text-terciario-fuerte">{fuente.titulo.toUpperCase()}</figcaption>
+      <figcaption className="text-[0.6875rem] font-extrabold tracking-[.06em] text-terciario-texto">{fuente.titulo.toUpperCase()}</figcaption>
       {fuente.barras && (
         <ul className="mt-2.5 grid gap-2.5">
           {fuente.barras.map((b) => (
@@ -309,7 +309,7 @@ function BloqueFuente({ fuente }: { fuente: Fuente }) {
                 <span>{b.etiqueta}</span>
                 <strong className="text-[0.9375rem]">{b.valor.toLocaleString("es-CO")} %</strong>
               </div>
-              <div aria-hidden="true" className="mt-1 h-2.5 overflow-hidden rounded-full bg-white">
+              <div aria-hidden="true" className="mt-1 h-2.5 overflow-hidden rounded-full bg-superficie">
                 <div className="h-full rounded-full bg-terciario-fuerte" style={{ width: `${b.valor}%` }} />
               </div>
             </li>

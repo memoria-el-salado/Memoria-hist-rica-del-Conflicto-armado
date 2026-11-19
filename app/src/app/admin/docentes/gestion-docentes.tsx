@@ -42,7 +42,7 @@ export function GestionDocentes({
 
       <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+          <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
             <span className="text-[0.8125rem] font-extrabold">Docentes registrados</span>
             <span className="text-[0.6875rem] font-bold text-suave">{docentes.length}</span>
           </div>
@@ -57,7 +57,7 @@ export function GestionDocentes({
             docentes.map((d) => (
               <div
                 key={d.id}
-                className="flex items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
+                className="flex items-center gap-3 border-b border-linea-suave px-[18px] py-3.5 last:border-b-0"
               >
                 <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-terciario-fuerte text-[0.6875rem] font-extrabold text-white">
                   {d.iniciales}
@@ -66,7 +66,7 @@ export function GestionDocentes({
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[0.84375rem] font-bold">{d.nombre}</span>
                     {d.provisional && (
-                      <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[0.625rem] font-bold text-[#8A6410]">
+                      <span className="rounded-full bg-aviso-tinte px-2 py-0.5 text-[0.625rem] font-bold text-aviso-texto">
                         Contraseña provisional
                       </span>
                     )}

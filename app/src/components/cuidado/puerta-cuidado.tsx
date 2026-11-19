@@ -62,13 +62,13 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
       <>
         <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-primario-borde bg-primario-tinte px-4 py-2.5">
           <span className="text-[0.75rem] text-tinta-media">
-            <strong className="text-primario-fuerte">Sesión con alerta de cuidado.</strong> Puedes pausar cuando
+            <strong className="text-primario-texto">Sesión con alerta de cuidado.</strong> Puedes pausar cuando
             quieras.
           </span>
           <button
             onClick={() => setHablar((v) => !v)}
             aria-expanded={hablar}
-            className="cursor-pointer text-[0.75rem] font-bold text-secundario-fuerte underline-offset-2 hover:underline"
+            className="cursor-pointer text-[0.75rem] font-bold text-secundario-texto underline-offset-2 hover:underline"
           >
             Hablar con mi docente
           </button>
@@ -88,7 +88,7 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
       aria-labelledby="titulo-puerta-cuidado"
       className="animar-aparecer mx-auto max-w-[620px] rounded-[14px] border border-primario-borde bg-superficie px-6 py-7 sm:px-8"
     >
-      <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-fuerte">
+      <div className="flex items-center gap-[9px] text-[0.6875rem] font-bold tracking-[.12em] text-primario-texto">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" />
         </svg>
@@ -115,14 +115,14 @@ export function PuertaCuidado({ sesionId, codigo, titulo, texto, children }: Pro
         <button
           onClick={() => setHablar(true)}
           aria-expanded={hablar}
-          className="cursor-pointer rounded-lg border border-secundario-borde bg-secundario-tinte px-[17px] py-[11px] text-[0.8125rem] font-semibold text-secundario-fuerte hover:border-secundario"
+          className="cursor-pointer rounded-lg border border-secundario-borde bg-secundario-tinte px-[17px] py-[11px] text-[0.8125rem] font-semibold text-secundario-texto hover:border-secundario"
         >
           Hablar con mi docente
         </button>
       </div>
 
       {hablar && (
-        <div className="mt-5 border-t border-[#F1EBE5] pt-4">
+        <div className="mt-5 border-t border-linea pt-4">
           <FormularioAcompanamiento sesionId={sesionId} />
         </div>
       )}

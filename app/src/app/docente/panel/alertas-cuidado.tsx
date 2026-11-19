@@ -44,7 +44,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
 
   return (
     <div className="rounded-xl border border-primario-borde bg-primario-tinte p-5">
-      <div className="flex items-center gap-2 text-[0.6875rem] font-bold tracking-[.1em] text-primario-fuerte">
+      <div className="flex items-center gap-2 text-[0.6875rem] font-bold tracking-[.1em] text-primario-texto">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z" />
         </svg>
@@ -65,7 +65,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
             name="sesionId"
             value={sesionId}
             onChange={(e) => elegir(e.target.value)}
-            className="mt-1.5 w-full rounded-lg border border-[#E9D3C9] bg-superficie px-3 py-2.5 text-[0.8125rem]"
+            className="mt-1.5 w-full rounded-lg border border-primario-borde bg-superficie px-3 py-2.5 text-[0.8125rem]"
           >
             <option value="">Seleccionar sesión...</option>
             {sugeridas.length > 0 && <optgroup label="Por su título, posibles contenidos sensibles">{sugeridas.map(opcion)}</optgroup>}
@@ -83,7 +83,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
             onChange={(e) => setTexto(e.target.value)}
             maxLength={LIMITES_CUIDADO.textoMaximo}
             rows={5}
-            className="mt-1.5 w-full rounded-lg border border-[#E9D3C9] bg-superficie px-3 py-2.5 text-[0.78125rem] leading-relaxed"
+            className="mt-1.5 w-full rounded-lg border border-primario-borde bg-superficie px-3 py-2.5 text-[0.78125rem] leading-relaxed"
           />
         </div>
         <button
@@ -94,7 +94,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
           {pendiente ? "GUARDANDO..." : elegida?.alertaCuidado ? "GUARDAR EL TEXTO DE LA ALERTA" : "ACTIVAR ALERTA DE CUIDADO"}
         </button>
         {estado?.ok && (
-          <div role="status" className="text-[0.71875rem] font-semibold text-secundario-fuerte">
+          <div role="status" className="text-[0.71875rem] font-semibold text-secundario-texto">
             {estado.ok}
           </div>
         )}
@@ -105,7 +105,7 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
         )}
       </form>
 
-      <div className="mt-4 border-t border-[#EFD9CF] pt-3">
+      <div className="mt-4 border-t border-primario-borde pt-3">
         <div className="text-[0.625rem] font-bold tracking-[.1em] text-tenue">
           ACTIVAS ({activas.length})
         </div>
@@ -116,11 +116,11 @@ export function AlertasCuidado({ sesiones }: { sesiones: SesionAlerta[] }) {
             {activas.map((s) => (
               <li key={s.id} className="flex items-center gap-2 text-[0.75rem]">
                 <span className="min-w-0 flex-1 truncate">
-                  <strong className="text-primario-fuerte">{s.codigo}</strong> {s.titulo}
+                  <strong className="text-primario-texto">{s.codigo}</strong> {s.titulo}
                 </span>
                 <button
                   onClick={() => elegir(s.id)}
-                  className="cursor-pointer text-[0.6875rem] font-bold text-secundario-fuerte hover:underline"
+                  className="cursor-pointer text-[0.6875rem] font-bold text-secundario-texto hover:underline"
                 >
                   Editar
                 </button>

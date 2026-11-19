@@ -53,15 +53,15 @@ export function GestionEstudiantes({
 
       <div className="rejilla-panel">
         <div className="overflow-hidden rounded-xl border border-borde bg-superficie">
-          <div className="flex items-center justify-between border-b border-[#F1EBE5] px-[18px] py-[15px]">
+          <div className="flex items-center justify-between border-b border-linea px-[18px] py-[15px]">
             <span className="text-[0.8125rem] font-extrabold">Estudiantes del grupo</span>
             <span className="text-[0.6875rem] font-bold text-suave">{estudiantes.length}</span>
           </div>
           {avisoCurso && (
             <div
               role={avisoCurso.error ? "alert" : "status"}
-              className={`border-b border-[#F1EBE5] px-[18px] py-2 text-[0.71875rem] font-semibold ${
-                avisoCurso.error ? "text-peligro" : "text-secundario-fuerte"
+              className={`border-b border-linea px-[18px] py-2 text-[0.71875rem] font-semibold ${
+                avisoCurso.error ? "text-peligro" : "text-secundario-texto"
               }`}
             >
               {avisoCurso.error ?? avisoCurso.ok}
@@ -78,7 +78,7 @@ export function GestionEstudiantes({
             estudiantes.map((e) => (
               <div
                 key={e.id}
-                className="flex flex-wrap items-center gap-3 border-b border-[#F7F2ED] px-[18px] py-3.5 last:border-b-0"
+                className="flex flex-wrap items-center gap-3 border-b border-linea-suave px-[18px] py-3.5 last:border-b-0"
               >
                 <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-secundario text-[0.6875rem] font-extrabold text-white">
                   {e.iniciales}
@@ -87,7 +87,7 @@ export function GestionEstudiantes({
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[0.84375rem] font-bold">{e.nombre}</span>
                     {e.provisional && (
-                      <span className="rounded-full bg-[#FBF1DC] px-2 py-0.5 text-[0.625rem] font-bold text-[#8A6410]">
+                      <span className="rounded-full bg-aviso-tinte px-2 py-0.5 text-[0.625rem] font-bold text-aviso-texto">
                         Contraseña provisional
                       </span>
                     )}
@@ -119,7 +119,7 @@ export function GestionEstudiantes({
                   <div className="mb-1 text-right text-[0.65625rem] font-bold text-tenue">
                     {e.avance}%
                   </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-[#F0EAE4]">
+                  <div className="h-1.5 overflow-hidden rounded-full bg-hundido">
                     <div className="h-full bg-primario" style={{ width: `${e.avance}%` }} />
                   </div>
                 </div>

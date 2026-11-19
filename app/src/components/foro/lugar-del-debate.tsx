@@ -30,7 +30,7 @@ export async function LugarDelDebate({ marcaId, quien }: { marcaId: string | nul
 
   return (
     <section aria-labelledby="titulo-lugar-debate" className="mb-5 rounded-xl border border-terciario-borde bg-terciario-tinte px-5 py-4">
-      <div className="text-[0.625rem] font-bold tracking-[.12em] text-terciario-fuerte">EL DEBATE PARTE DE LA CARTOGRAFÍA SOCIAL</div>
+      <div className="text-[0.625rem] font-bold tracking-[.12em] text-terciario-texto">EL DEBATE PARTE DE LA CARTOGRAFÍA SOCIAL</div>
       <h2 id="titulo-lugar-debate" className="mt-1 text-[1rem] font-extrabold text-tinta-media">
         {marca.lugar}
       </h2>
