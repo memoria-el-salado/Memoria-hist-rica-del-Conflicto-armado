@@ -194,6 +194,8 @@ await ejecutar("Capturas del manual de usuario", async ({ abrir }) => {
     const contexto = await navegador.createBrowserContext();
     const p = await contexto.newPage();
     await p.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+    // El manual muestra el tema claro, aunque el sistema del equipo esté en oscuro.
+    await p.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
     // El indicador de desarrollo de Next no forma parte de la aplicación.
     await p.evaluateOnNewDocument(() => {
       const estilo = document.createElement("style");
