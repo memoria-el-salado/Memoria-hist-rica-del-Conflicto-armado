@@ -458,7 +458,7 @@ desplazables operables con el teclado, y animaciones que se apagan con la prefer
 reducir el movimiento (2.3.3). Todo el texto llega al contraste 4.5:1 (1.4.3): el naranja de la marca
 (`primario`, #D95D39) queda para fondos, bordes e íconos, y el texto usa `primario-texto` (#AE4A2D);
 los colores propios de cada eje se oscurecen lo justo cuando llevan texto blanco encima
-(`src/lib/contraste.ts`). El diseño es responsivo y conmuta a navegación inferior por debajo de 960 px;
+(`src/lib/contraste.ts`). El diseño es responsivo y conmuta a navegación inferior por debajo de 768 px;
 `npm run humo:accesibilidad` lo comprueba todo en tres tamaños de pantalla.
 
 ---
